@@ -11,6 +11,8 @@ export const HOBBIES = {
   tcg: { name: 'TCG', color: '#d97706', blurb: 'Trading card games: Pokemon, Magic, One Piece, Yu-Gi-Oh! and more.' },
   consoles: { name: 'Consoles', color: '#059669', blurb: 'Gaming consoles, old and new.' },
   esports: { name: 'Esports', color: '#475569', blurb: 'Dota 2, League of Legends, TFT and the scenes around them.' },
+  // For articles about hobbies in general, not one hobby in particular.
+  general: { name: 'General', color: '#0e7490', blurb: 'Articles about hobbies in general: what they are, why we love them, and how to start one.' },
 } as const;
 
 export const TYPES = {

@@ -49,6 +49,8 @@ content:
               label: Consoles
             - name: esports
               label: Esports
+            - name: general
+              label: General (about hobbies in general)
       - name: type
         label: Article type
         type: select
