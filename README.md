@@ -1,4 +1,4 @@
-# Hobby Site
+# Build Play Collect
 
 An editorial site about hobbies: Beyblade, Tamiya, keyboards, TCG, consoles and esports.
 Built with [Astro](https://astro.build) and hosted on Cloudflare Pages.

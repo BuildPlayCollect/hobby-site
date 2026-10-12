@@ -1,7 +1,7 @@
 // The site's "menu": every hobby and every content type lives here.
 // Add a new hobby by adding one line to HOBBIES. The pages update themselves.
 
-export const SITE_NAME = 'Hobby Site';
+export const SITE_NAME = 'Build Play Collect';
 export const SITE_TAGLINE = 'History, guides and news for the hobbies we love.';
 
 export const HOBBIES = {
