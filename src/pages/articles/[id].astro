@@ -24,8 +24,20 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 const wiki = (await getCollection('wiki')).filter((w) => w.data.hobby === article.data.hobby);
 const usedSlugs = termsIn(article.body ?? '', wiki.map((w) => ({ slug: w.id, phrases: [w.data.title, ...w.data.aliases] })));
 const terms = wiki.filter((w) => usedSlugs.includes(w.id));
+
+// Structured data: tells Google this page is an article, who wrote it and when.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: article.data.title,
+  description: article.data.description,
+  datePublished: article.data.date.toISOString(),
+  author: { '@type': 'Person', name: article.data.author },
+  publisher: { '@type': 'Organization', name: 'Build Play Collect', url: 'https://buildplaycollect.com' },
+  ...(article.data.cover ? { image: new URL(article.data.cover, 'https://buildplaycollect.com').href } : {}),
+};
 ---
-<Base title={article.data.title} description={article.data.description}>
+<Base title={article.data.title} description={article.data.description} type="article" image={article.data.cover} jsonLd={jsonLd}>
   <div class="progress" aria-hidden="true"></div>
   <div class="article-layout">
     <article class="article">

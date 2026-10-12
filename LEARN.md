@@ -127,3 +127,7 @@ Only use photos you took or have permission for (see the image rules in the proj
 ## Drafts
 
 Every article has a **Draft** switch in Pages CMS. While it's on, the article stays off the site: no page, no cards, no search result. New articles start as drafts, so you can save half-finished work safely. When the article is written and every fact is checked, switch Draft off and save; it goes live on the next deploy. The 7 starter sample articles are kept as drafts for reference.
+
+## Google and SEO
+
+Every page tells search engines its title, description, official address (canonical) and share picture; articles also tell Google they're articles, who wrote them and when (all in `src/layouts/Base.astro` and `src/pages/articles/[id].astro`). `public/robots.txt` lets search engines read everything and points them to the sitemap. The default share picture is `public/og-default.png`; an article with a cover image uses its cover instead. The full checklist for articles and the one-time Google Search Console steps are in the project's `resources/seo-guide.md`.

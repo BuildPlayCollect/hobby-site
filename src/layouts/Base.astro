@@ -9,9 +9,17 @@ import '../styles/global.css';
 interface Props {
   title?: string;
   description?: string;
+  // SEO extras: a share image (e.g. an article's cover), the page kind, and structured data for Google.
+  image?: string;
+  type?: 'website' | 'article';
+  jsonLd?: Record<string, unknown>;
 }
-const { title, description = SITE_TAGLINE } = Astro.props;
+const { title, description = SITE_TAGLINE, image, type = 'website', jsonLd } = Astro.props;
 const fullTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
+// The one official address for this page, so Google doesn't count www/workers.dev copies as duplicates.
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+// The picture shown when the page is shared on Facebook, Messenger, X, Discord...
+const shareImage = new URL(image ?? '/og-default.png', Astro.site).href;
 ---
 <!doctype html>
 <html lang="en">
@@ -20,7 +28,16 @@ const fullTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:title" content={title ?? SITE_NAME} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content={type} />
+    <meta property="og:image" content={shareImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
     <!-- Night mode: runs before the page draws so it never flashes white.
          Uses the reader's saved choice, or their device's setting if they haven't picked. -->
     <script is:inline>
