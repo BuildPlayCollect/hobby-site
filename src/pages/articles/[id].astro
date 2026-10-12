@@ -4,8 +4,8 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import AdSlot from '../../components/AdSlot.astro';
-import ArticleCard from '../../components/ArticleCard.astro';
 import { HOBBIES, TYPES, TYPE_SLUGS, type HobbyKey, type TypeKey } from '../../data/site';
+import { termsIn } from '../../lib/wiki-terms.mjs';
 
 export async function getStaticPaths() {
   const articles = await getCollection('articles');
@@ -13,22 +13,39 @@ export async function getStaticPaths() {
 }
 
 const { article, all } = Astro.props;
-const { Content } = await render(article);
+const { Content, headings } = await render(article);
 const hobby = HOBBIES[article.data.hobby as HobbyKey];
 const typeKey = article.data.type as TypeKey;
-const related = all.filter((a) => a.data.hobby === article.data.hobby && a.id !== article.id).slice(0, 3);
+const related = all.filter((a) => a.data.hobby === article.data.hobby && a.id !== article.id).slice(0, 4);
 const dateText = article.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
+
+// Wiki terms used in this article, for the "Terms in this article" box.
+const wiki = (await getCollection('wiki')).filter((w) => w.data.hobby === article.data.hobby);
+const usedSlugs = termsIn(article.body ?? '', wiki.map((w) => ({ slug: w.id, phrases: [w.data.title, ...w.data.aliases] })));
+const terms = wiki.filter((w) => usedSlugs.includes(w.id));
 ---
 <Base title={article.data.title} description={article.data.description}>
+  <div class="progress" aria-hidden="true"></div>
   <div class="article-layout">
     <article class="article">
       <p class="kicker">
-        <a href={`/${article.data.hobby}`}>{hobby.name}</a>{' · '}<a href={`/${TYPE_SLUGS[typeKey]}`}>{TYPES[typeKey].name}</a>
+        <span class="dot" style={`background:${hobby.color}`}></span>
+        <a href={`/${article.data.hobby}`}>{hobby.name}</a> ·
+        <a href={`/${TYPE_SLUGS[typeKey]}`}>{TYPES[typeKey].name}</a>
       </p>
       <h1>{article.data.title}</h1>
       <p class="dek">{article.data.description}</p>
-      <p class="byline">By {article.data.author} &middot; {dateText}</p>
-      <div class="article-cover" style={`background:${hobby.color}`}>
+      <p class="byline">By {article.data.author} · {dateText}</p>
+
+      {toc.length > 1 && (
+        <details class="toc-mobile panel">
+          <summary>On this page</summary>
+          <ul class="toc">{toc.map((h) => <li class={`depth-${h.depth}`}><a href={`#${h.slug}`}>{h.text}</a></li>)}</ul>
+        </details>
+      )}
+
+      <div class="article-cover" style={`background:linear-gradient(135deg, ${hobby.color}, color-mix(in srgb, ${hobby.color} 55%, #06b6d4))`}>
         {article.data.cover
           ? <img src={article.data.cover} alt={article.data.coverAlt ?? ''} />
           : <span>{hobby.name}</span>}
@@ -36,14 +53,49 @@ const dateText = article.data.date.toLocaleDateString('en-US', { year: 'numeric'
       <div class="prose"><Content /></div>
       <AdSlot position="in-article" />
     </article>
+
     <aside class="sidebar">
-      <AdSlot position="sidebar" />
-      {related.length > 0 && (
-        <>
-          <h2 class="section-title">More {hobby.name}</h2>
-          {related.map((a) => <ArticleCard article={a} />)}
-        </>
-      )}
+      <div class="sidebar-sticky sidebar">
+        {toc.length > 1 && (
+          <nav class="panel toc-panel" aria-label="On this page">
+            <h2>On this page</h2>
+            <ul class="toc">{toc.map((h) => <li class={`depth-${h.depth}`}><a href={`#${h.slug}`}>{h.text}</a></li>)}</ul>
+          </nav>
+        )}
+        {terms.length > 0 && (
+          <div class="panel">
+            <h2>Terms in this article</h2>
+            <div class="term-list">{terms.map((w) => <a class="chip wiki-chip" href={`/wiki/${w.id}/`}>{w.data.title}</a>)}</div>
+          </div>
+        )}
+        {related.length > 0 && (
+          <div class="panel">
+            <h2>More {hobby.name}</h2>
+            <div class="related">{related.map((a) => <a href={`/articles/${a.id}/`}>{a.data.title}</a>)}</div>
+          </div>
+        )}
+        <AdSlot position="sidebar" />
+      </div>
     </aside>
   </div>
+
+  <script is:inline>
+    // Reading progress bar + highlight the current section in "On this page".
+    (function () {
+      var bar = document.querySelector('.progress');
+      var article = document.querySelector('.article');
+      var tocLinks = document.querySelectorAll('.toc-panel .toc a');
+      var targets = Array.prototype.map.call(tocLinks, function (a) { return document.getElementById(decodeURIComponent(a.hash.slice(1))); });
+      function onScroll() {
+        var r = article.getBoundingClientRect();
+        var done = Math.min(1, Math.max(0, -r.top / (r.height - window.innerHeight)));
+        bar.style.width = (done * 100) + '%';
+        var current = -1;
+        targets.forEach(function (t, i) { if (t && t.getBoundingClientRect().top < 120) current = i; });
+        tocLinks.forEach(function (a, i) { a.classList.toggle('active', i === current); });
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    })();
+  </script>
 </Base>

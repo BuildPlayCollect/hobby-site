@@ -1,0 +1,54 @@
+---
+// wiki/[slug].astro: one page per wiki term (/wiki/blade, /wiki/linear-switch ...).
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { HOBBIES, type HobbyKey } from '../../data/site';
+import { termsIn } from '../../lib/wiki-terms.mjs';
+
+export async function getStaticPaths() {
+  const wiki = await getCollection('wiki');
+  const articles = await getCollection('articles');
+  return wiki.map((entry) => ({ params: { slug: entry.id }, props: { entry, wiki, articles } }));
+}
+
+const { entry, wiki, articles } = Astro.props;
+const { Content } = await render(entry);
+const hobby = HOBBIES[entry.data.hobby as HobbyKey];
+const me = [{ slug: entry.id, phrases: [entry.data.title, ...entry.data.aliases] }];
+
+// Articles that use this term, and other terms from the same hobby.
+const mentionedIn = articles.filter((a) => a.data.hobby === entry.data.hobby && termsIn(a.body ?? '', me).length > 0);
+const related = wiki.filter((w) => w.data.hobby === entry.data.hobby && w.id !== entry.id);
+---
+<Base title={`${entry.data.title} (wiki)`} description={entry.data.summary}>
+  <div class="article-layout">
+    <article class="article">
+      <header class="wiki-hero">
+        <p class="kicker">
+          <span class="dot" style={`background:${hobby.color}`}></span>
+          <a href="/wiki">Wiki</a> · <a href={`/${entry.data.hobby}`}>{hobby.name}</a>
+        </p>
+        <h1>{entry.data.title}</h1>
+        <p class="wiki-lead">{entry.data.summary}</p>
+      </header>
+      <div class="prose"><Content /></div>
+    </article>
+
+    <aside class="sidebar">
+      <div class="sidebar-sticky sidebar">
+        {mentionedIn.length > 0 && (
+          <div class="panel">
+            <h2>Mentioned in</h2>
+            <div class="related">{mentionedIn.map((a) => <a href={`/articles/${a.id}/`}>{a.data.title}</a>)}</div>
+          </div>
+        )}
+        {related.length > 0 && (
+          <div class="panel">
+            <h2>More {hobby.name} terms</h2>
+            <div class="term-list">{related.map((w) => <a class="chip wiki-chip" href={`/wiki/${w.id}/`}>{w.data.title}</a>)}</div>
+          </div>
+        )}
+      </div>
+    </aside>
+  </div>
+</Base>

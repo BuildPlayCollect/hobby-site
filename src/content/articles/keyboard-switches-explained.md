@@ -13,16 +13,16 @@ The switch under each key decides how a mechanical keyboard feels and sounds.
 
 ## Linear
 
-Smooth from top to bottom with no bump. Popular for gaming.
+Linear switches are smooth from top to bottom with no bump. Popular for gaming.
 
 ## Tactile
 
-A small bump partway down tells your finger the key has registered. A good all-rounder for typing.
+Tactile switches have a small bump partway down that tells your finger the key has registered. A good all-rounder for typing.
 
 ## Clicky
 
-A bump plus an audible click. Satisfying for you, loud for everyone around you.
+Clicky switches add an audible click to the bump. Satisfying for you, loud for everyone around you.
 
 ## Which to try first
 
-Buy a cheap switch tester with several types before committing to a full board.
+Buy a cheap switch tester with several types before committing to a full board. If you pick a hot-swappable keyboard, you can change switches later without soldering, and swap the keycaps too.

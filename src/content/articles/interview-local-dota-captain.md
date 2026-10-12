@@ -13,6 +13,10 @@ date: 2026-09-30
 
 Answer goes here.
 
+**How do you keep up with the meta after each patch?**
+
+Answer goes here.
+
 **What does a normal practice week look like?**
 
 Answer goes here.

@@ -23,4 +23,16 @@ const articles = defineCollection({
   }),
 });
 
-export const collections = { articles };
+// Wiki entries: short explainer pages for hobby words (Blade, Linear switch, Singles...).
+// Articles link to them automatically the first time the word appears.
+const wiki = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/wiki' }),
+  schema: z.object({
+    title: z.string(),
+    hobby: z.enum(Object.keys(HOBBIES) as [string, ...string[]]),
+    summary: z.string(),
+    aliases: z.array(z.string()).default([]),
+  }),
+});
+
+export const collections = { articles, wiki };

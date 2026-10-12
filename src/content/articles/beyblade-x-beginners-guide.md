@@ -22,7 +22,7 @@ The Ratchet sits under the Blade. Its name is two numbers, like 3-60: the first 
 
 ## The Bit
 
-The Bit is the tip that touches the stadium. It controls movement. Flat, aggressive Bits race around the stadium; sharp or ball-shaped Bits stay near the center.
+The Bit is the tip that touches the stadium. It controls movement. Flat, aggressive Bits race around the stadium and catch the rail for an Xtreme Dash; sharp or ball-shaped Bits stay near the center.
 
 ## Where to start
 

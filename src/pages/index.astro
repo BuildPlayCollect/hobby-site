@@ -3,30 +3,45 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import ArticleCard from '../components/ArticleCard.astro';
-import { HOBBIES, SITE_TAGLINE } from '../data/site';
+import { HOBBIES } from '../data/site';
 
 const articles = (await getCollection('articles')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const featured = articles.find((a) => a.data.featured) ?? articles[0];
 const latest = articles.filter((a) => a !== featured).slice(0, 6);
+const wiki = (await getCollection('wiki')).sort((a, b) => a.data.title.localeCompare(b.data.title));
 ---
 <Base>
-  <p class="tagline">{SITE_TAGLINE}</p>
-  {featured && (
-    <section class="featured">
-      <ArticleCard article={featured} large />
-    </section>
-  )}
+  <section class="hero">
+    <h1>Build. Play. <span>Collect.</span></h1>
+    <p>History, guides, new releases and giveaways for the hobbies we love.</p>
+    <div class="chip-row" aria-label="Hobbies">
+      {Object.entries(HOBBIES).map(([key, h]) => (
+        <a class="chip" href={`/${key}`}><span class="dot" style={`background:${h.color}`}></span>{h.name}</a>
+      ))}
+    </div>
+  </section>
 
-  <h2 class="section-title">Latest</h2>
+  {featured && <ArticleCard article={featured} large />}
+
+  <div class="section-head"><h2>Latest</h2></div>
   <div class="grid">{latest.map((a) => <ArticleCard article={a} />)}</div>
+
+  <div class="section-head">
+    <h2>Fall down the rabbit hole</h2>
+    <a class="more" href="/wiki">Open the wiki →</a>
+  </div>
+  <div class="chip-row" style="flex-wrap:wrap;overflow:visible">
+    {wiki.map((w) => <a class="chip wiki-chip" href={`/wiki/${w.id}/`}>{w.data.title}</a>)}
+  </div>
 
   {Object.entries(HOBBIES).map(([key, h]) => {
     const forHobby = articles.filter((a) => a.data.hobby === key).slice(0, 3);
     return forHobby.length > 0 && (
-      <section class="hobby-strip">
-        <h2 class="section-title" style={`border-color:${h.color}`}>
-          <a href={`/${key}`}>{h.name}</a>
-        </h2>
+      <section>
+        <div class="section-head">
+          <h2><span class="dot" style={`background:${h.color};margin:0`}></span>{h.name}</h2>
+          <a class="more" href={`/${key}`}>All {h.name} →</a>
+        </div>
         <div class="grid">{forHobby.map((a) => <ArticleCard article={a} />)}</div>
       </section>
     );
