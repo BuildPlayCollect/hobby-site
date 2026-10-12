@@ -90,6 +90,7 @@ The headline slider moves on its own every 6 seconds and stops while someone hov
 Each file in `src/content/rules/` is one rulebook summary, shown at `/rules/<file-name>`. The `scope` field says where the rules come from:
 
 - **official**: the organizer's own rulebook (Takara Tomy, Tamiya, Play! Pokémon...). `sourceUrl` links it, and the twice-weekly update routine re-checks it and proposes changes when the rulebook changes.
+- **community**: a fan organization's published rulebook, like the World Beyblade Organization's.
 - **local**: your community's own rules. Add these in Pages CMS under **Tournament rules**, pasting the copy your community gives you. The routine never rewrites local rules; it only points out where they differ from the official ones.
 
 Every rules page shows "Last checked", and the footer links the [editorial standards](/standards) page that explains how we fact-check.

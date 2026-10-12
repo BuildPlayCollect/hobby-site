@@ -40,3 +40,10 @@ export type TypeKey = keyof typeof TYPES;
 // Newsletter sign-up (Kit, kit.com). Paste your Kit form's address here, e.g.
 // 'https://app.kit.com/forms/1234567/subscriptions'. Until then the form shows "opening soon".
 export const NEWSLETTER_FORM_ACTION = 'https://app.kit.com/forms/10034575/subscriptions';
+
+// Where a tournament rulebook comes from (the badge on each rules page).
+export const SCOPE_LABEL: Record<string, string> = {
+  official: 'Official',
+  community: 'Community',
+  local: 'Local',
+};

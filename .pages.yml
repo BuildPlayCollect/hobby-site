@@ -191,6 +191,8 @@ content:
           values:
             - name: local
               label: Local
+            - name: community
+              label: Community (fan organization, e.g. WBO)
             - name: official
               label: Official
       - name: organizer
