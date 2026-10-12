@@ -3,11 +3,16 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import ArticleCard from '../components/ArticleCard.astro';
+import Carousel from '../components/Carousel.astro';
 import { HOBBIES } from '../data/site';
 
 const articles = (await getCollection('articles')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const featured = articles.find((a) => a.data.featured) ?? articles[0];
-const latest = articles.filter((a) => a !== featured).slice(0, 6);
+// Headline carousel: the featured story, then the newest story from each hobby.
+// It rebuilds itself every time an article is added, no editing needed.
+const headlines = [featured, ...Object.keys(HOBBIES).map((key) => articles.find((a) => a.data.hobby === key))]
+  .filter((a, i, all) => a && all.indexOf(a) === i);
+const latest = articles.filter((a) => !headlines.includes(a)).slice(0, 6);
 const wiki = (await getCollection('wiki')).sort((a, b) => a.data.title.localeCompare(b.data.title));
 ---
 <Base>
@@ -21,10 +26,16 @@ const wiki = (await getCollection('wiki')).sort((a, b) => a.data.title.localeCom
     </div>
   </section>
 
-  {featured && <ArticleCard article={featured} large />}
+  <Carousel label="Top headlines" variant="hero" autoplay>
+    {headlines.map((a) => <ArticleCard article={a} large />)}
+  </Carousel>
 
-  <div class="section-head"><h2>Latest</h2></div>
-  <div class="grid">{latest.map((a) => <ArticleCard article={a} />)}</div>
+  {latest.length > 0 && (
+    <>
+      <div class="section-head"><h2>Latest</h2></div>
+      <div class="grid">{latest.map((a) => <ArticleCard article={a} />)}</div>
+    </>
+  )}
 
   <div class="section-head">
     <h2>Fall down the rabbit hole</h2>
@@ -35,14 +46,16 @@ const wiki = (await getCollection('wiki')).sort((a, b) => a.data.title.localeCom
   </div>
 
   {Object.entries(HOBBIES).map(([key, h]) => {
-    const forHobby = articles.filter((a) => a.data.hobby === key).slice(0, 3);
+    const forHobby = articles.filter((a) => a.data.hobby === key).slice(0, 8);
     return forHobby.length > 0 && (
       <section>
         <div class="section-head">
           <h2><span class="dot" style={`background:${h.color};margin:0`}></span>{h.name}</h2>
           <a class="more" href={`/${key}`}>All {h.name} →</a>
         </div>
-        <div class="grid">{forHobby.map((a) => <ArticleCard article={a} />)}</div>
+        <Carousel label={`Latest ${h.name}`}>
+          {forHobby.map((a) => <ArticleCard article={a} />)}
+        </Carousel>
       </section>
     );
   })}

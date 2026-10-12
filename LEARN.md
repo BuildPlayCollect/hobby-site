@@ -79,6 +79,12 @@ You never add wiki links by hand. When the site builds, `src/lib/rehype-wiki-lin
 
 Hovering a wiki word shows its summary; clicking opens its page, which lists every article that mentions it. In Pages CMS, add new terms under **Wiki terms**.
 
+## Carousels
+
+The big headline slider at the top of the home page and the sideways rows under each hobby both come from `src/components/Carousel.astro`. You never fill them by hand: `src/pages/index.astro` picks the featured article plus the newest article from each hobby for the headlines, and the 8 newest per hobby for each row. Publish an article and it shows up in the carousel on the next build.
+
+The headline slider moves on its own every 6 seconds and stops while someone hovers, taps or tabs into it (and for readers who've asked their device to reduce motion). On phones readers swipe; on bigger screens they also get ‹ › buttons.
+
 ## Search
 
 Press `/` or the magnifier button. `src/pages/search.json.ts` writes a small list of every article and wiki term when the site builds, and the search box filters that list in the reader's browser. No search service or account is needed.

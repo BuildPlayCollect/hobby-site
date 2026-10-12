@@ -160,6 +160,25 @@ main { padding-bottom: 24px; }
   .card-large h3 { font-size: 1.7rem; }
 }
 
+/* ---------- Carousels (home page headlines and hobby rows) ---------- */
+.carousel { position: relative; }
+.carousel-track { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; padding: 4px 2px 8px; margin: 0 -2px; }
+.carousel-track::-webkit-scrollbar { display: none; }
+.carousel-track:focus-visible { outline-offset: 4px; }
+.carousel-track > * { scroll-snap-align: start; flex: none; }
+.carousel-hero .carousel-track > * { width: 100%; }
+.carousel-rail .carousel-track > * { width: min(78%, 300px); }
+@media (min-width: 760px) { .carousel-rail .carousel-track > * { width: calc((100% - 32px) / 3); } }
+.carousel-controls { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+.carousel-dots { display: flex; gap: 6px; margin-right: auto; }
+.carousel-dots button { width: 8px; height: 8px; padding: 0; border-radius: 99px; border: 0; background: var(--line); cursor: pointer; transition: width .2s, background .2s; }
+.carousel-dots button.on { width: 22px; background: var(--accent); }
+.carousel-btn { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line); background: var(--bg); color: var(--ink); font-size: 1.3rem; line-height: 1; cursor: pointer; display: grid; place-items: center; padding-bottom: 3px; }
+.carousel-btn:hover { border-color: var(--accent); color: var(--accent); }
+.carousel.single .carousel-controls { display: none; }
+/* Phones swipe, so the arrows only show on wider screens. The dots stay. */
+@media (max-width: 759px) { .carousel-btn { display: none; } }
+
 /* ---------- Article page ---------- */
 .progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; background: linear-gradient(90deg, var(--accent-bright), var(--accent)); z-index: 60; }
 .article-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; padding-top: 28px; }
