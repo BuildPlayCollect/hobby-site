@@ -9,7 +9,7 @@ date: 2026-10-04
 
 *Sample article. Replace it with your own writing and real shop names.*
 
-Buying single cards is usually cheaper than opening packs to chase one card. Here is where to look.
+Buying single cards is usually cheaper than opening booster packs to chase one card. Here is where to look.
 
 ## Local game stores
 

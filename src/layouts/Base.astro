@@ -1,7 +1,7 @@
 ---
-// Base.astro: the frame around every page (header, menu, footer).
+// Base.astro: the frame around every page (header, menu, search, footer).
 // Each page puts its own content where <slot /> is.
-import { SITE_NAME, SITE_TAGLINE, HOBBIES } from '../data/site';
+import { SITE_NAME, SITE_TAGLINE, HOBBIES, TYPE_SLUGS } from '../data/site';
 import AdSlot from '../components/AdSlot.astro';
 import Newsletter from '../components/Newsletter.astro';
 import '../styles/global.css';
@@ -35,42 +35,178 @@ const fullTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
   <body>
     <header class="site-header">
       <div class="wrap header-row">
-        <a class="logo" href="/">{SITE_NAME}</a>
-        <div class="header-tools">
-          <nav class="hobby-nav" aria-label="Hobbies">
-            {Object.entries(HOBBIES).map(([key, h]) => <a href={`/${key}`}>{h.name}</a>)}
-          </nav>
-          <button class="theme-toggle" type="button" aria-label="Toggle night mode" title="Toggle night mode">
+        <a class="logo" href="/"><span class="logo-mark" aria-hidden="true">BPC</span>{SITE_NAME}</a>
+
+        <nav class="main-nav" id="main-nav" aria-label="Main">
+          <div class="dropdown">
+            <button class="nav-button" type="button" aria-expanded="false" aria-controls="hobby-menu">
+              Hobbies <span class="chev" aria-hidden="true">▼</span>
+            </button>
+            <div class="dropdown-panel" id="hobby-menu">
+              {Object.entries(HOBBIES).map(([key, h]) => (
+                <a class="hobby-item" href={`/${key}`}>
+                  <span class="dot" style={`background:${h.color}`}></span>
+                  <span><strong>{h.name}</strong><small>{h.blurb}</small></span>
+                </a>
+              ))}
+            </div>
+          </div>
+          <a class="nav-link" href={`/${TYPE_SLUGS.guide}`}>Guides</a>
+          <a class="nav-link" href={`/${TYPE_SLUGS['new-release']}`}>New Releases</a>
+          <a class="nav-link" href="/wiki">Wiki</a>
+          <a class="nav-link" href={`/${TYPE_SLUGS.giveaway}`}>Giveaways</a>
+        </nav>
+
+        <div class="header-actions">
+          <button class="icon-btn search-open" type="button" aria-label="Search (press /)" title="Search (press /)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+          <button class="icon-btn theme-toggle" type="button" aria-label="Toggle night mode" title="Toggle night mode">
             <span class="sun">☀</span><span class="moon">☾</span>
           </button>
+          <button class="icon-btn menu-toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="main-nav">☰</button>
         </div>
       </div>
     </header>
+
+    <div class="search-overlay" role="dialog" aria-modal="true" aria-label="Search">
+      <div class="search-box">
+        <label class="sr-only" for="search-input">Search articles and wiki</label>
+        <input id="search-input" type="search" placeholder="Search articles and wiki…" autocomplete="off" />
+        <ul class="search-results"></ul>
+        <p class="search-hint">Try "Bit", "switch" or "Tamiya". Press Esc to close.</p>
+      </div>
+    </div>
+
     <div class="wrap"><AdSlot position="header" /></div>
     <main class="wrap">
       <slot />
     </main>
     <div class="wrap"><Newsletter compact /></div>
+
     <footer class="site-footer">
-      <div class="wrap footer-row">
-        <span>&copy; {new Date().getFullYear()} {SITE_NAME}</span>
-        <nav aria-label="Footer">
-          <a href="/about">About</a>
-          <a href="/giveaways">Giveaways</a>
-          <a href="/newsletter">Newsletter</a>
-          <a href="/advertise">Advertise</a>
-          <a href="/contact">Contact</a>
-          <a href="/privacy">Privacy</a>
-        </nav>
+      <div class="wrap footer-grid">
+        <div>
+          <a class="logo" href="/"><span class="logo-mark" aria-hidden="true">BPC</span>{SITE_NAME}</a>
+          <p>{SITE_TAGLINE}</p>
+          <p>&copy; {new Date().getFullYear()} {SITE_NAME}</p>
+        </div>
+        <div>
+          <h2>Hobbies</h2>
+          <ul>{Object.entries(HOBBIES).map(([key, h]) => <li><a href={`/${key}`}>{h.name}</a></li>)}</ul>
+        </div>
+        <div>
+          <h2>Site</h2>
+          <ul>
+            <li><a href="/wiki">Wiki</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/newsletter">Newsletter</a></li>
+            <li><a href="/advertise">Advertise</a></li>
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="/privacy">Privacy</a></li>
+          </ul>
+        </div>
       </div>
     </footer>
+
     <script is:inline>
-      // The night mode button: flip the theme and remember the choice.
-      document.querySelector('.theme-toggle').addEventListener('click', function () {
-        var next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-        document.documentElement.dataset.theme = next;
-        try { localStorage.setItem('theme', next); } catch (e) {}
-      });
+      (function () {
+        var root = document.documentElement;
+
+        // Night mode button: flip the theme and remember the choice.
+        document.querySelector('.theme-toggle').addEventListener('click', function () {
+          var next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          try { localStorage.setItem('theme', next); } catch (e) {}
+        });
+
+        // Phone menu (the ☰ button).
+        var menuBtn = document.querySelector('.menu-toggle');
+        menuBtn.addEventListener('click', function () {
+          var open = document.body.classList.toggle('nav-open');
+          menuBtn.setAttribute('aria-expanded', open);
+          menuBtn.textContent = open ? '✕' : '☰';
+        });
+
+        // Hobbies dropdown: click to open, hover on desktop, click outside or Esc to close.
+        var dropdown = document.querySelector('.dropdown');
+        var ddBtn = dropdown.querySelector('.nav-button');
+        function setDropdown(open) { dropdown.classList.toggle('open', open); ddBtn.setAttribute('aria-expanded', open); }
+        ddBtn.addEventListener('click', function () { setDropdown(!dropdown.classList.contains('open')); });
+        if (window.matchMedia('(hover: hover) and (min-width: 881px)').matches) {
+          var t;
+          dropdown.addEventListener('mouseenter', function () { clearTimeout(t); setDropdown(true); });
+          dropdown.addEventListener('mouseleave', function () { t = setTimeout(function () { setDropdown(false); }, 150); });
+        }
+        document.addEventListener('click', function (e) { if (!dropdown.contains(e.target)) setDropdown(false); });
+
+        // Search: opens with the ⌕ button or the "/" key, searches /search.json.
+        var overlay = document.querySelector('.search-overlay');
+        var input = document.getElementById('search-input');
+        var list = overlay.querySelector('.search-results');
+        var index = null, active = -1;
+        function openSearch() {
+          overlay.classList.add('open'); input.value = ''; render([]); input.focus();
+          if (!index) fetch('/search.json').then(function (r) { return r.json(); }).then(function (d) { index = d; });
+        }
+        function closeSearch() { overlay.classList.remove('open'); }
+        function render(items) {
+          active = -1;
+          list.innerHTML = items.slice(0, 12).map(function (it) {
+            return '<li><a href="' + it.url + '"><span class="kind ' + (it.kind === 'Wiki' ? 'wiki-kind' : '') + '">' + it.kind + ' · ' + it.hobby + '</span><br>' +
+              escapeHtml(it.title) + '<small>' + escapeHtml(it.summary) + '</small></a></li>';
+          }).join('');
+        }
+        function escapeHtml(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+        input.addEventListener('input', function () {
+          var q = input.value.trim().toLowerCase();
+          if (!q || !index) return render([]);
+          var words = q.split(/\s+/);
+          render(index.filter(function (it) {
+            var hay = (it.title + ' ' + it.summary + ' ' + it.hobby + ' ' + it.kind).toLowerCase();
+            return words.every(function (w) { return hay.indexOf(w) !== -1; });
+          }));
+        });
+        input.addEventListener('keydown', function (e) {
+          var links = list.querySelectorAll('a');
+          if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            active = Math.max(0, Math.min(links.length - 1, active + (e.key === 'ArrowDown' ? 1 : -1)));
+            links.forEach(function (l, i) { l.classList.toggle('active', i === active); });
+          } else if (e.key === 'Enter' && links[Math.max(active, 0)]) {
+            location.href = links[Math.max(active, 0)].href;
+          }
+        });
+        document.querySelector('.search-open').addEventListener('click', openSearch);
+        overlay.addEventListener('click', function (e) { if (e.target === overlay) closeSearch(); });
+        document.addEventListener('keydown', function (e) {
+          var typing = /INPUT|TEXTAREA/.test(document.activeElement.tagName);
+          if (e.key === '/' && !typing) { e.preventDefault(); openSearch(); }
+          if (e.key === 'Escape') { closeSearch(); setDropdown(false); }
+        });
+
+        // Wiki previews: hovering a wiki word in an article shows its short definition.
+        var links = document.querySelectorAll('a.wiki-link');
+        if (links.length && window.matchMedia('(hover: hover)').matches) {
+          var tip = document.createElement('div');
+          tip.className = 'wiki-preview';
+          tip.setAttribute('role', 'tooltip');
+          document.body.appendChild(tip);
+          links.forEach(function (a) {
+            function show() {
+              tip.innerHTML = '<strong></strong><p style="margin:0"></p><span>Click to open the wiki page</span>';
+              tip.querySelector('strong').textContent = a.dataset.wikiTitle;
+              tip.querySelector('p').textContent = a.dataset.wikiSummary;
+              var r = a.getBoundingClientRect();
+              var left = Math.min(window.scrollX + r.left, window.scrollX + document.documentElement.clientWidth - tip.offsetWidth - 12);
+              tip.style.left = Math.max(12, left) + 'px';
+              tip.style.top = (window.scrollY + r.bottom + 8) + 'px';
+              tip.classList.add('show');
+            }
+            function hide() { tip.classList.remove('show'); }
+            a.addEventListener('mouseenter', show); a.addEventListener('focus', show);
+            a.addEventListener('mouseleave', hide); a.addEventListener('blur', hide);
+          });
+        }
+      })();
     </script>
   </body>
 </html>

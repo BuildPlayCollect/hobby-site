@@ -4,28 +4,69 @@
 // one page per hobby (/beyblade, /keyboards ...) and one per content type (/guides, /interviews ...).
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import ArticleGrid from '../components/ArticleGrid.astro';
+import ArticleCard from '../components/ArticleCard.astro';
 import { HOBBIES, TYPES, TYPE_SLUGS } from '../data/site';
 
 export async function getStaticPaths() {
-  const articles = await getCollection('articles');
+  const articles = (await getCollection('articles')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  const wiki = await getCollection('wiki');
   const hobbyPages = Object.entries(HOBBIES).map(([key, h]) => ({
     params: { section: key },
-    props: { title: h.name, intro: h.blurb, color: h.color, articles: articles.filter((a) => a.data.hobby === key) },
+    props: {
+      title: h.name, intro: h.blurb, color: h.color, isHobby: true,
+      articles: articles.filter((a) => a.data.hobby === key),
+      terms: wiki.filter((w) => w.data.hobby === key),
+    },
   }));
   const typePages = Object.entries(TYPES).map(([key, t]) => ({
     params: { section: TYPE_SLUGS[key as keyof typeof TYPES] },
-    props: { title: t.plural, intro: `Every ${t.name.toLowerCase()} article, across all hobbies.`, color: 'var(--ink)', articles: articles.filter((a) => a.data.type === key) },
+    props: {
+      title: t.plural, intro: `Every ${t.name.toLowerCase()} article, across all hobbies.`, color: 'var(--accent-bright)', isHobby: false,
+      articles: articles.filter((a) => a.data.type === key),
+      terms: [],
+    },
   }));
   return [...hobbyPages, ...typePages];
 }
 
-const { title, intro, color, articles } = Astro.props;
+const { title, intro, color, isHobby, articles, terms } = Astro.props;
+// Only offer filter buttons for types this hobby actually has.
+const typesHere = Object.entries(TYPES).filter(([key]) => articles.some((a) => a.data.type === key));
 ---
 <Base title={title} description={intro}>
-  <header class="page-head" style={`border-color:${color}`}>
-    <h1>{title}</h1>
+  <header class="page-head">
+    <h1><span class="dot" style={`background:${color};width:14px;height:14px;margin:0`}></span>{title}</h1>
     <p>{intro}</p>
   </header>
-  <ArticleGrid articles={articles} />
+
+  {isHobby && typesHere.length > 1 && (
+    <div class="chip-row filters" role="group" aria-label="Filter by type">
+      <button class="chip" type="button" data-filter="all" aria-pressed="true">All</button>
+      {typesHere.map(([key, t]) => <button class="chip" type="button" data-filter={key} aria-pressed="false">{t.plural}</button>)}
+    </div>
+  )}
+
+  {articles.length === 0
+    ? <p class="empty">No articles here yet.</p>
+    : <div class="grid" style="margin-top:16px">{articles.map((a) => <ArticleCard article={a} />)}</div>}
+
+  {terms.length > 0 && (
+    <>
+      <div class="section-head"><h2>{title} wiki</h2><a class="more" href="/wiki">Full wiki →</a></div>
+      <div class="chip-row" style="flex-wrap:wrap;overflow:visible">
+        {terms.map((w) => <a class="chip wiki-chip" href={`/wiki/${w.id}/`}>{w.data.title}</a>)}
+      </div>
+    </>
+  )}
+
+  <script is:inline>
+    // Filter buttons: show only the cards of the chosen type.
+    document.querySelectorAll('.filters .chip').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var f = btn.dataset.filter;
+        document.querySelectorAll('.filters .chip').forEach(function (b) { b.setAttribute('aria-pressed', b === btn); });
+        document.querySelectorAll('.grid .card').forEach(function (c) { c.hidden = f !== 'all' && c.dataset.type !== f; });
+      });
+    });
+  </script>
 </Base>

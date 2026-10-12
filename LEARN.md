@@ -61,9 +61,33 @@ The form is defined in `.pages.yml`. If you ever add a new hobby to `src/data/si
 - `src/pages/[section].astro` uses square brackets, which mean "fill in the blank". It makes **13 pages from one file**: one per hobby and one per content type.
 - `src/pages/articles/[id].astro` makes one page per article file.
 
-## Night mode
+## Night mode and colors
 
 The moon/sun button in the header switches night mode. It works by swapping the color variables at the top of `src/styles/global.css`: the light values are under `:root`, the dark ones under `:root[data-theme="dark"]`. To change the site's colors later, edit those two blocks.
+
+- **Light mode** is white with cyan (`--accent: #0e7490`, a deep cyan dark enough to read as text).
+- **Dark mode** is a soft slate blue (`--bg: #1c2532`), not pure black, which is easier on the eyes. Cyan stays the main color and **amber** (`--wiki: #fcc85a`) is the second color, used for wiki words so they stand out from normal links.
+
+## The wiki (words that lead somewhere)
+
+Each file in `src/content/wiki/` is one term, like `ratchet.md`. It has a `title`, a `hobby`, a one-line `summary` and optional `aliases` (other spellings).
+
+You never add wiki links by hand. When the site builds, `src/lib/rehype-wiki-links.mjs` reads every article, finds the first time each term appears, and turns it into a link. Two rules keep it tidy:
+
+- It only links terms from the article's own hobby (so "Switch" in a Tamiya article isn't sent to keyboards).
+- Matching is case-sensitive, so "a bit of" is not linked to the Beyblade **Bit**.
+
+Hovering a wiki word shows its summary; clicking opens its page, which lists every article that mentions it. In Pages CMS, add new terms under **Wiki terms**.
+
+## Carousels
+
+The big headline slider at the top of the home page and the sideways rows under each hobby both come from `src/components/Carousel.astro`. You never fill them by hand: `src/pages/index.astro` picks the featured article plus the newest article from each hobby for the headlines, and the 8 newest per hobby for each row. Publish an article and it shows up in the carousel on the next build.
+
+The headline slider moves on its own every 6 seconds and stops while someone hovers, taps or tabs into it (and for readers who've asked their device to reduce motion). On phones readers swipe; on bigger screens they also get ‹ › buttons.
+
+## Search
+
+Press `/` or the magnifier button. `src/pages/search.json.ts` writes a small list of every article and wiki term when the site builds, and the search box filters that list in the reader's browser. No search service or account is needed.
 
 ## Newsletter
 

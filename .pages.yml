@@ -96,3 +96,54 @@ content:
         type: rich-text
         options:
           format: markdown
+
+  - name: wiki
+    label: Wiki terms
+    type: collection
+    path: src/content/wiki
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      fields: [title, hobby]
+      primary: title
+      sort: [title]
+    fields:
+      - name: title
+        label: Term
+        description: Written exactly as it appears in articles, e.g. "Ratchet". Matching is case-sensitive.
+        type: string
+        required: true
+      - name: hobby
+        label: Hobby
+        description: The term is only auto-linked in articles from this hobby.
+        type: select
+        required: true
+        options:
+          values:
+            - name: beyblade
+              label: Beyblade
+            - name: tamiya
+              label: Tamiya
+            - name: keyboards
+              label: Keyboards
+            - name: tcg
+              label: TCG
+            - name: consoles
+              label: Consoles
+            - name: esports
+              label: Esports
+      - name: summary
+        label: One-line definition
+        description: Shown when readers hover over the word, and at the top of the wiki page.
+        type: text
+        required: true
+      - name: aliases
+        label: Other spellings
+        description: Other ways the term is written, e.g. "ratchets" or "Ratchets".
+        type: string
+        list: true
+      - name: body
+        label: Full explanation
+        type: rich-text
+        options:
+          format: markdown

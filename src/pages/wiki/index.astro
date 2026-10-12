@@ -1,0 +1,42 @@
+---
+// wiki/index.astro: the wiki home (/wiki), every term grouped by hobby.
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { HOBBIES } from '../../data/site';
+
+const wiki = (await getCollection('wiki')).sort((a, b) => a.data.title.localeCompare(b.data.title));
+---
+<Base title="Wiki" description="Plain-English explanations of the words and parts behind every hobby.">
+  <header class="wiki-hero">
+    <p class="kicker">The Build Play Collect Wiki</p>
+    <h1>Every term, explained</h1>
+    <p class="muted">Short explainers for the words you'll meet in our articles. Each one links to more, so it's easy to keep exploring.</p>
+    <label class="sr-only" for="wiki-filter">Filter the wiki</label>
+    <input id="wiki-filter" class="wiki-filter" type="search" placeholder="Filter terms…" autocomplete="off" />
+  </header>
+
+  <div class="wiki-groups">
+    {Object.entries(HOBBIES).map(([key, h]) => {
+      const entries = wiki.filter((w) => w.data.hobby === key);
+      return entries.length > 0 && (
+        <section class="wiki-group">
+          <h2><span class="dot" style={`background:${h.color};margin:0`}></span><a href={`/${key}`} style="color:inherit">{h.name}</a></h2>
+          {entries.map((w) => (
+            <a class="wiki-entry" href={`/wiki/${w.id}/`} data-search={`${w.data.title} ${w.data.aliases.join(' ')} ${w.data.summary}`.toLowerCase()}>
+              <strong>{w.data.title}</strong>
+              <small>{w.data.summary}</small>
+            </a>
+          ))}
+        </section>
+      );
+    })}
+  </div>
+
+  <script is:inline>
+    document.getElementById('wiki-filter').addEventListener('input', function (e) {
+      var q = e.target.value.trim().toLowerCase();
+      document.querySelectorAll('.wiki-entry').forEach(function (el) { el.hidden = q && el.dataset.search.indexOf(q) === -1; });
+      document.querySelectorAll('.wiki-group').forEach(function (g) { g.hidden = !g.querySelector('.wiki-entry:not([hidden])'); });
+    });
+  </script>
+</Base>
