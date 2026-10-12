@@ -3,6 +3,7 @@ title: "Beyblade X Official Regulations (Takara Tomy, Asia)"
 hobby: beyblade
 scope: official
 organizer: "Takara Tomy (Asia version)"
+sourceUrl: "https://www.probladers.it/beyblade-x-rules-v12.pdf"
 version: "12th edition (March 2026)"
 lastChecked: 2026-10-12
 summary: "The official Beyblade X rules for events and tournaments: legal Beys and stadiums, Bey checks, how to shoot, how points are scored and the 3on3, 3-Blader and team formats."
@@ -104,4 +105,4 @@ The first player to **4 points** wins the match. Points only count if the battle
 
 ## Read the full rules
 
-This is a summary of the Beyblade X Regulations (Asia ver.), 12th edition (March 2026), published by Takara Tomy. The full three-page document includes diagrams of every stadium zone and the paintable areas of each part. Ask your event organizer or local shop for the current edition.
+This is a summary of the Beyblade X Regulations (Asia ver.), 12th edition (March 2026), published by Takara Tomy. The full three-page document includes diagrams of every stadium zone and the paintable areas of each part. You can read it as a PDF [hosted by ProBladers](https://www.probladers.it/beyblade-x-rules-v12.pdf), an Italian Beyblade community, since Takara Tomy Asia's own copy isn't posted as a public download. If your event organizer has a newer edition, theirs is the one that counts.
