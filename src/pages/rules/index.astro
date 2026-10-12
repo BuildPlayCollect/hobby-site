@@ -1,0 +1,40 @@
+---
+// rules/index.astro: every tournament rulebook (/rules), grouped by hobby.
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { HOBBIES, SCOPE_LABEL } from '../../data/site';
+
+// Official rulebooks first, then community, then local.
+const ORDER = ['official', 'community', 'local'];
+const rules = (await getCollection('rules')).sort((a, b) =>
+  ORDER.indexOf(a.data.scope) - ORDER.indexOf(b.data.scope) || a.data.title.localeCompare(b.data.title));
+const fmt = (d: Date) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+---
+<Base title="Tournament Rules" description="Official and local tournament rules for every hobby, in plain English, with links to the full rulebooks.">
+  <header class="wiki-hero">
+    <p class="kicker">Tournament rules</p>
+    <h1>Know the rules before you battle</h1>
+    <p class="muted">Plain-English summaries of each hobby's tournament rules. <strong>Official</strong> rules come straight from the organizer's rulebook. <strong>Community</strong> rules come from fan organizations like the WBO, and <strong>Local</strong> rules come from the group that runs the event. Every page shows when we last checked it and links the full rules.</p>
+  </header>
+
+  {rules.length === 0 && <p class="empty">Rules pages are on the way.</p>}
+
+  {Object.entries(HOBBIES).map(([key, h]) => {
+    const here = rules.filter((r) => r.data.hobby === key);
+    return here.length > 0 && (
+      <section>
+        <div class="section-head"><h2><span class="dot" style={`background:${h.color};margin:0`}></span>{h.name}</h2></div>
+        <div class="rules-list">
+          {here.map((r) => (
+            <a class="rules-item" href={`/rules/${r.id}/`}>
+              <span class={`badge badge-${r.data.scope}`}>{SCOPE_LABEL[r.data.scope]}</span>
+              <strong>{r.data.title}</strong>
+              <small>{r.data.summary}</small>
+              <small class="checked">Last checked {fmt(r.data.lastChecked)}</small>
+            </a>
+          ))}
+        </div>
+      </section>
+    );
+  })}
+</Base>

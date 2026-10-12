@@ -17,5 +17,12 @@ export async function GET() {
     kind: 'Wiki',
     hobby: HOBBIES[w.data.hobby as HobbyKey].name,
   }));
-  return new Response(JSON.stringify([...wiki, ...articles]), { headers: { 'Content-Type': 'application/json' } });
+  const rules = (await getCollection('rules')).map((r) => ({
+    title: r.data.title,
+    summary: r.data.summary,
+    url: `/rules/${r.id}/`,
+    kind: 'Rules',
+    hobby: HOBBIES[r.data.hobby as HobbyKey].name,
+  }));
+  return new Response(JSON.stringify([...wiki, ...rules, ...articles]), { headers: { 'Content-Type': 'application/json' } });
 }

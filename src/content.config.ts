@@ -35,4 +35,22 @@ const wiki = defineCollection({
   }),
 });
 
-export const collections = { articles, wiki };
+// Tournament rules: one page per rulebook (/rules/...).
+// "official" rules come from the organizer's own rulebook (sourceUrl).
+// "community" rules come from a fan organization's published rulebook (e.g. WBO).
+// "local" rules come from a community's own copy, provided by Echo.
+const rules = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/rules' }),
+  schema: z.object({
+    title: z.string(),
+    hobby: z.enum(Object.keys(HOBBIES) as [string, ...string[]]),
+    scope: z.enum(['official', 'community', 'local']),
+    organizer: z.string(),
+    sourceUrl: z.string().url().optional(),
+    version: z.string().optional(),
+    lastChecked: z.coerce.date(),
+    summary: z.string(),
+  }),
+});
+
+export const collections = { articles, wiki, rules };

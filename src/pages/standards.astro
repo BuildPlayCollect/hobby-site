@@ -1,0 +1,33 @@
+---
+// standards.astro: our promise to readers (/standards).
+// The full working version for writers lives in the project files (editorial-standards.md).
+import Base from '../layouts/Base.astro';
+import { SITE_NAME } from '../data/site';
+---
+<Base title="Editorial Standards" description={`How ${SITE_NAME} checks facts, stays fair and writes headlines.`}>
+  <div class="prose page-prose">
+    <h1>Editorial standards</h1>
+    <p>We'd rather be right than first. Here's what every article, wiki page and rules page on {SITE_NAME} follows.</p>
+
+    <h2>Checked before it's posted</h2>
+    <ul>
+      <li>Every fact comes from a source we link, and we use the official one (the brand, the organizer, the rulebook) whenever it exists.</li>
+      <li>Leaks and rumors are either left out or clearly marked <strong>Unconfirmed</strong>, with the source named.</li>
+      <li>Rules and release pages show the date we last checked them.</li>
+    </ul>
+
+    <h2>Fair to everyone</h2>
+    <ul>
+      <li>We describe products, teams and brands by what they are and what they do.</li>
+      <li>When the community disagrees, we give each side's main point.</li>
+      <li>Sponsored posts, affiliate links, review samples and giveaway partners are disclosed at the top of the article. Advertisers never change what we write.</li>
+    </ul>
+
+    <h2>Headlines that keep their promise</h2>
+    <p>We want you curious enough to click, and glad you did. If a headline promises something, the article delivers it. No fake urgency, no rumors dressed up as news.</p>
+
+    <h2>When we get it wrong</h2>
+    <p>We fix it quickly and add a correction note at the bottom of the page saying what changed. We never quietly erase a mistake.</p>
+    <p>Spotted an error? <a href="/contact">Tell us</a>.</p>
+  </div>
+</Base>
