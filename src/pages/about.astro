@@ -1,12 +1,31 @@
 ---
 import Base from '../layouts/Base.astro';
-import { SITE_NAME } from '../data/site';
+import { SITE_NAME, HOBBIES } from '../data/site';
 ---
-<Base title="About">
+<Base title="About" description={`Meet Jericho Punsalang, the Philippine-based hobby fan behind ${SITE_NAME}.`}>
   <div class="prose page-prose">
     <h1>About {SITE_NAME}</h1>
-    <p>{SITE_NAME} covers the hobbies we grew up with and still obsess over: Beyblade, Tamiya, mechanical keyboards, trading card games, consoles and esports.</p>
-    <p>We write history pieces, brand profiles, buying guides and interviews for collectors, players and builders. (Replace this with your own story.)</p>
-    <p>Everything we publish is fact-checked and fair. Read our <a href="/standards">editorial standards</a>.</p>
+
+    <p>Hi! I'm <strong>Jericho Punsalang</strong>. Depending on who's calling me, that's Jepoy, Jeps, Shin or Shinryu. (If you shout any of them at a hobby shop, I'll probably turn around.) I'm based in the Philippines, and right now {SITE_NAME} is a one-person show: me, a keyboard, and a worrying number of open tabs.</p>
+
+    <h2>Why this site exists</h2>
+    <p>I wanted one place that explains <em>all</em> the hobbies, not just one. A one-stop shop, so to speak. Whether you're curious about your first deck, your first Mini 4WD, your first mechanical keyboard or your first ranked match, you shouldn't need twelve forums and a group chat to get started. You should be able to land here, learn the basics, and maybe catch a new obsession on the way out.</p>
+
+    <h2>How I got here</h2>
+    <p>When I was a kid, my mom bought me a toy every month on her payday. That one tradition did a lot of damage, in the best way. It started with Dragon Ball Z and Spider-Man figures, then Crush Gear, Zoids, Beyblades battled in a metal basin, and a yo-yo that only ever knew two tricks.</p>
+    <p>Then came the Game Boy Advance, then a PSP (my elementary-school self barely saw sunlight after that, thanks to Monster Hunter), and later PC games like Dota 2, TFT and Valorant. These days I'm back to spinning tops with Beyblade X, while still wandering into every other hobby I can find.</p>
+
+    <h2>What you'll find here</h2>
+    <p>History, brand profiles, beginner guides, where to buy, new releases, tournament rules and more, across:</p>
+    <ul>
+      {Object.entries(HOBBIES).map(([key, h]) => (
+        <li><a href={`/${key}`}>{h.name}</a>: {h.blurb}</li>
+      ))}
+    </ul>
+
+    <h2>My promise to you</h2>
+    <p>Headlines here can be fun, but the facts will always be true. I check my sources, I don't pick favorites, and if I get something wrong, I'll fix it. You can read the full rules in our <a href="/standards">editorial standards</a>.</p>
+
+    <p>Got a question, a correction or a hobby you think I should cover? Say hi on the <a href="/contact">contact page</a>.</p>
   </div>
 </Base>
