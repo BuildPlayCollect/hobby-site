@@ -274,3 +274,18 @@ main { padding-bottom: 24px; }
 .footer-grid a:hover { color: var(--accent); }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* ---------- Tournament rules ---------- */
+.rules-list { display: grid; gap: 12px; }
+@media (min-width: 760px) { .rules-list { grid-template-columns: 1fr 1fr; } }
+.rules-item { display: flex; flex-direction: column; gap: 4px; padding: 16px 18px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg); color: var(--ink); transition: border-color .15s, transform .15s, box-shadow .15s; }
+.rules-item:hover { text-decoration: none; border-color: color-mix(in srgb, var(--accent) 40%, var(--line)); transform: translateY(-2px); box-shadow: var(--shadow); }
+.rules-item:hover strong { color: var(--accent); }
+.rules-item small { color: var(--muted); font-size: .9rem; }
+.rules-item .checked { font-size: .8rem; }
+.badge { align-self: flex-start; font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 3px 9px; border-radius: 99px; }
+.badge-official { background: var(--accent-soft); color: var(--accent); }
+.badge-local { background: #fef3c7; color: #854d0e; }
+:root[data-theme="dark"] .badge-local { background: #4a3b16; color: #fcc85a; }
+.rules-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; margin-top: 14px; color: var(--muted); font-size: .88rem; }
+.rules-note { margin-top: 32px; padding: 14px 16px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); color: var(--muted); font-size: .93rem; }

@@ -10,12 +10,14 @@ import { HOBBIES, TYPES, TYPE_SLUGS } from '../data/site';
 export async function getStaticPaths() {
   const articles = (await getCollection('articles')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
   const wiki = await getCollection('wiki');
+  const rules = await getCollection('rules');
   const hobbyPages = Object.entries(HOBBIES).map(([key, h]) => ({
     params: { section: key },
     props: {
       title: h.name, intro: h.blurb, color: h.color, isHobby: true,
       articles: articles.filter((a) => a.data.hobby === key),
       terms: wiki.filter((w) => w.data.hobby === key),
+      rulebooks: rules.filter((r) => r.data.hobby === key),
     },
   }));
   const typePages = Object.entries(TYPES).map(([key, t]) => ({
@@ -24,12 +26,13 @@ export async function getStaticPaths() {
       title: t.plural, intro: `Every ${t.name.toLowerCase()} article, across all hobbies.`, color: 'var(--accent-bright)', isHobby: false,
       articles: articles.filter((a) => a.data.type === key),
       terms: [],
+      rulebooks: [],
     },
   }));
   return [...hobbyPages, ...typePages];
 }
 
-const { title, intro, color, isHobby, articles, terms } = Astro.props;
+const { title, intro, color, isHobby, articles, terms, rulebooks } = Astro.props;
 // Only offer filter buttons for types this hobby actually has.
 const typesHere = Object.entries(TYPES).filter(([key]) => articles.some((a) => a.data.type === key));
 ---
@@ -49,6 +52,21 @@ const typesHere = Object.entries(TYPES).filter(([key]) => articles.some((a) => a
   {articles.length === 0
     ? <p class="empty">No articles here yet.</p>
     : <div class="grid" style="margin-top:16px">{articles.map((a) => <ArticleCard article={a} />)}</div>}
+
+  {rulebooks.length > 0 && (
+    <>
+      <div class="section-head"><h2>{title} tournament rules</h2><a class="more" href="/rules">All rules →</a></div>
+      <div class="rules-list">
+        {rulebooks.map((r) => (
+          <a class="rules-item" href={`/rules/${r.id}/`}>
+            <span class={`badge badge-${r.data.scope}`}>{r.data.scope === 'local' ? 'Local' : 'Official'}</span>
+            <strong>{r.data.title}</strong>
+            <small>{r.data.summary}</small>
+          </a>
+        ))}
+      </div>
+    </>
+  )}
 
   {terms.length > 0 && (
     <>

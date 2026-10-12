@@ -147,3 +147,75 @@ content:
         type: rich-text
         options:
           format: markdown
+
+  - name: rules
+    label: Tournament rules
+    type: collection
+    path: src/content/rules
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      fields: [title, hobby, scope, lastChecked]
+      primary: title
+      sort: [title]
+    fields:
+      - name: title
+        label: Title
+        description: e.g. "Beyblade X Rules (Manila community)"
+        type: string
+        required: true
+      - name: hobby
+        label: Hobby
+        type: select
+        required: true
+        options:
+          values:
+            - name: beyblade
+              label: Beyblade
+            - name: tamiya
+              label: Tamiya
+            - name: keyboards
+              label: Keyboards
+            - name: tcg
+              label: TCG
+            - name: consoles
+              label: Consoles
+            - name: esports
+              label: Esports
+      - name: scope
+        label: Official or local
+        description: Local = rules from your community's own copy. Official = the organizer's rulebook.
+        type: select
+        required: true
+        options:
+          values:
+            - name: local
+              label: Local
+            - name: official
+              label: Official
+      - name: organizer
+        label: Who made these rules
+        description: The community, shop or organizer, e.g. "Manila Beyblade Community".
+        type: string
+        required: true
+      - name: sourceUrl
+        label: Link to the full rules (optional)
+        type: string
+      - name: version
+        label: Version or date of the rules (optional)
+        type: string
+      - name: lastChecked
+        label: Last checked
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: summary
+        label: One-line summary
+        type: text
+        required: true
+      - name: body
+        label: Rules
+        type: rich-text
+        options:
+          format: markdown
