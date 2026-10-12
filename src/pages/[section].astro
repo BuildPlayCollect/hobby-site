@@ -15,7 +15,7 @@ export async function getStaticPaths() {
   }));
   const typePages = Object.entries(TYPES).map(([key, t]) => ({
     params: { section: TYPE_SLUGS[key as keyof typeof TYPES] },
-    props: { title: t.plural, intro: `Every ${t.name.toLowerCase()} article, across all hobbies.`, color: '#111', articles: articles.filter((a) => a.data.type === key) },
+    props: { title: t.plural, intro: `Every ${t.name.toLowerCase()} article, across all hobbies.`, color: 'var(--ink)', articles: articles.filter((a) => a.data.type === key) },
   }));
   return [...hobbyPages, ...typePages];
 }

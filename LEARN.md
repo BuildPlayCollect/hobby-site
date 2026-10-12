@@ -46,12 +46,24 @@ Your article starts here. Use ## for section headings.
 
 That's it. The article automatically shows up on the home page, its hobby page (`/tamiya`) and its type page (`/guides`).
 
+## Writing in the browser (Pages CMS)
+
+You don't have to edit files by hand. Go to https://app.pagescms.org, sign in with GitHub and open `hobby-site`. You'll see an **Articles** list and a form for each article: title, hobby, type, date, cover image and the article itself.
+
+When you click **Save**, Pages CMS saves the article as a `.md` file in GitHub for you, exactly like the ones in `src/content/articles/`. Cloudflare sees the change and the live site updates about a minute later.
+
+The form is defined in `.pages.yml`. If you ever add a new hobby to `src/data/site.ts`, add it to the hobby list in `.pages.yml` too.
+
 ## How pages get made
 
 - `src/pages/index.astro` is the home page (`/`).
 - `src/pages/about.astro` is `/about`.
 - `src/pages/[section].astro` uses square brackets, which mean "fill in the blank". It makes **13 pages from one file**: one per hobby and one per content type.
 - `src/pages/articles/[id].astro` makes one page per article file.
+
+## Night mode
+
+The moon/sun button in the header switches night mode. It works by swapping the color variables at the top of `src/styles/global.css`: the light values are under `:root`, the dark ones under `:root[data-theme="dark"]`. To change the site's colors later, edit those two blocks.
 
 ## Ads
 

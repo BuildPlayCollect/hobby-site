@@ -20,14 +20,29 @@ const fullTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <!-- Night mode: runs before the page draws so it never flashes white.
+         Uses the reader's saved choice, or their device's setting if they haven't picked. -->
+    <script is:inline>
+      (function () {
+        var saved = null;
+        try { saved = localStorage.getItem('theme'); } catch (e) {}
+        var dark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+      })();
+    </script>
   </head>
   <body>
     <header class="site-header">
       <div class="wrap header-row">
         <a class="logo" href="/">{SITE_NAME}</a>
-        <nav class="hobby-nav" aria-label="Hobbies">
-          {Object.entries(HOBBIES).map(([key, h]) => <a href={`/${key}`}>{h.name}</a>)}
-        </nav>
+        <div class="header-tools">
+          <nav class="hobby-nav" aria-label="Hobbies">
+            {Object.entries(HOBBIES).map(([key, h]) => <a href={`/${key}`}>{h.name}</a>)}
+          </nav>
+          <button class="theme-toggle" type="button" aria-label="Toggle night mode" title="Toggle night mode">
+            <span class="sun">☀</span><span class="moon">☾</span>
+          </button>
+        </div>
       </div>
     </header>
     <div class="wrap"><AdSlot position="header" /></div>
@@ -46,5 +61,13 @@ const fullTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
         </nav>
       </div>
     </footer>
+    <script is:inline>
+      // The night mode button: flip the theme and remember the choice.
+      document.querySelector('.theme-toggle').addEventListener('click', function () {
+        var next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+        document.documentElement.dataset.theme = next;
+        try { localStorage.setItem('theme', next); } catch (e) {}
+      });
+    </script>
   </body>
 </html>

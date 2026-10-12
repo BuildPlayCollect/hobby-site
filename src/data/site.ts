@@ -10,7 +10,7 @@ export const HOBBIES = {
   keyboards: { name: 'Keyboards', color: '#7c3aed', blurb: 'Mechanical keyboards, switches, keycaps and builds.' },
   tcg: { name: 'TCG', color: '#d97706', blurb: 'Trading card games: Pokemon, Magic, One Piece, Yu-Gi-Oh! and more.' },
   consoles: { name: 'Consoles', color: '#059669', blurb: 'Gaming consoles, old and new.' },
-  esports: { name: 'Esports', color: '#0f172a', blurb: 'Dota 2, League of Legends, TFT and the scenes around them.' },
+  esports: { name: 'Esports', color: '#475569', blurb: 'Dota 2, League of Legends, TFT and the scenes around them.' },
 } as const;
 
 export const TYPES = {

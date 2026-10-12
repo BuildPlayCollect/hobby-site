@@ -14,7 +14,9 @@ const type = TYPES[article.data.type as TypeKey];
 ---
 <a class:list={['card', { 'card-large': large }]} href={`/articles/${article.id}`}>
   <div class="card-cover" style={`background:${hobby.color}`}>
-    <span>{hobby.name}</span>
+    {article.data.cover
+      ? <img src={article.data.cover} alt={article.data.coverAlt ?? ''} loading="lazy" />
+      : <span>{hobby.name}</span>}
   </div>
   <div class="card-body">
     <p class="kicker">{hobby.name} &middot; {type.name}</p>

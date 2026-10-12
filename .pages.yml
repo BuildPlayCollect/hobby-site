@@ -1,0 +1,98 @@
+# .pages.yml: settings for Pages CMS, the browser editor (https://app.pagescms.org).
+# It describes the article form you fill in. Each "field" here matches a line
+# in an article's frontmatter (see src/content.config.ts).
+
+media:
+  input: public/images
+  output: /images
+  categories: [image]
+
+content:
+  - name: articles
+    label: Articles
+    type: collection
+    path: src/content/articles
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      fields: [title, hobby, type, date]
+      primary: title
+      sort: [date, title]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: description
+        label: Short description
+        description: One sentence. Shown on article cards and in Google results.
+        type: text
+        required: true
+      - name: hobby
+        label: Hobby
+        type: select
+        required: true
+        options:
+          values:
+            - name: beyblade
+              label: Beyblade
+            - name: tamiya
+              label: Tamiya
+            - name: keyboards
+              label: Keyboards
+            - name: tcg
+              label: TCG
+            - name: consoles
+              label: Consoles
+            - name: esports
+              label: Esports
+      - name: type
+        label: Article type
+        type: select
+        required: true
+        options:
+          values:
+            - name: history
+              label: History
+            - name: brand-profile
+              label: Brand Profile
+            - name: guide
+              label: Guide
+            - name: where-to-buy
+              label: Where to Buy
+            - name: new-release
+              label: New Release
+            - name: giveaway
+              label: Giveaway
+            - name: interview
+              label: Interview
+      - name: author
+        label: Author
+        type: string
+        default: Echo
+        required: true
+      - name: date
+        label: Publish date
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: featured
+        label: Feature on the home page
+        type: boolean
+        default: false
+      - name: cover
+        label: Cover image
+        type: image
+      - name: coverAlt
+        label: Cover image description
+        description: Describe the photo for readers using screen readers, e.g. "Three Beyblade X tops in a stadium".
+        type: string
+      - name: body
+        label: Article
+        type: rich-text
+        options:
+          format: markdown
