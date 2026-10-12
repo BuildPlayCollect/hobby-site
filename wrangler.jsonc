@@ -1,0 +1,10 @@
+// wrangler.jsonc: tells Cloudflare how to host this site.
+// "assets" means: after `npm run build`, upload the finished pages in ./dist as-is.
+{
+  "name": "hobby-site",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}
