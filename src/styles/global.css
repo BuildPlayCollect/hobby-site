@@ -308,9 +308,6 @@ main { padding-bottom: 24px; }
 .parts-table th { background: var(--surface); font-weight: 700; font-size: .85rem; }
 .parts-table tbody tr:hover { background: var(--surface); }
 .parts-section[hidden], .parts-group[hidden], .parts-table tr[hidden] { display: none; }
-.parts-cta { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 6px 16px; margin-top: 40px; padding: 18px 20px; border-radius: var(--radius); background: linear-gradient(120deg, var(--accent-soft), var(--surface)); border: 1px solid var(--line); color: var(--ink); transition: transform .15s, box-shadow .15s; }
-.parts-cta:hover { text-decoration: none; transform: translateY(-2px); box-shadow: var(--shadow); }
-.parts-cta span { color: var(--accent); font-weight: 600; }
 
 /* Part photos in the parts list (src/components/PartPhoto.astro) */
 .part-photo { display: inline-block; vertical-align: middle; margin: 0 12px 0 0; text-align: center; }
