@@ -24,7 +24,7 @@ In plain words: a hobby is the thing you do because you *want* to. No boss, no g
 
 Around the year 1400, a "hobby" was a small, active horse. By the 1550s, a "hobbyhorse" was a pretend horse used in morris dancing, and by the 1580s it was a child's toy horse. In the 1670s, people started using "hobbyhorse" to mean a favorite pastime, and by 1816 plain old "hobby" meant it too.
 
-So technically, every hobby is riding a toy horse very seriously. Honestly, that explains a lot about grown adults timing their Beyblade launches.
+So technically, every hobby is riding a toy horse very seriously. Honestly, that explains a lot about grown adults lubing keyboard switches at 2am.
 
 Bonus: "hobby" is also the name of a small falcon. Hobbies really can take off.
 
@@ -32,11 +32,11 @@ Bonus: "hobby" is also the name of a small falcon. Hobbies really can take off.
 
 If you've ever said "just one more," it counts. Most hobbies fall into one of three camps, which is where this site gets its name:
 
-- **Build:** putting something together with your own hands, like a [Tamiya](/tamiya) kit or a custom [keyboard](/keyboards).
-- **Play:** battling, racing, competing. My childhood "stadium" for Beyblades was a metal basin. Official stadium? Never heard of her.
-- **Collect:** figures, cards, rare Beys, old consoles. Anything you line up on a shelf and stare at proudly.
+- **Build:** putting something together with your own hands, like a [Tamiya](/tamiya) Mini 4WD, a custom [keyboard](/keyboards), or a model kit.
+- **Play:** battling, racing, competing. Card games at a [TCG](/tcg) night, ranked matches in [esports](/esports), spinning tops in a [Beyblade](/beyblade) stadium. (Mine was a metal basin from the kitchen. Official stadium? Never heard of her.)
+- **Collect:** figures, cards, retro [consoles](/consoles), sneakers, stamps. Anything you line up on a shelf and stare at proudly.
 
-Plenty of hobbies are all three at once. Ask anyone who builds a [Beyblade X](/beyblade) combo, battles with it, and then buys a second one "for display."
+Plenty of hobbies are all three at once. Ask anyone who builds a Mini 4WD, races it every weekend, and then buys a second one "just for display."
 
 ## A hobby grows with you
 
@@ -62,7 +62,7 @@ Here's what mine gave me:
 
 1. **Start small.** One starter set, one deck, one kit. You don't need the whole shelf on day one.
 2. **Ask yourself: build, play or collect?** Pick the one that sounds the most fun right now.
-3. **Find your people.** A local shop, a group chat, a tournament. Hobbies are better with company.
+3. **Find your people.** A local shop, a group chat, a race track, a game night. Hobbies are better with company.
 4. **Give it a month.** Some hobbies click on day one. Others sneak up on you.
 5. **Don't compare your Shield Liger to someone else's Blade Liger.** Trust me.
 
@@ -70,7 +70,7 @@ Here's what mine gave me:
 
 So, what's your hobby? Or the one you've been "just looking at" for months? Pick one and give it a go.
 
-Then come back. We've got a [Beyblade X parts list](/beyblade/parts), [tournament rules](/rules), and a [wiki](/wiki) full of hobby words to fall into. And if you want new guides in your inbox, [join the newsletter](/newsletter).
+Then come back. Pick a corner to explore: [Beyblade](/beyblade), [Tamiya](/tamiya), [keyboards](/keyboards), [TCG](/tcg), [consoles](/consoles) or [esports](/esports). There are also [tournament rules](/rules) and a [wiki](/wiki) full of hobby words to fall into. And if you want new guides in your inbox, [join the newsletter](/newsletter).
 
 ---
 
