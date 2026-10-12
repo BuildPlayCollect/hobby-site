@@ -6,21 +6,34 @@ import Base from '../../layouts/Base.astro';
 import { SPECIAL_EDITIONS } from '../../data/bx-special-editions';
 
 const parts = await getCollection('bxParts');
-const blades = parts.filter((p) => p.data.kind === 'blade');
-const ratchets = parts.filter((p) => p.data.kind === 'ratchet');
-const bits = parts.filter((p) => p.data.kind === 'bit');
-// Blade groups in the order the wiki lists them, then A to Z inside each group.
-const GROUP_ORDER = ['Main', 'Expand', 'Hasbro debut', 'X-Over Project'];
-const rank = (g: string) => (GROUP_ORDER.includes(g) ? GROUP_ORDER.indexOf(g) : GROUP_ORDER.length);
-const bladeGroups = [...new Set(blades.map((b) => b.data.group ?? 'Other'))].sort((a, b) => rank(a) - rank(b) || a.localeCompare(b));
-const label = (b: (typeof blades)[number]) => b.data.name ?? b.data.hasbroName ?? '';
-blades.sort((a, b) => label(a).localeCompare(label(b)));
-ratchets.sort((a, b) => (a.data.abbr ?? '').localeCompare(b.data.abbr ?? '', undefined, { numeric: true }));
-bits.sort((a, b) => (a.data.name ?? '').localeCompare(b.data.name ?? ''));
+const ofKind = (k: string) => parts.filter((p) => p.data.kind === k);
+const blades = ofKind('blade');
+const ratchets = ofKind('ratchet');
+const bits = ofKind('bit');
 const LINE = { basic: 'Basic Line', unique: 'Unique Line', custom: 'Custom Line' };
+// Blade groups in the order the wiki lists them (Basic Line first), then A to Z inside each group.
+const GROUP_ORDER = ['Main', 'Expand', 'Hasbro debut', 'Ratchet-integrated', 'X-Over Project'];
+const LINE_ORDER = ['basic', 'unique', 'custom'];
+const rank = (g: string) => (GROUP_ORDER.includes(g) ? GROUP_ORDER.indexOf(g) : GROUP_ORDER.length);
+const groupOf = (b: (typeof parts)[number]) => `${LINE[b.data.line]}: ${b.data.group ?? 'Other'}`;
+const bladeGroups = [...new Map(blades.map((b) => [groupOf(b), b])).values()]
+  .sort((a, b) => LINE_ORDER.indexOf(a.data.line) - LINE_ORDER.indexOf(b.data.line) || rank(a.data.group ?? '') - rank(b.data.group ?? '') || (a.data.group ?? '').localeCompare(b.data.group ?? ''))
+  .map(groupOf);
+const label = (b: (typeof parts)[number]) => b.data.name ?? b.data.hasbroName ?? '';
+for (const list of [blades, bits]) list.sort((a, b) => label(a).localeCompare(label(b)));
+ratchets.sort((a, b) => (a.data.abbr ?? '').localeCompare(b.data.abbr ?? '', undefined, { numeric: true }));
+// Custom Line (CX) Blades are built from smaller parts, each listed in its own table.
+const CX = [
+  { kind: 'lock-chip', title: 'Lock Chips', named: true },
+  { kind: 'main-blade', title: 'Main Blades', named: true },
+  { kind: 'assist-blade', title: 'Assist Blades', named: false },
+  { kind: 'metal-blade', title: 'Metal Blades', named: true },
+  { kind: 'over-blade', title: 'Over Blades', named: false },
+].map((g) => ({ ...g, parts: ofKind(g.kind).sort((a, b) => label(a).localeCompare(label(b))) }));
+const cxCount = CX.reduce((n, g) => n + g.parts.length, 0);
 const search = (...words: (string | undefined)[]) => words.filter(Boolean).join(' ').toLowerCase();
 ---
-<Base title="Beyblade X Parts List" description={`Every Beyblade X Blade, Ratchet and Bit in one searchable list: ${blades.length} Blades, ${ratchets.length} Ratchets and ${bits.length} Bits.`}>
+<Base title="Beyblade X Parts List" description={`Every Beyblade X Blade, Ratchet and Bit in one searchable list: ${blades.length} Blades, ${ratchets.length} Ratchets and ${bits.length} Bits, plus ${cxCount} Custom Line Blade parts.`}>
   <header class="wiki-hero">
     <p class="kicker"><span class="dot" style="background:#e63946"></span><a href="/beyblade">Beyblade</a> · Parts</p>
     <h1>Beyblade X parts list</h1>
@@ -29,6 +42,7 @@ const search = (...words: (string | undefined)[]) => words.filter(Boolean).join(
       <span><strong>{blades.length}</strong> Blades</span>
       <span><strong>{ratchets.length}</strong> Ratchets</span>
       <span><strong>{bits.length}</strong> Bits</span>
+      <span><strong>{cxCount}</strong> CX Blade parts</span>
     </div>
     <label class="sr-only" for="parts-filter">Search parts</label>
     <input id="parts-filter" class="wiki-filter" type="search" placeholder="Search parts, e.g. Dran, 3-60 or Flat" autocomplete="off" />
@@ -37,20 +51,21 @@ const search = (...words: (string | undefined)[]) => words.filter(Boolean).join(
       <button class="chip" type="button" data-kind="blade" aria-pressed="false">Blades</button>
       <button class="chip" type="button" data-kind="ratchet" aria-pressed="false">Ratchets</button>
       <button class="chip" type="button" data-kind="bit" aria-pressed="false">Bits</button>
-      <button class="chip" type="button" data-kind="special" aria-pressed="false">Special editions</button>
+      <button class="chip" type="button" data-kind="cx" aria-pressed="false">CX Blade parts</button>
+      <button class="chip" type="button" data-kind="special" aria-pressed="false">Rare releases</button>
     </div>
   </header>
 
   <section class="parts-section" data-kind="blade">
     <div class="section-head"><h2>Blades</h2></div>
-    <p class="muted">"Not listed" means the Beyblade Wiki gives no name for that company.</p>
+    <p class="muted">"Not listed" means the Beyblade Wiki gives no name for that company. Ratchet-integrated Blades have a Ratchet built in, so they go straight onto a Bit.</p>
     {bladeGroups.map((g) => (
       <div class="parts-group">
         <h3>{g}</h3>
         <table class="parts-table">
           <thead><tr><th>Takara Tomy name</th><th>Hasbro name</th></tr></thead>
           <tbody>
-            {blades.filter((b) => (b.data.group ?? 'Other') === g).map((b) => (
+            {blades.filter((b) => groupOf(b) === g).map((b) => (
               <tr data-search={search(b.data.name, b.data.hasbroName, g)}>
                 <td>{b.data.name ?? <span class="muted">Not listed</span>}</td>
                 <td>{b.data.hasbroName ?? <span class="muted">Not listed</span>}</td>
@@ -82,19 +97,45 @@ const search = (...words: (string | undefined)[]) => words.filter(Boolean).join(
       <thead><tr><th>Bit</th><th>Name</th><th>Line</th></tr></thead>
       <tbody>
         {bits.map((b) => (
-          <tr data-search={search(b.data.abbr, b.data.name)}><td><strong>{b.data.abbr}</strong></td><td>{b.data.name}</td><td>{LINE[b.data.line]}</td></tr>
+          <tr data-search={search(b.data.abbr, b.data.name, b.data.group)}><td><strong>{b.data.abbr}</strong></td><td>{b.data.name}{b.data.group && <span class="muted"> ({b.data.group.toLowerCase()})</span>}</td><td>{LINE[b.data.line]}</td></tr>
         ))}
       </tbody>
     </table>
   </section>
 
+  <section class="parts-section" data-kind="cx">
+    <div class="section-head"><h2>Custom Line (CX) Blade parts</h2></div>
+    <p class="muted">A Custom Line Blade is built from parts: a Lock Chip, a Main Blade and an Assist Blade. A CX Expand Blade uses a Lock Chip, an Over Blade, a Metal Blade and an Assist Blade. Mix them to make your own Blade.</p>
+    {CX.map((g) => (
+      <div class="parts-group">
+        <h3>{g.title}</h3>
+        <table class="parts-table">
+          <thead>{g.named ? <tr><th>Takara Tomy name</th><th>Hasbro name</th></tr> : <tr><th>Abbr.</th><th>Name</th></tr>}</thead>
+          <tbody>
+            {g.parts.map((p) => g.named ? (
+              <tr data-search={search(p.data.name, p.data.hasbroName, g.title)}>
+                <td>{p.data.name ?? <span class="muted">Not listed</span>}</td>
+                <td>{p.data.hasbroName ?? <span class="muted">Not listed</span>}</td>
+              </tr>
+            ) : (
+              <tr data-search={search(p.data.abbr, p.data.name, g.title)}>
+                <td><strong>{p.data.abbr ?? <span class="muted">Not listed</span>}</strong></td>
+                <td>{p.data.name}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    ))}
+  </section>
+
   <section class="parts-section" data-kind="special">
-    <div class="section-head"><h2>Special editions</h2></div>
-    <p class="muted">Gold, coated, black and other special-color releases, named as the <a href="https://www.beybxdb.com/beyblades/takara-tomy-beyblade-x" rel="noopener">Beyblade X Database</a> lists them. Check the database for how each one was released.</p>
+    <div class="section-head"><h2>Rare BX/UX/CX-00 releases</h2></div>
+    <p class="muted">Special releases the <a href="https://www.beybxdb.com/beyblades/takara-tomy-beyblade-x" rel="noopener">Beyblade X Database</a> lists as "Rare BX/UX/CX-00", with the product code shown for each. Check the database for how each one was released.</p>
     <table class="parts-table">
-      <thead><tr><th>Release</th></tr></thead>
+      <thead><tr><th>Code</th><th>Release</th></tr></thead>
       <tbody>
-        {SPECIAL_EDITIONS.map((s) => <tr data-search={s.toLowerCase()}><td>{s}</td></tr>)}
+        {SPECIAL_EDITIONS.map((s) => <tr data-search={`${s.code} ${s.name}`.toLowerCase()}><td>{s.code}</td><td>{s.name}</td></tr>)}
       </tbody>
     </table>
   </section>
@@ -102,8 +143,8 @@ const search = (...words: (string | undefined)[]) => words.filter(Boolean).join(
   <p class="empty parts-none" hidden>No parts match that search.</p>
 
   <p class="rules-note">
-    Sources: part names from the Beyblade Wiki's <a href="https://beyblade.fandom.com/wiki/List_of_Basic_Line_parts" rel="noopener">List of Basic Line parts</a>,
-    special editions from the <a href="https://www.beybxdb.com/beyblades/takara-tomy-beyblade-x" rel="noopener">Beyblade X Database</a>. Last checked October 12, 2026.
+    Sources: part names from the Beyblade Wiki's <a href="https://beyblade.fandom.com/wiki/List_of_Basic_Line_parts" rel="noopener">Basic Line</a>, <a href="https://beyblade.fandom.com/wiki/List_of_Unique_Line_parts" rel="noopener">Unique Line</a> and <a href="https://beyblade.fandom.com/wiki/List_of_Custom_Line_parts" rel="noopener">Custom Line</a> parts lists,
+    rare releases from the <a href="https://www.beybxdb.com/beyblades/takara-tomy-beyblade-x" rel="noopener">Beyblade X Database</a>. Last checked October 12, 2026.
     Spot a missing part? <a href="/contact">Tell us</a>.
   </p>
 

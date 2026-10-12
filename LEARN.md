@@ -97,7 +97,7 @@ Every rules page shows "Last checked", and the footer links the [editorial stand
 
 ## Beyblade X parts list
 
-`/beyblade/parts` lists every Blade, Ratchet and Bit. The parts live in **one file**, `src/data/bx-parts.yaml`: each part is a few lines (kind, line, name, Hasbro name or abbreviation). To add a part, copy an entry, change it, and give it a new `id`. The page, its counts, its filters and the site search all update themselves. Special-color releases are listed in `src/data/bx-special-editions.ts`.
+`/beyblade/parts` lists every Blade, Ratchet and Bit across the Basic, Unique and Custom Lines, plus the Custom Line (CX) Blade parts: Lock Chips, Main, Assist, Metal and Over Blades. The parts live in **one file**, `src/data/bx-parts.yaml`: each part is a few lines (kind, line, name, Hasbro name or abbreviation). To add a part, copy an entry, change it, and give it a new `id`. The page, its counts, its filters and the site search all update themselves. The rare BX/UX/CX-00 releases are listed in `src/data/bx-special-editions.ts`, one line each with the product code and name.
 
 ## Search
 

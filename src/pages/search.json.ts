@@ -26,8 +26,8 @@ export async function GET() {
   }));
   const parts = (await getCollection('bxParts')).map((p) => {
     const title = p.data.abbr ? `${p.data.abbr} (${p.data.name})` : (p.data.name ?? p.data.hasbroName ?? p.id);
-    const other = p.data.kind === 'blade' && p.data.name && p.data.hasbroName ? `Hasbro name: ${p.data.hasbroName}` : '';
-    const kind = { blade: 'Blade', ratchet: 'Ratchet', bit: 'Bit' }[p.data.kind];
+    const other = p.data.name && p.data.hasbroName && !p.data.abbr ? `Hasbro name: ${p.data.hasbroName}` : '';
+    const kind = { blade: 'Blade', ratchet: 'Ratchet', bit: 'Bit', 'lock-chip': 'Lock Chip', 'metal-blade': 'Metal Blade', 'over-blade': 'Over Blade', 'main-blade': 'Main Blade', 'assist-blade': 'Assist Blade' }[p.data.kind];
     return {
       title,
       summary: [`Beyblade X ${kind}`, other].filter(Boolean).join('. '),

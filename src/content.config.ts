@@ -57,7 +57,7 @@ const rules = defineCollection({
 const bxParts = defineCollection({
   loader: file('src/data/bx-parts.yaml'),
   schema: z.object({
-    kind: z.enum(['blade', 'ratchet', 'bit']),
+    kind: z.enum(['blade', 'ratchet', 'bit', 'lock-chip', 'metal-blade', 'over-blade', 'main-blade', 'assist-blade']),
     line: z.enum(['basic', 'unique', 'custom']),
     group: z.string().optional(),
     name: z.string().optional(),
