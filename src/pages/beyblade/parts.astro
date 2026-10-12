@@ -4,6 +4,7 @@
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import { SPECIAL_EDITIONS } from '../../data/bx-special-editions';
+import PartPhoto from '../../components/PartPhoto.astro';
 
 const parts = await getCollection('bxParts');
 const ofKind = (k: string) => parts.filter((p) => p.data.kind === k);
@@ -31,6 +32,17 @@ const CX = [
   { kind: 'over-blade', title: 'Over Blades', named: false },
 ].map((g) => ({ ...g, parts: ofKind(g.kind).sort((a, b) => label(a).localeCompare(label(b))) }));
 const cxCount = CX.reduce((n, g) => n + g.parts.length, 0);
+// Photos added in Pages CMS ("Part photos"), matched to a part by its id, name, Hasbro name or abbreviation.
+// A photo that matches no part, or more than one, stops the build with a message saying which.
+const norm = (x?: string) => (x ?? '').toLowerCase().replace(/[^a-z0-9]/g, '');
+const photos = new Map<string, Awaited<ReturnType<typeof getCollection<'partPhotos'>>>[number]['data']>();
+for (const ph of await getCollection('partPhotos')) {
+  const want = norm(ph.data.part);
+  const hits = parts.filter((p) => (!ph.data.kind || p.data.kind === ph.data.kind) && [p.id, p.data.name, p.data.hasbroName, p.data.abbr].some((x) => x && norm(x) === want));
+  if (hits.length === 0) throw new Error(`Part photo "${ph.id}": no part is called "${ph.data.part}". Use the name as the parts list shows it.`);
+  if (hits.length > 1) throw new Error(`Part photo "${ph.id}": "${ph.data.part}" matches ${hits.length} parts (${hits.map((h) => h.data.kind).join(', ')}). Pick a Part type in Pages CMS.`);
+  photos.set(hits[0].id, ph.data);
+}
 const search = (...words: (string | undefined)[]) => words.filter(Boolean).join(' ').toLowerCase();
 ---
 <Base title="Beyblade X Parts List" description={`Every Beyblade X Blade, Ratchet and Bit in one searchable list: ${blades.length} Blades, ${ratchets.length} Ratchets and ${bits.length} Bits, plus ${cxCount} Custom Line Blade parts.`}>
@@ -67,7 +79,7 @@ const search = (...words: (string | undefined)[]) => words.filter(Boolean).join(
           <tbody>
             {blades.filter((b) => groupOf(b) === g).map((b) => (
               <tr data-search={search(b.data.name, b.data.hasbroName, g)}>
-                <td>{b.data.name ?? <span class="muted">Not listed</span>}</td>
+                <td><PartPhoto photo={photos.get(b.id)} />{b.data.name ?? <span class="muted">Not listed</span>}</td>
                 <td>{b.data.hasbroName ?? <span class="muted">Not listed</span>}</td>
               </tr>
             ))}
@@ -84,7 +96,7 @@ const search = (...words: (string | undefined)[]) => words.filter(Boolean).join(
       <thead><tr><th>Ratchet</th><th>Name</th><th>Line</th></tr></thead>
       <tbody>
         {ratchets.map((r) => (
-          <tr data-search={search(r.data.abbr, r.data.name)}><td><strong>{r.data.abbr}</strong></td><td>{r.data.name}</td><td>{LINE[r.data.line]}</td></tr>
+          <tr data-search={search(r.data.abbr, r.data.name)}><td><PartPhoto photo={photos.get(r.id)} /><strong>{r.data.abbr}</strong></td><td>{r.data.name}</td><td>{LINE[r.data.line]}</td></tr>
         ))}
       </tbody>
     </table>
@@ -97,7 +109,7 @@ const search = (...words: (string | undefined)[]) => words.filter(Boolean).join(
       <thead><tr><th>Bit</th><th>Name</th><th>Line</th></tr></thead>
       <tbody>
         {bits.map((b) => (
-          <tr data-search={search(b.data.abbr, b.data.name, b.data.group)}><td><strong>{b.data.abbr}</strong></td><td>{b.data.name}{b.data.group && <span class="muted"> ({b.data.group.toLowerCase()})</span>}</td><td>{LINE[b.data.line]}</td></tr>
+          <tr data-search={search(b.data.abbr, b.data.name, b.data.group)}><td><PartPhoto photo={photos.get(b.id)} /><strong>{b.data.abbr}</strong></td><td>{b.data.name}{b.data.group && <span class="muted"> ({b.data.group.toLowerCase()})</span>}</td><td>{LINE[b.data.line]}</td></tr>
         ))}
       </tbody>
     </table>
@@ -114,12 +126,12 @@ const search = (...words: (string | undefined)[]) => words.filter(Boolean).join(
           <tbody>
             {g.parts.map((p) => g.named ? (
               <tr data-search={search(p.data.name, p.data.hasbroName, g.title)}>
-                <td>{p.data.name ?? <span class="muted">Not listed</span>}</td>
+                <td><PartPhoto photo={photos.get(p.id)} />{p.data.name ?? <span class="muted">Not listed</span>}</td>
                 <td>{p.data.hasbroName ?? <span class="muted">Not listed</span>}</td>
               </tr>
             ) : (
               <tr data-search={search(p.data.abbr, p.data.name, g.title)}>
-                <td><strong>{p.data.abbr ?? <span class="muted">Not listed</span>}</strong></td>
+                <td><PartPhoto photo={photos.get(p.id)} /><strong>{p.data.abbr ?? <span class="muted">Not listed</span>}</strong></td>
                 <td>{p.data.name}</td>
               </tr>
             ))}

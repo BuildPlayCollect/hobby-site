@@ -117,3 +117,9 @@ The sign-up box above the footer (and the `/newsletter` page) comes from `src/co
 2. Open this folder in VS Code, then open its Terminal (View → Terminal).
 3. Run `npm install` once. This downloads Astro.
 4. Run `npm run dev` and open http://localhost:4321. The page updates every time you save a file.
+
+## Part photos
+
+Each part on the parts list can show a small photo. In Pages CMS, open **Part photos**, click **Add an entry**, type the part's name as the list shows it (e.g. `DranSword`, `3-60` or `Flat`), upload the photo, describe it, and fill in the credit. The photo appears next to the part on the next deploy. If two parts share a name (like the "F" Bit and the "F" Assist Blade), also pick the Part type. If the name doesn't match a part, the site won't update and the build log says which photo to fix.
+
+Only use photos you took or have permission for (see the image rules in the project files). Wiki and shop photos are someone else's.

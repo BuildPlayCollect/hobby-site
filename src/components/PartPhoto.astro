@@ -1,0 +1,12 @@
+---
+// PartPhoto.astro: a small photo of a part in the parts list, with its credit.
+// Shows nothing when the part has no photo yet. Tapping the photo opens it full size.
+interface Props { photo?: { photo: string; alt: string; credit: string } }
+const { photo } = Astro.props;
+---
+{photo && (
+  <figure class="part-photo">
+    <a href={photo.photo} target="_blank" rel="noopener"><img src={photo.photo} alt={photo.alt} width="56" height="56" loading="lazy" decoding="async" /></a>
+    <figcaption>{photo.credit}</figcaption>
+  </figure>
+)}

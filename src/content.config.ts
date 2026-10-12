@@ -66,4 +66,19 @@ const bxParts = defineCollection({
   }),
 });
 
-export const collections = { articles, wiki, rules, bxParts };
+// Part photos: one small file per photo (src/content/part-photos), added from Pages CMS.
+// "part" is the part's name as the parts list shows it (e.g. DranSword, 3-60 or Flat).
+// Only use photos you took or have permission for, and always fill in the credit.
+const partPhotos = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/part-photos' }),
+  schema: z.object({
+    part: z.string(),
+    kind: z.enum(['blade', 'ratchet', 'bit', 'lock-chip', 'metal-blade', 'over-blade', 'main-blade', 'assist-blade']).optional(),
+    photo: z.string(),
+    alt: z.string(),
+    credit: z.string(),
+    permission: z.string().optional(),
+  }),
+});
+
+export const collections = { articles, wiki, rules, bxParts, partPhotos };

@@ -311,3 +311,9 @@ main { padding-bottom: 24px; }
 .parts-cta { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 6px 16px; margin-top: 40px; padding: 18px 20px; border-radius: var(--radius); background: linear-gradient(120deg, var(--accent-soft), var(--surface)); border: 1px solid var(--line); color: var(--ink); transition: transform .15s, box-shadow .15s; }
 .parts-cta:hover { text-decoration: none; transform: translateY(-2px); box-shadow: var(--shadow); }
 .parts-cta span { color: var(--accent); font-weight: 600; }
+
+/* Part photos in the parts list (src/components/PartPhoto.astro) */
+.part-photo { display: inline-block; vertical-align: middle; margin: 0 12px 0 0; text-align: center; }
+.part-photo img { display: block; width: 56px; height: 56px; object-fit: contain; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); transition: transform .15s; }
+.part-photo a:hover img { transform: scale(1.08); }
+.part-photo figcaption { font-size: .68rem; color: var(--muted); max-width: 72px; margin-top: 3px; line-height: 1.2; }
