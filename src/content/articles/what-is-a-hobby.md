@@ -5,7 +5,7 @@ hobby: general
 type: guide
 author: Echo
 date: 2026-10-12
-draft: true
+draft: false
 ---
 
 When I was a kid, my mom brought home a new toy every month, right after payday. I didn't see it as a gift back then. I saw it as *the schedule*.
