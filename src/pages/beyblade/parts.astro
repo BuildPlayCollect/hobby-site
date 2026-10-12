@@ -184,15 +184,19 @@ const search = (...words: (string | undefined)[]) => words.filter(Boolean).join(
       }
       input.addEventListener('input', apply);
       // Arriving from site search (/beyblade/parts/?q=dran) fills the box.
-      var q = new URLSearchParams(location.search).get('q');
+      var params = new URLSearchParams(location.search);
+      var q = params.get('q');
       if (q) { input.value = q; apply(); }
-      document.querySelectorAll('.parts-tabs .chip').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          kind = btn.dataset.kind;
-          document.querySelectorAll('.parts-tabs .chip').forEach(function (b) { b.setAttribute('aria-pressed', b === btn); });
-          apply();
-        });
-      });
+      var chips = document.querySelectorAll('.parts-tabs .chip');
+      function pick(btn) {
+        kind = btn.dataset.kind;
+        chips.forEach(function (b) { b.setAttribute('aria-pressed', b === btn); });
+        apply();
+      }
+      chips.forEach(function (btn) { btn.addEventListener('click', function () { pick(btn); }); });
+      // Arriving from a card on the Beyblade page (/beyblade/parts/?kind=bit) opens that tab.
+      var start = document.querySelector('.parts-tabs .chip[data-kind="' + params.get('kind') + '"]');
+      if (start) pick(start);
     })();
   </script>
 </Base>
