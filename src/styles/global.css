@@ -94,6 +94,17 @@ img { max-width: 100%; }
 .page-prose h1 { font-size: 2.4rem; }
 .sidebar .card { margin-bottom: 24px; }
 
+/* Newsletter */
+.newsletter { border: 3px solid var(--ink); padding: 28px; margin-top: 64px; display: grid; gap: 16px 32px; grid-template-columns: 1fr 1fr; align-items: center; }
+.newsletter h2 { font-family: var(--serif); font-size: 1.6rem; margin: 0 0 6px; }
+.newsletter p { color: var(--muted); margin: 0; }
+.newsletter-form { display: flex; gap: 8px; }
+.newsletter-form input { flex: 1; min-width: 0; padding: 12px; font: inherit; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
+.newsletter-form button { padding: 12px 20px; font: inherit; font-weight: 700; border: 0; background: var(--ink); color: var(--bg); cursor: pointer; }
+.newsletter-form button:disabled, .newsletter-form input:disabled { opacity: 0.55; cursor: not-allowed; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.page-prose .newsletter { margin-top: 0; }
+
 /* Footer */
 .site-footer { border-top: 3px solid var(--ink); margin-top: 64px; padding: 24px 0; font-size: 0.85rem; }
 .footer-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
@@ -101,6 +112,7 @@ img { max-width: 100%; }
 
 /* Phones and small tablets */
 @media (max-width: 800px) {
-  .card-large, .article-layout { grid-template-columns: 1fr; }
+  .card-large, .article-layout, .newsletter { grid-template-columns: 1fr; }
+  .newsletter-form { flex-direction: column; }
   .card-large h3, .article h1, .page-head h1 { font-size: 1.9rem; }
 }

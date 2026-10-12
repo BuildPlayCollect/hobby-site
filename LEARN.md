@@ -65,6 +65,10 @@ The form is defined in `.pages.yml`. If you ever add a new hobby to `src/data/si
 
 The moon/sun button in the header switches night mode. It works by swapping the color variables at the top of `src/styles/global.css`: the light values are under `:root`, the dark ones under `:root[data-theme="dark"]`. To change the site's colors later, edit those two blocks.
 
+## Newsletter
+
+The sign-up box above the footer (and the `/newsletter` page) comes from `src/components/Newsletter.astro`. The emails themselves are stored and sent by **Kit** (kit.com). To switch it on, create a form in Kit, copy its address and paste it into `NEWSLETTER_FORM_ACTION` in `src/data/site.ts`.
+
 ## Ads
 
 `src/components/AdSlot.astro` holds the ad spaces you see as striped boxes. When you sign up for an ad service, the ad code goes in that one file and flipping `SHOW_ADS` to `true` turns ads on everywhere.

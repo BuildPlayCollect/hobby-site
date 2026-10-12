@@ -3,6 +3,7 @@
 // Each page puts its own content where <slot /> is.
 import { SITE_NAME, SITE_TAGLINE, HOBBIES } from '../data/site';
 import AdSlot from '../components/AdSlot.astro';
+import Newsletter from '../components/Newsletter.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -49,12 +50,14 @@ const fullTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
     <main class="wrap">
       <slot />
     </main>
+    <div class="wrap"><Newsletter compact /></div>
     <footer class="site-footer">
       <div class="wrap footer-row">
         <span>&copy; {new Date().getFullYear()} {SITE_NAME}</span>
         <nav aria-label="Footer">
           <a href="/about">About</a>
           <a href="/giveaways">Giveaways</a>
+          <a href="/newsletter">Newsletter</a>
           <a href="/advertise">Advertise</a>
           <a href="/contact">Contact</a>
           <a href="/privacy">Privacy</a>

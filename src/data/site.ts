@@ -36,3 +36,7 @@ export const TYPE_SLUGS: Record<keyof typeof TYPES, string> = {
 
 export type HobbyKey = keyof typeof HOBBIES;
 export type TypeKey = keyof typeof TYPES;
+
+// Newsletter sign-up (Kit, kit.com). Paste your Kit form's address here, e.g.
+// 'https://app.kit.com/forms/1234567/subscriptions'. Until then the form shows "opening soon".
+export const NEWSLETTER_FORM_ACTION = '';
