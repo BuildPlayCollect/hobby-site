@@ -1,0 +1,5 @@
+# Search engines may read every page. The sitemap lists them all.
+User-agent: *
+Allow: /
+
+Sitemap: https://buildplaycollect.com/sitemap-index.xml
