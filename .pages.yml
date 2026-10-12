@@ -49,6 +49,8 @@ content:
               label: Consoles
             - name: esports
               label: Esports
+            - name: general
+              label: General (about hobbies in general)
       - name: type
         label: Article type
         type: select
@@ -84,6 +86,11 @@ content:
         label: Feature on the home page
         type: boolean
         default: false
+      - name: draft
+        label: Draft (hidden from the site)
+        description: Keep this on while you're writing. Switch it off when the article is checked and ready to publish.
+        type: boolean
+        default: true
       - name: cover
         label: Cover image
         type: image

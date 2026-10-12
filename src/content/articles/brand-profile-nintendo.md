@@ -5,6 +5,7 @@ hobby: consoles
 type: brand-profile
 author: Echo
 date: 2026-10-02
+draft: true
 ---
 
 *Sample article. Replace it with your own writing and check every fact before publishing.*

@@ -5,6 +5,7 @@ hobby: esports
 type: interview
 author: Echo
 date: 2026-09-30
+draft: true
 ---
 
 *Sample article. This is a template for an interview: replace the questions and answers with a real conversation.*

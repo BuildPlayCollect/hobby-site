@@ -5,6 +5,7 @@ hobby: keyboards
 type: guide
 author: Echo
 date: 2026-10-06
+draft: true
 ---
 
 *Sample article. Replace it with your own writing.*

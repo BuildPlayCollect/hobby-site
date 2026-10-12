@@ -5,6 +5,7 @@ hobby: beyblade
 type: giveaway
 author: Echo
 date: 2026-10-11
+draft: true
 ---
 
 *Sample giveaway. Do not publish until the prize, dates and official rules are real.*

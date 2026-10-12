@@ -7,7 +7,7 @@ import { termsIn } from '../../lib/wiki-terms.mjs';
 
 export async function getStaticPaths() {
   const wiki = await getCollection('wiki');
-  const articles = await getCollection('articles');
+  const articles = await getCollection('articles', ({ data }) => !data.draft);
   return wiki.map((entry) => ({ params: { slug: entry.id }, props: { entry, wiki, articles } }));
 }
 

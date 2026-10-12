@@ -5,6 +5,7 @@ hobby: tamiya
 type: history
 author: Echo
 date: 2026-10-08
+draft: true
 ---
 
 *Sample article. Replace it with your own writing and check every date before publishing.*
