@@ -2,7 +2,7 @@
 // Every article file must have these fields at the top (the "frontmatter").
 // If one is missing or misspelled, the build stops and tells you which file is wrong.
 import { defineCollection } from 'astro:content';
-import { glob } from 'astro/loaders';
+import { glob, file } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { HOBBIES, TYPES } from './data/site';
 
@@ -53,4 +53,31 @@ const rules = defineCollection({
   }),
 });
 
-export const collections = { articles, wiki, rules };
+// Beyblade X parts: every Blade, Ratchet and Bit, kept in one list (src/data/bx-parts.yaml).
+const bxParts = defineCollection({
+  loader: file('src/data/bx-parts.yaml'),
+  schema: z.object({
+    kind: z.enum(['blade', 'ratchet', 'bit', 'lock-chip', 'metal-blade', 'over-blade', 'main-blade', 'assist-blade']),
+    line: z.enum(['basic', 'unique', 'custom']),
+    group: z.string().optional(),
+    name: z.string().optional(),
+    hasbroName: z.string().optional(),
+    abbr: z.string().optional(),
+  }),
+});
+
+// Part photos: one small file per photo (src/content/part-photos), added from Pages CMS.
+// "part" is the part's full name as the parts list shows it (e.g. DranSword, Free or Flat), or a Ratchet's number (3-60).
+// Only use photos you took or have permission for, and always fill in the credit.
+const partPhotos = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/part-photos' }),
+  schema: z.object({
+    part: z.string(),
+    photo: z.string(),
+    alt: z.string(),
+    credit: z.string(),
+    permission: z.string().optional(),
+  }),
+});
+
+export const collections = { articles, wiki, rules, bxParts, partPhotos };

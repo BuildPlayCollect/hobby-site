@@ -95,6 +95,10 @@ Each file in `src/content/rules/` is one rulebook summary, shown at `/rules/<fil
 
 Every rules page shows "Last checked", and the footer links the [editorial standards](/standards) page that explains how we fact-check.
 
+## Beyblade X parts list
+
+`/beyblade/parts` lists every Blade, Ratchet and Bit across the Basic, Unique and Custom Lines, plus the Custom Line (CX) Blade parts: Lock Chips, Main, Assist, Metal and Over Blades. The parts live in **one file**, `src/data/bx-parts.yaml`: each part is a few lines (kind, line, name, Hasbro name or abbreviation). To add a part, copy an entry, change it, and give it a new `id`. The page, its counts, its filters and the site search all update themselves. The rare BX/UX/CX-00 releases are listed in `src/data/bx-special-editions.ts`, one line each with the product code and name.
+
 ## Search
 
 Press `/` or the magnifier button. `src/pages/search.json.ts` writes a small list of every article and wiki term when the site builds, and the search box filters that list in the reader's browser. No search service or account is needed.
@@ -113,3 +117,9 @@ The sign-up box above the footer (and the `/newsletter` page) comes from `src/co
 2. Open this folder in VS Code, then open its Terminal (View → Terminal).
 3. Run `npm install` once. This downloads Astro.
 4. Run `npm run dev` and open http://localhost:4321. The page updates every time you save a file.
+
+## Part photos
+
+Each part on the parts list can show a small photo. In Pages CMS, open **Part photos**, click **Add an entry**, type the part's full name as the list shows it (e.g. `DranSword`, `Flat` or `Free`), or a Ratchet's number (`3-60`), upload the photo, describe it, and fill in the credit. The photo appears next to the part on the next deploy. Always spell the name in full: short codes like "F" belong to several parts (the Flat Bit, the Free Assist Blade and the Flow Over Blade), but full names never repeat. If the name doesn't match a part, the site won't update and the build log says which photo to fix.
+
+Only use photos you took or have permission for (see the image rules in the project files). Wiki and shop photos are someone else's.

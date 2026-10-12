@@ -221,3 +221,41 @@ content:
         type: rich-text
         options:
           format: markdown
+
+  - name: part-photos
+    label: Part photos
+    description: A photo for a part on the Beyblade X parts list. Only use photos you took or have permission to use.
+    type: collection
+    path: src/content/part-photos
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      fields: [part, credit]
+      primary: part
+      sort: [part]
+    fields:
+      - name: part
+        label: Part
+        description: The part's full name as the parts list shows it, e.g. DranSword, Flat or Free (not F). For Ratchets, the number, e.g. 3-60.
+        type: string
+        required: true
+      - name: photo
+        label: Photo
+        description: A square photo on a plain background works best.
+        type: image
+        required: true
+      - name: alt
+        label: Photo description
+        description: Describe the photo for readers using screen readers, e.g. "The DranSword Blade from above".
+        type: string
+        required: true
+      - name: credit
+        label: Credit
+        description: Shown under the photo, e.g. "Photo: Echo" or "Photo: u/username, used with permission".
+        type: string
+        default: "Photo: Build Play Collect"
+        required: true
+      - name: permission
+        label: Permission note (not shown on the site)
+        description: For photos you didn't take, where the "yes" is saved, e.g. "Reddit DM screenshot, 2026-10-14".
+        type: text
