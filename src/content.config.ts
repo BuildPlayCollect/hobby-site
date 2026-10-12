@@ -17,6 +17,9 @@ const articles = defineCollection({
     author: z.string(),
     date: z.coerce.date(),
     featured: z.boolean().default(false),
+    // Optional cover photo, e.g. /images/my-photo.jpg (files live in public/images).
+    cover: z.string().optional(),
+    coverAlt: z.string().optional(),
   }),
 });
 

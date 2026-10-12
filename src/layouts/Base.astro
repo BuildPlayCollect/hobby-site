@@ -3,6 +3,7 @@
 // Each page puts its own content where <slot /> is.
 import { SITE_NAME, SITE_TAGLINE, HOBBIES } from '../data/site';
 import AdSlot from '../components/AdSlot.astro';
+import Newsletter from '../components/Newsletter.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -20,31 +21,56 @@ const fullTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <!-- Night mode: runs before the page draws so it never flashes white.
+         Uses the reader's saved choice, or their device's setting if they haven't picked. -->
+    <script is:inline>
+      (function () {
+        var saved = null;
+        try { saved = localStorage.getItem('theme'); } catch (e) {}
+        var dark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+      })();
+    </script>
   </head>
   <body>
     <header class="site-header">
       <div class="wrap header-row">
         <a class="logo" href="/">{SITE_NAME}</a>
-        <nav class="hobby-nav" aria-label="Hobbies">
-          {Object.entries(HOBBIES).map(([key, h]) => <a href={`/${key}`}>{h.name}</a>)}
-        </nav>
+        <div class="header-tools">
+          <nav class="hobby-nav" aria-label="Hobbies">
+            {Object.entries(HOBBIES).map(([key, h]) => <a href={`/${key}`}>{h.name}</a>)}
+          </nav>
+          <button class="theme-toggle" type="button" aria-label="Toggle night mode" title="Toggle night mode">
+            <span class="sun">☀</span><span class="moon">☾</span>
+          </button>
+        </div>
       </div>
     </header>
     <div class="wrap"><AdSlot position="header" /></div>
     <main class="wrap">
       <slot />
     </main>
+    <div class="wrap"><Newsletter compact /></div>
     <footer class="site-footer">
       <div class="wrap footer-row">
         <span>&copy; {new Date().getFullYear()} {SITE_NAME}</span>
         <nav aria-label="Footer">
           <a href="/about">About</a>
           <a href="/giveaways">Giveaways</a>
+          <a href="/newsletter">Newsletter</a>
           <a href="/advertise">Advertise</a>
           <a href="/contact">Contact</a>
           <a href="/privacy">Privacy</a>
         </nav>
       </div>
     </footer>
+    <script is:inline>
+      // The night mode button: flip the theme and remember the choice.
+      document.querySelector('.theme-toggle').addEventListener('click', function () {
+        var next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+        document.documentElement.dataset.theme = next;
+        try { localStorage.setItem('theme', next); } catch (e) {}
+      });
+    </script>
   </body>
 </html>

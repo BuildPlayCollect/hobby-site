@@ -1,0 +1,22 @@
+---
+// Newsletter.astro: the "join the newsletter" box.
+// The form sends the reader's email straight to Kit, which stores the list and sends the emails.
+import { NEWSLETTER_FORM_ACTION, SITE_NAME } from '../data/site';
+
+interface Props {
+  compact?: boolean;
+}
+const { compact = false } = Astro.props;
+const ready = NEWSLETTER_FORM_ACTION !== '';
+---
+<section class:list={['newsletter', { 'newsletter-compact': compact }]} id="newsletter">
+  <div class="newsletter-text">
+    <h2>The {SITE_NAME} Newsletter</h2>
+    <p>New releases, guides and giveaways across every hobby, once a week. No spam, unsubscribe anytime.</p>
+  </div>
+  <form class="newsletter-form" action={ready ? NEWSLETTER_FORM_ACTION : undefined} method="post" target="_blank">
+    <label class="sr-only" for={compact ? 'nl-email-compact' : 'nl-email'}>Email address</label>
+    <input id={compact ? 'nl-email-compact' : 'nl-email'} type="email" name="email_address" placeholder="you@example.com" required disabled={!ready} />
+    <button type="submit" disabled={!ready}>{ready ? 'Subscribe' : 'Opening soon'}</button>
+  </form>
+</section>
