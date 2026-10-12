@@ -32,15 +32,16 @@ const CX = [
   { kind: 'over-blade', title: 'Over Blades', named: false },
 ].map((g) => ({ ...g, parts: ofKind(g.kind).sort((a, b) => label(a).localeCompare(label(b))) }));
 const cxCount = CX.reduce((n, g) => n + g.parts.length, 0);
-// Photos added in Pages CMS ("Part photos"), matched to a part by its id, name, Hasbro name or abbreviation.
+// Photos added in Pages CMS ("Part photos"), matched to a part by its full name (Takara Tomy or Hasbro),
+// or by the number for Ratchets (3-60). Full names never repeat, unlike short codes such as "F".
 // A photo that matches no part, or more than one, stops the build with a message saying which.
 const norm = (x?: string) => (x ?? '').toLowerCase().replace(/[^a-z0-9]/g, '');
 const photos = new Map<string, Awaited<ReturnType<typeof getCollection<'partPhotos'>>>[number]['data']>();
 for (const ph of await getCollection('partPhotos')) {
   const want = norm(ph.data.part);
-  const hits = parts.filter((p) => (!ph.data.kind || p.data.kind === ph.data.kind) && [p.id, p.data.name, p.data.hasbroName, p.data.abbr].some((x) => x && norm(x) === want));
-  if (hits.length === 0) throw new Error(`Part photo "${ph.id}": no part is called "${ph.data.part}". Use the name as the parts list shows it.`);
-  if (hits.length > 1) throw new Error(`Part photo "${ph.id}": "${ph.data.part}" matches ${hits.length} parts (${hits.map((h) => h.data.kind).join(', ')}). Pick a Part type in Pages CMS.`);
+  const hits = parts.filter((p) => [p.data.name, p.data.hasbroName, p.data.kind === 'ratchet' ? p.data.abbr : undefined].some((x) => x && norm(x) === want));
+  if (hits.length === 0) throw new Error(`Part photo "${ph.id}": no part is called "${ph.data.part}". Use the part's full name as the parts list shows it, e.g. Free, not F.`);
+  if (hits.length > 1) throw new Error(`Part photo "${ph.id}": "${ph.data.part}" matches ${hits.length} parts (${hits.map((h) => h.id).join(', ')}).`);
   photos.set(hits[0].id, ph.data);
 }
 const search = (...words: (string | undefined)[]) => words.filter(Boolean).join(' ').toLowerCase();

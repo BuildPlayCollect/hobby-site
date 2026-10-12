@@ -230,37 +230,15 @@ content:
     format: yaml-frontmatter
     filename: "{primary}.md"
     view:
-      fields: [part, kind, credit]
+      fields: [part, credit]
       primary: part
       sort: [part]
     fields:
       - name: part
         label: Part
-        description: The part's name exactly as the parts list shows it, e.g. DranSword, 3-60 or Flat.
+        description: The part's full name as the parts list shows it, e.g. DranSword, Flat or Free (not F). For Ratchets, the number, e.g. 3-60.
         type: string
         required: true
-      - name: kind
-        label: Part type (optional)
-        description: Only needed when two parts share a name, e.g. the "F" Over Blade and the "F" Assist Blade.
-        type: select
-        options:
-          values:
-            - name: blade
-              label: Blade
-            - name: ratchet
-              label: Ratchet
-            - name: bit
-              label: Bit
-            - name: lock-chip
-              label: Lock Chip
-            - name: main-blade
-              label: Main Blade
-            - name: assist-blade
-              label: Assist Blade
-            - name: metal-blade
-              label: Metal Blade
-            - name: over-blade
-              label: Over Blade
       - name: photo
         label: Photo
         description: A square photo on a plain background works best.

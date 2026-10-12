@@ -120,6 +120,6 @@ The sign-up box above the footer (and the `/newsletter` page) comes from `src/co
 
 ## Part photos
 
-Each part on the parts list can show a small photo. In Pages CMS, open **Part photos**, click **Add an entry**, type the part's name as the list shows it (e.g. `DranSword`, `3-60` or `Flat`), upload the photo, describe it, and fill in the credit. The photo appears next to the part on the next deploy. If two parts share a name (like the "F" Bit and the "F" Assist Blade), also pick the Part type. If the name doesn't match a part, the site won't update and the build log says which photo to fix.
+Each part on the parts list can show a small photo. In Pages CMS, open **Part photos**, click **Add an entry**, type the part's full name as the list shows it (e.g. `DranSword`, `Flat` or `Free`), or a Ratchet's number (`3-60`), upload the photo, describe it, and fill in the credit. The photo appears next to the part on the next deploy. Always spell the name in full: short codes like "F" belong to several parts (the Flat Bit, the Free Assist Blade and the Flow Over Blade), but full names never repeat. If the name doesn't match a part, the site won't update and the build log says which photo to fix.
 
 Only use photos you took or have permission for (see the image rules in the project files). Wiki and shop photos are someone else's.
