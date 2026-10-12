@@ -1,0 +1,15 @@
+---
+// ArticleGrid.astro: a grid of ArticleCards, newest first.
+import type { CollectionEntry } from 'astro:content';
+import ArticleCard from './ArticleCard.astro';
+
+interface Props {
+  articles: CollectionEntry<'articles'>[];
+}
+const sorted = [...Astro.props.articles].sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+{sorted.length === 0 ? (
+  <p class="empty">No articles here yet.</p>
+) : (
+  <div class="grid">{sorted.map((a) => <ArticleCard article={a} />)}</div>
+)}

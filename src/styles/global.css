@@ -1,0 +1,79 @@
+/* global.css: the look of the whole site.
+   Change the variables below to restyle everything at once. */
+:root {
+  --ink: #111;
+  --muted: #666;
+  --line: #e5e5e5;
+  --bg: #fff;
+  --accent: #e63946;
+  --serif: Georgia, 'Times New Roman', serif;
+  --sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --max: 1140px;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: var(--sans); color: var(--ink); background: var(--bg); line-height: 1.5; }
+a { color: inherit; }
+img { max-width: 100%; }
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 16px; }
+
+/* Header */
+.site-header { border-bottom: 3px solid var(--ink); }
+.header-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-top: 18px; padding-bottom: 14px; }
+.logo { font-family: var(--serif); font-size: 2rem; font-weight: 700; text-decoration: none; letter-spacing: -0.02em; }
+.hobby-nav { display: flex; flex-wrap: wrap; gap: 4px 18px; }
+.hobby-nav a { text-decoration: none; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+.hobby-nav a:hover { color: var(--accent); }
+.tagline { color: var(--muted); font-family: var(--serif); font-style: italic; margin: 20px 0; }
+
+/* Ads */
+.ad { margin: 16px auto; }
+.ad-placeholder { display: grid; place-items: center; background: repeating-linear-gradient(45deg, #fafafa, #fafafa 10px, #f2f2f2 10px, #f2f2f2 20px); color: #aaa; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; border: 1px dashed #ddd; }
+.ad-header { height: 90px; max-width: 728px; }
+.ad-in-article { height: 250px; max-width: 300px; }
+.ad-sidebar { height: 250px; width: 100%; max-width: 300px; }
+
+/* Cards */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 28px; }
+.card { display: block; text-decoration: none; }
+.card-cover { aspect-ratio: 16 / 10; display: grid; place-items: center; color: #fff; font-family: var(--serif); font-size: 1.3rem; font-weight: 700; opacity: 0.92; }
+.card:hover .card-cover { opacity: 1; }
+.card:hover h3 { text-decoration: underline; }
+.card-body h3 { font-family: var(--serif); font-size: 1.2rem; line-height: 1.25; margin: 4px 0 0; }
+.kicker { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 10px 0 0; }
+.kicker a { text-decoration: none; }
+.card-large { display: grid; grid-template-columns: 3fr 2fr; gap: 28px; align-items: center; }
+.card-large .card-cover { font-size: 2.5rem; }
+.card-large h3 { font-size: 2.1rem; }
+.card-desc { color: var(--muted); font-size: 1.05rem; }
+.featured { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--line); }
+
+/* Section headings */
+.section-title { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; border-top: 3px solid var(--ink); padding-top: 8px; margin: 40px 0 18px; }
+.section-title a { text-decoration: none; }
+.page-head { border-bottom: 3px solid; padding: 24px 0 16px; margin-bottom: 28px; }
+.page-head h1 { font-family: var(--serif); font-size: 2.6rem; margin: 0; }
+.page-head p { color: var(--muted); margin: 6px 0 0; }
+.empty { color: var(--muted); }
+
+/* Article page */
+.article-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 48px; margin-top: 24px; }
+.article h1 { font-family: var(--serif); font-size: 2.6rem; line-height: 1.1; margin: 8px 0; }
+.dek { font-family: var(--serif); font-size: 1.25rem; color: var(--muted); margin: 0 0 12px; }
+.byline { font-size: 0.85rem; color: var(--muted); border-bottom: 1px solid var(--line); padding-bottom: 16px; }
+.article-cover { aspect-ratio: 16 / 9; display: grid; place-items: center; color: #fff; font-family: var(--serif); font-size: 3rem; font-weight: 700; margin: 20px 0; }
+.prose { font-family: var(--serif); font-size: 1.15rem; line-height: 1.7; max-width: 680px; }
+.prose h2 { font-family: var(--sans); font-size: 1.35rem; margin-top: 2em; }
+.page-prose { margin: 32px auto; }
+.page-prose h1 { font-size: 2.4rem; }
+.sidebar .card { margin-bottom: 24px; }
+
+/* Footer */
+.site-footer { border-top: 3px solid var(--ink); margin-top: 64px; padding: 24px 0; font-size: 0.85rem; }
+.footer-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+.footer-row nav { display: flex; flex-wrap: wrap; gap: 16px; }
+
+/* Phones and small tablets */
+@media (max-width: 800px) {
+  .card-large, .article-layout { grid-template-columns: 1fr; }
+  .card-large h3, .article h1, .page-head h1 { font-size: 1.9rem; }
+}

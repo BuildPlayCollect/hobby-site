@@ -1,0 +1,45 @@
+---
+// articles/[id].astro: the page for a single article.
+// Each .md file becomes /articles/<file-name>.
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { HOBBIES, TYPES, TYPE_SLUGS, type HobbyKey, type TypeKey } from '../../data/site';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('articles');
+  return articles.map((article) => ({ params: { id: article.id }, props: { article, all: articles } }));
+}
+
+const { article, all } = Astro.props;
+const { Content } = await render(article);
+const hobby = HOBBIES[article.data.hobby as HobbyKey];
+const typeKey = article.data.type as TypeKey;
+const related = all.filter((a) => a.data.hobby === article.data.hobby && a.id !== article.id).slice(0, 3);
+const dateText = article.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+<Base title={article.data.title} description={article.data.description}>
+  <div class="article-layout">
+    <article class="article">
+      <p class="kicker">
+        <a href={`/${article.data.hobby}`}>{hobby.name}</a>{' · '}<a href={`/${TYPE_SLUGS[typeKey]}`}>{TYPES[typeKey].name}</a>
+      </p>
+      <h1>{article.data.title}</h1>
+      <p class="dek">{article.data.description}</p>
+      <p class="byline">By {article.data.author} &middot; {dateText}</p>
+      <div class="article-cover" style={`background:${hobby.color}`}><span>{hobby.name}</span></div>
+      <div class="prose"><Content /></div>
+      <AdSlot position="in-article" />
+    </article>
+    <aside class="sidebar">
+      <AdSlot position="sidebar" />
+      {related.length > 0 && (
+        <>
+          <h2 class="section-title">More {hobby.name}</h2>
+          {related.map((a) => <ArticleCard article={a} />)}
+        </>
+      )}
+    </aside>
+  </div>
+</Base>

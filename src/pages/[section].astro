@@ -1,0 +1,31 @@
+---
+// [section].astro: ONE file that makes many pages.
+// The square brackets mean "fill this in". getStaticPaths lists every value:
+// one page per hobby (/beyblade, /keyboards ...) and one per content type (/guides, /interviews ...).
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import ArticleGrid from '../components/ArticleGrid.astro';
+import { HOBBIES, TYPES, TYPE_SLUGS } from '../data/site';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('articles');
+  const hobbyPages = Object.entries(HOBBIES).map(([key, h]) => ({
+    params: { section: key },
+    props: { title: h.name, intro: h.blurb, color: h.color, articles: articles.filter((a) => a.data.hobby === key) },
+  }));
+  const typePages = Object.entries(TYPES).map(([key, t]) => ({
+    params: { section: TYPE_SLUGS[key as keyof typeof TYPES] },
+    props: { title: t.plural, intro: `Every ${t.name.toLowerCase()} article, across all hobbies.`, color: '#111', articles: articles.filter((a) => a.data.type === key) },
+  }));
+  return [...hobbyPages, ...typePages];
+}
+
+const { title, intro, color, articles } = Astro.props;
+---
+<Base title={title} description={intro}>
+  <header class="page-head" style={`border-color:${color}`}>
+    <h1>{title}</h1>
+    <p>{intro}</p>
+  </header>
+  <ArticleGrid articles={articles} />
+</Base>

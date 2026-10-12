@@ -1,0 +1,24 @@
+---
+// ArticleCard.astro: the little preview box for one article,
+// used on the home page, hobby pages and type pages.
+import type { CollectionEntry } from 'astro:content';
+import { HOBBIES, TYPES, type HobbyKey, type TypeKey } from '../data/site';
+
+interface Props {
+  article: CollectionEntry<'articles'>;
+  large?: boolean;
+}
+const { article, large = false } = Astro.props;
+const hobby = HOBBIES[article.data.hobby as HobbyKey];
+const type = TYPES[article.data.type as TypeKey];
+---
+<a class:list={['card', { 'card-large': large }]} href={`/articles/${article.id}`}>
+  <div class="card-cover" style={`background:${hobby.color}`}>
+    <span>{hobby.name}</span>
+  </div>
+  <div class="card-body">
+    <p class="kicker">{hobby.name} &middot; {type.name}</p>
+    <h3>{article.data.title}</h3>
+    {large && <p class="card-desc">{article.data.description}</p>}
+  </div>
+</a>

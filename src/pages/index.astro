@@ -1,0 +1,34 @@
+---
+// index.astro: the home page (the address "/").
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import { HOBBIES, SITE_TAGLINE } from '../data/site';
+
+const articles = (await getCollection('articles')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const featured = articles.find((a) => a.data.featured) ?? articles[0];
+const latest = articles.filter((a) => a !== featured).slice(0, 6);
+---
+<Base>
+  <p class="tagline">{SITE_TAGLINE}</p>
+  {featured && (
+    <section class="featured">
+      <ArticleCard article={featured} large />
+    </section>
+  )}
+
+  <h2 class="section-title">Latest</h2>
+  <div class="grid">{latest.map((a) => <ArticleCard article={a} />)}</div>
+
+  {Object.entries(HOBBIES).map(([key, h]) => {
+    const forHobby = articles.filter((a) => a.data.hobby === key).slice(0, 3);
+    return forHobby.length > 0 && (
+      <section class="hobby-strip">
+        <h2 class="section-title" style={`border-color:${h.color}`}>
+          <a href={`/${key}`}>{h.name}</a>
+        </h2>
+        <div class="grid">{forHobby.map((a) => <ArticleCard article={a} />)}</div>
+      </section>
+    );
+  })}
+</Base>

@@ -1,0 +1,50 @@
+---
+// Base.astro: the frame around every page (header, menu, footer).
+// Each page puts its own content where <slot /> is.
+import { SITE_NAME, SITE_TAGLINE, HOBBIES } from '../data/site';
+import AdSlot from '../components/AdSlot.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const { title, description = SITE_TAGLINE } = Astro.props;
+const fullTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap header-row">
+        <a class="logo" href="/">{SITE_NAME}</a>
+        <nav class="hobby-nav" aria-label="Hobbies">
+          {Object.entries(HOBBIES).map(([key, h]) => <a href={`/${key}`}>{h.name}</a>)}
+        </nav>
+      </div>
+    </header>
+    <div class="wrap"><AdSlot position="header" /></div>
+    <main class="wrap">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="wrap footer-row">
+        <span>&copy; {new Date().getFullYear()} {SITE_NAME}</span>
+        <nav aria-label="Footer">
+          <a href="/about">About</a>
+          <a href="/giveaways">Giveaways</a>
+          <a href="/advertise">Advertise</a>
+          <a href="/contact">Contact</a>
+          <a href="/privacy">Privacy</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>
