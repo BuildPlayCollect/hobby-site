@@ -1198,9 +1198,15 @@
   line: custom
   abbr: "P"
   name: Peak
+- id: over-blade-i
+  kind: over-blade
+  line: custom
+  abbr: "I"
+  name: I
 - id: over-blade-tough
   kind: over-blade
   line: custom
+  abbr: "I"
   name: Tough
 - id: main-antlers
   kind: main-blade
