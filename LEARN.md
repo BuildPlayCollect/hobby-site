@@ -95,6 +95,10 @@ Each file in `src/content/rules/` is one rulebook summary, shown at `/rules/<fil
 
 Every rules page shows "Last checked", and the footer links the [editorial standards](/standards) page that explains how we fact-check.
 
+## Beyblade X parts list
+
+`/beyblade/parts` lists every Blade, Ratchet and Bit. The parts live in **one file**, `src/data/bx-parts.yaml`: each part is a few lines (kind, line, name, Hasbro name or abbreviation). To add a part, copy an entry, change it, and give it a new `id`. The page, its counts, its filters and the site search all update themselves. Special-color releases are listed in `src/data/bx-special-editions.ts`.
+
 ## Search
 
 Press `/` or the magnifier button. `src/pages/search.json.ts` writes a small list of every article and wiki term when the site builds, and the search box filters that list in the reader's browser. No search service or account is needed.

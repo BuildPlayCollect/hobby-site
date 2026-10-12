@@ -297,3 +297,17 @@ main { padding-bottom: 24px; }
 .prose th, .prose td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
 .prose th { background: var(--surface); font-weight: 700; }
 .prose tbody tr:hover { background: var(--surface); }
+
+/* ---------- Beyblade X parts list ---------- */
+.parts-stats { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 14px 0 18px; color: var(--muted); }
+.parts-stats strong { color: var(--ink); font-size: 1.3rem; }
+.parts-tabs { padding-top: 12px; }
+.parts-group h3 { font-size: 1rem; margin: 22px 0 6px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.parts-table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+.parts-table th, .parts-table td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+.parts-table th { background: var(--surface); font-weight: 700; font-size: .85rem; }
+.parts-table tbody tr:hover { background: var(--surface); }
+.parts-section[hidden], .parts-group[hidden], .parts-table tr[hidden] { display: none; }
+.parts-cta { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 6px 16px; margin-top: 40px; padding: 18px 20px; border-radius: var(--radius); background: linear-gradient(120deg, var(--accent-soft), var(--surface)); border: 1px solid var(--line); color: var(--ink); transition: transform .15s, box-shadow .15s; }
+.parts-cta:hover { text-decoration: none; transform: translateY(-2px); box-shadow: var(--shadow); }
+.parts-cta span { color: var(--accent); font-weight: 600; }

@@ -1,0 +1,688 @@
+# Beyblade X parts (Basic Line), one entry per part.
+# Source: the Beyblade Wiki's "List of Basic Line parts" (beyblade.fandom.com), copied 2026-10-12.
+# kind: blade | ratchet | bit.  name = Takara Tomy name, hasbroName = Hasbro name (either can be missing).
+# To add a part, copy an entry and change it. The id must be unique.
+- id: blackshell
+  kind: blade
+  line: basic
+  group: Main
+  name: BlackShell
+  hasbroName: Obsidian Shell
+- id: cobaltdragoon
+  kind: blade
+  line: basic
+  group: Main
+  name: CobaltDragoon
+  hasbroName: Cobalt Dragoon
+- id: cobaltdrake
+  kind: blade
+  line: basic
+  group: Main
+  name: CobaltDrake
+  hasbroName: Cobalt Drake
+- id: crimsongaruda
+  kind: blade
+  line: basic
+  group: Main
+  name: CrimsonGaruda
+  hasbroName: Scarlet Garuda
+- id: drandagger
+  kind: blade
+  line: basic
+  group: Main
+  name: DranDagger
+  hasbroName: Dagger Dran
+- id: dransword
+  kind: blade
+  line: basic
+  group: Main
+  name: DranSword
+  hasbroName: Sword Dran
+- id: hellschain
+  kind: blade
+  line: basic
+  group: Main
+  name: HellsChain
+  hasbroName: Chain Incendio
+- id: hellsscythe
+  kind: blade
+  line: basic
+  group: Main
+  name: HellsScythe
+  hasbroName: Scythe Incendio
+- id: knightlance
+  kind: blade
+  line: basic
+  group: Main
+  name: KnightLance
+  hasbroName: Lance Knight
+- id: knightshield
+  kind: blade
+  line: basic
+  group: Main
+  name: KnightShield
+  hasbroName: Helm Knight
+- id: leonclaw
+  kind: blade
+  line: basic
+  group: Main
+  name: LeonClaw
+  hasbroName: Claw Leon
+- id: phoenixfeather
+  kind: blade
+  line: basic
+  group: Main
+  name: PhoenixFeather
+  hasbroName: Feather Phoenix
+- id: phoenixwing
+  kind: blade
+  line: basic
+  group: Main
+  name: PhoenixWing
+  hasbroName: Soar Phoenix
+- id: rhinohorn
+  kind: blade
+  line: basic
+  group: Main
+  name: RhinoHorn
+  hasbroName: Horn Rhino
+- id: samuraicalibur
+  kind: blade
+  line: basic
+  group: Main
+  name: SamuraiCalibur
+  hasbroName: Calibur Samurai
+- id: sharkedge
+  kind: blade
+  line: basic
+  group: Main
+  name: SharkEdge
+  hasbroName: Keel Shark
+- id: shelterdrake
+  kind: blade
+  line: basic
+  group: Main
+  name: ShelterDrake
+  hasbroName: Shelter Drake
+- id: sphinxcowl
+  kind: blade
+  line: basic
+  group: Main
+  name: SphinxCowl
+  hasbroName: Cowl Sphinx
+- id: tricerapress
+  kind: blade
+  line: basic
+  group: Main
+  name: TriceraPress
+  hasbroName: Brace Triceratops
+- id: tyrannobeat
+  kind: blade
+  line: basic
+  group: Main
+  name: TyrannoBeat
+  hasbroName: Beat Tyranno
+- id: unicornsting
+  kind: blade
+  line: basic
+  group: Main
+  name: UnicornSting
+  hasbroName: Sting Unicorn
+- id: vipertail
+  kind: blade
+  line: basic
+  group: Main
+  name: ViperTail
+  hasbroName: Tail Viper
+- id: weisstiger
+  kind: blade
+  line: basic
+  group: Main
+  name: WeissTiger
+  hasbroName: Pearl Tiger
+- id: whalewave
+  kind: blade
+  line: basic
+  group: Main
+  name: WhaleWave
+  hasbroName: Tide Whale
+- id: wizardarrow
+  kind: blade
+  line: basic
+  group: Main
+  name: WizardArrow
+  hasbroName: Arrow Wizard
+- id: wyverngale
+  kind: blade
+  line: basic
+  group: Main
+  name: WyvernGale
+  hasbroName: Gale Wyvern
+- id: cyclopseye
+  kind: blade
+  line: basic
+  group: Expand
+  name: CyclopsEye
+  hasbroName: Glare Cyclops
+- id: dranstrike
+  kind: blade
+  line: basic
+  group: Expand
+  name: DranStrike
+  hasbroName: Strike Dran
+- id: heavensring
+  kind: blade
+  line: basic
+  group: Expand
+  name: HeavensRing
+  hasbroName: Ring Aether
+- id: horusshatter
+  kind: blade
+  line: basic
+  group: Expand
+  name: HorusShatter
+  hasbroName: Shatter Horus
+- id: lusterdragoon
+  kind: blade
+  line: basic
+  group: Expand
+  name: LusterDragoon
+- id: siegsuperion
+  kind: blade
+  line: basic
+  group: Expand
+  name: SiegSuperion
+  hasbroName: Suppress Superion
+- id: crococrunch
+  kind: blade
+  line: basic
+  group: Hasbro debut
+  name: CrocoCrunch
+  hasbroName: Bite Croc
+- id: clamp-crab
+  kind: blade
+  line: basic
+  group: Hasbro debut
+  hasbroName: Clamp Crab
+- id: sharkgill
+  kind: blade
+  line: basic
+  group: Hasbro debut
+  name: SharkGill
+  hasbroName: Gill Shark
+- id: batgust
+  kind: blade
+  line: basic
+  group: Hasbro debut
+  name: BatGust
+  hasbroName: Gust Bat
+- id: shinobiknife
+  kind: blade
+  line: basic
+  group: Hasbro debut
+  name: ShinobiKnife
+  hasbroName: Knife Shinobi
+- id: triceraspiky
+  kind: blade
+  line: basic
+  group: Hasbro debut
+  name: TriceraSpiky
+  hasbroName: Ridge Triceratops
+- id: tyrannoroar
+  kind: blade
+  line: basic
+  group: Hasbro debut
+  name: TyrannoRoar
+  hasbroName: Roar Tyranno
+- id: bearscratch
+  kind: blade
+  line: basic
+  group: Hasbro debut
+  name: BearScratch
+  hasbroName: Savage Bear
+- id: samuraisteel
+  kind: blade
+  line: basic
+  group: Hasbro debut
+  name: SamuraiSteel
+  hasbroName: Steel Samurai
+- id: goattackle
+  kind: blade
+  line: basic
+  group: Hasbro debut
+  name: GoatTackle
+  hasbroName: Tackle Goat
+- id: pteraswing
+  kind: blade
+  line: basic
+  group: Hasbro debut
+  name: PteraSwing
+  hasbroName: Talon Ptera
+- id: mammothtusk
+  kind: blade
+  line: basic
+  group: Hasbro debut
+  name: MammothTusk
+  hasbroName: Tusk Mammoth
+- id: yell-kong
+  kind: blade
+  line: basic
+  group: Hasbro debut
+  hasbroName: Yell Kong
+- id: dragoonstorm
+  kind: blade
+  line: basic
+  group: X-Over Project
+  name: DragoonStorm
+  hasbroName: Dragoon Storm
+- id: dranzerspiral
+  kind: blade
+  line: basic
+  group: X-Over Project
+  name: DranzerSpiral
+  hasbroName: Dranzer Spiral
+- id: drigerslash
+  kind: blade
+  line: basic
+  group: X-Over Project
+  name: DrigerSlash
+  hasbroName: Driger Slash
+- id: dracielshield
+  kind: blade
+  line: basic
+  group: X-Over Project
+  name: DracielShield
+  hasbroName: Draciel Shield
+- id: lightning-l-drago-rapid-hit-type
+  kind: blade
+  line: basic
+  group: X-Over Project
+  name: Lightning L-Drago (Rapid-Hit Type)
+  hasbroName: Lightning L-Drago (Rapid-Hit Type)
+- id: lightning-l-drago-upper-type
+  kind: blade
+  line: basic
+  group: X-Over Project
+  name: Lightning L-Drago (Upper Type)
+  hasbroName: Lightning L-Drago (Upper Type)
+- id: rock-leone
+  kind: blade
+  line: basic
+  group: X-Over Project
+  name: Rock Leone
+  hasbroName: Rock Leone
+- id: stormpegasis
+  kind: blade
+  line: basic
+  group: X-Over Project
+  name: StormPegasis
+  hasbroName: Storm Pegasis
+- id: stormspriggan
+  kind: blade
+  line: basic
+  group: X-Over Project
+  name: StormSpriggan
+  hasbroName: Storm Spryzen
+- id: trypio
+  kind: blade
+  line: basic
+  group: X-Over Project
+  name: Trypio
+  hasbroName: Trypio
+- id: victoryvalkyrie
+  kind: blade
+  line: basic
+  group: X-Over Project
+  name: VictoryValkyrie
+  hasbroName: Victory Valkyrie
+- id: xenoxcalibur
+  kind: blade
+  line: basic
+  group: X-Over Project
+  name: XenoXcalibur
+  hasbroName: Xeno Xcalius
+- id: mosasaurus
+  kind: blade
+  line: basic
+  group: 'Collab: Jurassic World'
+  hasbroName: Mosasaurus
+- id: quetzalcoatlus
+  kind: blade
+  line: basic
+  group: 'Collab: Jurassic World'
+  hasbroName: Quetzalcoatlus
+- id: spinosaurus
+  kind: blade
+  line: basic
+  group: 'Collab: Jurassic World'
+  hasbroName: Spinosaurus
+- id: t-rex
+  kind: blade
+  line: basic
+  group: 'Collab: Jurassic World'
+  hasbroName: T. Rex
+- id: captain-america
+  kind: blade
+  line: basic
+  group: 'Collab: Marvel'
+  hasbroName: Captain America
+- id: doctor-doom
+  kind: blade
+  line: basic
+  group: 'Collab: Marvel'
+  hasbroName: Doctor Doom
+- id: green-goblin
+  kind: blade
+  line: basic
+  group: 'Collab: Marvel'
+  hasbroName: Green Goblin
+- id: iron-man
+  kind: blade
+  line: basic
+  group: 'Collab: Marvel'
+  hasbroName: Iron Man
+- id: miles-morales
+  kind: blade
+  line: basic
+  group: 'Collab: Marvel'
+  hasbroName: Miles Morales
+- id: mister-fantastic
+  kind: blade
+  line: basic
+  group: 'Collab: Marvel'
+  hasbroName: Mister Fantastic
+- id: red-hulk
+  kind: blade
+  line: basic
+  group: 'Collab: Marvel'
+  hasbroName: Red Hulk
+- id: spider-man
+  kind: blade
+  line: basic
+  group: 'Collab: Marvel'
+  hasbroName: Spider-Man
+- id: thanos
+  kind: blade
+  line: basic
+  group: 'Collab: Marvel'
+  hasbroName: Thanos
+- id: venom
+  kind: blade
+  line: basic
+  group: 'Collab: Marvel'
+  hasbroName: Venom
+- id: chewbacca
+  kind: blade
+  line: basic
+  group: 'Collab: Star Wars'
+  hasbroName: Chewbacca
+- id: darth-vader
+  kind: blade
+  line: basic
+  group: 'Collab: Star Wars'
+  hasbroName: Darth Vader
+- id: general-grievous
+  kind: blade
+  line: basic
+  group: 'Collab: Star Wars'
+  hasbroName: General Grievous
+- id: luke-skywalker
+  kind: blade
+  line: basic
+  group: 'Collab: Star Wars'
+  hasbroName: Luke Skywalker
+- id: moff-gideon
+  kind: blade
+  line: basic
+  group: 'Collab: Star Wars'
+  hasbroName: Moff Gideon
+- id: obi-wan-kenobi
+  kind: blade
+  line: basic
+  group: 'Collab: Star Wars'
+  hasbroName: Obi-Wan Kenobi
+- id: stormtrooper
+  kind: blade
+  line: basic
+  group: 'Collab: Star Wars'
+  hasbroName: Stormtrooper
+- id: the-mandalorian
+  kind: blade
+  line: basic
+  group: 'Collab: Star Wars'
+  hasbroName: The Mandalorian
+- id: bumblebee
+  kind: blade
+  line: basic
+  group: 'Collab: Transformers'
+  hasbroName: Bumblebee
+- id: megatron
+  kind: blade
+  line: basic
+  group: 'Collab: Transformers'
+  hasbroName: Megatron
+- id: optimus-primal
+  kind: blade
+  line: basic
+  group: 'Collab: Transformers'
+  hasbroName: Optimus Primal
+- id: optimus-prime
+  kind: blade
+  line: basic
+  group: 'Collab: Transformers'
+  hasbroName: Optimus Prime
+- id: shockwave
+  kind: blade
+  line: basic
+  group: 'Collab: Transformers'
+  hasbroName: Shockwave
+- id: starscream
+  kind: blade
+  line: basic
+  group: 'Collab: Transformers'
+  hasbroName: Starscream
+- id: ratchet-1-70
+  kind: ratchet
+  line: basic
+  abbr: 1-70
+  name: One-Seventy
+- id: ratchet-2-60
+  kind: ratchet
+  line: basic
+  abbr: 2-60
+  name: Two-Sixty
+- id: ratchet-2-80
+  kind: ratchet
+  line: basic
+  abbr: 2-80
+  name: Two-Eighty
+- id: ratchet-3-60
+  kind: ratchet
+  line: basic
+  abbr: 3-60
+  name: Three-Sixty
+- id: ratchet-3-80
+  kind: ratchet
+  line: basic
+  abbr: 3-80
+  name: Three-Eighty
+- id: ratchet-4-60
+  kind: ratchet
+  line: basic
+  abbr: 4-60
+  name: Four-Sixty
+- id: ratchet-4-70
+  kind: ratchet
+  line: basic
+  abbr: 4-70
+  name: Four-Seventy
+- id: ratchet-4-80
+  kind: ratchet
+  line: basic
+  abbr: 4-80
+  name: Four-Eighty
+- id: ratchet-5-60
+  kind: ratchet
+  line: basic
+  abbr: 5-60
+  name: Five-Sixty
+- id: ratchet-5-80
+  kind: ratchet
+  line: basic
+  abbr: 5-80
+  name: Five-Eighty
+- id: ratchet-6-70
+  kind: ratchet
+  line: basic
+  abbr: 6-70
+  name: Six-Seventy
+- id: ratchet-7-80
+  kind: ratchet
+  line: basic
+  abbr: 7-80
+  name: Seven-Eighty
+- id: ratchet-9-60
+  kind: ratchet
+  line: basic
+  abbr: 9-60
+  name: Nine-Sixty
+- id: ratchet-9-80
+  kind: ratchet
+  line: basic
+  abbr: 9-80
+  name: Nine-Eighty
+- id: ratchet-m-85
+  kind: ratchet
+  line: basic
+  abbr: M-85
+  name: M-Eighty-Five
+- id: bit-ball
+  kind: bit
+  line: basic
+  abbr: B
+  name: Ball
+- id: bit-cyclone
+  kind: bit
+  line: basic
+  abbr: C
+  name: Cyclone
+- id: bit-disk-spike
+  kind: bit
+  line: basic
+  abbr: DS
+  name: Disk Spike
+- id: bit-dot
+  kind: bit
+  line: basic
+  abbr: D
+  name: Dot
+- id: bit-elevate
+  kind: bit
+  line: basic
+  abbr: E
+  name: Elevate
+- id: bit-flat
+  kind: bit
+  line: basic
+  abbr: F
+  name: Flat
+- id: bit-free-flat
+  kind: bit
+  line: basic
+  abbr: FF
+  name: Free Flat
+- id: bit-gear-ball
+  kind: bit
+  line: basic
+  abbr: GB
+  name: Gear Ball
+- id: bit-gear-flat
+  kind: bit
+  line: basic
+  abbr: GF
+  name: Gear Flat
+- id: bit-gear-needle
+  kind: bit
+  line: basic
+  abbr: GN
+  name: Gear Needle
+- id: bit-gear-point
+  kind: bit
+  line: basic
+  abbr: GP
+  name: Gear Point
+- id: bit-high-needle
+  kind: bit
+  line: basic
+  abbr: HN
+  name: High Needle
+- id: bit-high-taper
+  kind: bit
+  line: basic
+  abbr: HT
+  name: High Taper
+- id: bit-low-cyclone
+  kind: bit
+  line: basic
+  abbr: LC
+  name: Low Cyclone
+- id: bit-low-flat
+  kind: bit
+  line: basic
+  abbr: LF
+  name: Low Flat
+- id: bit-low-point
+  kind: bit
+  line: basic
+  abbr: LP
+  name: Low Point
+- id: bit-merge
+  kind: bit
+  line: basic
+  abbr: M
+  name: Merge
+- id: bit-needle
+  kind: bit
+  line: basic
+  abbr: N
+  name: Needle
+- id: bit-orb
+  kind: bit
+  line: basic
+  abbr: O
+  name: Orb
+- id: bit-point
+  kind: bit
+  line: basic
+  abbr: P
+  name: Point
+- id: bit-quake
+  kind: bit
+  line: basic
+  abbr: Q
+  name: Quake
+- id: bit-rush
+  kind: bit
+  line: basic
+  abbr: R
+  name: Rush
+- id: bit-spike
+  kind: bit
+  line: basic
+  abbr: S
+  name: Spike
+- id: bit-taper
+  kind: bit
+  line: basic
+  abbr: T
+  name: Taper
+- id: bit-trans-point
+  kind: bit
+  line: basic
+  abbr: TP
+  name: Trans Point
+- id: bit-unite
+  kind: bit
+  line: basic
+  abbr: U
+  name: Unite

@@ -53,6 +53,13 @@ const typesHere = Object.entries(TYPES).filter(([key]) => articles.some((a) => a
     ? <p class="empty">No articles here yet.</p>
     : <div class="grid" style="margin-top:16px">{articles.map((a) => <ArticleCard article={a} />)}</div>}
 
+  {title === 'Beyblade' && (
+    <a class="parts-cta" href="/beyblade/parts">
+      <strong>Beyblade X parts list</strong>
+      <span>Every Blade, Ratchet and Bit, searchable →</span>
+    </a>
+  )}
+
   {rulebooks.length > 0 && (
     <>
       <div class="section-head"><h2>{title} tournament rules</h2><a class="more" href="/rules">All rules →</a></div>

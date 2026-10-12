@@ -1,0 +1,144 @@
+---
+// beyblade/parts.astro: the Beyblade X parts list (/beyblade/parts).
+// The parts themselves live in src/data/bx-parts.yaml; this page only lays them out.
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { SPECIAL_EDITIONS } from '../../data/bx-special-editions';
+
+const parts = await getCollection('bxParts');
+const blades = parts.filter((p) => p.data.kind === 'blade');
+const ratchets = parts.filter((p) => p.data.kind === 'ratchet');
+const bits = parts.filter((p) => p.data.kind === 'bit');
+// Blade groups in the order the wiki lists them, then A to Z inside each group.
+const GROUP_ORDER = ['Main', 'Expand', 'Hasbro debut', 'X-Over Project'];
+const rank = (g: string) => (GROUP_ORDER.includes(g) ? GROUP_ORDER.indexOf(g) : GROUP_ORDER.length);
+const bladeGroups = [...new Set(blades.map((b) => b.data.group ?? 'Other'))].sort((a, b) => rank(a) - rank(b) || a.localeCompare(b));
+const label = (b: (typeof blades)[number]) => b.data.name ?? b.data.hasbroName ?? '';
+blades.sort((a, b) => label(a).localeCompare(label(b)));
+ratchets.sort((a, b) => (a.data.abbr ?? '').localeCompare(b.data.abbr ?? '', undefined, { numeric: true }));
+bits.sort((a, b) => (a.data.name ?? '').localeCompare(b.data.name ?? ''));
+const LINE = { basic: 'Basic Line', unique: 'Unique Line', custom: 'Custom Line' };
+const search = (...words: (string | undefined)[]) => words.filter(Boolean).join(' ').toLowerCase();
+---
+<Base title="Beyblade X Parts List" description={`Every Beyblade X Blade, Ratchet and Bit in one searchable list: ${blades.length} Blades, ${ratchets.length} Ratchets and ${bits.length} Bits.`}>
+  <header class="wiki-hero">
+    <p class="kicker"><span class="dot" style="background:#e63946"></span><a href="/beyblade">Beyblade</a> · Parts</p>
+    <h1>Beyblade X parts list</h1>
+    <p class="muted">Every Bey is a <a href="/wiki/blade/">Blade</a>, a <a href="/wiki/ratchet/">Ratchet</a> and a <a href="/wiki/bit/">Bit</a>. Search or filter below to find any part, with its Takara Tomy and Hasbro names.</p>
+    <div class="parts-stats">
+      <span><strong>{blades.length}</strong> Blades</span>
+      <span><strong>{ratchets.length}</strong> Ratchets</span>
+      <span><strong>{bits.length}</strong> Bits</span>
+    </div>
+    <label class="sr-only" for="parts-filter">Search parts</label>
+    <input id="parts-filter" class="wiki-filter" type="search" placeholder="Search parts, e.g. Dran, 3-60 or Flat" autocomplete="off" />
+    <div class="chip-row parts-tabs" role="group" aria-label="Show">
+      <button class="chip" type="button" data-kind="all" aria-pressed="true">All</button>
+      <button class="chip" type="button" data-kind="blade" aria-pressed="false">Blades</button>
+      <button class="chip" type="button" data-kind="ratchet" aria-pressed="false">Ratchets</button>
+      <button class="chip" type="button" data-kind="bit" aria-pressed="false">Bits</button>
+      <button class="chip" type="button" data-kind="special" aria-pressed="false">Special editions</button>
+    </div>
+  </header>
+
+  <section class="parts-section" data-kind="blade">
+    <div class="section-head"><h2>Blades</h2></div>
+    <p class="muted">"Not listed" means the Beyblade Wiki gives no name for that company.</p>
+    {bladeGroups.map((g) => (
+      <div class="parts-group">
+        <h3>{g}</h3>
+        <table class="parts-table">
+          <thead><tr><th>Takara Tomy name</th><th>Hasbro name</th></tr></thead>
+          <tbody>
+            {blades.filter((b) => (b.data.group ?? 'Other') === g).map((b) => (
+              <tr data-search={search(b.data.name, b.data.hasbroName, g)}>
+                <td>{b.data.name ?? <span class="muted">Not listed</span>}</td>
+                <td>{b.data.hasbroName ?? <span class="muted">Not listed</span>}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    ))}
+  </section>
+
+  <section class="parts-section" data-kind="ratchet">
+    <div class="section-head"><h2>Ratchets</h2></div>
+    <p class="muted">The first number is how many prongs the Ratchet has, and the second is its height. A <a href="/wiki/ratchet/">3-60</a> has three prongs and is 6.0 mm tall.</p>
+    <table class="parts-table">
+      <thead><tr><th>Ratchet</th><th>Name</th><th>Line</th></tr></thead>
+      <tbody>
+        {ratchets.map((r) => (
+          <tr data-search={search(r.data.abbr, r.data.name)}><td><strong>{r.data.abbr}</strong></td><td>{r.data.name}</td><td>{LINE[r.data.line]}</td></tr>
+        ))}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="parts-section" data-kind="bit">
+    <div class="section-head"><h2>Bits</h2></div>
+    <p class="muted">The letters at the end of a Bey's name are its Bit, so DranSword 3-60<strong>F</strong> uses the <strong>Flat</strong> Bit.</p>
+    <table class="parts-table">
+      <thead><tr><th>Bit</th><th>Name</th><th>Line</th></tr></thead>
+      <tbody>
+        {bits.map((b) => (
+          <tr data-search={search(b.data.abbr, b.data.name)}><td><strong>{b.data.abbr}</strong></td><td>{b.data.name}</td><td>{LINE[b.data.line]}</td></tr>
+        ))}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="parts-section" data-kind="special">
+    <div class="section-head"><h2>Special editions</h2></div>
+    <p class="muted">Gold, coated, black and other special-color releases, named as the <a href="https://www.beybxdb.com/beyblades/takara-tomy-beyblade-x" rel="noopener">Beyblade X Database</a> lists them. Check the database for how each one was released.</p>
+    <table class="parts-table">
+      <thead><tr><th>Release</th></tr></thead>
+      <tbody>
+        {SPECIAL_EDITIONS.map((s) => <tr data-search={s.toLowerCase()}><td>{s}</td></tr>)}
+      </tbody>
+    </table>
+  </section>
+
+  <p class="empty parts-none" hidden>No parts match that search.</p>
+
+  <p class="rules-note">
+    Sources: part names from the Beyblade Wiki's <a href="https://beyblade.fandom.com/wiki/List_of_Basic_Line_parts" rel="noopener">List of Basic Line parts</a>,
+    special editions from the <a href="https://www.beybxdb.com/beyblades/takara-tomy-beyblade-x" rel="noopener">Beyblade X Database</a>. Last checked October 12, 2026.
+    Spot a missing part? <a href="/contact">Tell us</a>.
+  </p>
+
+  <script is:inline>
+    (function () {
+      var input = document.getElementById('parts-filter');
+      var kind = 'all';
+      function apply() {
+        var q = input.value.trim().toLowerCase();
+        var any = false;
+        document.querySelectorAll('.parts-section').forEach(function (sec) {
+          var showSec = kind === 'all' || sec.dataset.kind === kind;
+          var visibleRows = 0;
+          sec.querySelectorAll('tbody tr').forEach(function (tr) {
+            var hit = !q || tr.dataset.search.indexOf(q) !== -1;
+            tr.hidden = !hit;
+            if (hit) visibleRows++;
+          });
+          sec.querySelectorAll('.parts-group').forEach(function (g) { g.hidden = !g.querySelector('tbody tr:not([hidden])'); });
+          sec.hidden = !showSec || visibleRows === 0;
+          if (!sec.hidden) any = true;
+        });
+        document.querySelector('.parts-none').hidden = any;
+      }
+      input.addEventListener('input', apply);
+      // Arriving from site search (/beyblade/parts/?q=dran) fills the box.
+      var q = new URLSearchParams(location.search).get('q');
+      if (q) { input.value = q; apply(); }
+      document.querySelectorAll('.parts-tabs .chip').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          kind = btn.dataset.kind;
+          document.querySelectorAll('.parts-tabs .chip').forEach(function (b) { b.setAttribute('aria-pressed', b === btn); });
+          apply();
+        });
+      });
+    })();
+  </script>
+</Base>

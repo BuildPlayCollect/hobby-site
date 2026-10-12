@@ -2,7 +2,7 @@
 // Every article file must have these fields at the top (the "frontmatter").
 // If one is missing or misspelled, the build stops and tells you which file is wrong.
 import { defineCollection } from 'astro:content';
-import { glob } from 'astro/loaders';
+import { glob, file } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { HOBBIES, TYPES } from './data/site';
 
@@ -53,4 +53,17 @@ const rules = defineCollection({
   }),
 });
 
-export const collections = { articles, wiki, rules };
+// Beyblade X parts: every Blade, Ratchet and Bit, kept in one list (src/data/bx-parts.yaml).
+const bxParts = defineCollection({
+  loader: file('src/data/bx-parts.yaml'),
+  schema: z.object({
+    kind: z.enum(['blade', 'ratchet', 'bit']),
+    line: z.enum(['basic', 'unique', 'custom']),
+    group: z.string().optional(),
+    name: z.string().optional(),
+    hasbroName: z.string().optional(),
+    abbr: z.string().optional(),
+  }),
+});
+
+export const collections = { articles, wiki, rules, bxParts };
