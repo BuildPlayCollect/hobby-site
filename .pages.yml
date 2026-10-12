@@ -15,7 +15,7 @@ content:
     format: yaml-frontmatter
     filename: "{primary}.md"
     view:
-      fields: [title, hobby, type, date]
+      fields: [title, draft, hobby, type, date]
       primary: title
       sort: [date, title]
       default:
@@ -258,7 +258,7 @@ content:
         required: true
       - name: credit
         label: Credit
-        description: Shown under the photo, e.g. "Photo: Echo" or "Photo: u/username, used with permission".
+        description: 'Shown under the photo, e.g. "Photo: Echo" or "Photo: u/username, used with permission".'
         type: string
         default: "Photo: Build Play Collect"
         required: true
