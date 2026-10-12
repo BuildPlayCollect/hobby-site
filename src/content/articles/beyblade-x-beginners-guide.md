@@ -6,6 +6,7 @@ type: guide
 author: Echo
 date: 2026-10-10
 featured: true
+draft: true
 ---
 
 *Sample article. Replace it with your own writing.*

@@ -5,6 +5,7 @@ hobby: tcg
 type: where-to-buy
 author: Echo
 date: 2026-10-04
+draft: true
 ---
 
 *Sample article. Replace it with your own writing and real shop names.*

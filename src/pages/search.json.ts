@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import { HOBBIES, TYPES, type HobbyKey, type TypeKey } from '../data/site';
 
 export async function GET() {
-  const articles = (await getCollection('articles')).map((a) => ({
+  const articles = (await getCollection('articles', ({ data }) => !data.draft)).map((a) => ({
     title: a.data.title,
     summary: a.data.description,
     url: `/articles/${a.id}/`,

@@ -8,7 +8,7 @@ import { HOBBIES, TYPES, TYPE_SLUGS, type HobbyKey, type TypeKey } from '../../d
 import { termsIn } from '../../lib/wiki-terms.mjs';
 
 export async function getStaticPaths() {
-  const articles = await getCollection('articles');
+  const articles = await getCollection('articles', ({ data }) => !data.draft);
   return articles.map((article) => ({ params: { id: article.id }, props: { article, all: articles } }));
 }
 

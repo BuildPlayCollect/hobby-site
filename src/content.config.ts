@@ -17,6 +17,8 @@ const articles = defineCollection({
     author: z.string(),
     date: z.coerce.date(),
     featured: z.boolean().default(false),
+    // Drafts stay off the site (no page, no cards, no search) until this is switched off.
+    draft: z.boolean().default(false),
     // Optional cover photo, e.g. /images/my-photo.jpg (files live in public/images).
     cover: z.string().optional(),
     coverAlt: z.string().optional(),

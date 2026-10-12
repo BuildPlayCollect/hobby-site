@@ -123,3 +123,7 @@ The sign-up box above the footer (and the `/newsletter` page) comes from `src/co
 Each part on the parts list can show a small photo. In Pages CMS, open **Part photos**, click **Add an entry**, type the part's full name as the list shows it (e.g. `DranSword`, `Flat` or `Free`), or a Ratchet's number (`3-60`), upload the photo, describe it, and fill in the credit. The photo appears next to the part on the next deploy. Always spell the name in full: short codes like "F" belong to several parts (the Flat Bit, the Free Assist Blade and the Flow Over Blade), but full names never repeat. If the name doesn't match a part, the site won't update and the build log says which photo to fix.
 
 Only use photos you took or have permission for (see the image rules in the project files). Wiki and shop photos are someone else's.
+
+## Drafts
+
+Every article has a **Draft** switch in Pages CMS. While it's on, the article stays off the site: no page, no cards, no search result. New articles start as drafts, so you can save half-finished work safely. When the article is written and every fact is checked, switch Draft off and save; it goes live on the next deploy. The 7 starter sample articles are kept as drafts for reference.
