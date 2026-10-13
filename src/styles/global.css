@@ -201,6 +201,9 @@ main { padding-bottom: 24px; }
 /* Wiki links inside articles: dotted underline, preview on hover */
 .prose a.wiki-link { color: var(--wiki); text-decoration: underline dotted 2px; text-underline-offset: 4px; }
 .prose a.wiki-link:hover { text-decoration-style: solid; }
+/* "📷 PHOTO:" reminders in articles: hidden from readers, shown with ?photos in the address. */
+.prose .photo-slot { display: none; }
+.show-photo-slots .prose .photo-slot { display: flex; align-items: center; justify-content: center; text-align: center; aspect-ratio: 16 / 9; padding: 16px; margin: 1.4em 0; border: 2px dashed var(--accent); border-radius: var(--radius); background: var(--accent-soft); color: var(--ink); font-weight: 600; font-size: .95rem; }
 /* "## Sources" at the end of an article: a quiet, smaller reference list. */
 .prose h2#sources { margin-top: 2.5em; padding-top: 1.2em; border-top: 1px solid var(--line); font-size: 1.15rem; }
 .prose h2#sources ~ p, .prose h2#sources ~ ol, .prose h2#sources ~ ul { font-size: .9rem; color: var(--muted); }
