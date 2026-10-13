@@ -1,5 +1,5 @@
 ---
-title: "Let It Rip Through Time: Beyblade's Wild Spin From Seashells to World Championships"
+title: "The History of Beyblade, One Spin at a Time"
 description: "Where Beyblade came from, every generation from 1999 to Beyblade X, the rare tops collectors chase, and how a spinning top went global."
 hobby: beyblade
 type: history
