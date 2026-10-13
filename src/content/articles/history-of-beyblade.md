@@ -52,9 +52,11 @@ It worked. Beyblade X shipped [more than 28 million units worldwide by February 
 
 ## Rare tops collectors chase
 
-Every generation has its grails, and Beyblade X is no exception. Its rarest tops often carry a "00" code (BX-00, UX-00) and come from events or store exclusives. We keep a list of them in our [Beyblade X parts list](/beyblade/parts/).
+Every generation has its grails, and Beyblade X is no exception. Its rarest tops usually carry a "00" code (BX-00, UX-00) and never hit regular store shelves. We keep a list of them in our [Beyblade X parts list](/beyblade/parts/). Three favorites:
 
-Two examples from a [2026 roundup by resale marketplace SNKRDUNK](https://snkrdunk.com/en/magazine/?p=514909): a black **Cobalt Dragoon 2-60** Metal Coat handed out at events (listed from ¥5,800), and a **Samurai Saber 5-60K** Metal Coat in Samurai Blue for Japan's national football team, sold only at select Japanese stores from May 2026 (listed from ¥12,280).
+- **Aero Pegasus 3-70A.** For more than two years, the only way to get one was through the Beyblade X app's "Rare Bey Get Battle". Players needed a Rare Bey Exchange Ticket, which app users had [a 0.7% chance](https://beyblade.fandom.com/wiki/AeroPegasus_3-70A) of getting, then redeemed it for this [UX-00 prize, first released in Japan on July 30, 2024](https://beyblade.fandom.com/wiki/Blade_-_AeroPegasus). Plot twist: on October 10, 2026, it finally [came to stores in Japan in the BX-53 All-in-One Set](https://www.toy-people.com/en/?p=114407), in a dual metallic blue and aqua finish. Good news for players, slightly less good news for collectors' bragging rights.
+- **Wizard Rod (Metal Coat: Gold).** You can't buy this one. It's a [UX-00 G3 tournament prize](https://beyblade.fandom.com/wiki/Blade_-_WizardRod), and G3 events are among the [higher-level tournaments run by official B4 stores](https://www.takaratomyasia.com/documents/beybladex/1705650582_Beyblade%20X_Start%20Dash%20Guide.pdf). Want a gold Bey? Go win it.
+- **Phoenix Wing 9-80DB (Metal Coat: Navy).** A CoroCoro Comic special, offered through the magazine's [October issue as a paid mail-order for every reader who applied](https://snkrdunk.com/en/streetwears/389713). Easy to get at the time, if you were reading CoroCoro that month. Miss the window, and you're shopping resale.
 
 The nostalgia runs deep, too. Rare Beyblade X releases include tops named after the original four bit-beasts: **Dranzer Spiral**, **Driger S**, **Draciel Shield** and **Dragoon Storm**. The 1999 kids are all grown up, and they're buying.
 
@@ -81,5 +83,8 @@ Ready to jump in? Start with our [Beyblade X parts list](/beyblade/parts/), chec
 2. Tokyo Weekender: [Beyblade 25th anniversary feature](https://www.tokyoweekender.com/entertainment/beyblade-25th-anniversary/) (April 12, 2024)
 3. TOMY press release: [TOMY to hold Beyblade X World Championship 2025](https://kyodonewsprwire.jp/release/202503105477) (March 2025)
 4. TOMY press release: [TOMY announces two global Beyblade tournaments](https://www.takaratomy.co.jp/english/product_release/pdf/p260321_en.pdf) (March 21, 2026)
-5. SNKRDUNK: ["The Beyblade Renaissance"](https://snkrdunk.com/en/magazine/?p=514909) (July 21, 2026)
-6. Beyblade X Database, via our [Beyblade X parts list](/beyblade/parts/)
+5. Beyblade Wiki (Fandom): [AeroPegasus 3-70A](https://beyblade.fandom.com/wiki/AeroPegasus_3-70A), [Blade: AeroPegasus](https://beyblade.fandom.com/wiki/Blade_-_AeroPegasus), [Blade: WizardRod](https://beyblade.fandom.com/wiki/Blade_-_WizardRod)
+6. ToyPeople: [BX-53 All-in-One Set unveiled](https://www.toy-people.com/en/?p=114407) (September 15, 2026)
+7. Takara Tomy Asia: [Beyblade X Start Dash Guide](https://www.takaratomyasia.com/documents/beybladex/1705650582_Beyblade%20X_Start%20Dash%20Guide.pdf)
+8. SNKRDUNK listing: [Phoenix Wing 9-80DB Metal Coat: Navy](https://snkrdunk.com/en/streetwears/389713)
+9. Beyblade X Database, via our [Beyblade X parts list](/beyblade/parts/)
