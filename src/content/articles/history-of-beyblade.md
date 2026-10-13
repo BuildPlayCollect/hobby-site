@@ -1,6 +1,6 @@
 ---
 title: "The History of Beyblade, One Spin at a Time"
-description: "Where Beyblade came from, every generation from 1999 to Beyblade X, the rare tops collectors chase, and how a spinning top went global."
+description: "Its ancestor was a seashell full of sand. Today it has shipped 560 million units and has world championships. Here's how Beyblade got here, one generation at a time."
 hobby: beyblade
 type: history
 author: Echo
