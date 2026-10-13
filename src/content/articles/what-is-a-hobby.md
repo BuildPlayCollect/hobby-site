@@ -24,6 +24,8 @@ In plain words: a hobby is the thing you do because you *want* to. No boss, no g
 
 Around the year 1400, a "hobby" was a small, active horse. By the 1550s, a "hobbyhorse" was a pretend horse used in morris dancing, and by the 1580s it was a child's toy horse. In the 1670s, people started using "hobbyhorse" to mean a favorite pastime, and by 1816 plain old "hobby" meant it too.
 
+📷 PHOTO: A hobby horse (the stick toy). Yours or a relative's, or a free public domain illustration.
+
 So technically, every hobby is riding a toy horse very seriously. Honestly, that explains a lot about grown adults lubing keyboard switches at 2am.
 
 Bonus: "hobby" is also the name of a small falcon. Hobbies really can take off.
@@ -31,6 +33,8 @@ Bonus: "hobby" is also the name of a small falcon. Hobbies really can take off.
 ## What counts as a hobby?
 
 If you've ever said "just one more," it counts. Most hobbies fall into one of three camps, which is where this site gets its name:
+
+📷 PHOTO: Four quick shots: collecting (figures on a shelf), building (a half-built Mini 4WD), playing (cards mid-game), competing (a Beyblade launch).
 
 - **Build:** putting something together with your own hands, like a [Tamiya](/tamiya) Mini 4WD, a custom [keyboard](/keyboards), or a model kit.
 - **Play:** battling, racing, competing. Card games at a [TCG](/tcg) night, ranked matches in [esports](/esports), spinning tops in a [Beyblade](/beyblade) stadium. (Mine was a metal basin from the kitchen. Official stadium? Never heard of her.)
@@ -41,6 +45,8 @@ Plenty of hobbies are all three at once. Ask anyone who builds a Mini 4WD, races
 ## A hobby grows with you
 
 Mine never really left. It just changed outfits.
+
+📷 PHOTO: Your old childhood toys next to what you collect now.
 
 The toys turned into a Game Boy Advance. My very first game was a Pokémon ROM hack from a game shop in the mall (little me had no idea what a ROM hack was, it just had Pokémon in it). Then came a Super Mario Bros. game and Pokémon Ruby.
 
@@ -65,6 +71,8 @@ Here's what mine gave me:
 3. **Find your people.** A local shop, a group chat, a race track, a game night. Hobbies are better with company.
 4. **Give it a month.** Some hobbies click on day one. Others sneak up on you.
 5. **Don't compare your Shield Liger to someone else's Blade Liger.** Trust me.
+
+📷 PHOTO: Your hands mid-hobby: building, typing or shuffling cards.
 
 ## Your turn
 

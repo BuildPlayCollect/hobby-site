@@ -48,6 +48,8 @@ const shareImage = new URL(image ?? '/og-default.png', Astro.site).href;
         try { saved = localStorage.getItem('theme'); } catch (e) {}
         var dark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
         document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+        // Add ?photos to an article's address to see where photos still need to go.
+        if (/[?&]photos\b/.test(location.search)) document.documentElement.classList.add('show-photo-slots');
       })();
     </script>
   </head>
