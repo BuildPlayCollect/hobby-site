@@ -4,9 +4,10 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import Carousel from '../components/Carousel.astro';
-import HobbyIsland from '../components/HobbyIsland.astro';
-import HobbyIcon from '../components/HobbyIcon.astro';
-import { HOBBIES, type HobbyKey } from '../data/site';
+import HobbySelect from '../components/HobbySelect.astro';
+import PixelSprite from '../components/PixelSprite.astro';
+import Sticker from '../components/Sticker.astro';
+import { HOBBIES } from '../data/site';
 
 const articles = (await getCollection('articles', ({ data }) => !data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const featured = articles.find((a) => a.data.featured) ?? articles[0];
@@ -18,34 +19,37 @@ const latest = articles.filter((a) => !headlines.includes(a)).slice(0, 6);
 const wiki = (await getCollection('wiki')).sort((a, b) => a.data.title.localeCompare(b.data.title));
 ---
 <Base>
-  <HobbyIsland />
-
-  <!-- Phones only: a swipeable row of hobby buttons under the island, since the island's
-       tags are small to tap on a phone. Hidden on bigger screens, where the island does the job. -->
-  <nav class="hobby-pills" aria-label="Hobbies">
-    {Object.entries(HOBBIES).map(([key, h]) => (
-      <a class="hobby-pill" href={`/${key}`} style={`background:${h.color}`}>
-        <HobbyIcon hobby={key as HobbyKey} />
-        <span>{h.name}</span>
-      </a>
-    ))}
-  </nav>
-
-  <!-- One slim intro strip under the island: the site name, what we do, and a door into the wiki. -->
-  <section class="tile intro-strip">
-    <div>
-      <h1>Build. <span class="hl">Play.</span> Collect.</h1>
-      <p>Nerdy, playful and fact-checked. History, guides, new releases and giveaways for every hobby, from spinning tops to trading cards.</p>
+  <!-- Title screen: like the first screen of an old video game. -->
+  <section class="title-screen">
+    <div class="title-floor" aria-hidden="true"></div>
+    <div class="title-sprites" aria-hidden="true">
+      <PixelSprite name="coin" size={40} class="fly f1" />
+      <PixelSprite name="consoles" size={72} class="fly f2" />
+      <PixelSprite name="tcg" size={52} class="fly f3" />
+      <PixelSprite name="heart" size={36} class="fly f4" />
+      <PixelSprite name="tamiya" size={68} class="fly f5" />
+      <PixelSprite name="sparkle" size={30} class="fly f6" />
     </div>
-    <a class="pill-btn" href="/wiki">Fall down the wiki →</a>
+    <Sticker text="ALL HOBBIES!" color="var(--yellow)" size={112} tilt={10} class="title-sticker" />
+    <p class="title-kicker">Hobby history · guides · new releases</p>
+    <h1 class="title-logo"><span>Build</span> <span class="t-play">Play</span> <span>Collect</span></h1>
+    <p class="title-sub">Nerdy, playful and fact-checked. Every hobby, from spinning tops to trading cards.</p>
+    <div class="title-actions">
+      <a class="pixel-btn" href="#select">Press start ▶</a>
+      <a class="pixel-btn ghost" href="/wiki">Fall down the wiki</a>
+    </div>
   </section>
 
-  <a class="tile tile-colour quiz-cta" href="/quiz">
+  <HobbySelect />
+
+  <a class="tile quiz-cta" href="/quiz">
+    <PixelSprite name="sparkle" size={34} class="qs qs1" />
+    <PixelSprite name="sparkle" size={22} class="qs qs2" />
     <div>
-      <h2>Not sure where to start?</h2>
-      <p>Take the 5-question quiz and find the hobby that fits you.</p>
+      <p class="quiz-kicker">Bonus stage · 5 questions</p>
+      <h2>Which hobby <span>fits you?</span></h2>
     </div>
-    <span class="pill-btn dark">Take the quiz →</span>
+    <span class="pixel-btn">Take the quiz ▶</span>
   </a>
 
   <div class="section-head"><h2>Top <span class="hl">stories</span></h2></div>
