@@ -4,6 +4,7 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import AdSlot from '../../components/AdSlot.astro';
+import Sticker from '../../components/Sticker.astro';
 import { HOBBIES, TYPES, TYPE_SLUGS, type HobbyKey, type TypeKey } from '../../data/site';
 import { termsIn } from '../../lib/wiki-terms.mjs';
 
@@ -49,6 +50,15 @@ const jsonLd = {
       <p class="dek">{article.data.description}</p>
       <p class="byline">By {article.data.author} · {dateText}</p>
 
+      {article.data.quick.length > 0 && (
+        <aside class="quick" aria-labelledby="quick-title">
+          <Sticker text="60 SEC" color="var(--yellow)" size={74} tilt={10} />
+          <h2 id="quick-title">The 60-second version</h2>
+          <ul>{article.data.quick.map((q) => <li>{q}</li>)}</ul>
+          <a class="quick-more" href="#article-start">Got more time? Read the whole thing ↓</a>
+        </aside>
+      )}
+
       {toc.length > 1 && (
         <details class="toc-mobile panel">
           <summary>On this page</summary>
@@ -61,7 +71,7 @@ const jsonLd = {
           ? <img src={article.data.cover} alt={article.data.coverAlt ?? ''} />
           : <span>{hobby.name}</span>}
       </div>
-      <div class="prose"><Content /></div>
+      <div class="prose" id="article-start"><Content /></div>
       <AdSlot position="in-article" />
     </article>
 

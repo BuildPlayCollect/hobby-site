@@ -6,6 +6,11 @@ type: guide
 author: Echo
 date: 2026-10-12
 draft: false
+quick:
+  - "A hobby is something you do just because you want to. No boss, no grades, no paycheck."
+  - 'Around the year 1400, a "hobby" was a small horse. The pastime meaning came centuries later.'
+  - "Most hobbies are about building, playing or collecting, and plenty are all three."
+  - "Starting one? Go small, find your people, and give it a month."
 ---
 
 When I was a kid, my mom brought home a new toy every month, right after payday. I didn't see it as a gift back then. I saw it as *the schedule*.

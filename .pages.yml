@@ -91,6 +91,11 @@ content:
         description: Keep this on while you're writing. Switch it off when the article is checked and ready to publish.
         type: boolean
         default: true
+      - name: quick
+        label: The 60-second version
+        description: 3 to 4 short bullet points that sum up the article, shown in a box at the top for readers in a hurry. Only facts that are in the article.
+        type: string
+        list: true
       - name: cover
         label: Cover image
         type: image
