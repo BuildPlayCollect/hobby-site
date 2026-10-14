@@ -4,6 +4,11 @@
 // track, keycap houses, a house of cards, a retro TV, a trophy and a lighthouse).
 // On a computer, a landmark hops and shows its name when the cursor passes over it;
 // on phones the names always show. Click or tap a landmark to visit that hobby.
+// Little neighbour islands float around it, waiting for future hobbies: a new hobby in
+// src/data/site.ts without a spot on the main island moves onto the next free neighbour
+// by itself. Empty neighbours show a "?" sign that invites readers to suggest a hobby.
+// Art style: comic ink outlines mixed with a soft storybook look (tall striped cliffs,
+// grass dripping over the edge, pink cloud-trees, painted clouds).
 // Everything is drawn here from simple shapes, so it's all ours.
 import { HOBBIES, type HobbyKey } from '../data/site';
 
@@ -31,16 +36,50 @@ const top = curve(rim, true);
 // The front half of the rim (left to right), used for the grass edge and the cliff.
 const front = rim.slice(0, 37).reverse(); // angles 180° → 0° along the bottom
 const frontDown = front.map(([x, y]) => [x, y + SIDE] as [number, number]);
-const grassSide = `${curve(front, false)} L${frontDown.at(-1)![0]},${frontDown.at(-1)![1]} ${curve([...frontDown].reverse(), false).replace(/^M/, 'L')} Z`;
+// Grass dripping over the front edge: the rim, then hanging "tongues" of grass back along the bottom.
+const drips = (edge: [number, number][], depth: number, step: number, seed: number) => {
+  let d = '';
+  for (let i = edge.length - 1; i > 0; i -= step) {
+    const [x1, y1] = edge[i], [x2, y2] = edge[Math.max(0, i - step)];
+    const deep = depth * (0.55 + 0.45 * Math.abs(Math.sin(i * 1.7 + seed)));
+    d += ` Q${((x1 + x2) / 2).toFixed(1)},${((y1 + y2) / 2 + deep).toFixed(1)} ${x2.toFixed(1)},${y2.toFixed(1)}`;
+  }
+  return d;
+};
+const grassSide = `${curve(front, false)} L${frontDown.at(-1)![0]},${frontDown.at(-1)![1] - SIDE}${drips(front, 70, 2, 0)} Z`;
 const tip: [number, number][] = [[872, 400], [820, 470], [748, 540], [660, 600], [585, 668], [515, 735], [455, 690], [380, 625], [290, 560], [205, 488], [140, 410]];
-const cliff = `${curve(frontDown, false)} ${tip.map(([x, y]) => `L${x},${y}`).join(' ')} Z`;
-// Rock layers inside the cliff (clipped to its shape).
-const layer1 = 'M60,445 L170,470 L260,455 L360,488 L470,470 L560,500 L660,476 L760,492 L940,460 L940,800 L60,800 Z';
-const layer2 = 'M60,560 L230,548 L330,585 L430,566 L520,602 L620,580 L720,600 L940,570 L940,800 L60,800 Z';
-const cracks = ['M300,520 l18,22 l-8,20', 'M620,520 l-14,26 l10,18', 'M480,640 l12,20 l-6,22'];
+const cliff = `${curve(front, false)} ${tip.map(([x, y]) => `L${x},${y}`).join(' ')} Z`;
+// Inside the cliff (clipped to its shape): a soft lavender shadow on the right, and long vertical
+// rock stripes, like the storybook islands in Echo's reference.
+const shade = 'M600,380 C640,470 600,560 520,740 L940,760 L940,380 Z';
+const stripes = Array.from({ length: 19 }, (_, i) => {
+  const x = 150 + i * 38 + 8 * Math.sin(i * 2.3);
+  const len = 120 + 140 * Math.abs(Math.sin(i * 1.3 + 0.5));
+  return `M${x.toFixed(0)},${(440 + 14 * Math.cos(i)).toFixed(0)} q${(6 * Math.sin(i)).toFixed(0)},${(len / 2).toFixed(0)} ${(-4 + 8 * Math.cos(i * 0.7)).toFixed(0)},${len.toFixed(0)}`;
+});
+
+// ---- Neighbour islands for future hobbies: [centre x, top y, width].
+const NEIGHBOURS: [number, number, number][] = [[175, 84, 150], [840, 106, 130], [170, 590, 150], [835, 600, 130]];
+const mini = ([cx, cy, w]: [number, number, number], i: number) => {
+  const rx = w / 2, ry = w * 0.17, side = w * 0.1;
+  const pts = Array.from({ length: 36 }, (_, k) => {
+    const a = (k / 36) * Math.PI * 2;
+    const r = 1 + 0.06 * Math.sin(3 * a + i);
+    return [cx + rx * r * Math.cos(a), cy + ry * r * Math.sin(a)] as [number, number];
+  });
+  const fr = pts.slice(0, 19).reverse();
+  const frDown = fr.map(([x, y]) => [x, y + side] as [number, number]);
+  const tipY = cy + w * (0.72 + 0.1 * (i % 2));
+  // A chunky rock body with a jagged underside, rather than a neat cone.
+  const body: [number, number][] = [[0.98, 0.2], [0.8, 0.38], [0.6, 0.44], [0.42, 0.62], [0.2, 0.6], [0.06, tipY], [-0.12, 0.66], [-0.3, 0.52], [-0.55, 0.5], [-0.78, 0.36], [-0.96, 0.2]];
+  const cliffD = `${curve(fr, false)} ${body.map(([fx, fy]) => `L${(cx + rx * fx).toFixed(1)},${(fy === tipY ? tipY : cy + w * fy).toFixed(1)}`).join(' ')} Z`;
+  const grassD = `${curve(fr, false)} L${frDown.at(-1)![0]},${frDown.at(-1)![1] - side}${drips(fr, w * 0.2, 2, i)} Z`;
+  const stripeD = [-0.5, -0.2, 0.15, 0.45].map((f) => `M${(cx + rx * f).toFixed(0)},${(cy + side + 8).toFixed(0)} v${(w * (0.35 + 0.2 * Math.abs(f))).toFixed(0)}`).join(' ');
+  return { top: curve(pts, true), cliff: cliffD, grass: grassD, stripes: stripeD, shade: `M${cx + rx * 0.15},${cy} L${cx + rx * 1.2},${cy} L${cx + rx * 1.2},${tipY + 10} L${cx},${tipY + 10} Z` };
+};
 
 // ---- Where each landmark stands on the island (base centre), drawn back to front.
-const SPOTS: Record<HobbyKey, [number, number]> = {
+const SPOTS: Partial<Record<HobbyKey, [number, number]>> = {
   general: [500, 232],
   tcg: [318, 262],
   keyboards: [700, 250],
@@ -49,14 +88,18 @@ const SPOTS: Record<HobbyKey, [number, number]> = {
   tamiya: [385, 412],
   esports: [628, 412],
 };
-const order = (Object.keys(SPOTS) as HobbyKey[]).sort((a, b) => SPOTS[a][1] - SPOTS[b][1]);
-const trail = curve(['tcg', 'general', 'keyboards', 'consoles', 'esports', 'tamiya', 'beyblade'].map((k) => [SPOTS[k as HobbyKey][0], SPOTS[k as HobbyKey][1] + 6] as [number, number]), false);
+const order = (Object.keys(SPOTS) as HobbyKey[]).sort((a, b) => SPOTS[a]![1] - SPOTS[b]![1]);
+// Hobbies without a spot on the main island live on the neighbours, in order.
+const movedIn = (Object.keys(HOBBIES) as HobbyKey[]).filter((k) => !SPOTS[k]);
+const neighbours = NEIGHBOURS.map((n, i) => ({ n, shape: mini(n, i), hobby: movedIn[i] as HobbyKey | undefined }));
+const trail = curve(['tcg', 'general', 'keyboards', 'consoles', 'esports', 'tamiya', 'beyblade'].map((k) => [SPOTS[k as HobbyKey]![0], SPOTS[k as HobbyKey]![1] + 6] as [number, number]), false);
 const label = (name: string) => ({ w: name.length * 17 + 34 });
 // How tall each landmark is, so its pin sits right on top.
 // Low landmarks show their name tag underneath; tall ones show it above the pin.
 const BELOW: HobbyKey[] = ['tamiya', 'esports'];
-const HEIGHT: Record<HobbyKey, number> = { beyblade: 36, tamiya: 18, keyboards: 62, tcg: 128, consoles: 118, esports: 114, general: 156 };
-const trees: [number, number, number][] = [[175, 300, 1], [420, 215, 0.8], [590, 205, 0.85], [850, 290, 1], [470, 330, 0.9], [560, 340, 0.75], [270, 430, 0.9], [740, 445, 1], [880, 410, 0.8], [130, 360, 0.8]];
+const HEIGHT: Partial<Record<HobbyKey, number>> = { beyblade: 36, tamiya: 18, keyboards: 62, tcg: 128, consoles: 118, esports: 114, general: 156 };
+// Trees: [x, y, size, pink?]. Pink cloud-trees and green bushes, as in the storybook look.
+const trees: [number, number, number, boolean][] = [[175, 300, 1, true], [420, 215, 0.8, false], [590, 205, 0.85, true], [850, 290, 1, true], [470, 330, 0.9, false], [560, 340, 0.75, true], [270, 430, 0.9, false], [740, 445, 1, true], [880, 410, 0.8, false], [130, 360, 0.8, true]];
 ---
 <section class="island-wrap" aria-labelledby="island-title">
   <div class="island-head">
@@ -67,7 +110,19 @@ const trees: [number, number, number][] = [[175, 300, 1], [420, 215, 0.8], [590,
     <svg class="island-svg" viewBox="70 -30 860 790" preserveAspectRatio="xMidYMid meet" role="group" aria-label="Map of Hobby Island">
       <defs>
         <clipPath id="cliff-clip"><path d={cliff} /></clipPath>
+        {neighbours.map(({ shape }, i) => <clipPath id={`mini-clip-${i}`}><path d={shape.cliff} /></clipPath>)}
+        <!-- Cliff colour: warm sand at the top fading to lavender-pink at the bottom -->
+        <linearGradient id="cliff-fill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#f7cf8e" /><stop offset=".55" stop-color="#eeb48f" /><stop offset="1" stop-color="#d8a3d0" />
+        </linearGradient>
       </defs>
+
+      <!-- Soft painted clouds far behind everything (no outlines, so they stay in the background) -->
+      <g class="soft-clouds" aria-hidden="true">
+        <path d="M-40,560 a90,90 0 0 1 150,-60 a110,110 0 0 1 200,10 a80,80 0 0 1 130,60 v300 h-480 z" />
+        <path d="M560,600 a100,100 0 0 1 170,-50 a90,90 0 0 1 160,20 a70,70 0 0 1 120,70 v260 h-450 z" />
+        <path d="M600,40 a60,60 0 0 1 100,-30 a70,70 0 0 1 120,20 a50,50 0 0 1 60,50 h-280 z" class="far" />
+      </g>
 
       <!-- Sky decorations -->
       <g class="sky" aria-hidden="true">
@@ -75,8 +130,6 @@ const trees: [number, number, number][] = [[175, 300, 1], [420, 215, 0.8], [590,
         <g class="cloud c2"><path d="M760,170 a24,24 0 0 1 36,-20 a30,30 0 0 1 56,6 a22,22 0 0 1 20,30 h-106 a18,18 0 0 1 -6,-16 z" /></g>
         <path class="bird" d="M640,150 q10,-10 20,0 q10,-10 20,0" />
         <path class="bird" d="M690,128 q7,-7 14,0 q7,-7 14,0" />
-        <g class="rock r1"><path d="M110,560 l40,-6 l18,14 l-26,30 z" /><path d="M110,560 l40,-6 l18,14 l-20,4 z" class="rock-top" /></g>
-        <g class="rock r2"><path d="M850,600 l34,-4 l12,12 l-22,24 z" /><path d="M850,600 l34,-4 l12,12 l-18,2 z" class="rock-top" /></g>
         <g class="stars"><path d="M200,140 l3,8 l8,3 l-8,3 l-3,8 l-3,-8 l-8,-3 l8,-3 z" /><path d="M880,250 l2,6 l6,2 l-6,2 l-2,6 l-2,-6 l-6,-2 l6,-2 z" /><path d="M330,170 l2,5 l5,2 l-5,2 l-2,5 l-2,-5 l-5,-2 l5,-2 z" /></g>
       </g>
 
@@ -85,9 +138,8 @@ const trees: [number, number, number][] = [[175, 300, 1], [420, 215, 0.8], [590,
         <g transform="translate(14 14)" class="isle-shadow"><path d={top} /><path d={cliff} /></g>
         <path d={cliff} class="cliff" />
         <g clip-path="url(#cliff-clip)">
-          <path d={layer1} class="layer1" />
-          <path d={layer2} class="layer2" />
-          {cracks.map((c) => <path d={c} class="crack" />)}
+          <path d={shade} class="cliff-shade" />
+          {stripes.map((d) => <path d={d} class="stripe" />)}
         </g>
         <path d={cliff} class="outline" />
         <path d={grassSide} class="grass-side" />
@@ -99,17 +151,59 @@ const trees: [number, number, number][] = [[175, 300, 1], [420, 215, 0.8], [590,
           <ellipse cx="506" cy="440" rx="40" ry="14" class="pond" />
         </g>
         <path d={trail} class="trail" />
-        {trees.map(([x, y, s]) => (
-          <g class="tree" transform={`translate(${x} ${y}) scale(${s})`}>
-            <path d="M0,0 v-14" class="trunk" /><circle cx="0" cy="-26" r="15" />
+        {trees.map(([x, y, s, pink]) => (
+          <g class:list={['tree', { pink }]} transform={`translate(${x} ${y}) scale(${s})`}>
+            <path d="M0,0 v-14" class="trunk" />
+            <path d="M-20,-18 a10,10 0 0 1 4,-16 a12,12 0 0 1 20,-6 a11,11 0 0 1 16,10 a9,9 0 0 1 -2,12 z" class="puff" />
           </g>
         ))}
       </g>
 
+      <!-- Neighbour islands: homes for future hobbies -->
+      {neighbours.map(({ n: [cx, cy, w], shape, hobby }, i) => {
+        const h = hobby && HOBBIES[hobby];
+        const name = h ? h.name.toUpperCase() : 'YOUR HOBBY?';
+        const tw = name.length * 15 + 30;
+        return (
+          <g class="mini" style={`--d:${(-1.3 * i).toFixed(1)}s`}>
+            <g transform="translate(9 9)" class="isle-shadow"><path d={shape.top} /><path d={shape.cliff} /></g>
+            <path d={shape.cliff} class="cliff" />
+            <g clip-path={`url(#mini-clip-${i})`}><path d={shape.shade} class="cliff-shade" /><path d={shape.stripes} class="stripe" /></g>
+            <path d={shape.cliff} class="outline" />
+            <path d={shape.grass} class="grass-side" />
+            <path d={shape.top} class="grass" />
+            {i === 2 && (<g class="falls"><path d={`M${cx + 18},${cy + w * 0.12} h14 v${w * 0.9} h-14 z`} class="water" /><path d={`M${cx + 25},${cy + w * 0.14} v${w * 0.85}`} class="water-lines" /></g>)}
+            <a href={h ? `/${hobby}` : '/contact'} class="spot mini-spot" style={`--c:${h ? h.color : '#fffaf0'}`} aria-label={h ? `${h.name}: ${h.blurb}` : 'An empty island, waiting for a new hobby. Suggest one!'}>
+              <g transform={`translate(${cx} ${cy + 4})`}>
+                <ellipse cx="0" cy="2" rx={w * 0.26} ry="8" class="ground" />
+                <g class="landmark">
+                  {h ? (<>
+                    <g transform="scale(1.3)">
+                      <path d="M-22,0 v-30 l22,-18 l22,18 v30 z" class="fill-c" />
+                      <rect x="-7" y="-16" width="14" height="16" rx="4" class="fill-ink" />
+                      <path d="M0,-48 v-22" class="leg" /><path d="M0,-70 l22,6 l-22,6 z" class="fill-yellow" />
+                    </g>
+                  </>) : (<>
+                    <path d="M0,0 v-46" class="post" />
+                    <path d="M-26,-60 h52 v26 h-52 z" class="fill-cream" />
+                    <text x="0" y="-40" class="sign-q">?</text>
+                    <path d="M-34,0 q4,-12 10,-2 q4,-10 8,0" class="sprout" />
+                  </>)}
+                </g>
+                <g transform={`translate(0 ${h ? -112 : -70})`}><g class="tag">
+                  <rect x={-tw / 2} y="-20" width={tw} height="36" rx="18" />
+                  <text x="0" y="5" class="mini-tag">{name}</text>
+                </g></g>
+              </g>
+            </a>
+          </g>
+        );
+      })}
+
       <!-- Landmarks: each one is a link to its hobby -->
       {order.map((key, i) => {
         const h = HOBBIES[key];
-        const [x, y] = SPOTS[key];
+        const [x, y] = SPOTS[key]!;
         const { w } = label(h.name);
         return (
           <g transform={`translate(${x} ${y})`}><a href={`/${key}`} class="spot" style={`--c:${h.color};--d:${(i * 0.4).toFixed(1)}s`} aria-label={`${h.name}: ${h.blurb}`}>
@@ -172,11 +266,11 @@ const trees: [number, number, number][] = [[175, 300, 1], [420, 215, 0.8], [590,
                 <rect x="-6" y="-18" width="12" height="18" rx="5" class="fill-ink" />
               </>)}
             </g>
-            <g transform={`translate(0 ${-HEIGHT[key]})`}><g class="pin"><g class="pin-shape">
+            <g transform={`translate(0 ${-HEIGHT[key]!})`}><g class="pin"><g class="pin-shape">
               <path d="M0,0 C-6,-12 -18,-20 -18,-34 a18,18 0 0 1 36,0 C18,-20 6,-12 0,0 Z" class="fill-c" />
               <circle cx="0" cy="-34" r="7" class="fill-cream" />
             </g></g></g>
-            <g transform={`translate(0 ${BELOW.includes(key) ? 46 : -HEIGHT[key] - 74})`}><g class="tag">
+            <g transform={`translate(0 ${BELOW.includes(key) ? 46 : -HEIGHT[key]! - 74})`}><g class="tag">
               <rect x={-w / 2} y="-22" width={w} height="40" rx="20" />
               <text x="0" y="6">{h.name.toUpperCase()}</text>
             </g></g>
