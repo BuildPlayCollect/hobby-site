@@ -1,15 +1,14 @@
 ---
 // AdSlot.astro: a reserved space for an ad.
-// Today it shows a placeholder. When you sign up for ads, the ad code goes here once
-// and every page that uses <AdSlot /> starts showing ads.
+// Until there's an advertiser, it shows nothing at all (no empty boxes).
+// When ads are ready, flip SHOW_ADS to true and put the ad code below, once:
+// every page that uses <AdSlot /> starts showing ads.
 interface Props {
   position: 'header' | 'in-article' | 'sidebar';
 }
 const { position } = Astro.props;
 const SHOW_ADS = false; // flip to true when ads are live
 ---
-{SHOW_ADS ? (
+{SHOW_ADS && (
   <div class={`ad ad-${position}`}><!-- ad code goes here --></div>
-) : (
-  <div class={`ad ad-${position} ad-placeholder`} aria-hidden="true">Ad space ({position})</div>
 )}
