@@ -6,9 +6,9 @@ import AdSlot from '../components/AdSlot.astro';
 import Newsletter from '../components/Newsletter.astro';
 // Inter font, stored on our own site (no Google Fonts request).
 import '@fontsource-variable/inter';
-// Archivo Black: the chunky headline font (free OFL licence), also stored on our own site.
-import '@fontsource/archivo-black';
-import '../styles/global.css';
+// The whole look of the site (colours, fonts, outlines, shadows) lives in ONE theme file.
+// To try a different design, point this line at another file in src/styles/themes/.
+import '../styles/themes/comic.css';
 
 interface Props {
   title?: string;
@@ -94,7 +94,7 @@ const shareImage = new URL(image ?? '/og-default.png', Astro.site).href;
     <!-- Ticker: a scrolling strip of what's on the site. The list is written twice so it loops without a gap. -->
     <div class="ticker" aria-hidden="true">
       <div class="ticker-track">
-        {[0, 1].map(() => ['History', 'Guides', 'New releases', 'Giveaways', 'Wiki rabbit holes', 'Tournament rules', ...Object.values(HOBBIES).map((h) => h.name)].map((t) => <span>{t}</span>))}
+        {[0, 1].map(() => ['History', 'Guides', 'New releases', 'Giveaways', 'Wiki rabbit holes', 'Tournament rules'].map((t) => <span>{t}</span>))}
       </div>
     </div>
 
