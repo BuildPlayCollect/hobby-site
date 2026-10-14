@@ -476,16 +476,17 @@ a.tile:hover { text-decoration: none; transform: translate(-2px, -2px); box-shad
 .hero-keys { display: grid; gap: 28px; padding: 34px 0 0; border-bottom: var(--border); margin: 0 -16px; }
 .hero-copy { padding: 0 16px 8px; }
 @media (min-width: 960px) {
-  .hero-keys { grid-template-columns: 1fr 1.1fr; gap: 0; padding: 0; min-height: calc(100vh - var(--header-h) - 60px); }
-  .hero-copy { padding: 52px 40px 48px 16px; align-self: center; }
+  .hero-keys { grid-template-columns: 1fr 1.25fr; gap: 0; padding: 0; min-height: calc(100vh - var(--header-h) - 56px); }
+  .hero-copy { padding: 30px 40px 34px 16px; align-self: center; }
 }
-.hero-title { margin: 0; font-size: clamp(3.8rem, 13vw, 7.6rem); line-height: .9; letter-spacing: -0.055em; font-weight: 600; }
+.hero-title { margin: 0; font-size: clamp(4.6rem, 24vw, 10.5rem); line-height: .86; letter-spacing: -0.06em; font-weight: 700; }
+@media (min-width: 960px) { .hero-title { font-size: clamp(6rem, 9.6vw, 9.6rem); } .hero-sub { max-width: 48ch; margin-top: 20px; } .hero-meta, .hero-actions { margin-top: 20px; } .code-tag { margin-bottom: 14px; } }
 .hero-title .play { color: var(--orange); }
-.hero-sub { max-width: 42ch; margin: 22px 0 0; font-size: 1.08rem; color: var(--muted); }
+.hero-sub { max-width: 40ch; margin: 26px 0 0; font-size: 1.18rem; color: var(--muted); }
 .hero-meta { display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 0; margin: 26px 0 0; border: var(--border); width: fit-content; }
 .hero-meta div { padding: 10px 18px 12px; border-left: var(--border); display: flex; flex-direction: column-reverse; }
 .hero-meta div:first-child { border-left: 0; }
-.hero-meta dd { margin: 0; font-size: 2rem; font-weight: 700; line-height: 1; letter-spacing: -0.04em; }
+.hero-meta dd { margin: 0; font-size: 2.6rem; font-weight: 700; line-height: 1; letter-spacing: -0.04em; }
 .hero-meta dt { font-family: var(--mono); font-size: .72rem; color: var(--muted); margin-top: 6px; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
 
@@ -501,15 +502,15 @@ a.tile:hover { text-decoration: none; transform: translate(-2px, -2px); box-shad
 :root[data-theme="dark"] .arrow-btn-light { background: var(--surface); color: var(--ink); }
 
 /* The blue graph-paper panel */
-.keys-panel { position: relative; overflow: hidden; min-height: 380px; display: grid; place-items: center; padding: 40px 0 56px; background-color: #f9fbff; background-image: linear-gradient(var(--grid-line) 1.5px, transparent 1.5px), linear-gradient(90deg, var(--grid-line) 1.5px, transparent 1.5px); background-size: 46px 46px; border-top: var(--border); }
+.keys-panel { position: relative; overflow: hidden; min-height: 440px; display: grid; place-items: center; padding: 48px 0 64px; background-color: #f9fbff; background-image: linear-gradient(var(--grid-line) 1.5px, transparent 1.5px), linear-gradient(90deg, var(--grid-line) 1.5px, transparent 1.5px); background-size: 46px 46px; border-top: var(--border); }
 :root[data-theme="dark"] .keys-panel { background-color: #0d1b2b; }
 @media (min-width: 960px) { .keys-panel { border-top: 0; border-left: var(--border); padding: 40px 0; margin-right: min(0px, calc((1200px - 100vw) / 2)); } }
 .keys-panel .keys-note { position: absolute; left: 7%; top: 6%; z-index: 3; }
 @media (min-width: 960px) { .keys-panel .keys-note { left: 9%; top: 9%; } }
 
 /* The keycap cluster. --u is the size of one key, --g the gap. Tilted like a keyboard on a desk. */
-.keys { --u: min(118px, 19.5vw); --g: min(16px, 2.6vw); position: relative; display: flex; flex-direction: column; gap: var(--g); transform: rotate(-9deg); margin: calc(var(--u) * .3) 0 0 calc(var(--u) * .12); }
-@media (min-width: 960px) { .keys { --u: min(112px, 8.4vw); --g: min(15px, 1.2vw); } }
+.keys { --u: min(118px, 18vw); --g: min(16px, 2.4vw); position: relative; display: flex; flex-direction: column; gap: var(--g); transform: rotate(-9deg); margin: calc(var(--u) * .3) 0 0 calc(var(--u) * .2); }
+@media (min-width: 960px) { .keys { --u: min(134px, 9.2vw); --g: min(17px, 1.25vw); margin-left: calc(var(--u) * -.1); } }
 .keys-row { display: flex; gap: var(--g); margin-left: calc(var(--row) * var(--u) * .32); }
 .key { --c: var(--surface); position: relative; display: block; width: var(--u); height: var(--u); color: var(--navy); }
 .key:hover { text-decoration: none; }
