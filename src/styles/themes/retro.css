@@ -38,6 +38,8 @@
   --ad-2: #e2ddd0;
   --doodle-ink: #141414;
   --sky: #b9ccff;          /* light blue panels */
+  /* Faint doodles (plus, sparkle, squiggle, ring, x, loop) repeated across the paper. Very low opacity so text stays calm. */
+  --paper-doodles: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280' viewBox='0 0 280 280' fill='none' stroke='%23141414' stroke-opacity='.09' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M40 30v16M32 38h16'/%3E%3Cpath d='M200 46c1 6 4 9 10 10-6 1-9 4-10 10-1-6-4-9-10-10 6-1 9-4 10-10z'/%3E%3Cpath d='M110 120c5-7 9-7 12 0s7 7 12 0 8-7 12 0'/%3E%3Ccircle cx='236' cy='170' r='6'/%3E%3Cpath d='M30 200l12 12M42 200l-12 12'/%3E%3Cpath d='M150 236c4-10 14-12 16-4s-8 8-6 0 12-8 18-2'/%3E%3Ccircle cx='90' cy='60' r='1.5' fill='{c}' fill-opacity='{op}'/%3E%3Ccircle cx='260' cy='250' r='1.5' fill='{c}' fill-opacity='{op}'/%3E%3Ccircle cx='70' cy='260' r='1.5' fill='{c}' fill-opacity='{op}'/%3E%3C/svg%3E");
 
   /* The colour box */
   --pink: #ff8fc7;
@@ -79,6 +81,7 @@
   --ad-2: #232323;
   --doodle-ink: #f3efe6;
   --sky: #24305e;
+  --paper-doodles: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280' viewBox='0 0 280 280' fill='none' stroke='%23f3efe6' stroke-opacity='.07' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M40 30v16M32 38h16'/%3E%3Cpath d='M200 46c1 6 4 9 10 10-6 1-9 4-10 10-1-6-4-9-10-10 6-1 9-4 10-10z'/%3E%3Cpath d='M110 120c5-7 9-7 12 0s7 7 12 0 8-7 12 0'/%3E%3Ccircle cx='236' cy='170' r='6'/%3E%3Cpath d='M30 200l12 12M42 200l-12 12'/%3E%3Cpath d='M150 236c4-10 14-12 16-4s-8 8-6 0 12-8 18-2'/%3E%3Ccircle cx='90' cy='60' r='1.5' fill='{c}' fill-opacity='{op}'/%3E%3Ccircle cx='260' cy='250' r='1.5' fill='{c}' fill-opacity='{op}'/%3E%3Ccircle cx='70' cy='260' r='1.5' fill='{c}' fill-opacity='{op}'/%3E%3C/svg%3E");
   color-scheme: dark;
 }
 
@@ -86,7 +89,8 @@
 * { box-sizing: border-box; }
 html, body { overflow-x: clip; } /* stickers may poke past the edge; never let them make the page scroll sideways */
 html { scroll-padding-top: calc(var(--header-h) + 16px); -webkit-text-size-adjust: 100%; }
-body { margin: 0; font-family: var(--sans); font-size: 1rem; color: var(--ink); background: var(--bg); line-height: 1.6; transition: background-color .2s, color .2s; }
+body { margin: 0; font-family: var(--sans); font-size: 1rem; color: var(--ink); background: var(--bg) var(--paper-doodles) 0 0 / 280px 280px repeat; line-height: 1.6; transition: background-color .2s, color .2s; }
+body:has(.prose) { background-image: none; } /* article pages keep plain paper so reading stays calm */
 a { color: var(--link); text-decoration: none; }
 a:hover { text-decoration: underline; text-underline-offset: 3px; }
 img { max-width: 100%; display: block; }
@@ -191,7 +195,7 @@ a.tile:hover { text-decoration: none; transform: translateY(-3px); }
 /* Hero poster */
 .poster { display: grid; gap: 10px 30px; align-items: center; padding: 30px 0 10px; border-bottom: var(--border); }
 @media (min-width: 900px) { .poster { grid-template-columns: 1fr 1.05fr; padding: 40px 0 30px; } }
-.poster-kicker { margin: 0 0 6px; font-weight: 800; font-size: 1.15rem; line-height: 1.15; }
+.poster-kicker { display: inline-block; margin: 0 0 14px; padding: 6px 14px; font-family: var(--marker); font-weight: 400; font-size: 1.3rem; line-height: 1.15; background: var(--yellow); color: #141414; border: 2px solid #141414; border-radius: 10px; box-shadow: 3px 3px 0 #141414; transform: rotate(-2.5deg); }
 .poster-title { position: relative; margin: 0; font-size: clamp(3.4rem, 11vw, 7rem); line-height: .86; }
 .poster-title span { display: inline-block; }
 .poster-title span:nth-of-type(2) { transform: rotate(-3deg); }
@@ -200,11 +204,20 @@ a.tile:hover { text-decoration: none; transform: translateY(-3px); }
 @media (max-width: 899px) { .pt-spark.s3 { display: none; } }
 .poster-sub { max-width: 44ch; margin: 22px 0 0; font-size: 1.05rem; color: var(--muted); }
 .poster-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
-.poster-stats { display: flex; margin: 30px 0 0; }
-.poster-stats div { padding: 0 22px; border-left: var(--border); display: flex; flex-direction: column-reverse; }
-.poster-stats div:first-child { padding-left: 0; border-left: 0; }
-.poster-stats dd { margin: 0; font-weight: 900; font-size: 2rem; line-height: 1; letter-spacing: -0.03em; }
-.poster-stats dt { font-size: .82rem; color: var(--muted); margin-top: 4px; }
+.poster-stats { display: flex; flex-wrap: wrap; gap: 14px; margin: 32px 0 6px; }
+/* The stats read like a game HUD: three chunky stickers, each tilted a little differently. */
+.poster-stats div { display: flex; flex-direction: column-reverse; align-items: flex-start; min-width: 104px; padding: 10px 16px 12px; border: 2px solid #141414; border-radius: 14px; box-shadow: 4px 4px 0 #141414; transform: rotate(-3deg); transition: transform .15s; }
+.poster-stats div:nth-child(1) { background: #141414; color: #fff8ec; }
+.poster-stats div:nth-child(2) { background: var(--orange); color: #141414; transform: rotate(2.5deg) translateY(4px); }
+.poster-stats div:nth-child(3) { background: var(--blue); color: #fff8ec; transform: rotate(-1.5deg); }
+.poster-stats div:hover { transform: rotate(0) translateY(-3px); }
+.poster-stats dd { margin: 0; font-family: var(--display); font-size: 2.9rem; line-height: .95; }
+.poster-stats div:nth-child(1) dd { color: var(--yellow); }
+.poster-stats dt { font-family: var(--pixel); font-size: .78rem; letter-spacing: .04em; text-transform: uppercase; margin-top: 4px; }
+:root[data-theme="dark"] .poster-stats div { border-color: #f3efe6; box-shadow: 4px 4px 0 #000; }
+:root[data-theme="dark"] .poster-stats div:nth-child(1) { background: #f3efe6; color: #141414; }
+:root[data-theme="dark"] .poster-stats div:nth-child(1) dd { color: var(--blue); }
+@media (max-width: 420px) { .poster-stats div { min-width: 0; flex: 1; padding: 8px 12px 10px; } .poster-stats dd { font-size: 2.3rem; } .poster-stats dt { font-size: .68rem; } }
 
 /* The sticker collage on the right */
 .poster-art { position: relative; aspect-ratio: 1 / .92; min-height: 300px; }
