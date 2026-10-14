@@ -9,6 +9,9 @@ export default defineConfig({
   site: 'https://buildplaycollect.com',
   // The sitemap lists every page so Google can find them.
   integrations: [sitemap()],
+  // Keep fonts and images as real files instead of tucking small ones into the CSS as
+  // "data:" text, so the security policy below (font-src 'self') lets them load.
+  vite: { build: { assetsInlineLimit: 0 } },
   // Security: a Content Security Policy tells browsers to only run the scripts
   // we wrote (Astro fingerprints each one) and only load things from places we
   // trust, so injected or hijacked code can't run on our pages.

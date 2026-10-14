@@ -1,0 +1,38 @@
+---
+// HobbyTiles.astro: the "Retro" design's hobby picker on the home page.
+// One bright tile per hobby with its pixel sprite and a few doodles, plus a quiz tile to round off the grid.
+// A new hobby in src/data/site.ts shows up here by itself; it just needs a sprite in src/data/sprites.ts.
+import { HOBBIES, type HobbyKey } from '../data/site';
+import PixelSprite from './PixelSprite.astro';
+import Doodle from './Doodle.astro';
+
+const entries = Object.entries(HOBBIES) as [HobbyKey, (typeof HOBBIES)[HobbyKey]][];
+// Two doodles per tile, taking turns so neighbouring tiles look different.
+const marks = [['scribble', 'sparkle'], ['rays', 'star'], ['loop', 'sparkle'], ['scribble', 'star']] as const;
+---
+<section class="hobby-tiles-wrap" id="hobbies" aria-labelledby="tiles-title">
+  <div class="section-head">
+    <h2 id="tiles-title">Pick a hobby <Doodle name="star" color="var(--orange)" size={34} /></h2>
+  </div>
+  <div class="hobby-tiles">
+    {entries.map(([key, h], i) => (
+      <a class="hobby-tile" href={`/${key}`} style={`--c:${h.color}`} title={h.blurb}>
+        <Doodle name={marks[i % 4][0]} size={40} class="t-mark m1" />
+        <Doodle name={marks[i % 4][1]} size={26} class="t-mark m2" />
+        <span class="hobby-tile-art"><PixelSprite name={key} size={96} /></span>
+        <span class="hobby-tile-foot">
+          <span class="hobby-tile-name">{h.name}</span>
+          <span class="circle-btn" aria-hidden="true">→</span>
+        </span>
+      </a>
+    ))}
+    <a class="hobby-tile hobby-tile-quiz" href="/quiz">
+      <Doodle name="sparkle" size={30} class="t-mark m2" />
+      <span class="hobby-tile-quiz-text">Not sure?<br />Take the quiz</span>
+      <span class="hobby-tile-foot">
+        <span class="hobby-tile-name">5 questions</span>
+        <span class="circle-btn" aria-hidden="true">→</span>
+      </span>
+    </a>
+  </div>
+</section>

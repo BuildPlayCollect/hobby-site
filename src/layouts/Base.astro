@@ -8,7 +8,7 @@ import Newsletter from '../components/Newsletter.astro';
 import '@fontsource-variable/inter';
 // The whole look of the site (colours, fonts, outlines, shadows) lives in ONE theme file.
 // To try a different design, point this line at another file in src/styles/themes/.
-import '../styles/themes/comic.css';
+import '../styles/themes/retro.css';
 
 interface Props {
   title?: string;
@@ -90,13 +90,6 @@ const shareImage = new URL(image ?? '/og-default.png', Astro.site).href;
         </div>
       </div>
     </header>
-
-    <!-- Ticker: a scrolling strip of what's on the site. The list is written twice so it loops without a gap. -->
-    <div class="ticker" aria-hidden="true">
-      <div class="ticker-track">
-        {[0, 1].map(() => ['History', 'Guides', 'New releases', 'Giveaways', 'Wiki rabbit holes', 'Tournament rules'].map((t) => <span>{t}</span>))}
-      </div>
-    </div>
 
     <div class="search-overlay" role="dialog" aria-modal="true" aria-label="Search">
       <div class="search-box">

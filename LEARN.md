@@ -20,7 +20,8 @@ your article (.md)  +  page template (.astro)  →  finished page (.html)  →  
 | `src/pages/` | **One file = one web address** | Adding a page like /shop |
 | `src/layouts/Base.astro` | The **frame** around every page: header, menu, footer | Changing the menu or footer |
 | `src/components/` | **Reusable pieces**: article cards, ad slots | Changing how cards or ads look |
-| `src/styles/themes/comic.css` | The **look** (the "comic" design): fonts, colors, outlines, spacing | Restyling the site, or adding a new design next to it |
+| `src/styles/themes/retro.css` | The **look** (the "Retro" design: bold poster style with pixel stickers): fonts, colors, outlines, spacing. `comic.css` next to it is the comic design | Restyling the site, or adding a new design next to it |
+| `src/data/sprites.ts` | The pixel-art sprites (one per hobby, plus a few extras), drawn as text grids | Adding a sprite for a new hobby |
 | `astro.config.mjs` | Site **settings** | Setting your real domain |
 | `package.json` | The **tools** this site needs | Rarely |
 
@@ -63,7 +64,7 @@ The form is defined in `.pages.yml`. If you ever add a new hobby to `src/data/si
 
 ## Night mode and colors
 
-The moon/sun button in the header switches night mode. It works by swapping the color variables at the top of `src/styles/themes/comic.css`: the light values are under `:root`, the dark ones under `:root[data-theme="dark"]`. To change the site's colors later, edit those two blocks.
+The moon/sun button in the header switches night mode. It works by swapping the color variables at the top of the theme file in `src/styles/themes/`: the light values are under `:root`, the dark ones under `:root[data-theme="dark"]`. To change the site's colors later, edit those two blocks.
 
 - **Light mode** is white with cyan (`--accent: #0e7490`, a deep cyan dark enough to read as text).
 - **Dark mode** is a soft slate blue (`--bg: #1c2532`), not pure black, which is easier on the eyes. Cyan stays the main color and **amber** (`--wiki: #fcc85a`) is the second color, used for wiki words so they stand out from normal links.

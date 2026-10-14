@@ -1,0 +1,30 @@
+---
+// PixelSprite.astro: draws one pixel-art sprite from src/data/sprites.ts as crisp squares.
+import { SPRITES, PALETTE, type SpriteName } from '../data/sprites';
+
+interface Props {
+  name: SpriteName;
+  size?: number;   // width in pixels on screen
+  class?: string;
+}
+const { name, size = 64, class: cls } = Astro.props;
+const rows = SPRITES[name];
+const w = rows[0].length;
+const h = rows.length;
+
+// Join neighbouring pixels of the same colour into one rectangle, so the SVG stays small.
+const rects: { x: number; y: number; len: number; fill: string }[] = [];
+rows.forEach((row, y) => {
+  let x = 0;
+  while (x < row.length) {
+    const ch = row[x];
+    let len = 1;
+    while (row[x + len] === ch) len++;
+    if (ch !== '.') rects.push({ x, y, len, fill: PALETTE[ch] });
+    x += len;
+  }
+});
+---
+<svg class:list={['sprite', cls]} width={size} height={(size * h) / w} viewBox={`0 0 ${w} ${h}`} shape-rendering="crispEdges" aria-hidden="true">
+  {rects.map((r) => <rect x={r.x} y={r.y} width={r.len} height="1" fill={r.fill} />)}
+</svg>

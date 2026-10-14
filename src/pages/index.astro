@@ -4,9 +4,11 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import Carousel from '../components/Carousel.astro';
-import HobbyIsland from '../components/HobbyIsland.astro';
-import HobbyIcon from '../components/HobbyIcon.astro';
-import { HOBBIES, type HobbyKey } from '../data/site';
+import HobbyTiles from '../components/HobbyTiles.astro';
+import PixelSprite from '../components/PixelSprite.astro';
+import Sticker from '../components/Sticker.astro';
+import Doodle from '../components/Doodle.astro';
+import { HOBBIES } from '../data/site';
 
 const articles = (await getCollection('articles', ({ data }) => !data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const featured = articles.find((a) => a.data.featured) ?? articles[0];
@@ -16,42 +18,79 @@ const headlines = [featured, ...Object.keys(HOBBIES).map((key) => articles.find(
   .filter((a, i, all) => a && all.indexOf(a) === i);
 const latest = articles.filter((a) => !headlines.includes(a)).slice(0, 6);
 const wiki = (await getCollection('wiki')).sort((a, b) => a.data.title.localeCompare(b.data.title));
+// Real numbers for the stats under the headline.
+const rulebooks = (await getCollection('rules')).length;
 ---
 <Base>
-  <HobbyIsland />
-
-  <!-- Phones only: a swipeable row of hobby buttons under the island, since the island's
-       tags are small to tap on a phone. Hidden on bigger screens, where the island does the job. -->
-  <nav class="hobby-pills" aria-label="Hobbies">
-    {Object.entries(HOBBIES).map(([key, h]) => (
-      <a class="hobby-pill" href={`/${key}`} style={`background:${h.color}`}>
-        <HobbyIcon hobby={key as HobbyKey} />
-        <span>{h.name}</span>
-      </a>
-    ))}
-  </nav>
-
-  <!-- One slim intro strip under the island: the site name, what we do, and a door into the wiki. -->
-  <section class="tile intro-strip">
-    <div>
-      <h1>Build. <span class="hl">Play.</span> Collect.</h1>
-      <p>Nerdy, playful and fact-checked. History, guides, new releases and giveaways for every hobby, from spinning tops to trading cards.</p>
+  <!-- Hero: a bold poster. Words on the left, a sticker collage of every hobby on the right. -->
+  <section class="poster">
+    <div class="poster-text">
+      <p class="poster-kicker">Every hobby,<br />one happy place</p>
+      <h1 class="bubble poster-title">
+        <Doodle name="sparkle" size={44} class="pt-spark s1" />
+        <span>Build</span> <span>Play</span> <span>Collect</span>
+        <Doodle name="sparkle" size={30} class="pt-spark s2" />
+        <Doodle name="rays" size={40} class="pt-spark s3" />
+      </h1>
+      <p class="poster-sub">Nerdy, playful and fact-checked. History, guides, new releases and giveaways, from spinning tops to trading cards.</p>
+      <div class="poster-actions">
+        <a class="btn-black" href="#hobbies">Start exploring →</a>
+        <a class="btn-outline" href="/quiz"><span class="play" aria-hidden="true">▶</span> Take the quiz</a>
+      </div>
+      <dl class="poster-stats">
+        <div><dt>Hobbies</dt><dd>{Object.keys(HOBBIES).length}</dd></div>
+        <div><dt>Wiki words</dt><dd>{wiki.length}</dd></div>
+        <div><dt>Rulebooks</dt><dd>{rulebooks}</dd></div>
+      </dl>
     </div>
-    <a class="pill-btn" href="/wiki">Fall down the wiki →</a>
+
+    <div class="poster-art" aria-hidden="true">
+      <svg class="splash splash-blue" viewBox="0 0 360 340"><path d="M70 38c52-46 160-40 212 8 40 37 22 82 46 116 26 38 30 92-14 118-36 21-62-6-92 14-24 16-18 46-48 44-28-2-22-34-48-42-40-12-86 6-108-34-20-36 14-62 8-100C20 120 30 74 70 38z" /><circle cx="330" cy="300" r="10" /><circle cx="40" cy="300" r="7" /></svg>
+      <svg class="splash splash-orange" viewBox="0 0 120 120"><path d="M30 14c26-16 66-8 80 22 12 26-4 46 2 66-26 18-58 22-82 6C6 92 0 64 6 42 10 28 18 20 30 14z" /></svg>
+      <PixelSprite name="consoles" size={170} class="stk k1" />
+      <PixelSprite name="beyblade" size={124} class="stk k2" />
+      <PixelSprite name="tcg" size={96} class="stk k3" />
+      <PixelSprite name="tamiya" size={128} class="stk k4" />
+      <PixelSprite name="keyboards" size={92} class="stk k5" />
+      <PixelSprite name="esports" size={88} class="stk k6" />
+      <PixelSprite name="general" size={78} class="stk k7" />
+      <p class="note n1">Start something<br />new :)</p>
+      <p class="note n2">Fun, fact-checked<br />&amp; free</p>
+      <Sticker text="ALL HOBBIES!" color="var(--yellow)" size={118} tilt={12} class="poster-sticker" />
+    </div>
   </section>
 
-  <a class="tile tile-colour quiz-cta" href="/quiz">
-    <div>
-      <h2>Not sure where to start?</h2>
-      <p>Take the 5-question quiz and find the hobby that fits you.</p>
-    </div>
-    <span class="pill-btn dark">Take the quiz →</span>
-  </a>
+  <HobbyTiles />
 
-  <div class="section-head"><h2>Top <span class="hl">stories</span></h2></div>
-  <Carousel label="Top headlines" variant="hero" autoplay>
-    {headlines.map((a) => <ArticleCard article={a} large />)}
-  </Carousel>
+  <!-- Wiki banner: a bold poster strip with every wiki word as a chip. -->
+  <section class="banner">
+    <div class="banner-side" aria-hidden="true">
+      <p class="banner-label">New <br />wiki <br />// {new Date().getFullYear()}</p>
+      <PixelSprite name="sparkle" size={70} class="banner-sprite" />
+      <Doodle name="scribble" size={44} class="banner-scribble" />
+    </div>
+    <div class="banner-main">
+      <h2 class="bubble bubble-blue">Fall down the <span>rabbit hole</span></h2>
+      <div class="chip-row banner-chips">
+        {wiki.map((w) => <a class="chip wiki-chip" href={`/wiki/${w.id}/`}>{w.data.title}</a>)}
+      </div>
+    </div>
+    <a class="banner-go" href="/wiki"><span class="circle-btn big" aria-hidden="true">→</span><span>Explore<br />the wiki</span></a>
+  </section>
+
+  <div class="stories">
+    <div class="stories-main">
+      <div class="section-head"><h2>Top stories <Doodle name="squiggle" color="var(--orange)" size={44} /></h2></div>
+      <Carousel label="Top headlines" variant="hero" autoplay>
+        {headlines.map((a) => <ArticleCard article={a} large />)}
+      </Carousel>
+    </div>
+    <aside class="stories-note">
+      <p class="note big">Good hobbies,<br />good people <Doodle name="smile" size={34} /></p>
+      <p>Get new releases, guides and giveaways across every hobby in your inbox.</p>
+      <a class="btn-black" href="#newsletter">Join the newsletter →</a>
+    </aside>
+  </div>
 
   {latest.length > 0 && (
     <>
@@ -59,14 +98,6 @@ const wiki = (await getCollection('wiki')).sort((a, b) => a.data.title.localeCom
       <div class="grid">{latest.map((a) => <ArticleCard article={a} />)}</div>
     </>
   )}
-
-  <div class="section-head">
-    <h2>Fall down the rabbit hole</h2>
-    <a class="more" href="/wiki">Open the wiki →</a>
-  </div>
-  <div class="chip-row" style="flex-wrap:wrap;overflow:visible">
-    {wiki.map((w) => <a class="chip wiki-chip" href={`/wiki/${w.id}/`}>{w.data.title}</a>)}
-  </div>
 
   {Object.entries(HOBBIES).map(([key, h]) => {
     // A hobby gets its own row once it has 3+ articles. Before that, its stories
