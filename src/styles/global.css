@@ -363,6 +363,15 @@ a.tile:hover { text-decoration: none; transform: translate(-2px, -2px); box-shad
 .footer-grid a { color: #cfc6b6; }
 .footer-grid a:hover { color: #fbf3e4; }
 
+/* Narrow phones: shrink the logo and buttons so everything fits on one line. */
+@media (max-width: 430px) {
+  .logo { font-size: .82rem; gap: 8px; }
+  .logo-mark { width: 32px; height: 32px; font-size: .62rem; }
+  .icon-btn { width: 36px; height: 36px; }
+  .header-actions { gap: 6px; }
+  .header-row { gap: 8px; }
+}
+
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } .ticker-track { animation: none; } }
 
 /* ---------- Tournament rules ---------- */
@@ -404,3 +413,67 @@ a.tile:hover { text-decoration: none; transform: translate(-2px, -2px); box-shad
 .part-photo img { display: block; width: 56px; height: 56px; object-fit: contain; border-radius: 10px; background: var(--surface); border: 2px solid var(--line); transition: transform .15s; }
 .part-photo a:hover img { transform: scale(1.08); }
 .part-photo figcaption { font-size: .68rem; color: var(--muted); max-width: 72px; margin-top: 3px; line-height: 1.2; }
+
+/* ---------- Hobby Island (top of the home page, src/components/HobbyIsland.astro) ---------- */
+.island-wrap { padding-top: 26px; }
+.island-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 6px 20px; margin-bottom: 16px; }
+.island-head h2 { font-size: clamp(1.6rem, 4.5vw, 2.6rem); margin: 0; text-transform: uppercase; }
+.island-head p { margin: 0; color: var(--muted); font-weight: 600; }
+.island { position: relative; aspect-ratio: 2 / 1; border: var(--border); border-radius: 22px; box-shadow: var(--shadow-lg); overflow: hidden;
+  background-color: #8ec0ff; background-image: radial-gradient(rgb(255 255 255 / .45) 1.3px, transparent 1.7px); background-size: 16px 16px; }
+:root[data-theme="dark"] .island { background-color: #3b5a8f; }
+@media (max-width: 700px) { .island { aspect-ratio: 4 / 5; } }
+.island-map { position: absolute; inset: 0; width: 100%; height: 100%; }
+.island-map path { vector-effect: non-scaling-stroke; }
+.island-shadow { fill: #141414; }
+.island-sand { fill: #ffe3a3; stroke: #141414; stroke-width: 3; }
+.island-grass { fill: #8fe0b5; stroke: #141414; stroke-width: 2; stroke-dasharray: 2 6; stroke-linecap: round; }
+.island-trail { fill: none; stroke: #141414; stroke-width: 2.5; stroke-dasharray: 3 9; stroke-linecap: round; stroke-linejoin: round; opacity: .55; }
+.trail-phone { display: none; }
+@media (max-width: 700px) { .trail-wide { display: none; } .trail-phone { display: inline; } }
+
+/* Decorations */
+.deco { position: absolute; fill: none; stroke: #141414; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; overflow: visible; }
+.wave { width: 60px; stroke: #fff; opacity: .9; animation: drift 6s ease-in-out infinite alternate; }
+.w1 { left: 3%; top: 8%; } .w2 { right: 4%; bottom: 10%; animation-delay: -2s; } .w3 { left: 6%; bottom: 14%; animation-delay: -4s; }
+.boat { width: 54px; right: 6%; top: 8%; animation: bob 3s ease-in-out infinite; }
+.boat .sail { fill: #fffaf0; } .boat .hull { fill: var(--coral); }
+.compass { width: 54px; left: 2.5%; top: 40%; }
+.compass .c-ring { fill: #fffaf0; } .compass .c-needle { fill: #fffaf0; } .compass .c-north { fill: var(--coral); }
+.compass text { font-family: var(--display); font-size: 9px; fill: #141414; stroke: none; }
+.island-sticker { position: absolute; left: 41%; bottom: 3%; }
+@media (max-width: 700px) {
+  .boat { top: 3%; right: 34%; width: 44px; } .compass { top: auto; bottom: 3%; left: auto; right: 4%; width: 44px; }
+  .w1 { top: 3%; } .w3 { display: none; } .w2 { bottom: 4%; right: auto; left: 4%; }
+  .island-sticker { width: 68px !important; left: 3%; top: 3%; bottom: auto; }
+  .w1 { display: none; }
+}
+@keyframes drift { to { transform: translateX(14px); } }
+@keyframes bob { 50% { transform: translateY(-5px) rotate(-3deg); } }
+
+/* Pins: the tip of the pin is the exact spot. */
+.pin { position: absolute; left: var(--x); top: var(--y); transform: translate(-50%, -100%); display: flex; flex-direction: column; align-items: center; color: #141414; z-index: 2; }
+@media (max-width: 700px) { .pin { left: var(--mx); top: var(--my); } }
+.pin:hover, .pin:focus-visible { text-decoration: none; z-index: 3; }
+.pin-body { position: relative; display: block; padding-bottom: 8px; animation: idle 3.2s ease-in-out var(--d) infinite; }
+/* The ground shadow under the tip */
+.pin-body::after { content: ""; position: absolute; left: 50%; bottom: -3px; width: 26px; height: 8px; margin-left: -13px; border-radius: 50%; background: rgb(20 20 20 / .35); transition: transform .2s; }
+.pin-head { display: grid; place-items: center; width: 52px; height: 52px; background: var(--c); border: 2.5px solid #141414; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); box-shadow: 3px 3px 0 #141414; transition: transform .25s cubic-bezier(.3, 1.6, .5, 1); }
+.pin-head .hobby-icon { transform: rotate(45deg); background: #fffaf0; border: 2px solid #141414; border-radius: 50%; padding: 3px; width: 32px; height: 32px; }
+.pin-label { position: absolute; top: 100%; margin-top: 6px; white-space: nowrap; background: #fffaf0; border: 2px solid #141414; border-radius: 999px; padding: 2px 10px; font-weight: 800; font-size: .78rem; text-transform: uppercase; letter-spacing: .03em; box-shadow: 2px 2px 0 #141414; opacity: 0; transform: translateY(-6px) scale(.8); transition: opacity .18s, transform .25s cubic-bezier(.3, 1.6, .5, 1); pointer-events: none; }
+.pin:hover .pin-body, .pin:focus-visible .pin-body { animation: hop .6s cubic-bezier(.3, 1.4, .5, 1) both; }
+.pin:hover .pin-head, .pin:focus-visible .pin-head { transform: rotate(-45deg) scale(1.12); }
+.pin:hover .pin-body::after, .pin:focus-visible .pin-body::after { transform: scale(.6); }
+.pin:hover .pin-label, .pin:focus-visible .pin-label { opacity: 1; transform: none; background: var(--c); }
+@keyframes idle { 0%, 100% { transform: none; } 50% { transform: translateY(-3px); } }
+@keyframes hop { 0% { transform: none; } 40% { transform: translateY(-16px); } 70% { transform: translateY(-8px); } 100% { transform: translateY(-10px); } }
+/* Phones and tablets (no mouse): names always show, pins a little smaller. */
+@media (hover: none), (max-width: 700px) {
+  .pin-label { opacity: 1; transform: none; }
+}
+@media (max-width: 700px) {
+  .pin-head { width: 44px; height: 44px; }
+  .pin-head .hobby-icon { width: 28px; height: 28px; }
+  .pin-label { font-size: .7rem; }
+}
+@media (prefers-reduced-motion: reduce) { .pin-body, .wave, .boat { animation: none !important; } }

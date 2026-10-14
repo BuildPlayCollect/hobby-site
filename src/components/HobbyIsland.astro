@@ -1,0 +1,61 @@
+---
+// HobbyIsland.astro: the map at the top of the home page.
+// Each hobby is a pin on a cartoon island. On a computer, pins bounce and show their
+// name when the cursor passes over them; on phones the names always show. Click or tap a pin to visit.
+// Everything is drawn here from simple shapes, so it's all ours.
+// To add a hobby: add it to HOBBIES in src/data/site.ts, then give it a spot in SPOTS below.
+import HobbyIcon from './HobbyIcon.astro';
+import Sticker from './Sticker.astro';
+import { HOBBIES, type HobbyKey } from '../data/site';
+
+// Where each pin sits, in % of the map: [left, top] on wide screens, then [left, top] on phones.
+const SPOTS: Record<HobbyKey, [number, number, number, number]> = {
+  beyblade:  [19, 44, 28, 25],
+  tamiya:    [34, 25, 74, 20],
+  keyboards: [58, 22, 80, 47],
+  tcg:       [79, 38, 24, 57],
+  consoles:  [76, 69, 70, 73],
+  esports:   [53, 77, 36, 84],
+  general:   [48, 50, 52, 44],
+};
+const order: HobbyKey[] = ['beyblade', 'tamiya', 'general', 'keyboards', 'tcg', 'consoles', 'esports'];
+const trail = (wide: boolean) =>
+  order.map((k, i) => `${i ? 'L' : 'M'}${SPOTS[k][wide ? 0 : 2]},${SPOTS[k][wide ? 1 : 3]}`).join(' ');
+const island = 'M12,40 C10,22 28,9 45,12 C61,5 81,9 89,24 C97,37 93,52 91,63 C88,81 72,93 54,91 C37,95 17,89 11,72 C5,60 14,52 12,40 Z';
+---
+<section class="island-wrap" aria-labelledby="island-title">
+  <div class="island-head">
+    <h2 id="island-title">Welcome to <span class="hl">Hobby Island</span></h2>
+    <p>Pick a spot on the map. Every pin is a hobby to explore.</p>
+  </div>
+  <div class="island">
+    <svg class="island-map" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+      <path d={island} transform="translate(1.2 1.8)" class="island-shadow" />
+      <path d={island} class="island-sand" />
+      <path d={island} transform="translate(50 52) scale(.82) translate(-50 -52)" class="island-grass" />
+      <path d={trail(true)} class="island-trail trail-wide" />
+      <path d={trail(false)} class="island-trail trail-phone" />
+    </svg>
+
+    <!-- Little decorations: waves, a boat and a compass. -->
+    <svg class="deco wave w1" viewBox="0 0 60 14" aria-hidden="true"><path d="M2 8c7-7 12 7 19 0s12 7 19 0 12 7 19 0" /></svg>
+    <svg class="deco wave w2" viewBox="0 0 60 14" aria-hidden="true"><path d="M2 8c7-7 12 7 19 0s12 7 19 0 12 7 19 0" /></svg>
+    <svg class="deco wave w3" viewBox="0 0 60 14" aria-hidden="true"><path d="M2 8c7-7 12 7 19 0s12 7 19 0 12 7 19 0" /></svg>
+    <svg class="deco boat" viewBox="0 0 60 50" aria-hidden="true"><path d="M30 4v30M30 6l18 24H30z" class="sail" /><path d="M6 34h48l-8 12H14z" class="hull" /></svg>
+    <svg class="deco compass" viewBox="0 0 60 60" aria-hidden="true"><circle cx="30" cy="30" r="26" class="c-ring" /><path d="M30 8l6 22-6 22-6-22z" class="c-needle" /><path d="M30 8l6 22h-12z" class="c-north" /><text x="30" y="7" text-anchor="middle">N</text></svg>
+    <Sticker text="YOU ARE HERE" color="var(--pink)" size={92} tilt={-12} class="island-sticker" />
+
+    {order.map((key, i) => {
+      const h = HOBBIES[key];
+      const [x, y, mx, my] = SPOTS[key];
+      return (
+        <a class="pin" href={`/${key}`} style={`--x:${x}%;--y:${y}%;--mx:${mx}%;--my:${my}%;--c:${h.color};--d:${i * 0.35}s`}>
+          <span class="pin-body">
+            <span class="pin-head"><HobbyIcon hobby={key} size={26} /></span>
+          </span>
+          <span class="pin-label">{h.name}</span>
+        </a>
+      );
+    })}
+  </div>
+</section>
