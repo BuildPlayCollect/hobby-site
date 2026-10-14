@@ -18,10 +18,15 @@ const latest = articles.filter((a) => !headlines.includes(a)).slice(0, 6);
 const wiki = (await getCollection('wiki')).sort((a, b) => a.data.title.localeCompare(b.data.title));
 const rulebooks = (await getCollection('rules')).length;
 
+// "Try one now" opens a random article that has a 60-second version (any live article if none do yet).
+// The link points at the newest headline first, so it still works if scripts are off.
+const withQuick = articles.filter((a) => a.data.quick?.length);
+const tryUrls = (withQuick.length ? withQuick : articles).map((a) => `/articles/${a.id}/`);
+
 // "New here?" steps for first-time visitors.
 const steps = [
   { title: 'Pick a hobby', text: 'Tap a spot on the island. Every hobby has its own page of stories, guides and history.', href: '#island-title', link: 'Back to the island ↑', c: 'var(--blue)' },
-  { title: 'Read the 60-second version', text: 'Every article opens with a short summary, so you get the gist before the deep dive.', href: headlines[0] ? `/articles/${headlines[0].id}/` : '/guides', link: 'Try one now →', c: 'var(--orange)' },
+  { title: 'Read the 60-second version', text: 'Every article opens with a short summary, so you get the gist before the deep dive.', href: headlines[0] ? `/articles/${headlines[0].id}/` : '/guides', link: 'Try one now →', c: 'var(--orange)', random: true },
   { title: 'Fall down the rabbit hole', text: 'Hobby words are linked to our wiki. Hover for a quick meaning, click to keep going.', href: '/wiki', link: 'Open the wiki →', c: 'var(--teal)' },
 ];
 ---
@@ -63,7 +68,7 @@ const steps = [
           <span class="step-num">{i + 1}</span>
           <h3>{s.title}</h3>
           <p>{s.text}</p>
-          <a class="step-link" href={s.href}>{s.link}</a>
+          <a class="step-link" href={s.href} data-random={s.random ? JSON.stringify(tryUrls) : undefined}>{s.link}</a>
         </li>
       ))}
     </ol>
@@ -114,3 +119,13 @@ const steps = [
     );
   })}
 </Base>
+
+<script>
+  // "Try one now": swap in a random article just before the link is followed.
+  document.querySelectorAll<HTMLAnchorElement>('a[data-random]').forEach((a) => {
+    const urls: string[] = JSON.parse(a.dataset.random || '[]');
+    const pick = () => { if (urls.length) a.href = urls[Math.floor(Math.random() * urls.length)]; };
+    a.addEventListener('pointerdown', pick);
+    a.addEventListener('keydown', (e) => { if (e.key === 'Enter') pick(); });
+  });
+</script>
