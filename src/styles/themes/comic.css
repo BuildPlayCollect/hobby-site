@@ -510,8 +510,6 @@ a.tile:hover { text-decoration: none; transform: translate(-2px, -2px); box-shad
 .cloud path { fill: #fffaf0; }
 .cloud { animation: drift 9s ease-in-out infinite alternate; } .c2 { animation-delay: -4s; }
 .bird { fill: none; }
-.rock path { fill: #a8807a; } .rock .rock-top { fill: #8fe0b5; }
-.r1 { animation: bob 5s ease-in-out infinite; } .r2 { animation: bob 6s ease-in-out -2s infinite; }
 .stars path { fill: var(--yellow); stroke-width: 2; display: none; }
 :root[data-theme="dark"] .stars path { display: inline; }
 :root[data-theme="dark"] .bird { stroke: #f7efe1; }
@@ -550,6 +548,28 @@ a.tile:hover { text-decoration: none; transform: translate(-2px, -2px); box-shad
 .spin-top { transform-origin: 0 -14px; animation: wobble .5s ease-in-out infinite alternate; }
 @keyframes wobble { from { transform: rotate(-9deg); } to { transform: rotate(9deg); } }
 
+/* Neighbour islands: they float on their own rhythm. Empty ones show a "?" sign. */
+.mini { animation: float 6s ease-in-out var(--d) infinite; }
+.mini .mini-spot { animation: none; }
+.sign-q { font-size: 22px; }
+.mini-tag { font-size: 20px !important; }
+.mini-spot:hover .tag rect, .mini-spot:focus-visible .tag rect { fill: var(--yellow); }
+@media (hover: none), (max-width: 700px) { .mini-spot .tag { opacity: 0; } }
+.spot:hover { text-decoration: none; }
+
+/* Cats and the falcon */
+.cats { animation: float 7s ease-in-out infinite; } /* ride along with the island */
+.cats, .falcon { pointer-events: none; } /* never block a click on a landmark */
+.cat path, .cat ellipse, .cat circle { stroke-width: 2.5; }
+.cat-white .cat-fur { fill: #fffaf0; } .cat-orange .cat-fur { fill: #ff9f43; }
+.cat-tail, .cat-legs, .cat-stripes { fill: none; }
+.cat-stripes { stroke: #c2410c !important; stroke-width: 2 !important; }
+.cat { animation: trot .28s ease-in-out infinite alternate; }
+@keyframes trot { to { transform: translateY(-3px); } }
+.falcon path, .falcon circle { stroke-width: 2.5; }
+.falcon-body, .falcon-wing { fill: #7a5236; } .falcon-tail { fill: #5a3b26; }
+.falcon-belly { fill: none; stroke: #fffaf0 !important; stroke-width: 3 !important; }
+
 /* Pins bob above each landmark */
 .pin { animation: idle 2.6s ease-in-out var(--d) infinite; }
 .landmark, .pin-shape, .tag { transition: transform .3s cubic-bezier(.3, 1.6, .5, 1), opacity .2s; }
@@ -570,5 +590,5 @@ a.tile:hover { text-decoration: none; transform: translate(-2px, -2px); box-shad
 @keyframes drift { to { transform: translateX(14px); } }
 @keyframes bob { 50% { transform: translateY(-6px) rotate(-3deg); } }
 @media (prefers-reduced-motion: reduce) {
-  .isle, .spot, .pin, .cloud, .rock, .water-lines, .beams, .spin-top { animation: none !important; }
+  .isle, .spot, .mini, .cats, .cat, .pin, .cloud, .water-lines, .beams, .spin-top { animation: none !important; }
 }
