@@ -20,8 +20,8 @@ your article (.md)  +  page template (.astro)  →  finished page (.html)  →  
 | `src/pages/` | **One file = one web address** | Adding a page like /shop |
 | `src/layouts/Base.astro` | The **frame** around every page: header, menu, footer | Changing the menu or footer |
 | `src/components/` | **Reusable pieces**: article cards, ad slots | Changing how cards or ads look |
-| `src/styles/themes/retro.css` | The **look** (the "Retro" 8-bit design): fonts, colors, outlines, spacing. `comic.css` next to it is the comic design | Restyling the site, or adding a new design next to it |
-| `src/data/sprites.ts` | The pixel-art sprites (hearts, coins, one per hobby), drawn as text grids | Adding a sprite for a new hobby |
+| `src/styles/themes/retro.css` | The **look** (the "Retro" design: bold poster style with pixel stickers): fonts, colors, outlines, spacing. `comic.css` next to it is the comic design | Restyling the site, or adding a new design next to it |
+| `src/data/sprites.ts` | The pixel-art sprites (one per hobby, plus a few extras), drawn as text grids | Adding a sprite for a new hobby |
 | `astro.config.mjs` | Site **settings** | Setting your real domain |
 | `package.json` | The **tools** this site needs | Rarely |
 

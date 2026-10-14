@@ -9,8 +9,6 @@ import '@fontsource-variable/inter';
 // The whole look of the site (colours, fonts, outlines, shadows) lives in ONE theme file.
 // To try a different design, point this line at another file in src/styles/themes/.
 import '../styles/themes/retro.css';
-import { getCollection } from 'astro:content';
-import PixelSprite from '../components/PixelSprite.astro';
 
 interface Props {
   title?: string;
@@ -21,13 +19,6 @@ interface Props {
   jsonLd?: Record<string, unknown>;
 }
 const { title, description = SITE_TAGLINE, image, type = 'website', jsonLd } = Astro.props;
-// Real numbers for the game-style HUD bar under the header.
-const hud = {
-  hobbies: Object.keys(HOBBIES).length,
-  articles: (await getCollection('articles', ({ data }) => !data.draft)).length,
-  wiki: (await getCollection('wiki')).length,
-};
-const pad = (n: number) => String(n).padStart(2, '0');
 const fullTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
 // The one official address for this page, so Google doesn't count www/workers.dev copies as duplicates.
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
@@ -99,17 +90,6 @@ const shareImage = new URL(image ?? '/og-default.png', Astro.site).href;
         </div>
       </div>
     </header>
-
-    <!-- HUD: a video-game status bar with the site's real numbers. -->
-    <div class="hud">
-      <div class="wrap hud-row">
-        <span class="hud-hearts" aria-hidden="true"><PixelSprite name="heart" size={18} /><PixelSprite name="heart" size={18} /><PixelSprite name="heart" size={18} /></span>
-        <span>Hobbies <b>{pad(hud.hobbies)}</b></span>
-        <span>Articles <b>{pad(hud.articles)}</b></span>
-        <span class="hud-wide">Wiki words <b>{pad(hud.wiki)}</b></span>
-        <a class="hud-link" href="/quiz">Bonus stage ▶</a>
-      </div>
-    </div>
 
     <div class="search-overlay" role="dialog" aria-modal="true" aria-label="Search">
       <div class="search-box">
