@@ -1,0 +1,15 @@
+# _headers: extra security instructions Cloudflare sends with every page.
+# (Cloudflare reads this file; it is not a page itself.)
+/*
+  # Only ever load this site over HTTPS, for the next year.
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  # Don't let other websites show our pages inside a frame (stops "clickjacking").
+  X-Frame-Options: DENY
+  Content-Security-Policy: frame-ancestors 'none'
+  # Don't let browsers guess file types (stops a disguised file from running as a script).
+  X-Content-Type-Options: nosniff
+  # When a reader clicks out to another site, only share our domain, not the full page address.
+  Referrer-Policy: strict-origin-when-cross-origin
+  # We never need the camera, microphone, location or payments, so switch them off.
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+  Cross-Origin-Opener-Policy: same-origin

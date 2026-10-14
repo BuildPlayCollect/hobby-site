@@ -131,7 +131,7 @@ const shareImage = new URL(image ?? '/og-default.png', Astro.site).href;
       </div>
     </footer>
 
-    <script is:inline>
+    <script>
       (function () {
         var root = document.documentElement;
 
@@ -175,7 +175,7 @@ const shareImage = new URL(image ?? '/og-default.png', Astro.site).href;
         function render(items) {
           active = -1;
           list.innerHTML = items.slice(0, 12).map(function (it) {
-            return '<li><a href="' + it.url + '"><span class="kind ' + (it.kind === 'Wiki' ? 'wiki-kind' : '') + '">' + it.kind + ' · ' + it.hobby + '</span><br>' +
+            return '<li><a href="' + escapeHtml(it.url) + '"><span class="kind ' + (it.kind === 'Wiki' ? 'wiki-kind' : '') + '">' + escapeHtml(it.kind) + ' · ' + escapeHtml(it.hobby) + '</span><br>' +
               escapeHtml(it.title) + '<small>' + escapeHtml(it.summary) + '</small></a></li>';
           }).join('');
         }
