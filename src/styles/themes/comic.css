@@ -74,6 +74,7 @@
 
 /* ---------- Base ---------- */
 * { box-sizing: border-box; }
+html, body { overflow-x: clip; } /* stickers may poke past the edge; never let them make the page scroll sideways */
 html { scroll-padding-top: calc(var(--header-h) + 16px); -webkit-text-size-adjust: 100%; }
 body { margin: 0; font-family: var(--sans); font-size: 1rem; color: var(--ink); background: var(--bg); line-height: 1.6; transition: background-color .2s, color .2s; }
 /* Faint halftone dots over the whole page, like printed paper. */
@@ -210,6 +211,31 @@ a.tile:hover { text-decoration: none; transform: translate(-2px, -2px); box-shad
 .page-head h1 .dot { border-width: 2.5px; }
 .page-head p { color: var(--muted); margin: 0; max-width: 60ch; font-size: 1.05rem; }
 .empty { color: var(--muted); }
+
+/* Live counts in the intro strip, as tilted stickers (black, pink, blue). */
+.stat-stickers { display: flex; flex-wrap: wrap; gap: 14px; margin: 18px 0 4px; }
+.stat-stickers div { display: flex; flex-direction: column-reverse; min-width: 96px; padding: 8px 14px 10px; border: var(--border); border-color: #141414; border-radius: 12px; box-shadow: 4px 4px 0 #141414; transform: rotate(-3deg); transition: transform .15s; }
+.stat-stickers div:nth-child(1) { background: #141414; color: #fbf3e4; }
+.stat-stickers div:nth-child(2) { background: var(--pink); color: #141414; transform: rotate(2.5deg) translateY(3px); }
+.stat-stickers div:nth-child(3) { background: var(--blue); color: #141414; transform: rotate(-1.5deg); }
+.stat-stickers div:hover { transform: rotate(0) translateY(-3px); }
+.stat-stickers dd { margin: 0; font-family: var(--display); font-size: 2.3rem; line-height: 1; }
+.stat-stickers div:nth-child(1) dd { color: var(--yellow); }
+.stat-stickers dt { font-size: .7rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; margin-top: 4px; }
+:root[data-theme="dark"] .stat-stickers div:nth-child(1) { background: #fbf3e4; color: #141414; }
+:root[data-theme="dark"] .stat-stickers div:nth-child(1) dd { color: #141414; }
+@media (max-width: 420px) { .stat-stickers div { min-width: 0; flex: 1; padding: 7px 10px 9px; } .stat-stickers dd { font-size: 1.9rem; } .stat-stickers dt { font-size: .62rem; } }
+
+/* "New here?" steps for first-time visitors */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; }
+@media (min-width: 760px) { .steps { grid-template-columns: repeat(3, 1fr); } }
+.step { display: flex; flex-direction: column; padding-top: 0; overflow: hidden; }
+.step::before { content: ""; display: block; height: 18px; margin: 0 -22px; border-bottom: var(--border); background-color: var(--c); background-image: radial-gradient(rgb(20 20 20 / .2) 1.2px, transparent 1.5px); background-size: 8px 8px; }
+.step-num { display: grid; place-items: center; width: 52px; height: 52px; margin: 18px 0 0; border: var(--border); border-color: #141414; border-radius: 50%; background: var(--c); color: #141414; font-family: var(--display); font-size: 1.6rem; box-shadow: 3px 3px 0 #141414; transform: rotate(-6deg); }
+.step h3 { font-family: var(--display); font-weight: 400; font-size: 1.25rem; text-transform: uppercase; margin: 14px 0 6px; line-height: 1.15; }
+.step p { margin: 0 0 14px; color: var(--muted); }
+.step-link { margin-top: auto; align-self: flex-start; font-weight: 800; font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; color: var(--ink); border-bottom: 2.5px solid currentColor; }
+.step-link:hover { text-decoration: none; color: var(--wiki); }
 
 /* ---------- Cards ---------- */
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 22px; }
