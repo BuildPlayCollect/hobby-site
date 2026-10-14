@@ -1,12 +1,12 @@
 ---
 // quiz.astro: "Which hobby fits you?" (/quiz).
-// Five quick questions, one at a time. The questions live in src/data/quiz.ts.
+// Five quick questions, one at a time, picked at random from the pool in src/data/quiz.ts.
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Sticker from '../components/Sticker.astro';
 import HobbyIcon from '../components/HobbyIcon.astro';
 import { HOBBIES, type HobbyKey } from '../data/site';
-import { QUIZ, QUIZ_RESULTS } from '../data/quiz';
+import { QUIZ, QUIZ_LENGTH, QUIZ_RESULTS } from '../data/quiz';
 
 const articles = (await getCollection('articles', ({ data }) => !data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const results = (Object.keys(QUIZ_RESULTS) as HobbyKey[]).map((key) => ({
@@ -18,11 +18,11 @@ const results = (Object.keys(QUIZ_RESULTS) as HobbyKey[]).map((key) => ({
 }));
 ---
 <Base title="Which hobby fits you?" description="Five quick questions, one hobby match. Find out if you're a Beyblade blader, a Mini 4WD racer, a keyboard builder, a card slinger, a console collector or an esports fan.">
-  <section class="quiz" data-quiz>
+  <section class="quiz" data-quiz data-length={QUIZ_LENGTH}>
     <header class="quiz-head">
-      <p class="kicker"><span class="tag" style="background:var(--yellow)">Quiz</span><span class="tag tag-plain">5 questions</span></p>
+      <p class="kicker"><span class="tag" style="background:var(--yellow)">Quiz</span><span class="tag tag-plain">{QUIZ_LENGTH} questions</span></p>
       <h1>Which hobby <span class="hl">fits you?</span></h1>
-      <p>Five quick questions. No wrong answers, just a hobby match at the end.</p>
+      <p>Five quick questions, picked fresh from a pool of {QUIZ.length} every time you play. No wrong answers, just a hobby match at the end.</p>
       <Sticker text="NO WRONG ANSWERS" color="var(--teal)" size={104} tilt={10} class="quiz-sticker" />
     </header>
 
@@ -30,7 +30,7 @@ const results = (Object.keys(QUIZ_RESULTS) as HobbyKey[]).map((key) => ({
       <div class="quiz-progress" aria-hidden="true"><span></span></div>
       {QUIZ.map((q, qi) => (
         <fieldset class="quiz-q" data-q={qi} hidden={qi !== 0}>
-          <legend><small>Question {qi + 1} of {QUIZ.length}</small>{q.question}</legend>
+          <legend><small>Question <span class="quiz-num">{qi + 1}</span> of {QUIZ_LENGTH}</small>{q.question}</legend>
           <div class="quiz-answers">
             {q.answers.map((a) => (
               <button type="button" class="quiz-answer" data-points={JSON.stringify(a.points)}>{a.text}</button>
@@ -59,24 +59,44 @@ const results = (Object.keys(QUIZ_RESULTS) as HobbyKey[]).map((key) => ({
 </Base>
 
 <script>
-  // One question at a time: each answer adds points, then the next question shows.
+  // Each round picks 5 random questions from the pool and shuffles their answers,
+  // then shows them one at a time. Each answer adds points; the top hobby wins.
   const quiz = document.querySelector<HTMLElement>('[data-quiz]');
   if (quiz) {
-    const questions = Array.from(quiz.querySelectorAll<HTMLElement>('.quiz-q'));
+    const LENGTH = Number(quiz.dataset.length) || 5;
+    const pool = Array.from(quiz.querySelectorAll<HTMLElement>('.quiz-q'));
     const bar = quiz.querySelector<HTMLElement>('.quiz-progress span')!;
+    const shuffle = <T,>(list: T[]) => {
+      const a = [...list];
+      for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+      return a;
+    };
+    let round: HTMLElement[] = [];
     let scores: Record<string, number> = {};
     let step = 0;
     const show = (i: number) => {
-      questions.forEach((q, qi) => (q.hidden = qi !== i));
-      bar.style.width = `${(i / questions.length) * 100}%`;
+      pool.forEach((q) => (q.hidden = q !== round[i]));
+      bar.style.width = `${(i / round.length) * 100}%`;
+    };
+    const start = () => {
+      scores = {}; step = 0;
+      round = shuffle(pool).slice(0, LENGTH);
+      round.forEach((q, i) => {
+        q.querySelector('.quiz-num')!.textContent = String(i + 1);
+        const answers = q.querySelector('.quiz-answers')!;
+        shuffle(Array.from(answers.children)).forEach((a) => answers.appendChild(a));
+      });
+      quiz.querySelectorAll<HTMLElement>('.quiz-result').forEach((r) => (r.hidden = true));
+      show(0);
     };
     const finish = () => {
-      questions.forEach((q) => (q.hidden = true));
+      pool.forEach((q) => (q.hidden = true));
       bar.style.width = '100%';
-      // Highest score wins; on a tie, the hobby listed first wins.
+      // Highest score wins; a tie is settled at random so no hobby gets an edge.
       const results = Array.from(quiz.querySelectorAll<HTMLElement>('.quiz-result'));
-      let best = results[0];
-      results.forEach((r) => { if ((scores[r.dataset.result!] ?? 0) > (scores[best.dataset.result!] ?? 0)) best = r; });
+      const top = Math.max(...results.map((r) => scores[r.dataset.result!] ?? 0));
+      const tied = results.filter((r) => (scores[r.dataset.result!] ?? 0) === top);
+      const best = tied[Math.floor(Math.random() * tied.length)];
       best.hidden = false;
       quiz.querySelector('.quiz-card')!.scrollIntoView({ block: 'start', behavior: 'smooth' });
       best.querySelector<HTMLElement>('a')?.focus({ preventScroll: true });
@@ -86,14 +106,11 @@ const results = (Object.keys(QUIZ_RESULTS) as HobbyKey[]).map((key) => ({
         const points = JSON.parse(btn.dataset.points!) as Record<string, number>;
         for (const [k, v] of Object.entries(points)) scores[k] = (scores[k] ?? 0) + v;
         step += 1;
-        if (step < questions.length) { show(step); questions[step].querySelector<HTMLElement>('button')?.focus({ preventScroll: true }); }
+        if (step < round.length) { show(step); round[step].querySelector<HTMLElement>('button')?.focus({ preventScroll: true }); }
         else finish();
       });
     });
-    quiz.querySelectorAll('.quiz-again').forEach((btn) => btn.addEventListener('click', () => {
-      scores = {}; step = 0;
-      quiz.querySelectorAll<HTMLElement>('.quiz-result').forEach((r) => (r.hidden = true));
-      show(0);
-    }));
+    quiz.querySelectorAll('.quiz-again').forEach((btn) => btn.addEventListener('click', start));
+    start();
   }
 </script>
