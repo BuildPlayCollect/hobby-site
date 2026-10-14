@@ -32,7 +32,7 @@ const wiki = (await getCollection('wiki')).sort((a, b) => a.data.title.localeCom
     })}
   </div>
 
-  <script is:inline>
+  <script>
     document.getElementById('wiki-filter').addEventListener('input', function (e) {
       var q = e.target.value.trim().toLowerCase();
       document.querySelectorAll('.wiki-entry').forEach(function (el) { el.hidden = q && el.dataset.search.indexOf(q) === -1; });
