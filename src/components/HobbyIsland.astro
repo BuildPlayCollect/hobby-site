@@ -1,61 +1,188 @@
 ---
-// HobbyIsland.astro: the map at the top of the home page.
-// Each hobby is a pin on a cartoon island. On a computer, pins bounce and show their
-// name when the cursor passes over them; on phones the names always show. Click or tap a pin to visit.
+// HobbyIsland.astro: the floating island at the top of the home page.
+// Seen from above at an angle, with one landmark per hobby (a Beyblade stadium, a Mini 4WD
+// track, keycap houses, a house of cards, a retro TV, a trophy and a lighthouse).
+// On a computer, a landmark hops and shows its name when the cursor passes over it;
+// on phones the names always show. Click or tap a landmark to visit that hobby.
 // Everything is drawn here from simple shapes, so it's all ours.
-// To add a hobby: add it to HOBBIES in src/data/site.ts, then give it a spot in SPOTS below.
-import HobbyIcon from './HobbyIcon.astro';
-import Sticker from './Sticker.astro';
 import { HOBBIES, type HobbyKey } from '../data/site';
 
-// Where each pin sits, in % of the map: [left, top] on wide screens, then [left, top] on phones.
-const SPOTS: Record<HobbyKey, [number, number, number, number]> = {
-  beyblade:  [19, 44, 28, 25],
-  tamiya:    [34, 25, 74, 20],
-  keyboards: [58, 22, 80, 47],
-  tcg:       [79, 38, 24, 57],
-  consoles:  [76, 69, 70, 73],
-  esports:   [53, 77, 36, 84],
-  general:   [48, 50, 52, 44],
+// ---- The island's shape: a wobbly oval (the grassy top) over a rocky cliff that tapers to a point.
+const CX = 500, CY = 330, RX = 400, RY = 150, SIDE = 30;
+const wobble = (a: number) => 1 + 0.045 * Math.sin(3 * a + 0.6) + 0.03 * Math.cos(5 * a);
+const rim = Array.from({ length: 72 }, (_, i) => {
+  const a = (i / 72) * Math.PI * 2;
+  return [CX + RX * wobble(a) * Math.cos(a), CY + RY * wobble(a) * Math.sin(a)] as [number, number];
+});
+// Smooth closed/open curve through points (Catmull-Rom turned into Bezier curves).
+const curve = (p: [number, number][], closed: boolean) => {
+  const at = (i: number) => p[closed ? (i + p.length) % p.length : Math.max(0, Math.min(p.length - 1, i))];
+  let d = `M${p[0][0].toFixed(1)},${p[0][1].toFixed(1)}`;
+  const n = closed ? p.length : p.length - 1;
+  for (let i = 0; i < n; i++) {
+    const [p0, p1, p2, p3] = [at(i - 1), at(i), at(i + 1), at(i + 2)];
+    const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+    const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+    d += ` C${c1[0].toFixed(1)},${c1[1].toFixed(1)} ${c2[0].toFixed(1)},${c2[1].toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`;
+  }
+  return closed ? d + ' Z' : d;
 };
-const order: HobbyKey[] = ['beyblade', 'tamiya', 'general', 'keyboards', 'tcg', 'consoles', 'esports'];
-const trail = (wide: boolean) =>
-  order.map((k, i) => `${i ? 'L' : 'M'}${SPOTS[k][wide ? 0 : 2]},${SPOTS[k][wide ? 1 : 3]}`).join(' ');
-const island = 'M12,40 C10,22 28,9 45,12 C61,5 81,9 89,24 C97,37 93,52 91,63 C88,81 72,93 54,91 C37,95 17,89 11,72 C5,60 14,52 12,40 Z';
+const top = curve(rim, true);
+// The front half of the rim (left to right), used for the grass edge and the cliff.
+const front = rim.slice(0, 37).reverse(); // angles 180° → 0° along the bottom
+const frontDown = front.map(([x, y]) => [x, y + SIDE] as [number, number]);
+const grassSide = `${curve(front, false)} L${frontDown.at(-1)![0]},${frontDown.at(-1)![1]} ${curve([...frontDown].reverse(), false).replace(/^M/, 'L')} Z`;
+const tip: [number, number][] = [[872, 400], [820, 470], [748, 540], [660, 600], [585, 668], [515, 735], [455, 690], [380, 625], [290, 560], [205, 488], [140, 410]];
+const cliff = `${curve(frontDown, false)} ${tip.map(([x, y]) => `L${x},${y}`).join(' ')} Z`;
+// Rock layers inside the cliff (clipped to its shape).
+const layer1 = 'M60,445 L170,470 L260,455 L360,488 L470,470 L560,500 L660,476 L760,492 L940,460 L940,800 L60,800 Z';
+const layer2 = 'M60,560 L230,548 L330,585 L430,566 L520,602 L620,580 L720,600 L940,570 L940,800 L60,800 Z';
+const cracks = ['M300,520 l18,22 l-8,20', 'M620,520 l-14,26 l10,18', 'M480,640 l12,20 l-6,22'];
+
+// ---- Where each landmark stands on the island (base centre), drawn back to front.
+const SPOTS: Record<HobbyKey, [number, number]> = {
+  general: [500, 232],
+  tcg: [318, 262],
+  keyboards: [700, 250],
+  beyblade: [230, 352],
+  consoles: [818, 372],
+  tamiya: [385, 412],
+  esports: [628, 412],
+};
+const order = (Object.keys(SPOTS) as HobbyKey[]).sort((a, b) => SPOTS[a][1] - SPOTS[b][1]);
+const trail = curve(['tcg', 'general', 'keyboards', 'consoles', 'esports', 'tamiya', 'beyblade'].map((k) => [SPOTS[k as HobbyKey][0], SPOTS[k as HobbyKey][1] + 6] as [number, number]), false);
+const label = (name: string) => ({ w: name.length * 17 + 34 });
+// How tall each landmark is, so its pin sits right on top.
+// Low landmarks show their name tag underneath; tall ones show it above the pin.
+const BELOW: HobbyKey[] = ['tamiya', 'esports'];
+const HEIGHT: Record<HobbyKey, number> = { beyblade: 36, tamiya: 18, keyboards: 62, tcg: 128, consoles: 118, esports: 114, general: 156 };
+const trees: [number, number, number][] = [[175, 300, 1], [420, 215, 0.8], [590, 205, 0.85], [850, 290, 1], [470, 330, 0.9], [560, 340, 0.75], [270, 430, 0.9], [740, 445, 1], [880, 410, 0.8], [130, 360, 0.8]];
 ---
 <section class="island-wrap" aria-labelledby="island-title">
   <div class="island-head">
     <h2 id="island-title">Welcome to <span class="hl">Hobby Island</span></h2>
-    <p>Pick a spot on the map. Every pin is a hobby to explore.</p>
+    <p>Pick a landmark. Every one is a hobby to explore.</p>
   </div>
   <div class="island">
-    <svg class="island-map" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-      <path d={island} transform="translate(1.2 1.8)" class="island-shadow" />
-      <path d={island} class="island-sand" />
-      <path d={island} transform="translate(50 52) scale(.82) translate(-50 -52)" class="island-grass" />
-      <path d={trail(true)} class="island-trail trail-wide" />
-      <path d={trail(false)} class="island-trail trail-phone" />
+    <svg class="island-svg" viewBox="70 -30 860 790" preserveAspectRatio="xMidYMid meet" role="group" aria-label="Map of Hobby Island">
+      <defs>
+        <clipPath id="cliff-clip"><path d={cliff} /></clipPath>
+      </defs>
+
+      <!-- Sky decorations -->
+      <g class="sky" aria-hidden="true">
+        <g class="cloud c1"><path d="M120,200 a26,26 0 0 1 40,-24 a34,34 0 0 1 62,6 a24,24 0 0 1 22,34 h-118 a20,20 0 0 1 -6,-16 z" /></g>
+        <g class="cloud c2"><path d="M760,170 a24,24 0 0 1 36,-20 a30,30 0 0 1 56,6 a22,22 0 0 1 20,30 h-106 a18,18 0 0 1 -6,-16 z" /></g>
+        <path class="bird" d="M640,150 q10,-10 20,0 q10,-10 20,0" />
+        <path class="bird" d="M690,128 q7,-7 14,0 q7,-7 14,0" />
+        <g class="rock r1"><path d="M110,560 l40,-6 l18,14 l-26,30 z" /><path d="M110,560 l40,-6 l18,14 l-20,4 z" class="rock-top" /></g>
+        <g class="rock r2"><path d="M850,600 l34,-4 l12,12 l-22,24 z" /><path d="M850,600 l34,-4 l12,12 l-18,2 z" class="rock-top" /></g>
+        <g class="stars"><path d="M200,140 l3,8 l8,3 l-8,3 l-3,8 l-3,-8 l-8,-3 l8,-3 z" /><path d="M880,250 l2,6 l6,2 l-6,2 l-2,6 l-2,-6 l-6,-2 l6,-2 z" /><path d="M330,170 l2,5 l5,2 l-5,2 l-2,5 l-2,-5 l-5,-2 l5,-2 z" /></g>
+      </g>
+
+      <!-- The island itself, with a hard comic shadow -->
+      <g class="isle">
+        <g transform="translate(14 14)" class="isle-shadow"><path d={top} /><path d={cliff} /></g>
+        <path d={cliff} class="cliff" />
+        <g clip-path="url(#cliff-clip)">
+          <path d={layer1} class="layer1" />
+          <path d={layer2} class="layer2" />
+          {cracks.map((c) => <path d={c} class="crack" />)}
+        </g>
+        <path d={cliff} class="outline" />
+        <path d={grassSide} class="grass-side" />
+        <path d={top} class="grass" />
+        <!-- Waterfall pouring off the front edge -->
+        <g class="falls">
+          <path d="M486,478 h40 v300 h-40 z" class="water" />
+          <path d="M496,486 v280 M514,486 v280" class="water-lines" />
+          <ellipse cx="506" cy="440" rx="40" ry="14" class="pond" />
+        </g>
+        <path d={trail} class="trail" />
+        {trees.map(([x, y, s]) => (
+          <g class="tree" transform={`translate(${x} ${y}) scale(${s})`}>
+            <path d="M0,0 v-14" class="trunk" /><circle cx="0" cy="-26" r="15" />
+          </g>
+        ))}
+      </g>
+
+      <!-- Landmarks: each one is a link to its hobby -->
+      {order.map((key, i) => {
+        const h = HOBBIES[key];
+        const [x, y] = SPOTS[key];
+        const { w } = label(h.name);
+        return (
+          <g transform={`translate(${x} ${y})`}><a href={`/${key}`} class="spot" style={`--c:${h.color};--d:${(i * 0.4).toFixed(1)}s`} aria-label={`${h.name}: ${h.blurb}`}>
+            <ellipse cx="0" cy="4" rx="62" ry="16" class="ground" />
+            <g class="landmark">
+              {key === 'beyblade' && (<>
+                <path d="M-70,-8 v14 a70,24 0 0 0 140,0 v-14" class="fill-c" />
+                <ellipse cx="0" cy="-8" rx="70" ry="24" class="fill-c" />
+                <ellipse cx="0" cy="-8" rx="52" ry="16" class="fill-sand" />
+                <path d="M-52,-8 h104" class="rail" />
+                <g class="spin-top"><path d="M-16,-26 h32 l-16,16 z" class="fill-lav" /><ellipse cx="0" cy="-26" rx="16" ry="6" class="fill-lav" /><circle cx="0" cy="-27" r="3" class="fill-ink" /></g>
+              </>)}
+              {key === 'tamiya' && (<>
+                <ellipse cx="0" cy="-6" rx="96" ry="32" class="fill-c" />
+                <ellipse cx="0" cy="-6" rx="62" ry="16" class="fill-grass" />
+                <ellipse cx="0" cy="-6" rx="79" ry="24" class="lane" />
+                <g class="car"><rect x="-15" y="-9" width="30" height="13" rx="4" class="fill-yellow" /><rect x="-7" y="-15" width="14" height="7" rx="2" class="fill-cream" /><circle cx="-9" cy="5" r="4" class="fill-ink" /><circle cx="9" cy="5" r="4" class="fill-ink" />
+                  <animateMotion dur="5s" repeatCount="indefinite" path="M0,18 a79,24 0 1 1 0.1,0" />
+                </g>
+              </>)}
+              {key === 'keyboards' && (<>
+                {[[-46, 0.8, 'P', 'var(--pink)'], [46, 0.8, 'C', 'var(--yellow)'], [0, 1.05, 'B', 'var(--c)']].map(([dx, s, letter, fill]) => (
+                  <g transform={`translate(${dx} 0) scale(${s})`}>
+                    <path d="M-32,0 L32,0 L26,-40 L-26,-40 Z" style={`fill:${fill}`} class="solid" />
+                    <path d="M-26,-40 L26,-40 L20,-56 L-20,-56 Z" class="fill-cream" />
+                    <text x="0" y="-43" class="cap-letter">{letter}</text>
+                    <rect x="-7" y="-20" width="14" height="20" rx="3" class="fill-ink" />
+                  </g>
+                ))}
+              </>)}
+              {key === 'tcg' && (<>
+                {[[-34, 0, -14], [-12, 0, 14], [12, 0, -14], [34, 0, 14], [-23, -58, -14], [23, -58, 14]].map(([dx, dy, r]) => (
+                  <g transform={`translate(${dx} ${dy - 28}) rotate(${r})`}><rect x="-14" y="-28" width="28" height="56" rx="4" class="fill-cream" /><rect x="-9" y="-23" width="18" height="46" rx="2" class="fill-c thin" /></g>
+                ))}
+                <rect x="-50" y="-60" width="100" height="8" rx="3" class="fill-cream" />
+                <rect x="-26" y="-118" width="52" height="8" rx="3" class="fill-cream" />
+              </>)}
+              {key === 'consoles' && (<>
+                <path d="M-30,0 l8,-14 M30,0 l-8,-14" class="leg" />
+                <rect x="-48" y="-84" width="96" height="72" rx="12" class="fill-c" />
+                <rect x="-38" y="-74" width="58" height="52" rx="10" class="fill-screen" />
+                <path d="M-20,-56 h8 M4,-56 h8 M-18,-40 q9,8 18,0" class="pixel" />
+                <circle cx="34" cy="-64" r="6" class="fill-cream" /><circle cx="34" cy="-44" r="6" class="fill-cream" />
+                <path d="M-6,-84 l-22,-26 M6,-84 l20,-28" class="leg" /><circle cx="-28" cy="-110" r="5" class="fill-coral" /><circle cx="26" cy="-112" r="5" class="fill-coral" />
+              </>)}
+              {key === 'esports' && (<>
+                <path d="M-40,0 h80 v-10 h-80 z" class="fill-cream" />
+                <rect x="-30" y="-34" width="60" height="26" rx="3" class="fill-c" />
+                <rect x="-8" y="-52" width="16" height="18" class="fill-yellow" />
+                <path d="M-36,-112 h72 q-4,52 -36,60 q-32,-8 -36,-60 z" class="fill-yellow" />
+                <path d="M-36,-100 q-22,2 -16,22 q6,14 22,10 M36,-100 q22,2 16,22 q-6,14 -22,10" class="handle" />
+                <path d="M0,-100 l5,10 l11,1 l-8,7 l3,11 l-11,-6 l-11,6 l3,-11 l-8,-7 l11,-1 z" class="fill-cream" />
+              </>)}
+              {key === 'general' && (<>
+                <g class="beams"><path d="M0,-124 L-120,-150 L-120,-104 Z" /><path d="M0,-124 L120,-150 L120,-104 Z" /></g>
+                <path d="M-24,0 L24,0 L15,-104 L-15,-104 Z" class="fill-cream" />
+                <path d="M-22,-24 L22,-24 L20,-46 L-20,-46 Z M-18,-68 L18,-68 L16,-88 L-16,-88 Z" class="fill-c thin" />
+                <rect x="-18" y="-132" width="36" height="28" rx="4" class="fill-yellow" />
+                <path d="M-24,-132 L0,-152 L24,-132 Z" class="fill-coral" />
+                <rect x="-6" y="-18" width="12" height="18" rx="5" class="fill-ink" />
+              </>)}
+            </g>
+            <g transform={`translate(0 ${-HEIGHT[key]})`}><g class="pin"><g class="pin-shape">
+              <path d="M0,0 C-6,-12 -18,-20 -18,-34 a18,18 0 0 1 36,0 C18,-20 6,-12 0,0 Z" class="fill-c" />
+              <circle cx="0" cy="-34" r="7" class="fill-cream" />
+            </g></g></g>
+            <g transform={`translate(0 ${BELOW.includes(key) ? 46 : -HEIGHT[key] - 74})`}><g class="tag">
+              <rect x={-w / 2} y="-22" width={w} height="40" rx="20" />
+              <text x="0" y="6">{h.name.toUpperCase()}</text>
+            </g></g>
+          </a></g>
+        );
+      })}
     </svg>
-
-    <!-- Little decorations: waves, a boat and a compass. -->
-    <svg class="deco wave w1" viewBox="0 0 60 14" aria-hidden="true"><path d="M2 8c7-7 12 7 19 0s12 7 19 0 12 7 19 0" /></svg>
-    <svg class="deco wave w2" viewBox="0 0 60 14" aria-hidden="true"><path d="M2 8c7-7 12 7 19 0s12 7 19 0 12 7 19 0" /></svg>
-    <svg class="deco wave w3" viewBox="0 0 60 14" aria-hidden="true"><path d="M2 8c7-7 12 7 19 0s12 7 19 0 12 7 19 0" /></svg>
-    <svg class="deco boat" viewBox="0 0 60 50" aria-hidden="true"><path d="M30 4v30M30 6l18 24H30z" class="sail" /><path d="M6 34h48l-8 12H14z" class="hull" /></svg>
-    <svg class="deco compass" viewBox="0 0 60 60" aria-hidden="true"><circle cx="30" cy="30" r="26" class="c-ring" /><path d="M30 8l6 22-6 22-6-22z" class="c-needle" /><path d="M30 8l6 22h-12z" class="c-north" /><text x="30" y="7" text-anchor="middle">N</text></svg>
-    <Sticker text="YOU ARE HERE" color="var(--pink)" size={92} tilt={-12} class="island-sticker" />
-
-    {order.map((key, i) => {
-      const h = HOBBIES[key];
-      const [x, y, mx, my] = SPOTS[key];
-      return (
-        <a class="pin" href={`/${key}`} style={`--x:${x}%;--y:${y}%;--mx:${mx}%;--my:${my}%;--c:${h.color};--d:${i * 0.35}s`}>
-          <span class="pin-body">
-            <span class="pin-head"><HobbyIcon hobby={key} size={26} /></span>
-          </span>
-          <span class="pin-label">{h.name}</span>
-        </a>
-      );
-    })}
   </div>
 </section>

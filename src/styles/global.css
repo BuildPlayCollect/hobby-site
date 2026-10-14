@@ -419,61 +419,80 @@ a.tile:hover { text-decoration: none; transform: translate(-2px, -2px); box-shad
 .island-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 6px 20px; margin-bottom: 16px; }
 .island-head h2 { font-size: clamp(1.6rem, 4.5vw, 2.6rem); margin: 0; text-transform: uppercase; }
 .island-head p { margin: 0; color: var(--muted); font-weight: 600; }
-.island { position: relative; aspect-ratio: 2 / 1; border: var(--border); border-radius: 22px; box-shadow: var(--shadow-lg); overflow: hidden;
-  background-color: #8ec0ff; background-image: radial-gradient(rgb(255 255 255 / .45) 1.3px, transparent 1.7px); background-size: 16px 16px; }
-:root[data-theme="dark"] .island { background-color: #3b5a8f; }
-@media (max-width: 700px) { .island { aspect-ratio: 4 / 5; } }
-.island-map { position: absolute; inset: 0; width: 100%; height: 100%; }
-.island-map path { vector-effect: non-scaling-stroke; }
-.island-shadow { fill: #141414; }
-.island-sand { fill: #ffe3a3; stroke: #141414; stroke-width: 3; }
-.island-grass { fill: #8fe0b5; stroke: #141414; stroke-width: 2; stroke-dasharray: 2 6; stroke-linecap: round; }
-.island-trail { fill: none; stroke: #141414; stroke-width: 2.5; stroke-dasharray: 3 9; stroke-linecap: round; stroke-linejoin: round; opacity: .55; }
-.trail-phone { display: none; }
-@media (max-width: 700px) { .trail-wide { display: none; } .trail-phone { display: inline; } }
+@media (max-width: 700px) { .island { aspect-ratio: 1 / 0.95 !important; } }
+/* The sky: soft blue with halftone dots by day, deep navy with stars at night. */
+.island { position: relative; border: var(--border); border-radius: 22px; box-shadow: var(--shadow-lg); overflow: hidden;
+  background-color: #a9d2ff; background-image: radial-gradient(rgb(255 255 255 / .5) 1.3px, transparent 1.7px); background-size: 16px 16px; }
+:root[data-theme="dark"] .island { background-color: #262a4a; background-image: radial-gradient(rgb(255 255 255 / .12) 1.3px, transparent 1.7px); }
+.island { aspect-ratio: 16 / 10; }
+@media (max-width: 700px) { .island { aspect-ratio: 1 / 1.05; } }
+.island-svg { display: block; position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.island-svg path, .island-svg rect, .island-svg ellipse, .island-svg circle { stroke: #141414; stroke-width: 4; stroke-linejoin: round; stroke-linecap: round; }
+.island-svg .thin { stroke-width: 2.5; }
 
-/* Decorations */
-.deco { position: absolute; fill: none; stroke: #141414; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; overflow: visible; }
-.wave { width: 60px; stroke: #fff; opacity: .9; animation: drift 6s ease-in-out infinite alternate; }
-.w1 { left: 3%; top: 8%; } .w2 { right: 4%; bottom: 10%; animation-delay: -2s; } .w3 { left: 6%; bottom: 14%; animation-delay: -4s; }
-.boat { width: 54px; right: 6%; top: 8%; animation: bob 3s ease-in-out infinite; }
-.boat .sail { fill: #fffaf0; } .boat .hull { fill: var(--coral); }
-.compass { width: 54px; left: 2.5%; top: 40%; }
-.compass .c-ring { fill: #fffaf0; } .compass .c-needle { fill: #fffaf0; } .compass .c-north { fill: var(--coral); }
-.compass text { font-family: var(--display); font-size: 9px; fill: #141414; stroke: none; }
-.island-sticker { position: absolute; left: 41%; bottom: 3%; }
-@media (max-width: 700px) {
-  .boat { top: 3%; right: 34%; width: 44px; } .compass { top: auto; bottom: 3%; left: auto; right: 4%; width: 44px; }
-  .w1 { top: 3%; } .w3 { display: none; } .w2 { bottom: 4%; right: auto; left: 4%; }
-  .island-sticker { width: 68px !important; left: 3%; top: 3%; bottom: auto; }
-  .w1 { display: none; }
-}
-@keyframes drift { to { transform: translateX(14px); } }
-@keyframes bob { 50% { transform: translateY(-5px) rotate(-3deg); } }
+/* Sky bits */
+.cloud path { fill: #fffaf0; }
+.cloud { animation: drift 9s ease-in-out infinite alternate; } .c2 { animation-delay: -4s; }
+.bird { fill: none; }
+.rock path { fill: #a8807a; } .rock .rock-top { fill: #8fe0b5; }
+.r1 { animation: bob 5s ease-in-out infinite; } .r2 { animation: bob 6s ease-in-out -2s infinite; }
+.stars path { fill: var(--yellow); stroke-width: 2; display: none; }
+:root[data-theme="dark"] .stars path { display: inline; }
+:root[data-theme="dark"] .bird { stroke: #f7efe1; }
 
-/* Pins: the tip of the pin is the exact spot. */
-.pin { position: absolute; left: var(--x); top: var(--y); transform: translate(-50%, -100%); display: flex; flex-direction: column; align-items: center; color: #141414; z-index: 2; }
-@media (max-width: 700px) { .pin { left: var(--mx); top: var(--my); } }
-.pin:hover, .pin:focus-visible { text-decoration: none; z-index: 3; }
-.pin-body { position: relative; display: block; padding-bottom: 8px; animation: idle 3.2s ease-in-out var(--d) infinite; }
-/* The ground shadow under the tip */
-.pin-body::after { content: ""; position: absolute; left: 50%; bottom: -3px; width: 26px; height: 8px; margin-left: -13px; border-radius: 50%; background: rgb(20 20 20 / .35); transition: transform .2s; }
-.pin-head { display: grid; place-items: center; width: 52px; height: 52px; background: var(--c); border: 2.5px solid #141414; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); box-shadow: 3px 3px 0 #141414; transition: transform .25s cubic-bezier(.3, 1.6, .5, 1); }
-.pin-head .hobby-icon { transform: rotate(45deg); background: #fffaf0; border: 2px solid #141414; border-radius: 50%; padding: 3px; width: 32px; height: 32px; }
-.pin-label { position: absolute; top: 100%; margin-top: 6px; white-space: nowrap; background: #fffaf0; border: 2px solid #141414; border-radius: 999px; padding: 2px 10px; font-weight: 800; font-size: .78rem; text-transform: uppercase; letter-spacing: .03em; box-shadow: 2px 2px 0 #141414; opacity: 0; transform: translateY(-6px) scale(.8); transition: opacity .18s, transform .25s cubic-bezier(.3, 1.6, .5, 1); pointer-events: none; }
-.pin:hover .pin-body, .pin:focus-visible .pin-body { animation: hop .6s cubic-bezier(.3, 1.4, .5, 1) both; }
-.pin:hover .pin-head, .pin:focus-visible .pin-head { transform: rotate(-45deg) scale(1.12); }
-.pin:hover .pin-body::after, .pin:focus-visible .pin-body::after { transform: scale(.6); }
-.pin:hover .pin-label, .pin:focus-visible .pin-label { opacity: 1; transform: none; background: var(--c); }
-@keyframes idle { 0%, 100% { transform: none; } 50% { transform: translateY(-3px); } }
-@keyframes hop { 0% { transform: none; } 40% { transform: translateY(-16px); } 70% { transform: translateY(-8px); } 100% { transform: translateY(-10px); } }
-/* Phones and tablets (no mouse): names always show, pins a little smaller. */
+/* The island: a slow float */
+.isle, .spot { animation: float 7s ease-in-out infinite; }
+.isle-shadow path { fill: #141414; stroke: none; }
+:root[data-theme="dark"] .isle-shadow path { fill: #0d0c12; }
+.cliff { fill: #d98c5f; stroke: none; }
+.layer1 { fill: #b86f52; stroke-width: 3; } .layer2 { fill: #8a5d6e; stroke-width: 3; }
+.crack { fill: none; stroke-width: 3; }
+.outline { fill: none; }
+.grass-side { fill: #4fbf8f; }
+.grass { fill: #8fe0b5; }
+.trail { fill: none; stroke-width: 4; stroke-dasharray: 2 12; opacity: .5; }
+.tree circle { fill: #5fd3a8; } .tree .trunk { fill: none; }
+.water { fill: #6ea8fe; } .pond { fill: #6ea8fe; }
+.water-lines { fill: none; stroke: #fffaf0 !important; stroke-width: 3 !important; stroke-dasharray: 18 22; animation: pour 1.2s linear infinite; }
+@keyframes pour { to { stroke-dashoffset: -40; } }
+@keyframes float { 50% { transform: translateY(-8px); } }
+
+/* Landmarks */
+.spot { cursor: pointer; outline: none; }
+.spot .ground { fill: rgb(20 20 20 / .18); stroke: none; }
+.fill-c { fill: var(--c); } .fill-cream { fill: #fffaf0; } .fill-sand { fill: #ffe3a3; } .fill-lav { fill: var(--lavender); }
+.fill-ink { fill: #141414; } .fill-yellow { fill: var(--yellow); } .fill-coral { fill: var(--coral); } .fill-grass { fill: #8fe0b5; }
+.fill-screen { fill: #1b1922; } .solid { stroke: #141414; }
+.rail { fill: none; stroke-dasharray: 4 8; stroke-width: 2.5 !important; }
+.lane { fill: none; stroke: #fffaf0 !important; stroke-width: 3 !important; stroke-dasharray: 10 10; }
+.leg, .handle { fill: none; }
+.pixel { fill: none; stroke: var(--teal) !important; stroke-width: 5 !important; }
+.cap-letter { font-family: var(--display); font-size: 15px; text-anchor: middle; fill: #141414; }
+.beams path { fill: rgb(255 226 120 / .7); stroke: none; }
+.beams { transform-origin: 0 -124px; animation: beam 3s ease-in-out infinite; }
+@keyframes beam { 50% { opacity: .35; } }
+.spin-top { transform-origin: 0 -14px; animation: wobble .5s ease-in-out infinite alternate; }
+@keyframes wobble { from { transform: rotate(-9deg); } to { transform: rotate(9deg); } }
+
+/* Pins bob above each landmark */
+.pin { animation: idle 2.6s ease-in-out var(--d) infinite; }
+.landmark, .pin-shape, .tag { transition: transform .3s cubic-bezier(.3, 1.6, .5, 1), opacity .2s; }
+/* Name tags: hidden until hover on computers, always shown on phones. */
+.tag rect { fill: #fffaf0; stroke-width: 3; }
+.tag text { font-family: var(--sans); font-weight: 800; font-size: 24px; letter-spacing: .5px; text-anchor: middle; fill: #141414; }
+.tag { opacity: 0; transform: translateY(-8px) scale(.85); }
+.spot:hover .tag, .spot:focus-visible .tag { opacity: 1; transform: translateY(0); }
+.spot:hover .tag rect, .spot:focus-visible .tag rect { fill: var(--c); }
+.spot:hover .landmark, .spot:focus-visible .landmark { transform: translateY(-12px); }
+.spot:hover .pin-shape, .spot:focus-visible .pin-shape { transform: translateY(-14px) scale(1.15); }
+.spot:focus-visible .ground { stroke: var(--accent-bright); stroke-width: 4; }
 @media (hover: none), (max-width: 700px) {
-  .pin-label { opacity: 1; transform: none; }
+  .tag { opacity: 1; transform: none; }
+  .tag text { font-size: 26px; }
 }
-@media (max-width: 700px) {
-  .pin-head { width: 44px; height: 44px; }
-  .pin-head .hobby-icon { width: 28px; height: 28px; }
-  .pin-label { font-size: .7rem; }
+@keyframes idle { 0%, 100% { transform: none; } 50% { transform: translateY(-6px); } }
+@keyframes drift { to { transform: translateX(14px); } }
+@keyframes bob { 50% { transform: translateY(-6px) rotate(-3deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .isle, .spot, .pin, .cloud, .rock, .water-lines, .beams, .spin-top { animation: none !important; }
 }
-@media (prefers-reduced-motion: reduce) { .pin-body, .wave, .boat { animation: none !important; } }
