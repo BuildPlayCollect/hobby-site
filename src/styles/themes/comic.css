@@ -1,8 +1,16 @@
-/* global.css: the look of the whole site.
+/* themes/comic.css: the "comic" design, the look of the whole site.
    Style: "neo-brutalism", like a comic book or sticker sheet.
    Cream paper, thick black outlines, hard offset shadows, bright colour blocks.
    All colours are variables. Light mode is the first block, night mode the second.
-   Change a value here and it changes everywhere. */
+   Change a value here and it changes everywhere.
+
+   Designs are swappable: each design is one file in this folder, and
+   src/layouts/Base.astro imports the one that's live. This one is also
+   saved on the GitHub branch "design-comic". */
+
+/* Archivo Black: the chunky headline font (free OFL licence), stored on our own site. */
+@import '@fontsource/archivo-black';
+
 
 :root {
   /* Light: cream paper, black ink */
@@ -154,37 +162,20 @@ h1, h2 { font-family: var(--display); font-weight: 400; }
 .search-results small { display: block; color: var(--muted); }
 .search-hint { padding: 10px 20px 14px; font-size: .8rem; color: var(--muted); }
 
-/* ---------- Home page: comic panels (bento grid) ---------- */
+/* ---------- Home page: comic panels (tiles) ---------- */
 main { padding-bottom: 24px; }
 .tile { position: relative; background: var(--surface); border: var(--border); border-radius: 18px; box-shadow: var(--shadow-lg); padding: 22px; color: var(--ink); }
 a.tile { display: block; transition: transform .15s, box-shadow .15s; }
 a.tile:hover { text-decoration: none; transform: translate(-2px, -2px); box-shadow: 9px 9px 0 var(--shadow-color); }
 .tile-colour { color: #141414; border-color: #141414; }
-.bento { display: grid; gap: 18px; padding: 28px 0 8px; grid-template-columns: 1fr; }
-@media (min-width: 900px) { .bento { grid-template-columns: 1.65fr 1fr; } }
-.bento-title { padding: 26px 22px 30px; overflow: hidden; }
-.bento-title h1 { font-size: clamp(2.6rem, 9vw, 5.6rem); line-height: .92; margin: 0; text-transform: uppercase; letter-spacing: -0.02em; }
-.bento-title h1 .hl { font-size: .92em; margin: 6px 0; }
-.bento-title .sticker { position: absolute; right: 14px; top: 14px; }
-@media (max-width: 600px) { .bento-title .sticker { width: 74px !important; right: 8px; top: 8px; } }
-.bento-intro { display: flex; flex-direction: column; gap: 14px; justify-content: space-between; }
-.bento-intro .big { font-family: var(--display); font-size: 1.35rem; line-height: 1.1; margin: 0; text-transform: uppercase; }
-.bento-intro p { margin: 0; color: var(--muted); }
-.bento-intro hr { border: 0; border-top: var(--border); margin: 0; }
+.intro-strip { display: grid; gap: 14px; align-items: center; margin-top: 28px; }
+@media (min-width: 760px) { .intro-strip { grid-template-columns: 1fr auto; padding: 24px 30px; } }
+.intro-strip h1 { font-size: clamp(1.9rem, 5.5vw, 3rem); line-height: 1; margin: 0 0 8px; text-transform: uppercase; letter-spacing: -0.01em; }
+.intro-strip p { margin: 0; color: var(--muted); max-width: 60ch; }
 .pill-btn { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; padding: 10px 16px; border-radius: 999px; background: var(--yellow); color: #141414; border: var(--border); border-color: #141414; box-shadow: 3px 3px 0 #141414; font-weight: 800; font-size: .85rem; text-transform: uppercase; letter-spacing: .04em; transition: transform .12s, box-shadow .12s; }
 .pill-btn:hover { text-decoration: none; transform: translate(-1px, -1px); box-shadow: 4px 4px 0 #141414; }
 .pill-btn.dark { background: #141414; color: #fbf3e4; }
 
-/* Hobby pills (bottom row of the home page panel) */
-.hobby-pills { display: grid; gap: 12px; grid-template-columns: repeat(2, 1fr); margin: 18px 0 8px; }
-@media (min-width: 640px) { .hobby-pills { grid-template-columns: repeat(4, 1fr); } }
-@media (min-width: 1100px) { .hobby-pills { grid-template-columns: repeat(7, 1fr); } }
-/* An odd last pill on phones spans the full row instead of sitting alone. */
-@media (max-width: 639px) { .hobby-pill:last-child:nth-child(odd) { grid-column: 1 / -1; } }
-.hobby-pill { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border: var(--border); border-color: #141414; border-radius: 14px; box-shadow: var(--shadow); color: #141414; font-weight: 800; text-transform: uppercase; font-size: .85rem; letter-spacing: .03em; line-height: 1.15; transition: transform .12s, box-shadow .12s; }
-.hobby-pill small { display: block; font-weight: 600; text-transform: none; letter-spacing: 0; font-size: .74rem; opacity: .8; }
-.hobby-pill:hover { text-decoration: none; transform: translate(-2px, -2px) rotate(-1deg); box-shadow: 6px 6px 0 var(--shadow-color); }
-.hobby-pill .hobby-icon { flex: none; background: #fffaf0; border: 2px solid #141414; border-radius: 50%; padding: 4px; width: 36px; height: 36px; }
 
 .hero { padding: 40px 0 24px; }
 .hero h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); margin: 0 0 10px; text-transform: uppercase; }
@@ -418,7 +409,7 @@ a.tile:hover { text-decoration: none; transform: translate(-2px, -2px); box-shad
 @keyframes pop { from { transform: rotate(-2deg) scale(.6); opacity: 0; } }
 
 /* Quiz invite on the home page */
-.quiz-cta { display: grid; gap: 14px; align-items: center; margin-top: 52px; background: var(--lavender); }
+.quiz-cta { display: grid; gap: 14px; align-items: center; margin-top: 22px; background: var(--lavender); }
 @media (min-width: 760px) { .quiz-cta { grid-template-columns: 1fr auto; padding: 26px 30px; } }
 .quiz-cta h2 { margin: 0 0 4px; font-size: clamp(1.4rem, 3.6vw, 2rem); text-transform: uppercase; }
 .quiz-cta p { margin: 0; color: #3a3428; }

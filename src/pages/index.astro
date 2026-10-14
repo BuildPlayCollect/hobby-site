@@ -4,10 +4,8 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import Carousel from '../components/Carousel.astro';
-import Sticker from '../components/Sticker.astro';
-import HobbyIcon from '../components/HobbyIcon.astro';
 import HobbyIsland from '../components/HobbyIsland.astro';
-import { HOBBIES, type HobbyKey } from '../data/site';
+import { HOBBIES } from '../data/site';
 
 const articles = (await getCollection('articles', ({ data }) => !data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const featured = articles.find((a) => a.data.featured) ?? articles[0];
@@ -21,28 +19,14 @@ const wiki = (await getCollection('wiki')).sort((a, b) => a.data.title.localeCom
 <Base>
   <HobbyIsland />
 
-  <!-- Below the island: comic-panel tiles (a "bento" grid). -->
-  <section class="bento">
-    <div class="tile bento-title">
-      <h1>Build.<br /><span class="hl">Play.</span><br />Collect.</h1>
-      <Sticker text="ALL HOBBIES" color="var(--teal)" size={118} tilt={12} />
+  <!-- One slim intro strip under the island: the site name, what we do, and a door into the wiki. -->
+  <section class="tile intro-strip">
+    <div>
+      <h1>Build. <span class="hl">Play.</span> Collect.</h1>
+      <p>Nerdy, playful and fact-checked. History, guides, new releases and giveaways for every hobby, from spinning tops to trading cards.</p>
     </div>
-    <div class="tile bento-intro">
-      <p class="big">Nerdy.<br />Playful.<br />Fact-checked.</p>
-      <hr />
-      <p>History, guides, new releases and giveaways for the hobbies we love, from spinning tops to trading cards. Every fact is sourced.</p>
-      <a class="pill-btn" href="/wiki">Fall down the wiki →</a>
-    </div>
+    <a class="pill-btn" href="/wiki">Fall down the wiki →</a>
   </section>
-
-  <nav class="hobby-pills" aria-label="Hobbies">
-    {Object.entries(HOBBIES).map(([key, h]) => (
-      <a class="hobby-pill" href={`/${key}`} style={`background:${h.color}`}>
-        <HobbyIcon hobby={key as HobbyKey} />
-        <span>{h.name}</span>
-      </a>
-    ))}
-  </nav>
 
   <a class="tile tile-colour quiz-cta" href="/quiz">
     <div>
@@ -73,8 +57,10 @@ const wiki = (await getCollection('wiki')).sort((a, b) => a.data.title.localeCom
   </div>
 
   {Object.entries(HOBBIES).map(([key, h]) => {
+    // A hobby gets its own row once it has 3+ articles. Before that, its stories
+    // already show in Top stories, so a row would only repeat them.
     const forHobby = articles.filter((a) => a.data.hobby === key).slice(0, 8);
-    return forHobby.length > 0 && (
+    return forHobby.length >= 3 && (
       <section>
         <div class="section-head">
           <h2><span class="dot" style={`background:${h.color};margin:0`}></span>{h.name}</h2>
