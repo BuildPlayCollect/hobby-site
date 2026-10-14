@@ -6,6 +6,8 @@ import AdSlot from '../components/AdSlot.astro';
 import Newsletter from '../components/Newsletter.astro';
 // Inter font, stored on our own site (no Google Fonts request).
 import '@fontsource-variable/inter';
+// Archivo Black: the chunky headline font (free OFL licence), also stored on our own site.
+import '@fontsource/archivo-black';
 import '../styles/global.css';
 
 interface Props {
@@ -88,6 +90,13 @@ const shareImage = new URL(image ?? '/og-default.png', Astro.site).href;
         </div>
       </div>
     </header>
+
+    <!-- Ticker: a scrolling strip of what's on the site. The list is written twice so it loops without a gap. -->
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track">
+        {[0, 1].map(() => ['History', 'Guides', 'New releases', 'Giveaways', 'Wiki rabbit holes', 'Tournament rules', ...Object.values(HOBBIES).map((h) => h.name)].map((t) => <span>{t}</span>))}
+      </div>
+    </div>
 
     <div class="search-overlay" role="dialog" aria-modal="true" aria-label="Search">
       <div class="search-box">

@@ -4,15 +4,16 @@
 export const SITE_NAME = 'Build Play Collect';
 export const SITE_TAGLINE = 'History, guides and news for the hobbies we love.';
 
+// Each hobby's colour: bright and light, so black text and outlines sit on top (the comic-book look).
 export const HOBBIES = {
-  beyblade: { name: 'Beyblade', color: '#e63946', blurb: 'Beyblade X, decks, parts and the history of the spinning top.' },
-  tamiya: { name: 'Tamiya', color: '#1d4ed8', blurb: 'Mini 4WD, RC cars and plastic models.' },
-  keyboards: { name: 'Keyboards', color: '#7c3aed', blurb: 'Mechanical keyboards, switches, keycaps and builds.' },
-  tcg: { name: 'TCG', color: '#d97706', blurb: 'Trading card games: Pokemon, Magic, One Piece, Yu-Gi-Oh! and more.' },
-  consoles: { name: 'Consoles', color: '#059669', blurb: 'Gaming consoles, old and new.' },
-  esports: { name: 'Esports', color: '#475569', blurb: 'Dota 2, League of Legends, TFT and the scenes around them.' },
+  beyblade: { name: 'Beyblade', color: '#ff6b57', blurb: 'Beyblade X, decks, parts and the history of the spinning top.' },
+  tamiya: { name: 'Tamiya', color: '#6ea8fe', blurb: 'Mini 4WD, RC cars and plastic models.' },
+  keyboards: { name: 'Keyboards', color: '#c3a6ff', blurb: 'Mechanical keyboards, switches, keycaps and builds.' },
+  tcg: { name: 'TCG', color: '#ffd23f', blurb: 'Trading card games: Pokemon, Magic, One Piece, Yu-Gi-Oh! and more.' },
+  consoles: { name: 'Consoles', color: '#5fd3a8', blurb: 'Gaming consoles, old and new.' },
+  esports: { name: 'Esports', color: '#ff8fc7', blurb: 'Dota 2, League of Legends, TFT and the scenes around them.' },
   // For articles about hobbies in general, not one hobby in particular.
-  general: { name: 'General', color: '#0e7490', blurb: 'Articles about hobbies in general: what they are, why we love them, and how to start one.' },
+  general: { name: 'General', color: '#ff9f43', blurb: 'Articles about hobbies in general: what they are, why we love them, and how to start one.' },
 } as const;
 
 export const TYPES = {

@@ -1,0 +1,27 @@
+---
+// Sticker.astro: a comic-style starburst badge ("NEW!", "GUIDE", "FREE!").
+// Drawn here from simple shapes, so it's ours to use anywhere.
+interface Props {
+  text: string;
+  color?: string;   // fill colour
+  size?: number;    // width in pixels
+  tilt?: number;    // rotation in degrees
+  class?: string;
+}
+const { text, color = 'var(--yellow)', size = 96, tilt = -10, class: cls } = Astro.props;
+// A 14-point star: alternate outer and inner points around a circle.
+const points = Array.from({ length: 28 }, (_, i) => {
+  const r = i % 2 === 0 ? 48 : 38;
+  const a = (Math.PI * 2 * i) / 28 - Math.PI / 2;
+  return `${(50 + r * Math.cos(a)).toFixed(1)},${(50 + r * Math.sin(a)).toFixed(1)}`;
+}).join(' ');
+const words = text.split(' ');
+---
+<span class:list={['sticker', cls]} style={`width:${size}px;--tilt:${tilt}deg`} aria-hidden="true">
+  <svg viewBox="0 0 100 100">
+    <polygon points={points} fill={color} stroke="#111" stroke-width="3" stroke-linejoin="round" />
+    <text x="50" y={words.length > 1 ? 47 : 55} text-anchor="middle">
+      {words.map((w, i) => <tspan x="50" dy={i === 0 ? 0 : 15}>{w}</tspan>)}
+    </text>
+  </svg>
+</span>

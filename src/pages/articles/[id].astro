@@ -42,9 +42,8 @@ const jsonLd = {
   <div class="article-layout">
     <article class="article">
       <p class="kicker">
-        <span class="dot" style={`background:${hobby.color}`}></span>
-        <a href={`/${article.data.hobby}`}>{hobby.name}</a> ·
-        <a href={`/${TYPE_SLUGS[typeKey]}`}>{TYPES[typeKey].name}</a>
+        <a class="tag" style={`background:${hobby.color}`} href={`/${article.data.hobby}`}>{hobby.name}</a>
+        <a class="tag tag-plain" href={`/${TYPE_SLUGS[typeKey]}`}>{TYPES[typeKey].name}</a>
       </p>
       <h1>{article.data.title}</h1>
       <p class="dek">{article.data.description}</p>
@@ -57,7 +56,7 @@ const jsonLd = {
         </details>
       )}
 
-      <div class="article-cover" style={`background:linear-gradient(135deg, ${hobby.color}, color-mix(in srgb, ${hobby.color} 55%, #06b6d4))`}>
+      <div class="article-cover" style={`background-color:${hobby.color}`}>
         {article.data.cover
           ? <img src={article.data.cover} alt={article.data.coverAlt ?? ''} />
           : <span>{hobby.name}</span>}
