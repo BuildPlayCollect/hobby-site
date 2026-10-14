@@ -4,10 +4,6 @@
 // track, keycap houses, a house of cards, a retro TV, a trophy and a lighthouse).
 // On a computer, a landmark hops and shows its name when the cursor passes over it;
 // on phones the names always show. Click or tap a landmark to visit that hobby.
-// Little neighbour islands float around it, waiting for future hobbies: a new hobby in
-// src/data/site.ts without a spot on the main island moves onto the next free neighbour
-// by itself. Empty neighbours show a "?" sign that invites readers to suggest a hobby.
-// Island life: three white cats and an orange cat run around, and a falcon swoops past now and then.
 // Everything is drawn here from simple shapes, so it's all ours.
 import { HOBBIES, type HobbyKey } from '../data/site';
 
@@ -43,57 +39,24 @@ const layer1 = 'M60,445 L170,470 L260,455 L360,488 L470,470 L560,500 L660,476 L7
 const layer2 = 'M60,560 L230,548 L330,585 L430,566 L520,602 L620,580 L720,600 L940,570 L940,800 L60,800 Z';
 const cracks = ['M300,520 l18,22 l-8,20', 'M620,520 l-14,26 l10,18', 'M480,640 l12,20 l-6,22'];
 
-// ---- Neighbour islands for future hobbies: [centre x, top y, width]. Same look as the big one.
-const NEIGHBOURS: [number, number, number][] = [[170, 92, 140], [845, 112, 120], [165, 585, 140], [840, 600, 120]];
-const mini = ([cx, cy, w]: [number, number, number], i: number) => {
-  const rx = w / 2, ry = w * 0.17, side = w * 0.12;
-  const pts = Array.from({ length: 36 }, (_, k) => {
-    const a = (k / 36) * Math.PI * 2;
-    const r = 1 + 0.05 * Math.sin(3 * a + i);
-    return [cx + rx * r * Math.cos(a), cy + ry * r * Math.sin(a)] as [number, number];
-  });
-  const fr = pts.slice(0, 19).reverse();
-  const frDown = fr.map(([x, y]) => [x, y + side] as [number, number]);
-  const tipY = cy + w * (0.62 + 0.1 * (i % 2));
-  const body: [number, number][] = [[0.8, 0.32], [0.55, 0.42], [0.3, tipY], [0.05, 0.5], [-0.25, 0.46], [-0.6, 0.36]];
-  const cliffD = `${curve(frDown, false)} ${body.map(([fx, fy]) => `L${(cx + rx * fx).toFixed(1)},${(fy === tipY ? tipY : cy + w * fy).toFixed(1)}`).join(' ')} Z`;
-  const band = `${curve(fr, false)} L${frDown.at(-1)![0]},${frDown.at(-1)![1]} ${curve([...frDown].reverse(), false).replace(/^M/, 'L')} Z`;
-  const layer = `M${cx - w},${cy + w * 0.36} L${cx - rx * 0.3},${cy + w * 0.4} L${cx + rx * 0.2},${cy + w * 0.34} L${cx + w},${cy + w * 0.38} V${cy + w * 2} H${cx - w} Z`;
-  return { top: curve(pts, true), cliff: cliffD, band, layer };
-};
-
-// ---- Island life. Cats run along these paths (out and back); [path, seconds, delay, colour].
-// Each path keeps to open grass, so a cat never runs across a landmark, its pin or its name tag.
-const CATS: [string, number, number, 'white' | 'orange'][] = [
-  ['M326,330 Q430,318 535,326', 10, 0, 'white'],   // the middle meadow
-  ['M326,330 Q430,318 535,326', 10, -1.1, 'orange'], // ...with the orange cat in hot pursuit
-  ['M700,302 Q712,365 742,425', 7, -2, 'white'],   // the gap between the trophy and the TV
-  ['M204,432 Q234,447 262,455', 6, -4, 'white'],   // the front lawn by the stadium
-];
-// The falcon's swoop: in from the top left, dives past the island, climbs out to the right.
-const SWOOP = 'M-120,60 C160,40 260,330 500,300 S840,40 1100,-40';
-
 // ---- Where each landmark stands on the island (base centre), drawn back to front.
-const SPOTS: Partial<Record<HobbyKey, [number, number]>> = {
+const SPOTS: Record<HobbyKey, [number, number]> = {
   general: [500, 232],
   tcg: [318, 262],
   keyboards: [700, 250],
-  beyblade: [226, 340],
+  beyblade: [230, 352],
   consoles: [818, 372],
   tamiya: [385, 412],
   esports: [628, 412],
 };
-const order = (Object.keys(SPOTS) as HobbyKey[]).sort((a, b) => SPOTS[a]![1] - SPOTS[b]![1]);
-// Hobbies without a spot on the main island live on the neighbours, in order.
-const movedIn = (Object.keys(HOBBIES) as HobbyKey[]).filter((k) => !SPOTS[k]);
-const neighbours = NEIGHBOURS.map((n, i) => ({ n, shape: mini(n, i), hobby: movedIn[i] as HobbyKey | undefined }));
-const trail = curve(['tcg', 'general', 'keyboards', 'consoles', 'esports', 'tamiya', 'beyblade'].map((k) => [SPOTS[k as HobbyKey]![0], SPOTS[k as HobbyKey]![1] + 6] as [number, number]), false);
+const order = (Object.keys(SPOTS) as HobbyKey[]).sort((a, b) => SPOTS[a][1] - SPOTS[b][1]);
+const trail = curve(['tcg', 'general', 'keyboards', 'consoles', 'esports', 'tamiya', 'beyblade'].map((k) => [SPOTS[k as HobbyKey][0], SPOTS[k as HobbyKey][1] + 6] as [number, number]), false);
 const label = (name: string) => ({ w: name.length * 17 + 34 });
 // How tall each landmark is, so its pin sits right on top.
 // Low landmarks show their name tag underneath; tall ones show it above the pin.
 const BELOW: HobbyKey[] = ['tamiya', 'esports'];
-const HEIGHT: Partial<Record<HobbyKey, number>> = { beyblade: 36, tamiya: 18, keyboards: 62, tcg: 128, consoles: 118, esports: 114, general: 156 };
-const trees: [number, number, number][] = [[175, 300, 1], [420, 215, 0.8], [590, 205, 0.85], [850, 290, 1], [548, 372, 0.75], [880, 410, 0.8], [130, 360, 0.8]];
+const HEIGHT: Record<HobbyKey, number> = { beyblade: 36, tamiya: 18, keyboards: 62, tcg: 128, consoles: 118, esports: 114, general: 156 };
+const trees: [number, number, number][] = [[175, 300, 1], [420, 215, 0.8], [590, 205, 0.85], [850, 290, 1], [470, 330, 0.9], [560, 340, 0.75], [270, 430, 0.9], [740, 445, 1], [880, 410, 0.8], [130, 360, 0.8]];
 ---
 <section class="island-wrap" aria-labelledby="island-title">
   <div class="island-head">
@@ -104,7 +67,6 @@ const trees: [number, number, number][] = [[175, 300, 1], [420, 215, 0.8], [590,
     <svg class="island-svg" viewBox="70 -30 860 790" preserveAspectRatio="xMidYMid meet" role="group" aria-label="Map of Hobby Island">
       <defs>
         <clipPath id="cliff-clip"><path d={cliff} /></clipPath>
-        {neighbours.map(({ shape }, i) => <clipPath id={`mini-clip-${i}`}><path d={shape.cliff} /></clipPath>)}
       </defs>
 
       <!-- Sky decorations -->
@@ -113,6 +75,8 @@ const trees: [number, number, number][] = [[175, 300, 1], [420, 215, 0.8], [590,
         <g class="cloud c2"><path d="M760,170 a24,24 0 0 1 36,-20 a30,30 0 0 1 56,6 a22,22 0 0 1 20,30 h-106 a18,18 0 0 1 -6,-16 z" /></g>
         <path class="bird" d="M640,150 q10,-10 20,0 q10,-10 20,0" />
         <path class="bird" d="M690,128 q7,-7 14,0 q7,-7 14,0" />
+        <g class="rock r1"><path d="M110,560 l40,-6 l18,14 l-26,30 z" /><path d="M110,560 l40,-6 l18,14 l-20,4 z" class="rock-top" /></g>
+        <g class="rock r2"><path d="M850,600 l34,-4 l12,12 l-22,24 z" /><path d="M850,600 l34,-4 l12,12 l-18,2 z" class="rock-top" /></g>
         <g class="stars"><path d="M200,140 l3,8 l8,3 l-8,3 l-3,8 l-3,-8 l-8,-3 l8,-3 z" /><path d="M880,250 l2,6 l6,2 l-6,2 l-2,6 l-2,-6 l-6,-2 l6,-2 z" /><path d="M330,170 l2,5 l5,2 l-5,2 l-2,5 l-2,-5 l-5,-2 l5,-2 z" /></g>
       </g>
 
@@ -142,49 +106,10 @@ const trees: [number, number, number][] = [[175, 300, 1], [420, 215, 0.8], [590,
         ))}
       </g>
 
-      <!-- Neighbour islands: homes for future hobbies -->
-      {neighbours.map(({ n: [cx, cy, w], shape, hobby }, i) => {
-        const h = hobby && HOBBIES[hobby];
-        const name = h ? h.name.toUpperCase() : 'YOUR HOBBY?';
-        const tw = name.length * 15 + 30;
-        return (
-          <g class="mini" style={`--d:${(-1.3 * i).toFixed(1)}s`}>
-            <g transform="translate(10 10)" class="isle-shadow"><path d={shape.top} /><path d={shape.band} /><path d={shape.cliff} /></g>
-            <path d={shape.cliff} class="cliff" />
-            <g clip-path={`url(#mini-clip-${i})`}><path d={shape.layer} class="layer2" /></g>
-            <path d={shape.cliff} class="outline" />
-            <path d={shape.band} class="grass-side" />
-            <path d={shape.top} class="grass" />
-            <a href={h ? `/${hobby}` : '/contact'} class="spot mini-spot" style={`--c:${h ? h.color : '#fffaf0'}`} aria-label={h ? `${h.name}: ${h.blurb}` : 'An empty island, waiting for a new hobby. Suggest one!'}>
-              <g transform={`translate(${cx} ${cy + 4})`}>
-                <ellipse cx="0" cy="2" rx={w * 0.26} ry="8" class="ground" />
-                <g class="landmark">
-                  {h ? (
-                    <g transform="scale(1.3)">
-                      <path d="M-22,0 v-30 l22,-18 l22,18 v30 z" class="fill-c" />
-                      <rect x="-7" y="-16" width="14" height="16" rx="4" class="fill-ink" />
-                      <path d="M0,-48 v-22" class="leg" /><path d="M0,-70 l22,6 l-22,6 z" class="fill-yellow" />
-                    </g>
-                  ) : (<>
-                    <path d="M0,0 v-46" class="leg" />
-                    <path d="M-26,-60 h52 v26 h-52 z" class="fill-cream" />
-                    <text x="0" y="-40" class="cap-letter sign-q">?</text>
-                  </>)}
-                </g>
-                <g transform={`translate(0 ${h ? -112 : -70})`}><g class="tag">
-                  <rect x={-tw / 2} y="-20" width={tw} height="36" rx="18" />
-                  <text x="0" y="5" class="mini-tag">{name}</text>
-                </g></g>
-              </g>
-            </a>
-          </g>
-        );
-      })}
-
       <!-- Landmarks: each one is a link to its hobby -->
       {order.map((key, i) => {
         const h = HOBBIES[key];
-        const [x, y] = SPOTS[key]!;
+        const [x, y] = SPOTS[key];
         const { w } = label(h.name);
         return (
           <g transform={`translate(${x} ${y})`}><a href={`/${key}`} class="spot" style={`--c:${h.color};--d:${(i * 0.4).toFixed(1)}s`} aria-label={`${h.name}: ${h.blurb}`}>
@@ -247,75 +172,17 @@ const trees: [number, number, number][] = [[175, 300, 1], [420, 215, 0.8], [590,
                 <rect x="-6" y="-18" width="12" height="18" rx="5" class="fill-ink" />
               </>)}
             </g>
-            <g transform={`translate(0 ${-HEIGHT[key]!})`}><g class="pin"><g class="pin-shape">
+            <g transform={`translate(0 ${-HEIGHT[key]})`}><g class="pin"><g class="pin-shape">
               <path d="M0,0 C-6,-12 -18,-20 -18,-34 a18,18 0 0 1 36,0 C18,-20 6,-12 0,0 Z" class="fill-c" />
               <circle cx="0" cy="-34" r="7" class="fill-cream" />
             </g></g></g>
-            <g transform={`translate(0 ${BELOW.includes(key) ? 46 : -HEIGHT[key]! - 74})`}><g class="tag">
+            <g transform={`translate(0 ${BELOW.includes(key) ? 46 : -HEIGHT[key] - 74})`}><g class="tag">
               <rect x={-w / 2} y="-22" width={w} height="40" rx="20" />
               <text x="0" y="6">{h.name.toUpperCase()}</text>
             </g></g>
           </a></g>
         );
       })}
-
-      <!-- Cats running around the island (out and back; they turn around halfway).
-           Drawn after the landmarks so they run in front of them. -->
-      <g class="cats" aria-hidden="true">
-        {CATS.map(([path, dur, delay, colour]) => (
-          <g>
-            <animateMotion dur={`${dur}s`} begin={`${delay}s`} repeatCount="indefinite" path={path} keyPoints="0;1;0" keyTimes="0;0.5;1" calcMode="linear" />
-            <g>
-              <animateTransform attributeName="transform" type="scale" values="1 1;-1 1" keyTimes="0;0.5" calcMode="discrete" dur={`${dur}s`} begin={`${delay}s`} repeatCount="indefinite" />
-              <g class:list={['cat', `cat-${colour}`]}><g transform="scale(1.15)">
-                <g class="puff"><circle cx="-26" cy="-4" r="4" /><circle cx="-33" cy="-7" r="3" /></g>
-                <path d="M-15,-16 q-16,-2 -14,-18 q1,-6 7,-5" class="cat-tail-ink" /><path d="M-15,-16 q-16,-2 -14,-18 q1,-6 7,-5" class="cat-tail" />
-                <path d="M-8,-9 q-3,6 -7,8 M9,-9 q3,6 6,8" class="leg-ink" /><path d="M-8,-9 q-3,6 -7,8 M9,-9 q3,6 6,8" class="leg-fur" />
-                <path d="M-21,1 q0,-6 7,-5 q3,1 2,5 z M1,1 q0,-6 7,-5 q3,1 2,5 z" class="sneaker" />
-                <ellipse cx="-1" cy="-15" rx="17" ry="10" class="cat-fur" />
-                <path d="M-15,-11 q14,9 29,0 q-2,6 -14,7 q-12,0 -15,-7 z" class="cat-shade" />
-                {colour === 'orange' && <path d="M-8,-24 q2,5 0,9 M-2,-25 q2,5 0,9 M4,-24 q2,5 0,9" class="cat-stripes" />}
-                <path d="M7,-35 l1,-13 l9,8 z M18,-38 l8,-11 l3,13 z" class="cat-fur" />
-                <path d="M9,-38 l.5,-6 l4,4 z M21,-40 l4,-5 l1,6 z" class="cat-ear" />
-                <circle cx="16" cy="-28" r="12" class="cat-fur" />
-                {colour === 'orange' && <path d="M12,-39 v5 M17,-40 v5" class="cat-stripes" />}
-                <ellipse cx="20" cy="-30" rx="4.6" ry="5.8" class="eye-white" /><ellipse cx="27" cy="-30" rx="3.4" ry="5.2" class="eye-white" />
-                <ellipse cx="21.6" cy="-29.4" rx="2" ry="3.2" class="fill-ink" /><ellipse cx="28" cy="-29.4" rx="1.6" ry="3" class="fill-ink" />
-                <circle cx="20.8" cy="-31" r=".9" class="glint" />
-                <circle cx="13" cy="-23" r="2.4" class="blush" />
-                <path d="M21,-22 q3,4 6,0" class="mouth" />
-              </g></g>
-            </g>
-          </g>
-        ))}
-      </g>
-
-      <!-- The hobby falcon: swoops past every so often, then waits off-screen -->
-      <g class="falcon" aria-hidden="true">
-        <animateMotion dur="16s" begin="2s" repeatCount="indefinite" path={SWOOP} rotate="auto" keyPoints="0;1;1" keyTimes="0;0.22;1" calcMode="linear" />
-        <g transform="scale(1.3)">
-          <path d="M-46,-8 h-18 M-42,1 h-26 M-46,10 h-16" class="speed" />
-          <path d="M-22,-2 l-18,-9 l3,8 l-7,4 l7,4 l-3,8 l18,-9 z" class="falcon-tail" />
-          <path d="M-26,0 q4,-15 26,-15 q20,0 28,10 q-6,13 -28,13 q-20,0 -26,-8 z" class="falcon-body" />
-          <path d="M-12,4 q12,9 30,3 q-5,7 -18,7 q-10,0 -12,-10 z" class="falcon-belly" />
-          <path d="M-2,7 l2,2 l2,-2 M6,8 l2,2 l2,-2" class="chevrons" />
-          <circle cx="22" cy="-7" r="12" class="falcon-body" />
-          <path d="M14,0 q8,6 18,-1 q-4,-4 -10,-4 z" class="falcon-cheek" />
-          <path d="M32,-8 q13,0 13,9 q-5,-3 -12,2 z" class="fill-yellow" />
-          <circle cx="25" cy="-9" r="5.5" class="eye-white" /><circle cx="27" cy="-9" r="2.8" class="fill-ink" /><circle cx="26" cy="-10.2" r=".9" class="glint" />
-          <path d="M18,-16 l13,3" class="brow" />
-          <g class="wing"><path d="M-8,-9 q-4,-30 24,-36 q-7,9 -2,15 q-7,3 -4,10 q-7,2 -3,10 z" class="falcon-wing" /><path d="M2,-22 q4,-4 9,-6 M0,-14 q5,-3 9,-4" class="feather" />
-            <animateTransform attributeName="transform" type="scale" values="1 1;1 -0.6;1 1" dur=".5s" repeatCount="indefinite" />
-          </g>
-        </g>
-      </g>
     </svg>
   </div>
 </section>
-
-<script>
-  // Visitors who ask their device for less motion get a still island: cats, falcon and all.
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    document.querySelectorAll<SVGSVGElement>('.island-svg').forEach((svg) => svg.pauseAnimations());
-  }
-</script>
