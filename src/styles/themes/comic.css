@@ -560,15 +560,29 @@ a.tile:hover { text-decoration: none; transform: translate(-2px, -2px); box-shad
 /* Cats and the falcon */
 .cats { animation: float 7s ease-in-out infinite; } /* ride along with the island */
 .cats, .falcon { pointer-events: none; } /* never block a click on a landmark */
-.cat path, .cat ellipse, .cat circle { stroke-width: 2.5; }
-.cat-white .cat-fur { fill: #fffaf0; } .cat-orange .cat-fur { fill: #ff9f43; }
-.cat-tail, .cat-legs, .cat-stripes { fill: none; }
-.cat-stripes { stroke: #c2410c !important; stroke-width: 2 !important; }
+/* Drawn like a retro cartoon: thick ink lines, big shiny eyes, a shadow crescent, little sneakers */
+.cat path, .cat ellipse, .cat circle, .falcon path, .falcon circle { stroke-width: 2.6; }
+.cat-white { --fur: #fffaf0; --shade: #e3d3bb; } .cat-orange { --fur: #ff9f43; --shade: #d9772a; }
+.cat-fur, .leg-fur, .cat-tail { fill: var(--fur); }
+.cat-tail-ink, .leg-ink { fill: none; stroke-width: 8 !important; }
+.cat-tail, .leg-fur { fill: none; stroke: var(--fur) !important; stroke-width: 3.5 !important; }
+.cat-shade { fill: var(--shade); stroke: none !important; }
+.cat-ear, .blush { fill: #ff8fc7; stroke: none !important; }
+.sneaker { fill: #ff6b57; stroke-width: 2 !important; }
+.cat-stripes { fill: none; stroke: #b4531a !important; stroke-width: 2.4 !important; }
+.eye-white { fill: #fff; stroke-width: 2 !important; }
+.glint { fill: #fff; stroke: none !important; }
+.mouth, .brow, .chevrons, .feather, .speed { fill: none; }
+.brow { stroke-width: 3 !important; }
+.chevrons, .feather { stroke-width: 1.8 !important; }
+.puff circle { fill: #fffaf0; stroke-width: 2 !important; }
+.puff { animation: puff .56s ease-out infinite; transform-box: fill-box; transform-origin: right center; }
+@keyframes puff { from { opacity: 1; transform: scale(.6); } to { opacity: 0; transform: scale(1.3) translateX(-4px); } }
 .cat { animation: trot .28s ease-in-out infinite alternate; }
 @keyframes trot { to { transform: translateY(-3px); } }
-.falcon path, .falcon circle { stroke-width: 2.5; }
-.falcon-body, .falcon-wing { fill: #7a5236; } .falcon-tail { fill: #5a3b26; }
-.falcon-belly { fill: none; stroke: #fffaf0 !important; stroke-width: 3 !important; }
+.falcon-body { fill: #8a5a38; } .falcon-wing { fill: #a8714a; } .falcon-tail { fill: #5a3b26; }
+.falcon-belly, .falcon-cheek { fill: #fff3dc; }
+.speed { stroke-width: 3 !important; }
 
 /* Pins bob above each landmark */
 .pin { animation: idle 2.6s ease-in-out var(--d) infinite; }
@@ -590,5 +604,5 @@ a.tile:hover { text-decoration: none; transform: translate(-2px, -2px); box-shad
 @keyframes drift { to { transform: translateX(14px); } }
 @keyframes bob { 50% { transform: translateY(-6px) rotate(-3deg); } }
 @media (prefers-reduced-motion: reduce) {
-  .isle, .spot, .mini, .cats, .cat, .pin, .cloud, .water-lines, .beams, .spin-top { animation: none !important; }
+  .isle, .spot, .mini, .cats, .cat, .puff, .pin, .cloud, .water-lines, .beams, .spin-top { animation: none !important; }
 }

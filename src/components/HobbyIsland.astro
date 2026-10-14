@@ -62,12 +62,13 @@ const mini = ([cx, cy, w]: [number, number, number], i: number) => {
   return { top: curve(pts, true), cliff: cliffD, band, layer };
 };
 
-// ---- Island life. Cats run along these paths on the grass (out and back); [path, seconds, delay, colour].
+// ---- Island life. Cats run along these paths (out and back); [path, seconds, delay, colour].
+// Each path keeps to open grass, so a cat never runs across a landmark, its pin or its name tag.
 const CATS: [string, number, number, 'white' | 'orange'][] = [
-  ['M190,392 Q500,470 830,392', 11, 0, 'white'],
-  ['M300,318 Q480,350 690,318', 9, -3, 'white'],
-  ['M330,250 Q520,215 690,262', 13, -6, 'white'],
-  ['M190,392 Q500,470 830,392', 11, -1.2, 'orange'], // the orange cat chases the first white cat
+  ['M326,330 Q430,318 535,326', 10, 0, 'white'],   // the middle meadow
+  ['M326,330 Q430,318 535,326', 10, -1.1, 'orange'], // ...with the orange cat in hot pursuit
+  ['M700,302 Q712,365 742,425', 7, -2, 'white'],   // the gap between the trophy and the TV
+  ['M204,432 Q234,447 262,455', 6, -4, 'white'],   // the front lawn by the stadium
 ];
 // The falcon's swoop: in from the top left, dives past the island, climbs out to the right.
 const SWOOP = 'M-120,60 C160,40 260,330 500,300 S840,40 1100,-40';
@@ -77,7 +78,7 @@ const SPOTS: Partial<Record<HobbyKey, [number, number]>> = {
   general: [500, 232],
   tcg: [318, 262],
   keyboards: [700, 250],
-  beyblade: [230, 352],
+  beyblade: [226, 340],
   consoles: [818, 372],
   tamiya: [385, 412],
   esports: [628, 412],
@@ -92,7 +93,7 @@ const label = (name: string) => ({ w: name.length * 17 + 34 });
 // Low landmarks show their name tag underneath; tall ones show it above the pin.
 const BELOW: HobbyKey[] = ['tamiya', 'esports'];
 const HEIGHT: Partial<Record<HobbyKey, number>> = { beyblade: 36, tamiya: 18, keyboards: 62, tcg: 128, consoles: 118, esports: 114, general: 156 };
-const trees: [number, number, number][] = [[175, 300, 1], [420, 215, 0.8], [590, 205, 0.85], [850, 290, 1], [470, 330, 0.9], [560, 340, 0.75], [270, 430, 0.9], [740, 445, 1], [880, 410, 0.8], [130, 360, 0.8]];
+const trees: [number, number, number][] = [[175, 300, 1], [420, 215, 0.8], [590, 205, 0.85], [850, 290, 1], [548, 372, 0.75], [880, 410, 0.8], [130, 360, 0.8]];
 ---
 <section class="island-wrap" aria-labelledby="island-title">
   <div class="island-head">
@@ -266,15 +267,24 @@ const trees: [number, number, number][] = [[175, 300, 1], [420, 215, 0.8], [590,
             <animateMotion dur={`${dur}s`} begin={`${delay}s`} repeatCount="indefinite" path={path} keyPoints="0;1;0" keyTimes="0;0.5;1" calcMode="linear" />
             <g>
               <animateTransform attributeName="transform" type="scale" values="1 1;-1 1" keyTimes="0;0.5" calcMode="discrete" dur={`${dur}s`} begin={`${delay}s`} repeatCount="indefinite" />
-              <g class:list={['cat', `cat-${colour}`]} transform="scale(1.4)">
-                <path d="M-12,-10 q-10,-2 -12,-12" class="cat-tail" />
-                <ellipse cx="0" cy="-9" rx="12" ry="7" class="cat-fur" />
-                <path d="M-8,-3 v5 M-3,-3 v5 M4,-3 v5 M9,-3 v5" class="cat-legs" />
-                <circle cx="12" cy="-15" r="7" class="cat-fur" />
-                <path d="M7,-19 l1,-8 l5,5 M13,-21 l4,-6 l2,7" class="cat-fur" />
-                {colour === 'orange' && <path d="M-4,-15 v5 M1,-16 v5" class="cat-stripes" />}
-                <circle cx="14" cy="-16" r="1.4" class="fill-ink" />
-              </g>
+              <g class:list={['cat', `cat-${colour}`]}><g transform="scale(1.15)">
+                <g class="puff"><circle cx="-26" cy="-4" r="4" /><circle cx="-33" cy="-7" r="3" /></g>
+                <path d="M-15,-16 q-16,-2 -14,-18 q1,-6 7,-5" class="cat-tail-ink" /><path d="M-15,-16 q-16,-2 -14,-18 q1,-6 7,-5" class="cat-tail" />
+                <path d="M-8,-9 q-3,6 -7,8 M9,-9 q3,6 6,8" class="leg-ink" /><path d="M-8,-9 q-3,6 -7,8 M9,-9 q3,6 6,8" class="leg-fur" />
+                <path d="M-21,1 q0,-6 7,-5 q3,1 2,5 z M1,1 q0,-6 7,-5 q3,1 2,5 z" class="sneaker" />
+                <ellipse cx="-1" cy="-15" rx="17" ry="10" class="cat-fur" />
+                <path d="M-15,-11 q14,9 29,0 q-2,6 -14,7 q-12,0 -15,-7 z" class="cat-shade" />
+                {colour === 'orange' && <path d="M-8,-24 q2,5 0,9 M-2,-25 q2,5 0,9 M4,-24 q2,5 0,9" class="cat-stripes" />}
+                <path d="M7,-35 l1,-13 l9,8 z M18,-38 l8,-11 l3,13 z" class="cat-fur" />
+                <path d="M9,-38 l.5,-6 l4,4 z M21,-40 l4,-5 l1,6 z" class="cat-ear" />
+                <circle cx="16" cy="-28" r="12" class="cat-fur" />
+                {colour === 'orange' && <path d="M12,-39 v5 M17,-40 v5" class="cat-stripes" />}
+                <ellipse cx="20" cy="-30" rx="4.6" ry="5.8" class="eye-white" /><ellipse cx="27" cy="-30" rx="3.4" ry="5.2" class="eye-white" />
+                <ellipse cx="21.6" cy="-29.4" rx="2" ry="3.2" class="fill-ink" /><ellipse cx="28" cy="-29.4" rx="1.6" ry="3" class="fill-ink" />
+                <circle cx="20.8" cy="-31" r=".9" class="glint" />
+                <circle cx="13" cy="-23" r="2.4" class="blush" />
+                <path d="M21,-22 q3,4 6,0" class="mouth" />
+              </g></g>
             </g>
           </g>
         ))}
@@ -284,14 +294,19 @@ const trees: [number, number, number][] = [[175, 300, 1], [420, 215, 0.8], [590,
       <g class="falcon" aria-hidden="true">
         <animateMotion dur="16s" begin="2s" repeatCount="indefinite" path={SWOOP} rotate="auto" keyPoints="0;1;1" keyTimes="0;0.22;1" calcMode="linear" />
         <g transform="scale(1.3)">
-          <path d="M-22,0 l-12,-6 l2,10 z" class="falcon-tail" />
-          <g class="wing"><path d="M-6,-2 q-6,-26 10,-34 q-2,16 10,30 z" class="falcon-wing" />
+          <path d="M-46,-8 h-18 M-42,1 h-26 M-46,10 h-16" class="speed" />
+          <path d="M-22,-2 l-18,-9 l3,8 l-7,4 l7,4 l-3,8 l18,-9 z" class="falcon-tail" />
+          <path d="M-26,0 q4,-15 26,-15 q20,0 28,10 q-6,13 -28,13 q-20,0 -26,-8 z" class="falcon-body" />
+          <path d="M-12,4 q12,9 30,3 q-5,7 -18,7 q-10,0 -12,-10 z" class="falcon-belly" />
+          <path d="M-2,7 l2,2 l2,-2 M6,8 l2,2 l2,-2" class="chevrons" />
+          <circle cx="22" cy="-7" r="12" class="falcon-body" />
+          <path d="M14,0 q8,6 18,-1 q-4,-4 -10,-4 z" class="falcon-cheek" />
+          <path d="M32,-8 q13,0 13,9 q-5,-3 -12,2 z" class="fill-yellow" />
+          <circle cx="25" cy="-9" r="5.5" class="eye-white" /><circle cx="27" cy="-9" r="2.8" class="fill-ink" /><circle cx="26" cy="-10.2" r=".9" class="glint" />
+          <path d="M18,-16 l13,3" class="brow" />
+          <g class="wing"><path d="M-8,-9 q-4,-30 24,-36 q-7,9 -2,15 q-7,3 -4,10 q-7,2 -3,10 z" class="falcon-wing" /><path d="M2,-22 q4,-4 9,-6 M0,-14 q5,-3 9,-4" class="feather" />
             <animateTransform attributeName="transform" type="scale" values="1 1;1 -0.6;1 1" dur=".5s" repeatCount="indefinite" />
           </g>
-          <path d="M-24,0 q8,-10 26,-8 q12,2 16,8 q-10,8 -26,6 q-10,-1 -16,-6 z" class="falcon-body" />
-          <path d="M18,0 l8,2 l-7,3 z" class="fill-yellow" />
-          <circle cx="12" cy="-2" r="1.6" class="fill-ink" />
-          <path d="M-8,4 q10,4 20,-2" class="falcon-belly" />
         </g>
       </g>
     </svg>
