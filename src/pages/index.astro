@@ -6,6 +6,7 @@ import ArticleCard from '../components/ArticleCard.astro';
 import Carousel from '../components/Carousel.astro';
 import Sticker from '../components/Sticker.astro';
 import HobbyIcon from '../components/HobbyIcon.astro';
+import HobbyIsland from '../components/HobbyIsland.astro';
 import { HOBBIES, type HobbyKey } from '../data/site';
 
 const articles = (await getCollection('articles', ({ data }) => !data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
@@ -18,7 +19,9 @@ const latest = articles.filter((a) => !headlines.includes(a)).slice(0, 6);
 const wiki = (await getCollection('wiki')).sort((a, b) => a.data.title.localeCompare(b.data.title));
 ---
 <Base>
-  <!-- Top of the home page: comic-panel tiles (a "bento" grid). -->
+  <HobbyIsland />
+
+  <!-- Below the island: comic-panel tiles (a "bento" grid). -->
   <section class="bento">
     <div class="tile bento-title">
       <h1>Build.<br /><span class="hl">Play.</span><br />Collect.</h1>
