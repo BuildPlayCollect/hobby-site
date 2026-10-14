@@ -13,13 +13,13 @@ const hobby = HOBBIES[article.data.hobby as HobbyKey];
 const type = TYPES[article.data.type as TypeKey];
 ---
 <a class:list={['card', { 'card-large': large }]} href={`/articles/${article.id}/`} data-type={article.data.type}>
-  <div class="card-cover" style={`background:linear-gradient(135deg, ${hobby.color}, color-mix(in srgb, ${hobby.color} 55%, #06b6d4))`}>
+  <div class="card-cover" style={`background-color:${hobby.color}`}>
     {article.data.cover
       ? <img src={article.data.cover} alt={article.data.coverAlt ?? ''} loading="lazy" />
       : <span>{hobby.name}</span>}
   </div>
   <div class="card-body">
-    <p class="kicker"><span class="dot" style={`background:${hobby.color}`}></span>{hobby.name} · {type.name}</p>
+    <p class="kicker"><span class="tag" style={`background:${hobby.color}`}>{hobby.name}</span><span class="tag tag-plain">{type.name}</span></p>
     <h3>{article.data.title}</h3>
     {large && <p class="card-desc">{article.data.description}</p>}
   </div>
