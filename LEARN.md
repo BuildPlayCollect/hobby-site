@@ -21,6 +21,8 @@ your article (.md)  +  page template (.astro)  →  finished page (.html)  →  
 | `src/layouts/Base.astro` | The **frame** around every page: header, menu, footer | Changing the menu or footer |
 | `src/components/` | **Reusable pieces**: article cards, ad slots | Changing how cards or ads look |
 | `src/styles/themes/comic.css` | The **look** (the "comic" design): fonts, colors, outlines, spacing | Restyling the site, or adding a new design next to it |
+| `src/styles/themes/keys.css` | The "Keys" design (branch `design-keys`): square lines, keycap colours, mono labels | Trying the Keys look: import it in `Base.astro` instead of comic.css |
+| `src/components/KeyboardHero.astro` | The Keys home page hero: one keycap per hobby, plus the quiz space bar | Adding a hobby (it appears by itself) |
 | `astro.config.mjs` | Site **settings** | Setting your real domain |
 | `package.json` | The **tools** this site needs | Rarely |
 

@@ -4,9 +4,8 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import Carousel from '../components/Carousel.astro';
-import HobbyIsland from '../components/HobbyIsland.astro';
-import HobbyIcon from '../components/HobbyIcon.astro';
-import { HOBBIES, type HobbyKey } from '../data/site';
+import KeyboardHero from '../components/KeyboardHero.astro';
+import { HOBBIES } from '../data/site';
 
 const articles = (await getCollection('articles', ({ data }) => !data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const featured = articles.find((a) => a.data.featured) ?? articles[0];
@@ -16,57 +15,73 @@ const headlines = [featured, ...Object.keys(HOBBIES).map((key) => articles.find(
   .filter((a, i, all) => a && all.indexOf(a) === i);
 const latest = articles.filter((a) => !headlines.includes(a)).slice(0, 6);
 const wiki = (await getCollection('wiki')).sort((a, b) => a.data.title.localeCompare(b.data.title));
+const rulebooks = (await getCollection('rules')).length;
+
+// "New here?" steps for first-time visitors.
+const steps = [
+  { title: 'Pick a hobby', text: 'Press any key up top. Every hobby gets its own page of stories, guides and history.', href: '#top', link: 'Back to the keys', c: 'var(--blue)' },
+  { title: 'Read the 60-second version', text: 'Every article opens with a short summary, so you get the gist before the deep dive.', href: headlines[0] ? `/articles/${headlines[0].id}/` : '/guides', link: 'Try one now', c: 'var(--orange)' },
+  { title: 'Fall down the rabbit hole', text: 'Hobby words are linked to our wiki. Hover for a quick meaning, click to keep going.', href: '/wiki', link: 'Open the wiki', c: 'var(--teal)' },
+];
 ---
 <Base>
-  <HobbyIsland />
-
-  <!-- Phones only: a swipeable row of hobby buttons under the island, since the island's
-       tags are small to tap on a phone. Hidden on bigger screens, where the island does the job. -->
-  <nav class="hobby-pills" aria-label="Hobbies">
-    {Object.entries(HOBBIES).map(([key, h]) => (
-      <a class="hobby-pill" href={`/${key}`} style={`background:${h.color}`}>
-        <HobbyIcon hobby={key as HobbyKey} />
-        <span>{h.name}</span>
-      </a>
-    ))}
-  </nav>
-
-  <!-- One slim intro strip under the island: the site name, what we do, and a door into the wiki. -->
-  <section class="tile intro-strip">
-    <div>
-      <h1>Build. <span class="hl">Play.</span> Collect.</h1>
-      <p>Nerdy, playful and fact-checked. History, guides, new releases and giveaways for every hobby, from spinning tops to trading cards.</p>
+  <section class="hero-keys" id="top" data-bar="overview">
+    <div class="hero-copy">
+      <p class="code-tag"><span>&lt;hobbies&gt;</span> every one of them <span>&lt;/hobbies&gt;</span></p>
+      <h1 class="hero-title">Build<br /><span class="play">Play</span><br />Collect</h1>
+      <p class="hero-sub">Nerdy, playful and fact-checked. History, guides, new releases and giveaways, from spinning tops to trading cards.</p>
+      <dl class="hero-meta">
+        <div><dt>Hobbies</dt><dd>{Object.keys(HOBBIES).length}</dd></div>
+        <div><dt>Wiki words</dt><dd>{wiki.length}</dd></div>
+        <div><dt>Rulebooks</dt><dd>{rulebooks}</dd></div>
+      </dl>
+      <div class="hero-actions">
+        <a class="arrow-btn" href="#start"><span>New here? Start here</span><i aria-hidden="true">↘</i></a>
+        <a class="arrow-btn arrow-btn-light" href="/quiz"><span>Take the quiz</span><i aria-hidden="true">↗</i></a>
+      </div>
     </div>
-    <a class="pill-btn" href="/wiki">Fall down the wiki →</a>
+    <KeyboardHero />
   </section>
 
-  <a class="tile tile-colour quiz-cta" href="/quiz">
-    <div>
-      <h2>Not sure where to start?</h2>
-      <p>Take the 5-question quiz and find the hobby that fits you.</p>
+  <section class="steps-wrap" id="start" data-bar="start">
+    <h2 class="big-head">New here?</h2>
+    <p class="big-sub">Three steps from "what's a Beyblade?" to "one more article, then bed".</p>
+    <ol class="steps">
+      {steps.map((s, i) => (
+        <li class="step" style={`--c:${s.c}`}>
+          <span class="step-num">{String(i + 1).padStart(2, '0')}</span>
+          <h3>{s.title}</h3>
+          <p>{s.text}</p>
+          <a href={s.href}>{s.link} →</a>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section id="stories" data-bar="stories">
+    <div class="section-head"><h2 class="big-head">Top stories</h2></div>
+    <Carousel label="Top headlines" variant="hero" autoplay>
+      {headlines.map((a) => <ArticleCard article={a} large />)}
+    </Carousel>
+
+    {latest.length > 0 && (
+      <>
+        <div class="section-head"><h2>Fresh off the press</h2></div>
+        <div class="grid">{latest.map((a) => <ArticleCard article={a} />)}</div>
+      </>
+    )}
+  </section>
+
+  <section class="wiki-band" id="wiki-band" data-bar="wiki">
+    <div class="section-head">
+      <h2 class="big-head">Rabbit holes</h2>
+      <a class="more" href="/wiki">Open the wiki →</a>
     </div>
-    <span class="pill-btn dark">Take the quiz →</span>
-  </a>
-
-  <div class="section-head"><h2>Top <span class="hl">stories</span></h2></div>
-  <Carousel label="Top headlines" variant="hero" autoplay>
-    {headlines.map((a) => <ArticleCard article={a} large />)}
-  </Carousel>
-
-  {latest.length > 0 && (
-    <>
-      <div class="section-head"><h2>Fresh off the press</h2></div>
-      <div class="grid">{latest.map((a) => <ArticleCard article={a} />)}</div>
-    </>
-  )}
-
-  <div class="section-head">
-    <h2>Fall down the rabbit hole</h2>
-    <a class="more" href="/wiki">Open the wiki →</a>
-  </div>
-  <div class="chip-row" style="flex-wrap:wrap;overflow:visible">
-    {wiki.map((w) => <a class="chip wiki-chip" href={`/wiki/${w.id}/`}>{w.data.title}</a>)}
-  </div>
+    <p class="big-sub">Every word below is a wiki page. Pick one and see where it takes you.</p>
+    <div class="wiki-keys">
+      {wiki.map((w) => <a class="wiki-key" href={`/wiki/${w.id}/`}>{w.data.title}</a>)}
+    </div>
+  </section>
 
   {Object.entries(HOBBIES).map(([key, h]) => {
     // A hobby gets its own row once it has 3+ articles. Before that, its stories
@@ -84,4 +99,27 @@ const wiki = (await getCollection('wiki')).sort((a, b) => a.data.title.localeCom
       </section>
     );
   })}
+
+  <!-- The section bar: a row of tabs pinned to the bottom of the screen on computers.
+       The tab for the part of the page you're looking at lights up. -->
+  <nav class="section-bar" aria-label="Sections on this page">
+    <a href="#top" data-for="overview">Overview</a>
+    <a href="#start" data-for="start">New here?</a>
+    <a href="#stories" data-for="stories">Top stories</a>
+    <a href="#wiki-band" data-for="wiki">Rabbit holes</a>
+    <a class="section-bar-cta" href="/quiz">Take the quiz <i aria-hidden="true">↗</i></a>
+  </nav>
 </Base>
+
+<script>
+  // Light up the section bar tab for whichever section is on screen.
+  const tabs = document.querySelectorAll<HTMLAnchorElement>('.section-bar [data-for]');
+  const watch = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      const name = (e.target as HTMLElement).dataset.bar;
+      tabs.forEach((t) => t.classList.toggle('on', t.dataset.for === name));
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  document.querySelectorAll('[data-bar]').forEach((s) => watch.observe(s));
+</script>
