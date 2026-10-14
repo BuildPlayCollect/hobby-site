@@ -44,6 +44,14 @@ const wiki = (await getCollection('wiki')).sort((a, b) => a.data.title.localeCom
     ))}
   </nav>
 
+  <a class="tile tile-colour quiz-cta" href="/quiz">
+    <div>
+      <h2>Not sure where to start?</h2>
+      <p>Take the 5-question quiz and find the hobby that fits you.</p>
+    </div>
+    <span class="pill-btn dark">Take the quiz →</span>
+  </a>
+
   <div class="section-head"><h2>Top <span class="hl">stories</span></h2></div>
   <Carousel label="Top headlines" variant="hero" autoplay>
     {headlines.map((a) => <ArticleCard article={a} large />)}

@@ -22,6 +22,8 @@ const articles = defineCollection({
     // Optional cover photo, e.g. /images/my-photo.jpg (files live in public/images).
     cover: z.string().optional(),
     coverAlt: z.string().optional(),
+    // "The 60-second version": 3 to 4 short bullet points shown at the top, for skimmers.
+    quick: z.array(z.string()).default([]),
   }),
 });
 

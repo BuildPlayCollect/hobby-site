@@ -6,6 +6,11 @@ type: history
 author: Echo
 date: 2026-10-13
 draft: false
+quick:
+  - "Beyblade's ancestor is the beigoma, a Japanese top first made from a seashell filled with sand."
+  - "The first Beyblades launched in Japan in 1999. The manga started that year, and the anime followed in 2001."
+  - "Four generations so far: the original, Metal Fight, Burst, and today's Beyblade X (2023)."
+  - "Over 560 million units shipped in more than 80 countries and regions, and it now has world championships."
 ---
 
 Two tops. One stadium. A countdown, a rip, and about a minute of pure chaos.
