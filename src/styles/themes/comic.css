@@ -496,11 +496,10 @@ a.tile:hover { text-decoration: none; transform: translate(-2px, -2px); box-shad
 .island-head h2 { font-size: clamp(1.6rem, 4.5vw, 2.6rem); margin: 0; text-transform: uppercase; }
 .island-head p { margin: 0; color: var(--muted); font-weight: 600; }
 @media (max-width: 700px) { .island { aspect-ratio: 1 / 0.95 !important; } }
-/* The sky: bright cyan fading to a hazy white (storybook style), with faint comic dots on top.
-   Deep navy with stars at night. */
+/* The sky: one bold flat blue with faint comic dots. Deep navy with stars at night. */
 .island { position: relative; border: var(--border); border-radius: 22px; box-shadow: var(--shadow-lg); overflow: hidden;
-  background-color: #8fdcff; background-image: radial-gradient(rgb(255 255 255 / .35) 1.3px, transparent 1.7px), linear-gradient(#2fc4fb, #8fdcff 45%, #eaf7ff 85%); background-size: 16px 16px, 100% 100%; }
-:root[data-theme="dark"] .island { background-color: #262a4a; background-image: radial-gradient(rgb(255 255 255 / .12) 1.3px, transparent 1.7px), linear-gradient(#141833, #262a4a 60%, #3a3560); }
+  background-color: #3d9bff; background-image: radial-gradient(rgb(255 255 255 / .16) 1.3px, transparent 1.7px); background-size: 16px 16px; }
+:root[data-theme="dark"] .island { background-color: #1b2448; background-image: radial-gradient(rgb(255 255 255 / .1) 1.3px, transparent 1.7px); }
 .island { aspect-ratio: 16 / 10; }
 @media (max-width: 700px) { .island { aspect-ratio: 1 / 1.05; } }
 .island-svg { display: block; position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
@@ -508,12 +507,14 @@ a.tile:hover { text-decoration: none; transform: translate(-2px, -2px); box-shad
 .island-svg .thin { stroke-width: 2.5; }
 
 /* Sky bits */
-.cloud path { fill: #fffaf0; }
+.cloud path { fill: #f8e7bd; }
+:root[data-theme="dark"] .cloud path { fill: #3a4673; }
 .cloud { animation: drift 9s ease-in-out infinite alternate; } .c2 { animation-delay: -4s; }
 .bird { fill: none; }
-.soft-clouds path { fill: #fff; opacity: .75; stroke: none !important; }
-.soft-clouds .far { opacity: .45; }
-:root[data-theme="dark"] .soft-clouds path { fill: #4a4778; opacity: .5; }
+.soft-clouds .cloud-body circle { fill: #f8e7bd; stroke: none; }
+.soft-clouds .cloud-shade circle { fill: #ecc488; stroke: none; }
+.soft-clouds .cloud-line circle { fill: #141414; stroke-width: 6; }
+:root[data-theme="dark"] .soft-clouds .cloud-body circle { fill: #3a4673; } :root[data-theme="dark"] .soft-clouds .cloud-shade circle { fill: #2e3961; }
 .stars path { fill: var(--yellow); stroke-width: 2; display: none; }
 :root[data-theme="dark"] .stars path { display: inline; }
 :root[data-theme="dark"] .bird { stroke: #f7efe1; }
@@ -523,14 +524,14 @@ a.tile:hover { text-decoration: none; transform: translate(-2px, -2px); box-shad
 .isle-shadow path { fill: #141414; stroke: none; }
 :root[data-theme="dark"] .isle-shadow path { fill: #0d0c12; }
 .cliff { fill: url(#cliff-fill); stroke: none; }
-.cliff-shade { fill: #b9a0dc; opacity: .55; stroke: none !important; }
-.stripe { fill: none; stroke: #9a6a5a !important; stroke-width: 2.5 !important; opacity: .55; }
+.cliff-shade { fill: #b4502a; opacity: .45; stroke: none !important; }
+.stripe { fill: none; stroke: #7a3416 !important; stroke-width: 2.5 !important; opacity: .7; }
 .outline { fill: none; }
-.grass-side { fill: #9fcf5a; stroke-width: 3.5 !important; }
-.grass { fill: #c8e37c; }
+.grass-side { fill: #3f9a4a; stroke-width: 3.5 !important; }
+.grass { fill: #7fc45a; }
 .trail { fill: none; stroke-width: 4; stroke-dasharray: 2 12; opacity: .5; }
-.tree .puff { fill: #7cc96a; stroke-width: 3 !important; } .tree.pink .puff { fill: #ffb6cf; } .tree .trunk { fill: none; stroke: #8a5a4a !important; }
-.water { fill: #8fe3ff; } .pond { fill: #8fe3ff; }
+.tree .puff { fill: #5fb35a; stroke-width: 3 !important; } .tree.dark .puff { fill: #2f7f55; } .tree .trunk { fill: none; stroke: #7a4a2a !important; }
+.water { fill: #8fe0ff; } .pond { fill: #8fe0ff; }
 .water-lines { fill: none; stroke: #fffaf0 !important; stroke-width: 3 !important; stroke-dasharray: 18 22; animation: pour 1.2s linear infinite; }
 @keyframes pour { to { stroke-dashoffset: -40; } }
 @keyframes float { 50% { transform: translateY(-8px); } }
@@ -540,7 +541,7 @@ a.tile:hover { text-decoration: none; transform: translate(-2px, -2px); box-shad
 .spot:hover { text-decoration: none; }
 .spot .ground { fill: rgb(20 20 20 / .18); stroke: none; }
 .fill-c { fill: var(--c); } .fill-cream { fill: #fffaf0; } .fill-sand { fill: #ffe3a3; } .fill-lav { fill: var(--lavender); }
-.fill-ink { fill: #141414; } .fill-yellow { fill: var(--yellow); } .fill-coral { fill: var(--coral); } .fill-grass { fill: #8fe0b5; }
+.fill-ink { fill: #141414; } .fill-yellow { fill: var(--yellow); } .fill-coral { fill: var(--coral); } .fill-grass { fill: #9ad06a; }
 .fill-screen { fill: #1b1922; } .solid { stroke: #141414; }
 .rail { fill: none; stroke-dasharray: 4 8; stroke-width: 2.5 !important; }
 .lane { fill: none; stroke: #fffaf0 !important; stroke-width: 3 !important; stroke-dasharray: 10 10; }
