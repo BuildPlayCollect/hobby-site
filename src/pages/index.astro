@@ -4,7 +4,7 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import Carousel from '../components/Carousel.astro';
-import HobbyIsland from '../components/HobbyIsland.astro';
+import BoxHero from '../components/BoxHero.astro';
 import HobbyIcon from '../components/HobbyIcon.astro';
 import { HOBBIES, type HobbyKey } from '../data/site';
 
@@ -25,16 +25,16 @@ const tryUrls = (withQuick.length ? withQuick : articles).map((a) => `/articles/
 
 // "New here?" steps for first-time visitors.
 const steps = [
-  { title: 'Pick a hobby', text: 'Tap a spot on the island. Every hobby has its own page of stories, guides and history.', href: '#island-title', link: 'Back to the island ↑', c: 'var(--blue)' },
+  { title: 'Pick a hobby', text: 'Open a box at the top. Every hobby has its own page of stories, guides and history.', href: '#box-hero-title', link: 'Back to the boxes ↑', c: 'var(--blue)' },
   { title: 'Read the 60-second version', text: 'Every article opens with a short summary, so you get the gist before the deep dive.', href: headlines[0] ? `/articles/${headlines[0].id}/` : '/guides', link: 'Try one now →', c: 'var(--orange)', random: true },
   { title: 'Fall down the rabbit hole', text: 'Hobby words are linked to our wiki. Hover for a quick meaning, click to keep going.', href: '/wiki', link: 'Open the wiki →', c: 'var(--teal)' },
 ];
 ---
 <Base>
-  <HobbyIsland />
+  <BoxHero />
 
-  <!-- Phones only: a swipeable row of hobby buttons under the island, since the island's
-       tags are small to tap on a phone. Hidden on bigger screens, where the island does the job. -->
+  <!-- Phones only: a swipeable row of hobby buttons under the boxes, for quick tapping.
+       Hidden on bigger screens, where the boxes do the job. -->
   <nav class="hobby-pills" aria-label="Hobbies">
     {Object.entries(HOBBIES).map(([key, h]) => (
       <a class="hobby-pill" href={`/${key}`} style={`background:${h.color}`}>
@@ -44,7 +44,7 @@ const steps = [
     ))}
   </nav>
 
-  <!-- One slim intro strip under the island: the site name, what we do, and a door into the wiki. -->
+  <!-- One slim intro strip under the boxes: the site name, what we do, and a door into the wiki. -->
   <section class="tile intro-strip">
     <div>
       <h1>Build. <span class="hl">Play.</span> Collect.</h1>
