@@ -18,6 +18,14 @@ const TIMES = [15, 30, 60];
       <Sticker text="NO SIGN UP" color="var(--pink)" size={96} tilt={10} class="tt-sticker" />
     </header>
 
+    <!-- Shown instead of the test on phones and tablets until a real keyboard is plugged in. -->
+    <div class="tile tt-lock" data-lock hidden>
+      <p class="tt-lock-icon" aria-hidden="true">⌨️</p>
+      <h2>Grab a real keyboard</h2>
+      <p>The typing test is made for desktops and laptops. On a phone or tablet? Plug in a keyboard (USB or Bluetooth) and <strong>press any key</strong> to unlock it.</p>
+      <a class="pill-btn dark" href="/articles/keyboard-layouts/">Meanwhile, read: Keyboard layouts →</a>
+    </div>
+
     <div class="tt-options" role="group" aria-label="Test options">
       <div class="tt-group" role="radiogroup" aria-label="Time">
         {TIMES.map((t) => <button type="button" class="chip" data-time={t} aria-pressed={t === 30 ? 'true' : 'false'}>{t}s</button>)}
@@ -91,6 +99,27 @@ const TIMES = [15, 30, 60];
     const liveEl = $('[data-live-wpm]');
     const resultEl = $('[data-result]');
     const hint = $('[data-hint]');
+
+    // Desktop only: on a touch-only device (a phone or tablet with no mouse or trackpad) the test
+    // stays locked until a real keyboard sends a key. On-screen keyboards can't unlock it: they
+    // only type into a focused box, and the box can't be focused while the test is locked.
+    let locked = matchMedia('(hover: none) and (pointer: coarse)').matches && !matchMedia('(any-pointer: fine)').matches;
+    const unlock = () => {
+      locked = false;
+      root.classList.remove('is-locked');
+      $('[data-lock]').hidden = true;
+      document.removeEventListener('keydown', onLockedKey);
+      reset();
+    };
+    // A plugged-in keyboard sends real key names; on-screen keyboards on phones send "Unidentified" (key code 229).
+    const onLockedKey = (e: KeyboardEvent) => {
+      if (e.key && e.key !== 'Unidentified' && e.keyCode !== 229) { e.preventDefault(); unlock(); }
+    };
+    if (locked) {
+      root.classList.add('is-locked');
+      $('[data-lock]').hidden = false;
+      document.addEventListener('keydown', onLockedKey);
+    }
 
     // Ranks, slowest to fastest. Named after keyboard bits, just for fun.
     const RANKS: [number, string, string][] = [
@@ -166,7 +195,7 @@ const TIMES = [15, 30, 60];
       $('[data-share]').hidden = true;
       input.value = '';
       render();
-      input.focus();
+      if (!locked) input.focus();
     };
 
     const finish = () => {
@@ -236,9 +265,9 @@ const TIMES = [15, 30, 60];
     });
     input.addEventListener('focus', () => root.classList.add('is-focused'));
     input.addEventListener('blur', () => root.classList.remove('is-focused'));
-    $('[data-focus]').addEventListener('click', () => input.focus());
+    $('[data-focus]').addEventListener('click', () => { if (!locked) input.focus(); });
     root.querySelectorAll<HTMLElement>('[data-restart]').forEach((b) => b.addEventListener('click', reset));
-    hint.addEventListener('click', () => input.focus());
+    hint.addEventListener('click', () => { if (!locked) input.focus(); });
 
     // Option chips: time and word list.
     const choose = (attr: string, apply: (v: string) => void) => {
