@@ -312,9 +312,14 @@ a.tile:hover { text-decoration: none; transform: translate(-2px, -2px); box-shad
 .prose .photo-slot { display: none; }
 .show-photo-slots .prose .photo-slot { display: flex; align-items: center; justify-content: center; text-align: center; aspect-ratio: 16 / 9; padding: 16px; margin: 1.4em 0; border: 3px dashed var(--line); border-radius: var(--radius); background: var(--accent-soft); color: var(--ink); font-weight: 700; font-size: .95rem; }
 /* "## Sources" at the end of an article: a quiet, smaller reference list. */
-.prose h2#sources { margin-top: 2.5em; padding-top: 1.2em; border-top: 1px solid var(--soft-line); font-size: 1.1rem; text-transform: uppercase; }
-.prose h2#sources ~ p, .prose h2#sources ~ ol, .prose h2#sources ~ ul { font-size: .9rem; color: var(--muted); }
-.prose h2#sources ~ ol a, .prose h2#sources ~ ul a { color: var(--ink); }
+/* Sources: folded into one quiet line at the end of an article; tap to open. */
+.prose details.sources { margin-top: 2.5em; padding-top: 1em; border-top: 1px solid var(--soft-line); font-size: .9rem; color: var(--muted); }
+.prose details.sources summary { cursor: pointer; font-weight: 800; font-size: .85rem; text-transform: uppercase; letter-spacing: .05em; color: var(--ink); list-style: none; display: inline-flex; align-items: center; gap: 8px; }
+.prose details.sources summary::-webkit-details-marker { display: none; }
+.prose details.sources summary::before { content: "+"; display: inline-grid; place-items: center; width: 22px; height: 22px; border: 2px solid var(--ink); border-radius: 50%; font-size: .9rem; line-height: 1; transition: transform .2s; }
+.prose details.sources[open] summary::before { content: "−"; }
+.prose details.sources ol, .prose details.sources ul, .prose details.sources p { font-size: .85rem; color: var(--muted); }
+.prose details.sources a { color: var(--ink); }
 .wiki-preview { position: absolute; z-index: 70; width: min(320px, 90vw); background: var(--surface); border: var(--border); border-radius: 12px; box-shadow: var(--shadow); padding: 14px 16px; font-size: .92rem; line-height: 1.5; pointer-events: none; opacity: 0; transform: translateY(4px); transition: opacity .15s, transform .15s; }
 .wiki-preview.show { opacity: 1; transform: none; }
 .wiki-preview strong { display: block; color: var(--wiki); margin-bottom: 4px; }
