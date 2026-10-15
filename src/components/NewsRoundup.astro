@@ -1,0 +1,34 @@
+---
+// NewsRoundup.astro: the "News roundup" section on the home page.
+// Shows only the newest roundup (with its 60-second version), plus a link to past ones,
+// so twice-weekly news never floods the page. Hidden when there are no roundups yet.
+import type { CollectionEntry } from 'astro:content';
+import { TYPE_SLUGS } from '../data/site';
+
+interface Props { roundups: CollectionEntry<'articles'>[] }
+const { roundups } = Astro.props;
+const r = roundups[0];
+const day = (d: Date) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+---
+{r && (
+  <section class="roundup-wrap" aria-labelledby="roundup-title">
+    <div class="section-head">
+      <h2 id="roundup-title">News <span class="hl">roundup!</span></h2>
+      {roundups.length > 1 && <a class="more" href={`/${TYPE_SLUGS['new-release']}`}>Past roundups →</a>}
+    </div>
+    <a class="tile roundup" href={`/articles/${r.id}/`}>
+      <div class="roundup-main">
+        <p class="roundup-masthead"><span>Latest hobby news</span><time datetime={r.data.date.toISOString().slice(0, 10)}>{day(r.data.date)}</time></p>
+        <h3>{r.data.title}</h3>
+        <p class="roundup-desc">{r.data.description}</p>
+        <span class="pill-btn">Read the roundup →</span>
+      </div>
+      {r.data.quick?.length && (
+        <div class="roundup-quick">
+          <p class="roundup-quick-label">The 60-second version</p>
+          <ul>{r.data.quick.map((q) => <li>{q}</li>)}</ul>
+        </div>
+      )}
+    </a>
+  </section>
+)}
