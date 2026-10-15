@@ -710,7 +710,9 @@ a.tile.roundup { display: grid; gap: 0; padding: 0; overflow: hidden; color: var
 .tt.is-focused .tt-hint { display: none; }
 .tt-word { color: var(--muted); opacity: .75; border-bottom: 3px solid transparent; }
 .tt-word.is-wrong { border-bottom-color: #ff6b57; }
-.tt-word .ok { color: var(--ink); opacity: 1; }
+/* Correct letters turn green so you can see your progress (lighter green at night). */
+.tt-word .ok { color: var(--tt-ok, #0f7a57); opacity: 1; }
+:root[data-theme="dark"] .tt-word .ok { --tt-ok: #5fd3a8; }
 .tt-word.is-current, .tt-word:has(.ok) { opacity: 1; }
 .tt-word .bad { color: #e0503d; }
 .tt-word .extra { color: #b8402f; opacity: .8; }
