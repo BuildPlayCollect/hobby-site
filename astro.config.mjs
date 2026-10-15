@@ -4,6 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import rehypeWikiLinks from './src/lib/rehype-wiki-links.mjs';
 import rehypePhotoSlots from './src/lib/rehype-photo-slots.mjs';
 import rehypeExternalLinks from './src/lib/rehype-external-links.mjs';
+import rehypeFoldSources from './src/lib/rehype-fold-sources.mjs';
 
 export default defineConfig({
   site: 'https://buildplaycollect.com',
@@ -33,7 +34,8 @@ export default defineConfig({
     // Hides "📷 PHOTO:" reminder lines from readers (see src/lib/rehype-photo-slots.mjs),
     // then links wiki terms inside articles automatically (see src/lib/rehype-wiki-links.mjs).
     // Links to other websites open in a new tab (see src/lib/rehype-external-links.mjs).
-    rehypePlugins: [rehypePhotoSlots, rehypeWikiLinks, rehypeExternalLinks],
+    // The Sources list at the end folds into one tappable line (see src/lib/rehype-fold-sources.mjs).
+    rehypePlugins: [rehypePhotoSlots, rehypeWikiLinks, rehypeExternalLinks, rehypeFoldSources],
     // No code-highlighting needed; Shiki's inline styles would also clash with the CSP below.
     syntaxHighlight: false,
   },
