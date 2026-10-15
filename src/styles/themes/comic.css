@@ -586,3 +586,64 @@ a.tile:hover { text-decoration: none; transform: translate(-2px, -2px); box-shad
 @media (prefers-reduced-motion: reduce) {
   .isle, .spot, .mini, .pin, .cloud, .water-lines, .beams, .spin-top { animation: none !important; }
 }
+
+/* ---------- Box hero: the big pile of hobby boxes at the top of the home page ----------
+   Drawn like an old rubber-hose cartoon: thick ink lines, pie-cut eyes, big grins.
+   Each box takes its hobby's colour from --c. Hover, focus or a "peek" opens the lid. */
+.box-hero { display: grid; margin-top: 22px; border: var(--border); border-radius: 26px; box-shadow: var(--shadow-lg); overflow: hidden; background: var(--surface); }
+@media (min-width: 900px) { .box-hero { grid-template-columns: 1.05fr 1fr; min-height: min(80vh, 760px); } }
+/* Left: the big name. Kept plain on purpose, so the colourful pile stands out next to it. */
+.box-hero-text { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 18px; padding: clamp(26px, 4vw, 52px); }
+.big-title { font-size: clamp(3.4rem, 7.2vw, 6.8rem); line-height: .95; margin: 0; text-transform: uppercase; letter-spacing: -0.02em; }
+.big-title .hl { margin: .06em 0; }
+.box-hero-text p { margin: 0; color: var(--muted); font-size: 1.08rem; max-width: 42ch; }
+.box-hero-text .stat-stickers { margin: 4px 0; }
+/* Right: the box pile on blue graph paper. */
+.box-hero-art { display: grid; place-items: center; padding: 16px; border-top: var(--border); background-color: var(--blue);
+  background-image: linear-gradient(rgb(255 250 240 / .55) 2px, transparent 2px), linear-gradient(90deg, rgb(255 250 240 / .55) 2px, transparent 2px); background-size: 46px 46px; background-position: -2px -2px; }
+@media (min-width: 900px) { .box-hero-art { border-top: 0; border-left: var(--border); } }
+:root[data-theme="dark"] .box-hero-art { background-color: #2b4c86; background-image: linear-gradient(rgb(255 255 255 / .14) 2px, transparent 2px), linear-gradient(90deg, rgb(255 255 255 / .14) 2px, transparent 2px); }
+.box-hero-svg { display: block; width: 100%; max-width: 620px; height: auto; overflow: visible; }
+@media (max-width: 899px) { .big-title { font-size: clamp(2.6rem, 13vw, 4.4rem); } .box-hero-text { gap: 14px; } .box-hero-text p { font-size: 1rem; } }
+
+.box-hero-svg :is(rect, path, circle, ellipse) { stroke: #141414; stroke-width: 5; stroke-linejoin: round; stroke-linecap: round; }
+.box-tag { fill: var(--yellow); }
+.box-tag-text { font-family: var(--display); font-size: 24px; fill: #141414; text-anchor: middle; }
+.box-star { fill: #fffaf0; stroke-width: 4 !important; animation: twinkle 2.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.box-star:nth-of-type(2n) { animation-delay: -1.3s; }
+.box-floor { fill: none; stroke-width: 6 !important; }
+
+.box { outline: none; cursor: pointer; }
+.box, .box * { text-decoration: none !important; }
+.box-shadow { fill: #141414; stroke: none !important; }
+.box-inside { fill: #141414; }
+.box-front, .box-lid rect { fill: var(--c); }
+.box-shine { fill: none; stroke: #fffaf0 !important; stroke-width: 4 !important; opacity: .8; }
+.box-name { font-family: var(--display); fill: #141414; text-anchor: middle; letter-spacing: .03em; }
+.eye-white { fill: #fffaf0; stroke-width: 4 !important; }
+.eye-pupil { fill: #141414; stroke: none !important; }
+.eye-cut { fill: #fffaf0; stroke: none !important; }
+.box-mouth { fill: #141414; stroke-width: 4 !important; }
+.box-tongue { fill: #ff6b57; stroke: none !important; }
+.box-q { font-family: var(--display); font-size: 52px; fill: #141414; text-anchor: middle; }
+.box-q-front { font-size: 70px; }
+.lid-line { fill: none; stroke: #fffaf0 !important; stroke-width: 4 !important; opacity: .8; }
+.box-burst { fill: #fffaf0; stroke-width: 4 !important; }
+.box-pop-ball { fill: var(--c); }
+.box-quiz .box-pop-ball { fill: var(--yellow); }
+.box-pop .hobby-icon { color: #141414; }
+
+/* Moving parts: CSS transforms on wrapper groups, so the drawn positions above stay put. */
+.box-lid-wrap, .box-pop-wrap, .box-face { transform-box: fill-box; }
+.box-lid-wrap { transform-origin: center; transition: transform .4s cubic-bezier(.3, 1.4, .5, 1); }
+.box-pop-wrap { transition: transform .4s cubic-bezier(.3, 1.5, .5, 1) .05s; }
+.box-burst { transform-box: fill-box; transform-origin: center; transform: scale(.4); opacity: 0; transition: transform .4s .1s, opacity .2s .1s; }
+.box:is(:hover, :focus-visible, .peek) .box-lid-wrap { transform: translate(46px, calc(var(--up) - 62px)) rotate(14deg); }
+.box:is(:hover, :focus-visible, .peek) .box-pop-wrap { transform: translateY(var(--up)); }
+.box:is(:hover, :focus-visible, .peek) .box-burst { transform: scale(1) rotate(12deg); opacity: 1; }
+.box:is(:hover, :focus-visible) .box-front { stroke-width: 6; }
+.box:focus-visible .box-shadow { fill: #fffaf0; }
+.box:is(:hover, :focus-visible, .peek) .box-face { animation: wobble .5s ease-in-out; transform-origin: center; }
+@keyframes wobble { 30% { transform: rotate(-6deg); } 70% { transform: rotate(5deg); } }
+@keyframes twinkle { 50% { transform: scale(.7) rotate(20deg); } }
+@media (prefers-reduced-motion: reduce) { .box-star, .box-face { animation: none !important; } }
