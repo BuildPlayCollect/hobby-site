@@ -5,7 +5,7 @@ scope: official
 organizer: "Bandai"
 sourceUrl: "https://en.onepiece-cardgame.com/pdf/tournament_rules_manual.pdf"
 version: "Last Updated: October 17, 2025"
-lastChecked: 2026-10-12
+lastChecked: 2026-10-15
 summary: "The basics of the Bandai Organized Play One Piece Card Game Tournament Rules Manual: deck building, formats, match structure, time limits, sleeves, conduct and penalties."
 ---
 

@@ -5,7 +5,7 @@ scope: official
 organizer: "The Pokémon Company International"
 sourceUrl: "https://mcdn.pokemon.com/pokemon-prod/raw/upload/v1/live/static-assets/content-assets/cms2/pdf/play-pokemon/rules/play-pokemon-tcg-tournament-handbook-en.pdf"
 version: "Last revision: May 21, 2026"
-lastChecked: 2026-10-12
+lastChecked: 2026-10-15
 summary: "How official Play! Pokémon TCG tournaments handle decks, formats, sleeves, round time and penalties, based on the Play! Pokémon TCG Tournament Handbook and Tournament Rules Handbook."
 ---
 

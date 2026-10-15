@@ -5,7 +5,7 @@ scope: official
 organizer: "Tamiya"
 sourceUrl: "https://tamiya.com/english/mini4wd/regulation.htm"
 version: "December 2025"
-lastChecked: 2026-10-12
+lastChecked: 2026-10-15
 summary: "Tamiya's official Mini 4WD race regulations covering car dimensions, motors, batteries, allowed modifications, race procedure and car inspection."
 ---
 
