@@ -1,10 +1,11 @@
 ---
-// BoxHero.astro: the big hobby picker at the top of the home page (replaces the island).
+// BoxHero.astro: the big top of the home page (replaces the island).
+// Left: the site name and intro (passed in from index.astro). Right: the box pile.
 // A pile of cartoon boxes, drawn in an old "rubber hose" cartoon style: thick ink lines,
 // pie-cut eyes and big grins. Every box is a hobby. Hover (or tap) a box and its lid
 // pops open to show what's inside. The "?" box opens the quiz.
 // When nobody is hovering, a random box peeks open every couple of seconds.
-// A new hobby in src/data/site.ts needs a spot in DESKTOP and PHONE below
+// A new hobby in src/data/site.ts needs a spot in SPOTS below
 // (and an icon in HobbyIcon.astro).
 import { HOBBIES, type HobbyKey } from '../data/site';
 import HobbyIcon from './HobbyIcon.astro';
@@ -13,25 +14,15 @@ type Spot = { key: HobbyKey | 'quiz'; x: number; y: number; w: number; tilt: num
 // x = centre of the box, y = where its bottom sits, w = width, tilt = degrees,
 // lift = how far the hobby pops up above the box (smaller for the back row, so it stays clear of the title).
 // Boxes are drawn in this order, so later boxes sit in front of earlier ones.
-const DESKTOP: Spot[] = [
-  { key: 'beyblade', lift: 30, x: 230, y: 448, w: 185, tilt: -3 },
-  { key: 'tamiya', lift: 30, x: 410, y: 443, w: 185, tilt: 2 },
-  { key: 'quiz', lift: 30, x: 590, y: 448, w: 185, tilt: -2 },
-  { key: 'keyboards', lift: 30, x: 770, y: 443, w: 185, tilt: 3 },
-  { key: 'tcg', x: 135, y: 650, w: 205, tilt: 2 },
-  { key: 'consoles', x: 375, y: 655, w: 205, tilt: -3 },
-  { key: 'esports', x: 625, y: 650, w: 205, tilt: 3 },
-  { key: 'general', x: 865, y: 655, w: 205, tilt: -2 },
-];
-const PHONE: Spot[] = [
-  { key: 'beyblade', x: 112, y: 420, w: 168, tilt: -3 },
-  { key: 'tamiya', x: 300, y: 415, w: 168, tilt: 2 },
-  { key: 'keyboards', x: 488, y: 420, w: 168, tilt: -2 },
-  { key: 'tcg', x: 206, y: 625, w: 168, tilt: 3 },
-  { key: 'quiz', x: 394, y: 625, w: 168, tilt: -3 },
-  { key: 'consoles', x: 112, y: 830, w: 168, tilt: 2 },
-  { key: 'esports', x: 300, y: 835, w: 168, tilt: -2 },
-  { key: 'general', x: 488, y: 830, w: 168, tilt: 3 },
+const SPOTS: Spot[] = [
+  { key: 'beyblade', lift: 40, x: 112, y: 330, w: 168, tilt: -3 },
+  { key: 'tamiya', lift: 40, x: 300, y: 325, w: 168, tilt: 2 },
+  { key: 'keyboards', lift: 40, x: 488, y: 330, w: 168, tilt: -2 },
+  { key: 'tcg', x: 206, y: 535, w: 168, tilt: 3 },
+  { key: 'quiz', x: 394, y: 535, w: 168, tilt: -3 },
+  { key: 'consoles', x: 112, y: 740, w: 168, tilt: 2 },
+  { key: 'esports', x: 300, y: 745, w: 168, tilt: -2 },
+  { key: 'general', x: 488, y: 740, w: 168, tilt: 3 },
 ];
 
 const boxes = (spots: Spot[]) => spots.map((s) => {
@@ -45,35 +36,25 @@ const boxes = (spots: Spot[]) => spots.map((s) => {
     label: quiz ? 'Not sure? Take the hobby quiz' : `${HOBBIES[s.key as HobbyKey].name}: ${HOBBIES[s.key as HobbyKey].blurb}`,
   };
 });
-const layouts = [
-  { cls: 'box-hero-desktop', view: '0 25 1000 670', arc: 'M 90 290 A 410 220 0 0 1 910 290', size: 58, tagY: 215, tagX: 500, list: boxes(DESKTOP) },
-  { cls: 'box-hero-phone', view: '0 0 600 900', arc: 'M 30 250 A 270 190 0 0 1 570 250', size: 40, tagY: 185, tagX: 300, list: boxes(PHONE) },
-];
-// Little white sparkles and stars scattered around the pile (decoration only).
-const STARS = [[70, 140, 1], [930, 120, .8], [60, 470, .7], [950, 420, .9], [60, 620, .6]];
+const list = boxes(SPOTS);
+// Little sparkles scattered around the pile (decoration only).
+const STARS = [[40, 110, .8], [565, 90, .7], [575, 420, .6], [25, 600, .6]];
 ---
-<section class="box-hero" aria-labelledby="box-hero-title">
-  <h2 id="box-hero-title" class="sr-only">Pick a hobby</h2>
-  {layouts.map((L, li) => (
-    <svg class:list={['box-hero-svg', L.cls]} viewBox={L.view} role="group" aria-label="A pile of hobby boxes. Open one to pick a hobby.">
-      <defs><path id={`box-arc-${li}`} d={L.arc} /></defs>
-
-      <!-- The title, curved over the pile like a badge -->
-      <text class="box-title" font-size={L.size} aria-hidden="true">
-        <textPath href={`#box-arc-${li}`} startOffset="50%" text-anchor="middle">BUILD · PLAY · COLLECT</textPath>
-      </text>
-      <g transform={`translate(${L.tagX} ${L.tagY}) rotate(-3)`} aria-hidden="true">
+<section class="box-hero" id="hobby-boxes">
+  <div class="box-hero-text"><slot /></div>
+  <div class="box-hero-art">
+    <svg class="box-hero-svg" viewBox="30 40 540 725" role="group" aria-label="A pile of hobby boxes. Open one to pick a hobby.">
+      <g transform="translate(300 80) rotate(-3)" aria-hidden="true">
         <rect class="box-tag" x="-118" y="-24" width="236" height="44" rx="22" />
         <text class="box-tag-text" x="0" y="7">PICK A BOX!</text>
       </g>
-      {li === 0 && STARS.map(([x, y, s]) => (
+      {STARS.map(([x, y, s]) => (
         <path class="box-star" transform={`translate(${x} ${y}) scale(${s})`} d="M0 -22 C 3 -6 6 -3 22 0 C 6 3 3 6 0 22 C -3 6 -6 3 -22 0 C -6 -3 -3 -6 0 -22 Z" aria-hidden="true" />
       ))}
-
       <!-- The floor line under the front row -->
-      <path class="box-floor" d={li === 0 ? 'M 15 657 Q 500 645 985 659' : 'M 10 838 Q 300 828 590 840'} aria-hidden="true" />
+      <path class="box-floor" d="M 10 748 Q 300 738 590 750" aria-hidden="true" />
 
-      {L.list.map((b) => (
+      {list.map((b) => (
         <a class:list={['box', b.quiz && 'box-quiz']} href={b.href} aria-label={b.label}
            transform={`translate(${b.x} ${b.y}) rotate(${b.tilt})`}
            style={`--c:${b.color};--up:${-(b.h * 0.5 + (b.lift ?? 72))}px`}>
@@ -111,7 +92,7 @@ const STARS = [[70, 140, 1], [930, 120, .8], [60, 470, .7], [950, 420, .9], [60,
         </a>
       ))}
     </svg>
-  ))}
+  </div>
 </section>
 
 <script>
@@ -125,8 +106,7 @@ const STARS = [[70, 140, 1], [930, 120, .8], [60, 470, .7], [950, 420, .9], [60,
     hero.addEventListener('pointerleave', () => { paused = false; });
     setInterval(() => {
       if (paused || document.hidden) return;
-      const svg = [...hero.querySelectorAll('.box-hero-svg')].find((s) => s.getBoundingClientRect().width > 0);
-      const all = svg ? [...svg.querySelectorAll('.box')].filter((b) => b !== last) : [];
+      const all = [...hero.querySelectorAll('.box')].filter((b) => b !== last);
       last?.classList.remove('peek');
       last = all[Math.floor(Math.random() * all.length)];
       last?.classList.add('peek');

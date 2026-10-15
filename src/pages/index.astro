@@ -25,13 +25,24 @@ const tryUrls = (withQuick.length ? withQuick : articles).map((a) => `/articles/
 
 // "New here?" steps for first-time visitors.
 const steps = [
-  { title: 'Pick a hobby', text: 'Open a box at the top. Every hobby has its own page of stories, guides and history.', href: '#box-hero-title', link: 'Back to the boxes ↑', c: 'var(--blue)' },
+  { title: 'Pick a hobby', text: 'Open a box at the top. Every hobby has its own page of stories, guides and history.', href: '#hobby-boxes', link: 'Back to the boxes ↑', c: 'var(--blue)' },
   { title: 'Read the 60-second version', text: 'Every article opens with a short summary, so you get the gist before the deep dive.', href: headlines[0] ? `/articles/${headlines[0].id}/` : '/guides', link: 'Try one now →', c: 'var(--orange)', random: true },
   { title: 'Fall down the rabbit hole', text: 'Hobby words are linked to our wiki. Hover for a quick meaning, click to keep going.', href: '/wiki', link: 'Open the wiki →', c: 'var(--teal)' },
 ];
 ---
 <Base>
-  <BoxHero />
+  <!-- The top of the page: the site name and intro on the left, the box pile on the right. -->
+  <BoxHero>
+    <h1 class="big-title">Build.<br /><span class="hl">Play.</span><br />Collect.</h1>
+    <p>Nerdy, playful and fact-checked. History, guides, new releases and giveaways for every hobby, from spinning tops to trading cards.</p>
+    <!-- Live counts, as tilted stickers. They update themselves as hobbies, wiki words and rulebooks are added. -->
+    <dl class="stat-stickers">
+      <div><dt>Hobbies</dt><dd>{Object.keys(HOBBIES).length}</dd></div>
+      <div><dt>Wiki words</dt><dd>{wiki.length}</dd></div>
+      <div><dt>Rulebooks</dt><dd>{rulebooks}</dd></div>
+    </dl>
+    <a class="pill-btn" href="/wiki">Fall down the wiki →</a>
+  </BoxHero>
 
   <!-- Phones only: a swipeable row of hobby buttons under the boxes, for quick tapping.
        Hidden on bigger screens, where the boxes do the job. -->
@@ -43,21 +54,6 @@ const steps = [
       </a>
     ))}
   </nav>
-
-  <!-- One slim intro strip under the boxes: the site name, what we do, and a door into the wiki. -->
-  <section class="tile intro-strip">
-    <div>
-      <h1>Build. <span class="hl">Play.</span> Collect.</h1>
-      <p>Nerdy, playful and fact-checked. History, guides, new releases and giveaways for every hobby, from spinning tops to trading cards.</p>
-      <!-- Live counts, as tilted stickers. They update themselves as hobbies, wiki words and rulebooks are added. -->
-      <dl class="stat-stickers">
-        <div><dt>Hobbies</dt><dd>{Object.keys(HOBBIES).length}</dd></div>
-        <div><dt>Wiki words</dt><dd>{wiki.length}</dd></div>
-        <div><dt>Rulebooks</dt><dd>{rulebooks}</dd></div>
-      </dl>
-    </div>
-    <a class="pill-btn" href="/wiki">Fall down the wiki →</a>
-  </section>
 
   <!-- New here? Three numbered steps for first-time visitors. -->
   <section class="steps-wrap" aria-labelledby="steps-title">
