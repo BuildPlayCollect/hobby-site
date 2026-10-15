@@ -591,7 +591,7 @@ a.tile:hover { text-decoration: none; transform: translate(-2px, -2px); box-shad
    Drawn like an old rubber-hose cartoon: thick ink lines, pie-cut eyes, big grins.
    Each box takes its hobby's colour from --c. Hover, focus or a "peek" opens the lid. */
 .box-hero { display: grid; margin-top: 22px; border: var(--border); border-radius: 26px; box-shadow: var(--shadow-lg); overflow: hidden; background: var(--surface); }
-@media (min-width: 900px) { .box-hero { grid-template-columns: 1.15fr 1fr; min-height: min(80vh, 760px); } }
+@media (min-width: 900px) { .box-hero { grid-template-columns: 1.05fr 1fr; min-height: min(80vh, 760px); } }
 /* Left: the big name. Kept plain on purpose, so the colourful pile stands out next to it. */
 .box-hero-text { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 18px; padding: clamp(26px, 4vw, 52px); }
 .big-title { font-size: clamp(3.4rem, 7.2vw, 6.8rem); line-height: .95; margin: 0; text-transform: uppercase; letter-spacing: -0.02em; }
@@ -599,7 +599,7 @@ a.tile:hover { text-decoration: none; transform: translate(-2px, -2px); box-shad
 .box-hero-text p { margin: 0; color: var(--muted); font-size: 1.08rem; max-width: 42ch; }
 .box-hero-text .stat-stickers { margin: 4px 0; }
 /* Right: the box pile on blue graph paper. */
-.box-hero-art { display: grid; place-items: center; padding: 8px 0 6px; border-top: var(--border); background-color: var(--blue);
+.box-hero-art { display: grid; place-items: center; padding: 16px; border-top: var(--border); background-color: var(--blue);
   background-image: linear-gradient(rgb(255 250 240 / .55) 2px, transparent 2px), linear-gradient(90deg, rgb(255 250 240 / .55) 2px, transparent 2px); background-size: 46px 46px; background-position: -2px -2px; }
 @media (min-width: 900px) { .box-hero-art { border-top: 0; border-left: var(--border); } }
 :root[data-theme="dark"] .box-hero-art { background-color: #2b4c86; background-image: linear-gradient(rgb(255 255 255 / .14) 2px, transparent 2px), linear-gradient(90deg, rgb(255 255 255 / .14) 2px, transparent 2px); }

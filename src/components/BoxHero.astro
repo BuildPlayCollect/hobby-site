@@ -38,12 +38,12 @@ const boxes = (spots: Spot[]) => spots.map((s) => {
 });
 const list = boxes(SPOTS);
 // Little sparkles scattered around the pile (decoration only).
-const STARS = [[40, 110, .8], [565, 90, .7], [575, 420, .6], [25, 600, .6]];
+const STARS = [[60, 95, .8], [540, 90, .7], [585, 430, .55], [15, 430, .55]];
 ---
 <section class="box-hero" id="hobby-boxes">
   <div class="box-hero-text"><slot /></div>
   <div class="box-hero-art">
-    <svg class="box-hero-svg" viewBox="30 40 540 725" role="group" aria-label="A pile of hobby boxes. Open one to pick a hobby.">
+    <svg class="box-hero-svg" viewBox="-14 30 628 742" role="group" aria-label="A pile of hobby boxes. Open one to pick a hobby.">
       <g transform="translate(300 80) rotate(-3)" aria-hidden="true">
         <rect class="box-tag" x="-118" y="-24" width="236" height="44" rx="22" />
         <text class="box-tag-text" x="0" y="7">PICK A BOX!</text>
