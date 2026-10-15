@@ -454,6 +454,11 @@ a.tile:hover { text-decoration: none; transform: translate(-2px, -2px); box-shad
 @media (min-width: 760px) { .quiz-cta { grid-template-columns: 1fr auto; padding: 26px 30px; } }
 .quiz-cta h2 { margin: 0 0 4px; font-size: clamp(1.4rem, 3.6vw, 2rem); text-transform: uppercase; }
 .quiz-cta p { margin: 0; color: #3a3428; }
+/* Home: quiz + typing test side by side on wide screens */
+.play-row { display: grid; gap: 18px; margin-top: 22px; }
+.play-row a.tile.quiz-cta { display: grid; margin-top: 0; }
+@media (min-width: 900px) { .play-row { grid-template-columns: 1fr 1fr; } .play-row .quiz-cta { grid-template-columns: 1fr; grid-template-rows: 1fr auto; } .play-row .quiz-cta .pill-btn { justify-self: start; } }
+.typing-cta { background: #ffd23f; }
 
 /* ---------- Tournament rules ---------- */
 .rules-list { display: grid; gap: 12px; }
@@ -729,3 +734,27 @@ a.tile.roundup { display: grid; gap: 0; padding: 0; overflow: hidden; color: var
 .tt-note { margin-top: 14px; font-size: .85rem; color: var(--muted); }
 .tt-note kbd { border: 2px solid var(--ink); border-radius: 6px; padding: 0 6px; font-size: .8rem; box-shadow: 2px 2px 0 var(--ink); }
 @media (prefers-reduced-motion: reduce) { .tt-words { transition: none; } }
+
+/* Side details: doodles in the empty space beside the page on wide screens (SideDetails.astro).
+   They sit behind everything (the footer and header cover them) and can't be clicked. */
+.side-deco { display: none; }
+@media (min-width: 1400px) {
+  .side-deco { display: block; position: fixed; z-index: -1; top: 150px; bottom: 20px; width: min(170px, calc((100vw - var(--max)) / 2 - 36px)); pointer-events: none; }
+  .side-left { left: 14px; }
+  .side-right { right: 14px; }
+  .side-deco svg { width: 100%; height: 100%; overflow: visible; }
+}
+.side-deco .sd-line { stroke: var(--ink); stroke-width: 3; fill: none; stroke-linecap: round; }
+.side-deco .sd-thinline { stroke-width: 2.5; }
+.side-deco .sd-dash { stroke: var(--ink); stroke-width: 1.5; stroke-dasharray: 6 7; opacity: .5; }
+.side-deco .sd-tick { stroke: var(--ink); stroke-width: 2; }
+.side-deco .sd-fill { stroke: #141414; stroke-width: 3; }
+.side-deco .sd-shadow { fill: #141414; }
+:root[data-theme="dark"] .side-deco .sd-shadow { fill: #000; }
+.side-deco .sd-thin { fill: none; stroke: #141414; stroke-width: 1.5; stroke-dasharray: 3 4; }
+.side-deco .sd-text { font-family: var(--display); font-size: 13px; fill: #141414; text-anchor: middle; }
+.side-deco .sd-big { font-size: 16px; }
+.side-deco .sd-star { fill: var(--yellow, #ffd23f); stroke: var(--ink); stroke-width: 2; }
+.side-deco .sd-motto { font-family: var(--display); font-size: 26px; fill: none; stroke: var(--ink); stroke-width: 1.4; letter-spacing: .06em; }
+.side-deco .sd-eye { fill: #fffaf0; stroke: #141414; stroke-width: 2; }
+.side-deco .sd-pupil { fill: #141414; }
