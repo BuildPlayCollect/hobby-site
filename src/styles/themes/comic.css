@@ -720,6 +720,12 @@ a.tile.roundup { display: grid; gap: 0; padding: 0; overflow: hidden; color: var
 .tt-rank-text, .tt-best { margin: 0; color: var(--muted); }
 .tt-best { margin-top: 6px; font-weight: 700; color: var(--ink); }
 .tt-stats { margin: 16px 0 12px; }
+.tt-share { margin-top: 22px; padding-top: 20px; border-top: 2.5px dashed var(--ink); }
+.tt-share img { display: block; width: min(100%, 420px); height: auto; border: var(--border); border-radius: 14px; box-shadow: 4px 4px 0 var(--shadow-color); }
+.tt-share-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 16px 0 8px; }
+.tt-share-actions button { font: inherit; font-weight: 800; font-size: .85rem; cursor: pointer; background: var(--surface); color: var(--ink); }
+.quiz-actions button.yellow { background: var(--yellow); color: #141414; }
+.tt-share-note { margin: 0; font-size: .85rem; color: var(--muted); }
 .tt-note { margin-top: 14px; font-size: .85rem; color: var(--muted); }
 .tt-note kbd { border: 2px solid var(--ink); border-radius: 6px; padding: 0 6px; font-size: .8rem; box-shadow: 2px 2px 0 var(--ink); }
 @media (prefers-reduced-motion: reduce) { .tt-words { transition: none; } }
