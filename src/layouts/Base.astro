@@ -4,6 +4,7 @@
 import { SITE_NAME, SITE_TAGLINE, HOBBIES, TYPE_SLUGS } from '../data/site';
 import AdSlot from '../components/AdSlot.astro';
 import Newsletter from '../components/Newsletter.astro';
+import SideDetails from '../components/SideDetails.astro';
 // Inter font, stored on our own site (no Google Fonts request).
 import '@fontsource-variable/inter';
 // The whole look of the site (colours, fonts, outlines, shadows) lives in ONE theme file.
@@ -56,6 +57,7 @@ const shareImage = new URL(image ?? '/og-default.png', Astro.site).href;
     </script>
   </head>
   <body>
+    <SideDetails />
     <header class="site-header">
       <div class="wrap header-row">
         <a class="logo" href="/"><span class="logo-mark" aria-hidden="true">BPC</span>{SITE_NAME}</a>
