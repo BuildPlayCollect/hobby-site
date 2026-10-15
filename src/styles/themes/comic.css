@@ -682,3 +682,50 @@ a.tile.roundup { display: grid; gap: 0; padding: 0; overflow: hidden; color: var
 .roundup-quick-label { margin: 0 0 8px; font-family: var(--display); font-size: .85rem; text-transform: uppercase; letter-spacing: .04em; }
 .roundup-quick ul { margin: 0; padding-left: 1.1em; display: grid; gap: 8px; font-size: .95rem; font-weight: 500; }
 @media (max-width: 700px) { .roundup-desc { display: none; } }
+
+/* ---------- Typing test (/keyboards/typing-test) ---------- */
+.tt { max-width: 900px; margin: 0 auto; padding-top: 32px; }
+.tt-head { position: relative; margin-bottom: 18px; }
+.tt-head h1 { font-size: clamp(2.2rem, 7vw, 3.6rem); margin: 12px 0 8px; text-transform: uppercase; line-height: 1; }
+.tt-head p { color: var(--muted); margin: 0; max-width: 52ch; }
+.tt-sticker { position: absolute; right: 0; top: 0; }
+@media (max-width: 600px) { .tt-sticker { display: none; } }
+.tt-options { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-bottom: 16px; }
+.tt-group { display: flex; flex-wrap: wrap; gap: 8px; }
+.tt-group .chip[aria-pressed="true"] { background: #141414; color: #fbf3e4; }
+:root[data-theme="dark"] .tt-group .chip[aria-pressed="true"] { background: #fbf3e4; color: #141414; }
+.tt-card { padding: 0; overflow: hidden; }
+.tt-bar { display: flex; align-items: center; gap: 18px; padding: 12px 20px; border-bottom: var(--border); background: #c3a6ff; color: #141414; font-weight: 700; }
+.tt-bar strong { font-family: var(--display); font-size: 1.5rem; }
+.tt-restart { margin-left: auto; background: #fffaf0; color: #141414; border: 2.5px solid #141414; border-radius: 999px; padding: 5px 12px; font-weight: 800; font-size: .8rem; text-transform: uppercase; cursor: pointer; box-shadow: 2px 2px 0 #141414; }
+.tt-words-wrap { position: relative; height: calc(3 * 1.6em + 20px); margin: 22px 22px 26px; overflow: hidden; cursor: text; font-family: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace; font-size: clamp(1.15rem, 2.6vw, 1.6rem); line-height: 1.6; }
+.tt-words { display: flex; flex-wrap: wrap; gap: 10px .65em; transition: transform .15s; filter: blur(3px); opacity: .55; }
+.tt.is-focused .tt-words { filter: none; opacity: 1; }
+.tt-hint { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; font-family: var(--display); font-size: 1rem; text-transform: uppercase; letter-spacing: .05em; }
+.tt.is-focused .tt-hint { display: none; }
+.tt-word { color: var(--muted); opacity: .75; border-bottom: 3px solid transparent; }
+.tt-word.is-wrong { border-bottom-color: #ff6b57; }
+.tt-word .ok { color: var(--ink); opacity: 1; }
+.tt-word.is-current, .tt-word:has(.ok) { opacity: 1; }
+.tt-word .bad { color: #e0503d; }
+.tt-word .extra { color: #b8402f; opacity: .8; }
+.tt-word .caret, .tt-word.caret-end::after { box-shadow: -2.5px 0 0 var(--ink); }
+.tt-word.caret-end::after { content: ""; display: inline-block; width: 0; height: 1.1em; vertical-align: -.15em; }
+.tt.is-focused .tt-word .caret, .tt.is-focused .tt-word.caret-end::after { animation: caret 1s step-end infinite; }
+@keyframes caret { 50% { box-shadow: none; } }
+.tt-input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+.tt-result { padding: 24px 22px 26px; }
+.tt-rank-label { margin: 0; font-weight: 800; font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.tt-rank { font-size: clamp(1.8rem, 5vw, 2.8rem); margin: 4px 0 6px; text-transform: uppercase; line-height: 1.05; }
+.tt-rank-text, .tt-best { margin: 0; color: var(--muted); }
+.tt-best { margin-top: 6px; font-weight: 700; color: var(--ink); }
+.tt-stats { margin: 16px 0 12px; }
+.tt-share { margin-top: 22px; padding-top: 20px; border-top: 2.5px dashed var(--ink); }
+.tt-share img { display: block; width: min(100%, 420px); height: auto; border: var(--border); border-radius: 14px; box-shadow: 4px 4px 0 var(--shadow-color); }
+.tt-share-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 16px 0 8px; }
+.tt-share-actions button { font: inherit; font-weight: 800; font-size: .85rem; cursor: pointer; background: var(--surface); color: var(--ink); }
+.quiz-actions button.yellow { background: var(--yellow); color: #141414; }
+.tt-share-note { margin: 0; font-size: .85rem; color: var(--muted); }
+.tt-note { margin-top: 14px; font-size: .85rem; color: var(--muted); }
+.tt-note kbd { border: 2px solid var(--ink); border-radius: 6px; padding: 0 6px; font-size: .8rem; box-shadow: 2px 2px 0 var(--ink); }
+@media (prefers-reduced-motion: reduce) { .tt-words { transition: none; } }

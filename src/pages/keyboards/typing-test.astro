@@ -1,0 +1,339 @@
+---
+// keyboards/typing-test.astro: our own typing test (/keyboards/typing-test).
+// Pick a time and a word list, type the words, get your WPM, accuracy and a switch-themed rank.
+// Everything runs in the browser; nothing is sent anywhere. Your best score is kept in this
+// browser only (localStorage). Word lists live in src/data/typing-words.ts.
+import Base from '../../layouts/Base.astro';
+import Sticker from '../../components/Sticker.astro';
+import { EVERYDAY, HOBBY } from '../../data/typing-words';
+
+const TIMES = [15, 30, 60];
+---
+<Base title="Typing test" description="How fast can you type? Take our free typing test with everyday English words (or hobby words), and earn a switch-themed rank.">
+  <section class="tt" data-tt data-everyday={JSON.stringify(EVERYDAY)} data-hobby={JSON.stringify(HOBBY)}>
+    <header class="tt-head">
+      <p class="kicker"><a class="tag" href="/keyboards" style="background:#c3a6ff">Keyboards</a><span class="tag tag-plain">Tool</span></p>
+      <h1>Typing <span class="hl">test</span></h1>
+      <p>Grab your favourite board, pick a time and start typing. The timer starts on your first key.</p>
+      <Sticker text="NO SIGN UP" color="var(--pink)" size={96} tilt={10} class="tt-sticker" />
+    </header>
+
+    <div class="tt-options" role="group" aria-label="Test options">
+      <div class="tt-group" role="radiogroup" aria-label="Time">
+        {TIMES.map((t) => <button type="button" class="chip" data-time={t} aria-pressed={t === 30 ? 'true' : 'false'}>{t}s</button>)}
+      </div>
+      <div class="tt-group" role="radiogroup" aria-label="Words">
+        <button type="button" class="chip" data-list="everyday" aria-pressed="true">Everyday words</button>
+        <button type="button" class="chip" data-list="mix" aria-pressed="false">Mix of both</button>
+        <button type="button" class="chip" data-list="hobby" aria-pressed="false">Hobby words</button>
+      </div>
+    </div>
+
+    <div class="tile tt-card">
+      <div class="tt-bar">
+        <span class="tt-timer" aria-live="off"><strong data-timer>30</strong>s</span>
+        <span class="tt-live"><strong data-live-wpm>0</strong> wpm</span>
+        <button type="button" class="tt-restart" data-restart title="Restart (Tab)">↻ Restart</button>
+      </div>
+      <!-- The words. Click (or tap) here to focus; the hidden box below catches your typing. -->
+      <div class="tt-words-wrap" data-focus>
+        <div class="tt-words" data-words aria-hidden="true"></div>
+        <p class="tt-hint" data-hint>Click here and start typing</p>
+      </div>
+      <input class="tt-input" data-input type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Type the words shown" />
+
+      <div class="tt-result" data-result hidden>
+        <p class="tt-rank-label">Your rank</p>
+        <h2 class="tt-rank" data-rank></h2>
+        <p class="tt-rank-text" data-rank-text></p>
+        <dl class="stat-stickers tt-stats">
+          <div><dt>WPM</dt><dd data-wpm></dd></div>
+          <div><dt>Accuracy</dt><dd data-acc></dd></div>
+          <div><dt>Raw WPM</dt><dd data-raw></dd></div>
+        </dl>
+        <p class="tt-best" data-best></p>
+        <div class="quiz-actions">
+          <button type="button" class="pill-btn" data-restart>Try again ↻</button>
+          <button type="button" class="pill-btn yellow" data-share-btn>Share my score 📸</button>
+          <a class="pill-btn dark" href="/articles/keyboard-layouts/">Read: Keyboard layouts →</a>
+        </div>
+        <!-- The score card image, made in the browser when you press "Share my score". -->
+        <div class="tt-share" data-share hidden>
+          <img data-share-img alt="Your typing test score card" width="1080" height="1080" />
+          <div class="tt-share-actions">
+            <a class="pill-btn dark" data-share-save download="build-play-collect-typing-score.png" href="#">Save image ⬇</a>
+            <button type="button" class="pill-btn" data-share-copy>Copy text</button>
+          </div>
+          <p class="tt-share-note">Post it anywhere and challenge a friend. The image is made on your device; nothing is uploaded.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="tt-note"><kbd>Tab</kbd> restarts. WPM counts every 5 correct characters (spaces included) as one word, the usual way typing tests measure speed. Your best score stays in this browser only.</p>
+  </section>
+</Base>
+
+<script>
+  // The typing test. Words are drawn at random from the chosen list. Each typed letter is
+  // marked right or wrong; space moves to the next word. When time runs out we show the result.
+  const root = document.querySelector<HTMLElement>('[data-tt]');
+  if (root) {
+    const lists: Record<string, string[]> = {
+      everyday: JSON.parse(root.dataset.everyday || '[]'),
+      hobby: JSON.parse(root.dataset.hobby || '[]'),
+    };
+    // Mix: mostly everyday words with a sprinkle of hobby words.
+    lists.mix = [...lists.everyday, ...lists.hobby];
+    const $ = <T extends Element = HTMLElement>(sel: string) => root.querySelector<T>(sel)!;
+    const wordsEl = $('[data-words]');
+    const input = $<HTMLInputElement>('[data-input]');
+    const timerEl = $('[data-timer]');
+    const liveEl = $('[data-live-wpm]');
+    const resultEl = $('[data-result]');
+    const hint = $('[data-hint]');
+
+    // Ranks, slowest to fastest. Named after keyboard bits, just for fun.
+    const RANKS: [number, string, string][] = [
+      [0, 'Rubber Dome Rookie', 'Everyone starts somewhere. Keep at it and the numbers climb fast.'],
+      [25, 'Tactile Tourist', 'You can feel every bump. A few more runs and you will be cruising.'],
+      [40, 'Linear Cruiser', 'Smooth and steady, about the speed of a comfy everyday typist.'],
+      [60, 'Thock Machine', 'Quick and confident. Your keyboard is singing.'],
+      [80, 'Speed Switch Demon', 'Seriously fast. Your keycaps are asking for a break.'],
+      [100, 'Endgame Typist', 'Triple digits! There is no next level, only more keyboards.'],
+    ];
+
+    let list = 'everyday';
+    let seconds = 30;
+    let words: string[] = [];
+    let typed: string[] = [];   // what was typed for each word
+    let index = 0;              // current word
+    let started = 0;            // start time in ms (0 = not started)
+    let timer = 0;
+    let done = false;
+    let keystrokes = 0, wrongKeystrokes = 0;
+    let last = { wpm: 0, acc: 0, rank: '' };   // the latest result, for the share card
+
+    const pick = (n: number) => Array.from({ length: n }, () => {
+      const l = lists[list]; return l[Math.floor(Math.random() * l.length)];
+    });
+
+    // Draw every word as letters, coloured by what was typed.
+    const render = () => {
+      wordsEl.innerHTML = '';
+      words.forEach((w, wi) => {
+        const t = typed[wi] ?? '';
+        const word = document.createElement('span');
+        word.className = 'tt-word';
+        if (wi === index) word.classList.add('is-current');
+        if (wi < index && t !== w) word.classList.add('is-wrong');
+        const len = Math.max(w.length, t.length);
+        for (let i = 0; i < len; i++) {
+          const ch = document.createElement('span');
+          ch.textContent = w[i] ?? t[i];
+          if (i < t.length) ch.className = i >= w.length ? 'extra' : t[i] === w[i] ? 'ok' : 'bad';
+          if (wi === index && i === t.length) ch.classList.add('caret');
+          word.appendChild(ch);
+        }
+        if (wi === index && t.length >= len) word.classList.add('caret-end');
+        wordsEl.appendChild(word);
+      });
+      // Keep the current word on the top line or the line below it, so the text scrolls as you go.
+      const cur = wordsEl.children[index] as HTMLElement | undefined;
+      const first = wordsEl.children[0] as HTMLElement | undefined;
+      if (cur && first) {
+        const lineH = cur.offsetHeight + 10;
+        const lines = Math.max(0, Math.round((cur.offsetTop - first.offsetTop) / lineH) - 1);
+        wordsEl.style.transform = `translateY(${-lines * lineH}px)`;
+      }
+    };
+
+    const correctChars = () => {
+      // Count letters in words typed exactly right, plus their spaces, plus correct letters so far.
+      let n = 0;
+      for (let i = 0; i < index; i++) if (typed[i] === words[i]) n += words[i].length + 1;
+      const t = typed[index] ?? '';
+      for (let i = 0; i < t.length; i++) if (t[i] === words[index][i]) n++;
+      return n;
+    };
+    const minutes = () => Math.max((Date.now() - started) / 60000, 1 / 60);
+
+    const reset = () => {
+      clearInterval(timer);
+      words = pick(120); typed = []; index = 0; started = 0; done = false;
+      keystrokes = 0; wrongKeystrokes = 0;
+      timerEl.textContent = String(seconds); liveEl.textContent = '0';
+      resultEl.hidden = true; wordsEl.parentElement!.hidden = false;
+      $('[data-share]').hidden = true;
+      input.value = '';
+      render();
+      input.focus();
+    };
+
+    const finish = () => {
+      done = true; clearInterval(timer);
+      const mins = seconds / 60;
+      const wpm = Math.round(correctChars() / 5 / mins);
+      const raw = Math.round(keystrokes / 5 / mins);
+      const acc = keystrokes ? Math.round(((keystrokes - wrongKeystrokes) / keystrokes) * 100) : 0;
+      const rank = [...RANKS].reverse().find(([min]) => wpm >= min)!;
+      last = { wpm, acc, rank: rank[1] };
+      $('[data-wpm]').textContent = String(wpm);
+      $('[data-raw]').textContent = String(raw);
+      $('[data-acc]').textContent = `${acc}%`;
+      $('[data-rank]').textContent = rank[1];
+      $('[data-rank-text]').textContent = rank[2];
+      // Best score per time + list, in this browser only.
+      const key = `bpc-typing-best-${seconds}-${list}`;
+      let best = 0;
+      try { best = Number(localStorage.getItem(key)) || 0; if (wpm > best) localStorage.setItem(key, String(wpm)); } catch {}
+      $('[data-best]').textContent = wpm > best
+        ? (best ? `New personal best! Up from ${best} wpm.` : 'Your first score on this setting. Now beat it!')
+        : `Your best on this setting: ${best} wpm.`;
+      wordsEl.parentElement!.hidden = true;
+      resultEl.hidden = false;
+      input.blur();
+    };
+
+    const tick = () => {
+      const left = Math.max(0, seconds - Math.floor((Date.now() - started) / 1000));
+      timerEl.textContent = String(left);
+      liveEl.textContent = String(Math.round(correctChars() / 5 / minutes()));
+      if (left === 0) finish();
+    };
+
+    input.addEventListener('input', () => {
+      if (done) { input.value = ''; return; }
+      const value = input.value;
+      input.value = '';
+      if (!value) return;
+      if (!started) { started = Date.now(); timer = window.setInterval(tick, 200); }
+      for (const ch of value) {
+        if (ch === ' ') {
+          if ((typed[index] ?? '') === '') continue;          // ignore double spaces
+          keystrokes++;
+          if (typed[index] !== words[index]) wrongKeystrokes++;
+          index++;
+          if (index > words.length - 20) words.push(...pick(60));
+        } else {
+          const t = typed[index] ?? '';
+          keystrokes++;
+          if (words[index][t.length] !== ch) wrongKeystrokes++;
+          if (t.length < words[index].length + 8) typed[index] = t + ch;
+        }
+      }
+      render();
+    });
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Tab') { e.preventDefault(); reset(); return; }
+      if (e.key === 'Backspace' && !done) {
+        e.preventDefault();
+        const t = typed[index] ?? '';
+        if (e.ctrlKey || e.altKey) typed[index] = '';
+        else if (t) typed[index] = t.slice(0, -1);
+        else if (index > 0 && typed[index - 1] !== words[index - 1]) index--; // go back to fix a wrong word
+        render();
+      }
+    });
+    input.addEventListener('focus', () => root.classList.add('is-focused'));
+    input.addEventListener('blur', () => root.classList.remove('is-focused'));
+    $('[data-focus]').addEventListener('click', () => input.focus());
+    root.querySelectorAll<HTMLElement>('[data-restart]').forEach((b) => b.addEventListener('click', reset));
+    hint.addEventListener('click', () => input.focus());
+
+    // Option chips: time and word list.
+    const choose = (attr: string, apply: (v: string) => void) => {
+      root.querySelectorAll<HTMLButtonElement>(`[${attr}]`).forEach((b) => b.addEventListener('click', () => {
+        root.querySelectorAll(`[${attr}]`).forEach((o) => o.setAttribute('aria-pressed', String(o === b)));
+        apply(b.getAttribute(attr)!);
+        reset();
+      }));
+    };
+    choose('data-time', (v) => (seconds = Number(v)));
+    choose('data-list', (v) => (list = v));
+
+    // "Share my score": draw a square score card on a canvas, in the site's comic style.
+    const LIST_NAMES: Record<string, string> = { everyday: 'Everyday words', mix: 'Mix of both', hobby: 'Hobby words' };
+    const PAGE = 'buildplaycollect.com/keyboards/typing-test';
+    const shareText = () => `I typed ${last.wpm} WPM (${last.acc}% accuracy) and ranked ${last.rank} on the Build Play Collect typing test. Can you beat me? https://${PAGE}`;
+
+    const drawCard = async () => {
+      const S = 1080, ink = '#141414';
+      const c = document.createElement('canvas');
+      c.width = c.height = S;
+      const g = c.getContext('2d')!;
+      try { await Promise.all([document.fonts.load('100px "Archivo Black"'), document.fonts.load('700 40px "Inter Variable"')]); } catch {}
+      const display = '"Archivo Black", "Arial Black", sans-serif';
+      const sans = '"Inter Variable", system-ui, sans-serif';
+      // Cream paper with halftone dots
+      g.fillStyle = '#fbf3e4'; g.fillRect(0, 0, S, S);
+      g.fillStyle = 'rgba(20,20,20,.09)';
+      for (let y = 10; y < S; y += 22) for (let x = (y / 22) % 2 ? 21 : 10; x < S; x += 22) { g.beginPath(); g.arc(x, y, 2.4, 0, 7); g.fill(); }
+      // The card, with a hard shadow
+      const box = (x: number, y: number, w: number, h: number, fill: string, r = 28, shadow = 14) => {
+        g.fillStyle = ink; g.beginPath(); g.roundRect(x + shadow, y + shadow, w, h, r); g.fill();
+        g.fillStyle = fill; g.beginPath(); g.roundRect(x, y, w, h, r); g.fill();
+        g.lineWidth = 7; g.strokeStyle = ink; g.stroke();
+      };
+      box(70, 70, 926, 926, '#fffaf0', 36, 18);
+      // Purple top bar
+      g.save(); g.beginPath(); g.roundRect(70, 70, 926, 130, [36, 36, 0, 0]); g.clip();
+      g.fillStyle = '#c3a6ff'; g.fillRect(70, 70, 926, 130); g.restore();
+      g.beginPath(); g.moveTo(70, 200); g.lineTo(996, 200); g.stroke();
+      g.fillStyle = ink; g.textBaseline = 'middle'; g.textAlign = 'left';
+      g.font = `44px ${display}`; g.fillText('TYPING TEST', 120, 137);
+      g.textAlign = 'right'; g.font = `700 30px ${sans}`;
+      g.fillText(`${seconds}s · ${LIST_NAMES[list] ?? list}`, 946, 137);
+      // Big WPM number
+      g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+      g.font = `300px ${display}`; g.fillText(String(last.wpm), 533, 520);
+      g.font = `56px ${display}`; g.fillText('WPM', 533, 600);
+      // Rank on a tilted yellow tag
+      g.save(); g.translate(533, 700); g.rotate(-0.04);
+      g.font = `46px ${display}`;
+      const rank = last.rank.toUpperCase();
+      const w = Math.min(g.measureText(rank).width + 80, 860);
+      box(-w / 2, -48, w, 96, '#ffd23f', 48, 8);
+      g.fillStyle = ink; g.textBaseline = 'middle'; g.fillText(rank, 0, 3, w - 60);
+      g.restore();
+      // Accuracy
+      g.textBaseline = 'alphabetic'; g.font = `700 38px ${sans}`;
+      g.fillText(`${last.acc}% accuracy`, 533, 820);
+      // Footer
+      g.font = `30px ${display}`; g.fillText('CAN YOU BEAT ME?', 533, 900);
+      g.font = `600 26px ${sans}`; g.fillStyle = '#5a5248'; g.fillText(PAGE, 533, 945);
+      // Little pink sticker in the corner
+      g.save(); g.translate(925, 265); g.rotate(0.2);
+      g.fillStyle = '#ff8fc7'; g.strokeStyle = ink; g.lineWidth = 5; g.beginPath();
+      for (let i = 0; i < 24; i++) { const r = i % 2 ? 50 : 66, a = (i / 24) * Math.PI * 2; g.lineTo(Math.cos(a) * r, Math.sin(a) * r); }
+      g.closePath(); g.fill(); g.stroke();
+      g.fillStyle = ink; g.textBaseline = 'middle'; g.font = `22px ${display}`;
+      g.fillText('BUILD', 0, -22); g.fillText('PLAY', 0, 2); g.fillText('COLLECT', 0, 26, 92);
+      g.restore();
+      return c;
+    };
+
+    const shareBox = $('[data-share]');
+    $('[data-share-btn]').addEventListener('click', async () => {
+      const canvas = await drawCard();
+      const url = canvas.toDataURL('image/png');
+      $<HTMLImageElement>('[data-share-img]').src = url;
+      $<HTMLAnchorElement>('[data-share-save]').href = url;
+      shareBox.hidden = false;
+      shareBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      // On phones, open the share sheet straight away (with the image when the browser allows it).
+      const blob: Blob | null = await new Promise((ok) => canvas.toBlob(ok, 'image/png'));
+      const file = blob && new File([blob], 'build-play-collect-typing-score.png', { type: 'image/png' });
+      if (file && navigator.canShare?.({ files: [file] })) {
+        try { await navigator.share({ files: [file], text: shareText() }); } catch {}
+      }
+    });
+    $('[data-share-copy]').addEventListener('click', async (e) => {
+      const b = e.currentTarget as HTMLButtonElement;
+      try { await navigator.clipboard.writeText(shareText()); b.textContent = 'Copied! ✓'; } catch { b.textContent = 'Could not copy'; }
+      setTimeout(() => (b.textContent = 'Copy text'), 2000);
+    });
+
+    reset();
+    input.blur();
+  }
+</script>
