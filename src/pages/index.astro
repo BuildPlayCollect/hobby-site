@@ -7,15 +7,23 @@ import Carousel from '../components/Carousel.astro';
 import BoxHero from '../components/BoxHero.astro';
 import HobbyIcon from '../components/HobbyIcon.astro';
 import WikiUpdates from '../components/WikiUpdates.astro';
+import NewsRoundup from '../components/NewsRoundup.astro';
 import { HOBBIES, type HobbyKey } from '../data/site';
 
 const articles = (await getCollection('articles', ({ data }) => !data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-const featured = articles.find((a) => a.data.featured) ?? articles[0];
-// Headline carousel: the featured story, then the newest story from each hobby.
+// News roundups (written by the Mon/Thu update, named news-roundup-DATE) get their own section,
+// so they never crowd the stories below.
+const roundups = articles.filter((a) => a.id.startsWith('news-roundup-'));
+const stories = articles.filter((a) => !roundups.includes(a));
+const featured = stories.find((a) => a.data.featured);
+// Top stories carousel: the featured story (if one is switched on), the newest story,
+// then the newest story from each hobby. Capped at 6 so it never floods.
 // It rebuilds itself every time an article is added, no editing needed.
-const headlines = [featured, ...Object.keys(HOBBIES).map((key) => articles.find((a) => a.data.hobby === key))]
-  .filter((a, i, all) => a && all.indexOf(a) === i);
-const latest = articles.filter((a) => !headlines.includes(a)).slice(0, 6);
+const headlines = [featured, stories[0], ...Object.keys(HOBBIES).map((key) => stories.find((a) => a.data.hobby === key))]
+  .filter((a, i, all) => a && all.indexOf(a) === i)
+  .slice(0, 6) as typeof stories;
+// Everything else that's new goes in "Fresh off the press", newest first, at most 6.
+const latest = stories.filter((a) => !headlines.includes(a)).slice(0, 6);
 const wiki = (await getCollection('wiki')).sort((a, b) => a.data.title.localeCompare(b.data.title));
 const rulebooks = (await getCollection('rules')).length;
 
@@ -55,6 +63,9 @@ const steps = [
       </a>
     ))}
   </nav>
+
+  <!-- News roundup: the latest Mon/Thu roundup, on its own so it doesn't crowd the stories. -->
+  <NewsRoundup roundups={roundups} />
 
   <!-- Fresh from the wiki: the newest added or updated wiki terms, so returning readers see what changed. -->
   <WikiUpdates />
@@ -105,7 +116,7 @@ const steps = [
   {Object.entries(HOBBIES).map(([key, h]) => {
     // A hobby gets its own row once it has 3+ articles. Before that, its stories
     // already show in Top stories, so a row would only repeat them.
-    const forHobby = articles.filter((a) => a.data.hobby === key).slice(0, 8);
+    const forHobby = stories.filter((a) => a.data.hobby === key).slice(0, 8);
     return forHobby.length >= 3 && (
       <section>
         <div class="section-head">

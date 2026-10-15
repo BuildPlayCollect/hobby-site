@@ -3,6 +3,7 @@
 // used on the home page, hobby pages and type pages.
 import type { CollectionEntry } from 'astro:content';
 import { HOBBIES, TYPES, type HobbyKey, type TypeKey } from '../data/site';
+import Sticker from './Sticker.astro';
 
 interface Props {
   article: CollectionEntry<'articles'>;
@@ -11,9 +12,13 @@ interface Props {
 const { article, large = false } = Astro.props;
 const hobby = HOBBIES[article.data.hobby as HobbyKey];
 const type = TYPES[article.data.type as TypeKey];
+// A "NEW!" sticker for the first 7 days. The site rebuilds on every change, so the sticker
+// drops off at the first rebuild after that week.
+const isNew = Date.now() - article.data.date.valueOf() < 7 * 24 * 60 * 60 * 1000;
 ---
 <a class:list={['card', { 'card-large': large }]} href={`/articles/${article.id}/`} data-type={article.data.type}>
   <div class="card-cover" style={`background-color:${hobby.color}`}>
+    {isNew && <Sticker text="NEW!" size={large ? 84 : 64} tilt={12} class="card-new" />}
     {article.data.cover
       ? <img src={article.data.cover} alt={article.data.coverAlt ?? ''} loading="lazy" />
       : <span>{hobby.name}</span>}
