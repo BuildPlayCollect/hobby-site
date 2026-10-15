@@ -36,6 +36,12 @@ const wiki = defineCollection({
     hobby: z.enum(Object.keys(HOBBIES) as [string, ...string[]]),
     summary: z.string(),
     aliases: z.array(z.string()).default([]),
+    // For the "Fresh from the wiki" strip on the home page.
+    // added: when the term first went up. updated: the last real change (leave empty if none).
+    // note: one short line saying what changed, e.g. "Added the new CX parts". Optional.
+    added: z.coerce.date().optional(),
+    updated: z.coerce.date().optional(),
+    note: z.string().optional(),
   }),
 });
 

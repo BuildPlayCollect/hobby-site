@@ -3,6 +3,7 @@ title: Rollers
 hobby: tamiya
 summary: Small wheels on the corners of a Mini 4WD that roll along the track wall and keep the car on course.
 aliases: [Roller, rollers, roller]
+added: 2026-10-12
 ---
 Rollers sit at the front and back corners of a Mini 4WD chassis. They press against the track wall so the car can take corners without flying off.
 

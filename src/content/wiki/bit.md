@@ -3,6 +3,7 @@ title: Bit
 hobby: beyblade
 summary: The tip of a Beyblade X top. It touches the stadium and controls how the top moves.
 aliases: [Bits]
+added: 2026-10-12
 ---
 The Bit is the bottom part of a Beyblade X, the only part that touches the stadium floor.
 

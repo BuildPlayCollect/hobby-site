@@ -154,6 +154,18 @@ content:
         description: Other ways the term is written, e.g. "ratchets" or "Ratchets".
         type: string
         list: true
+      - name: added
+        label: Date added
+        description: When this term first went up. Shown as "NEW" on the home page.
+        type: date
+      - name: updated
+        label: Last updated
+        description: Set this when you make a real change (not a typo fix). It puts the term back on the home page as "UPDATED".
+        type: date
+      - name: note
+        label: What changed
+        description: One short line for the home page, e.g. "Added the new CX parts". Optional.
+        type: string
       - name: body
         label: Full explanation
         type: rich-text
