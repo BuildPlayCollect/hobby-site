@@ -647,3 +647,17 @@ a.tile:hover { text-decoration: none; transform: translate(-2px, -2px); box-shad
 @keyframes wobble { 30% { transform: rotate(-6deg); } 70% { transform: rotate(5deg); } }
 @keyframes twinkle { 50% { transform: scale(.7) rotate(20deg); } }
 @media (prefers-reduced-motion: reduce) { .box-star, .box-face { animation: none !important; } }
+
+/* ---------- Fresh from the wiki: newest added / updated terms on the home page ---------- */
+.wiki-updates-list { list-style: none; margin: 0; padding: 18px 8px 14px 2px; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(200px, 1fr); gap: 14px; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: thin; }
+.wiki-updates-list li { scroll-snap-align: start; display: flex; }
+.wiki-update { position: relative; display: flex; flex-direction: column; gap: 6px; width: 100%; padding: 26px 16px 16px; color: var(--ink); border-top: 8px solid var(--c) !important; transition: transform .15s; }
+.wiki-update:hover { text-decoration: none; transform: translateY(-3px) rotate(-.6deg); }
+.wu-badge { position: absolute; top: -16px; left: 12px; padding: 3px 10px; font-family: var(--display); font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: #141414; border: 2.5px solid #141414; border-radius: 999px; box-shadow: 2px 2px 0 #141414; transform: rotate(-4deg); }
+.wu-new { background: var(--yellow); }
+.wu-updated { background: var(--pink); }
+.wu-meta { display: flex; align-items: center; gap: 6px; font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+.wu-meta .dot { margin: 0; width: 10px; height: 10px; }
+.wu-term { font-family: var(--display); font-size: 1.15rem; line-height: 1.15; }
+.wu-text { font-size: .9rem; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+@media (max-width: 700px) { .wiki-updates-list { grid-auto-columns: 78%; margin: 0 -16px; padding: 18px 16px 14px; scroll-padding-inline: 16px; } }

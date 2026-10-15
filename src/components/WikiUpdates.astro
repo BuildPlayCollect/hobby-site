@@ -1,0 +1,43 @@
+---
+// WikiUpdates.astro: "Fresh from the wiki", a quick announcement strip on the home page.
+// Shows the newest wiki activity: terms that were just added ("NEW") or changed ("UPDATED").
+// It runs on the dates in each wiki term (added / updated, set in Pages CMS), so nothing
+// needs editing here. A term with an "updated" date and a "What changed" note shows that note.
+import { getCollection } from 'astro:content';
+import { HOBBIES, type HobbyKey } from '../data/site';
+
+interface Props { limit?: number }
+const { limit = 5 } = Astro.props;
+
+const when = (d: { added?: Date; updated?: Date }) => d.updated ?? d.added;
+const items = (await getCollection('wiki'))
+  .filter((w) => when(w.data))
+  .sort((a, b) => when(b.data)!.valueOf() - when(a.data)!.valueOf() || a.data.title.localeCompare(b.data.title))
+  .slice(0, limit);
+const day = (d: Date) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' });
+---
+{items.length > 0 && (
+  <section class="wiki-updates" aria-labelledby="wiki-updates-title">
+    <div class="section-head">
+      <h2 id="wiki-updates-title">Fresh from the <span class="hl">wiki</span></h2>
+      <a class="more" href="/wiki">All wiki words →</a>
+    </div>
+    <ul class="wiki-updates-list">
+      {items.map((w) => {
+        const h = HOBBIES[w.data.hobby as HobbyKey];
+        const updated = Boolean(w.data.updated);
+        const d = when(w.data)!;
+        return (
+          <li>
+            <a class="tile wiki-update" href={`/wiki/${w.id}/`} style={`--c:${h.color}`}>
+              <span class:list={['wu-badge', updated ? 'wu-updated' : 'wu-new']}>{updated ? 'Updated' : 'New'}</span>
+              <span class="wu-meta"><span class="dot" style={`background:${h.color}`}></span>{h.name} · <time datetime={d.toISOString().slice(0, 10)}>{day(d)}</time></span>
+              <strong class="wu-term">{w.data.title}</strong>
+              <span class="wu-text">{(updated && w.data.note) || w.data.summary}</span>
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  </section>
+)}

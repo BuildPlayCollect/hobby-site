@@ -3,6 +3,7 @@ title: Ratchet
 hobby: beyblade
 summary: The middle part of a Beyblade X top. Its name, like 3-60, gives its number of prongs and its height.
 aliases: [Ratchets]
+added: 2026-10-12
 ---
 The Ratchet connects the Blade to the Bit. Its name is two numbers: **prongs-height**. A 3-60 has three prongs and a height of 6.0 mm.
 

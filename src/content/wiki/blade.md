@@ -3,6 +3,7 @@ title: Blade
 hobby: beyblade
 summary: The top part of a Beyblade X top. Its shape and weight decide how it hits and how it defends.
 aliases: [Blades]
+added: 2026-10-12
 ---
 The Blade is the disc that sits on top of a Beyblade X. It makes first contact in a battle, so its shape matters most.
 

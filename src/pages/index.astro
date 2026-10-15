@@ -6,6 +6,7 @@ import ArticleCard from '../components/ArticleCard.astro';
 import Carousel from '../components/Carousel.astro';
 import BoxHero from '../components/BoxHero.astro';
 import HobbyIcon from '../components/HobbyIcon.astro';
+import WikiUpdates from '../components/WikiUpdates.astro';
 import { HOBBIES, type HobbyKey } from '../data/site';
 
 const articles = (await getCollection('articles', ({ data }) => !data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
@@ -54,6 +55,9 @@ const steps = [
       </a>
     ))}
   </nav>
+
+  <!-- Fresh from the wiki: the newest added or updated wiki terms, so returning readers see what changed. -->
+  <WikiUpdates />
 
   <!-- New here? Three numbered steps for first-time visitors. -->
   <section class="steps-wrap" aria-labelledby="steps-title">
