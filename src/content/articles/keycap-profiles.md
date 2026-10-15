@@ -5,7 +5,7 @@ hobby: keyboards
 type: guide
 author: Echo
 date: 2026-10-15
-draft: true
+draft: false
 quick:
   - "A keycap's profile is its shape: how tall it is, and whether each row is angled differently (sculpted) or all the same (uniform)."
   - "Cherry and OEM are the familiar, middle-height picks. SA and MT3 are tall and retro. DSA and XDA are flat and uniform."

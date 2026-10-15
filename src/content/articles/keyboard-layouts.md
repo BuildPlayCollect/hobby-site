@@ -5,7 +5,7 @@ hobby: keyboards
 type: guide
 author: Echo
 date: 2026-10-15
-draft: true
+draft: false
 quick:
   - "Layouts are named by size: full size, 96%, TKL (80%), 75%, 65%, 60% and 40%."
   - "Each step smaller drops something: the number pad, then the navigation keys, then the function row."
