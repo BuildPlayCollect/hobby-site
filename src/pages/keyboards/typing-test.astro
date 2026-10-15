@@ -9,7 +9,7 @@ import { EVERYDAY, HOBBY } from '../../data/typing-words';
 
 const TIMES = [15, 30, 60];
 ---
-<Base title="Typing test" description="How fast can you type? Take our free typing test with everyday words or hobby words, and earn a switch-themed rank.">
+<Base title="Typing test" description="How fast can you type? Take our free typing test with everyday English words (or hobby words), and earn a switch-themed rank.">
   <section class="tt" data-tt data-everyday={JSON.stringify(EVERYDAY)} data-hobby={JSON.stringify(HOBBY)}>
     <header class="tt-head">
       <p class="kicker"><a class="tag" href="/keyboards" style="background:#c3a6ff">Keyboards</a><span class="tag tag-plain">Tool</span></p>
@@ -24,6 +24,7 @@ const TIMES = [15, 30, 60];
       </div>
       <div class="tt-group" role="radiogroup" aria-label="Words">
         <button type="button" class="chip" data-list="everyday" aria-pressed="true">Everyday words</button>
+        <button type="button" class="chip" data-list="mix" aria-pressed="false">Mix of both</button>
         <button type="button" class="chip" data-list="hobby" aria-pressed="false">Hobby words</button>
       </div>
     </div>
@@ -71,6 +72,8 @@ const TIMES = [15, 30, 60];
       everyday: JSON.parse(root.dataset.everyday || '[]'),
       hobby: JSON.parse(root.dataset.hobby || '[]'),
     };
+    // Mix: mostly everyday words with a sprinkle of hobby words.
+    lists.mix = [...lists.everyday, ...lists.hobby];
     const $ = <T extends Element = HTMLElement>(sel: string) => root.querySelector<T>(sel)!;
     const wordsEl = $('[data-words]');
     const input = $<HTMLInputElement>('[data-input]');
