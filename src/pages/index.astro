@@ -4,8 +4,6 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import HobbyIcon from '../components/HobbyIcon.astro';
-import WikiUpdates from '../components/WikiUpdates.astro';
-import NewsRoundup from '../components/NewsRoundup.astro';
 import { HOBBIES, TYPES, type HobbyKey, type TypeKey } from '../data/site';
 
 const articles = (await getCollection('articles', ({ data }) => !data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
@@ -31,163 +29,123 @@ const rulebooks = (await getCollection('rules')).length;
 const withQuick = articles.filter((a) => a.data.quick?.length);
 const tryUrls = (withQuick.length ? withQuick : articles).map((a) => `/articles/${a.id}/`);
 
-// "Start here" steps for first-time visitors.
-const steps = [
-  { title: 'Pick a hobby', text: 'Every hobby in the index below has its own page of stories, guides and history.', href: '#hobby-index', link: 'See the index' },
-  { title: 'Read the 60-second version', text: 'Every article opens with a short summary, so you get the gist before the deep dive.', href: headlines[0] ? `/articles/${headlines[0].id}/` : '/guides', link: 'Try one now', random: true },
-  { title: 'Fall down the rabbit hole', text: 'Hobby words are linked to our wiki. Hover for a quick meaning, click to keep going.', href: '/wiki', link: 'Open the wiki' },
-];
-const lead = headlines[0];
-const sideList = headlines.slice(1);
-const pad = (n: number) => String(n).padStart(2, '0');
-const countFor = (key: string) => stories.filter((a) => a.data.hobby === key).length;
+// Short, plain words for each hobby on the picker.
+const nick: Record<string, string> = {
+  beyblade: 'Spinning tops', tamiya: 'Tiny fast cars', keyboards: 'Clacky boards', tcg: 'Card battles',
+  consoles: 'Game machines', esports: 'Pro gaming', general: 'Hobbies in general',
+};
+const picks = headlines.slice(0, 3);
+// Rabbit hole: every wiki word, so the box can show a new one each visit (and on "Another word").
+const holeWords = wiki.map((w) => ({ t: w.data.title, s: w.data.summary, u: `/wiki/${w.id}/`, h: HOBBIES[w.data.hobby as HobbyKey].name }));
+const firstWord = holeWords[0];
+const newest = roundups[0];
 ---
 <Base>
-  <!-- The nameplate: the site's name right across the page, like a magazine cover. -->
-  <section class="nameplate" aria-labelledby="site-title">
-    <div class="nameplate-meta label">
-      <span>A hobby magazine</span>
-      <span>{articles.length} {articles.length === 1 ? 'story' : 'stories'} and counting</span>
-    </div>
-    <h1 class="nameplate-title" id="site-title"><span>Build</span><span>Play</span><span>Collect</span></h1>
-    <div class="nameplate-row">
-      <p>Nerdy, playful and fact-checked. History, guides, new releases and giveaways for every hobby, from spinning tops to trading cards.</p>
-      <!-- Live counts. They update themselves as hobbies, wiki words and rulebooks are added. -->
-      <dl class="nameplate-stats">
-        <div><dt class="label">Hobbies</dt><dd>{pad(Object.keys(HOBBIES).length)}</dd></div>
-        <div><dt class="label">Wiki words</dt><dd>{pad(wiki.length)}</dd></div>
-        <div><dt class="label">Rulebooks</dt><dd>{pad(rulebooks)}</dd></div>
-      </dl>
-    </div>
-  </section>
-
-  <!-- Front page: the lead story big on the left, a numbered list of top stories on the right. -->
-  {lead && (
-    <section class="front" aria-label="Top stories">
-      <a class="lead" href={`/articles/${lead.id}/`} style={`--c:${HOBBIES[lead.data.hobby as HobbyKey].color}`}>
-        <div class="card-cover">
-          {lead.data.cover
-            ? <img src={lead.data.cover} alt={lead.data.coverAlt ?? ''} />
-            : <span class="card-cover-name">{HOBBIES[lead.data.hobby as HobbyKey].name}</span>}
-        </div>
-        <p class="kicker"><span class="tag">{HOBBIES[lead.data.hobby as HobbyKey].name}</span><span class="tag tag-plain">{TYPES[lead.data.type as TypeKey].name}</span></p>
-        <h2>{lead.data.title}</h2>
-        <p>{lead.data.description}</p>
-      </a>
-      {sideList.length > 0 && (
-        <div class="latest-list">
-          <h2><span>Top stories</span><span>{pad(sideList.length)}</span></h2>
-          <ol>
-            {sideList.map((a, i) => (
-              <li>
-                <a href={`/articles/${a.id}/`} style={`--c:${HOBBIES[a.data.hobby as HobbyKey].color}`}>
-                  <span class="latest-num">{pad(i + 1)}</span>
-                  <p class="kicker"><span class="tag">{HOBBIES[a.data.hobby as HobbyKey].name}</span><span class="tag tag-plain">{TYPES[a.data.type as TypeKey].name}</span></p>
-                  <h3>{a.data.title}</h3>
-                </a>
-              </li>
-            ))}
-          </ol>
-        </div>
-      )}
-    </section>
-  )}
-
-  <!-- The hobby index: one big row per hobby. Hover (or tap) fills the row with that hobby's colour. -->
-  <div class="section-head" id="hobby-index"><h2>The index</h2><span class="label muted">{pad(Object.keys(HOBBIES).length)} hobbies</span></div>
-  <ol class="hobby-index">
-    {Object.entries(HOBBIES).map(([key, h], i) => (
+  <!-- Welcome: a short hello, then one question with one big button per hobby. -->
+  <section class="welcome" aria-labelledby="welcome-title">
+    <h1 id="welcome-title">Find your next <span class="hl">hobby.</span></h1>
+    <p>Fun, fact-checked stories about spinning tops, tiny cars, clacky keyboards, cards, consoles and esports.</p>
+    <p class="welcome-ask">What are you into?</p>
+    <ul class="picker">
+      {Object.entries(HOBBIES).filter(([key]) => key !== 'general').map(([key, h]) => (
+        <li>
+          <a href={`/${key}`} style={`--c:${h.color}`}>
+            <span class="picker-icon"><HobbyIcon hobby={key as HobbyKey} size={38} /></span>
+            <strong>{h.name}</strong>
+            <small>{nick[key]}</small>
+          </a>
+        </li>
+      ))}
       <li>
-        <a href={`/${key}`} style={`--c:${h.color}`}>
-          <span class="hi-num">{pad(i + 1)}</span>
-          <span class="hi-name">{h.name}</span>
-          <span class="hi-blurb">{h.blurb}</span>
-          <span class="hi-side">
-            <span class="hi-count">{countFor(key)} {countFor(key) === 1 ? 'story' : 'stories'}</span>
-            <span class="hi-icon"><HobbyIcon hobby={key as HobbyKey} size={54} /></span>
-            <span class="hi-arrow" aria-hidden="true">→</span>
-          </span>
+        <a href="/quiz" style="--c:#ffffff">
+          <span class="picker-icon" aria-hidden="true"><strong>?</strong></span>
+          <strong>Not sure yet?</strong>
+          <small>Take the quiz</small>
         </a>
       </li>
-    ))}
-  </ol>
+    </ul>
+    <button class="welcome-search" type="button" data-open-search>Or search everything <kbd>/</kbd></button>
+  </section>
 
-  <!-- The briefing: the latest Mon/Thu news roundup. -->
-  <NewsRoundup roundups={roundups} />
+  <!-- This week: one line with the newest Mon/Thu news roundup. -->
+  {newest && (
+    <a class="this-week" href={`/articles/${newest.id}/`}>
+      <b>This week</b>
+      <span>{newest.data.title}</span>
+      <i>Read →</i>
+    </a>
+  )}
 
-  {latest.length > 0 && (
+  <!-- Just three stories to start with. Everything else is one click away. -->
+  {picks.length > 0 && (
     <>
-      <div class="section-head"><h2>Fresh off the press</h2></div>
-      <div class="grid">{latest.map((a) => <ArticleCard article={a} />)}</div>
+      <div class="section-head"><h2>Start with a <span class="hl">story</span></h2><a class="more" href="/guides">All guides →</a></div>
+      <div class="grid">{picks.map((a) => <ArticleCard article={a} />)}</div>
     </>
   )}
 
-  <!-- Little games: the hobby quiz and the typing test, as two poster blocks. -->
-  <div class="play">
-    <a class="play-quiz" href="/quiz">
-      <span class="play-big" aria-hidden="true">?</span>
-      <div>
-        <span class="label">Quiz · 5 questions</span>
-        <h2>Which hobby fits you?</h2>
-        <p>No wrong answers. Find the hobby that matches how you like to spend a Saturday.</p>
+  <!-- Rabbit hole: one wiki word at a time. Readers choose to keep falling. -->
+  {firstWord && (
+    <>
+      <div class="section-head"><h2>Rabbit hole of the day</h2><a class="more" href="/wiki">Whole wiki →</a></div>
+      <div class="hole" data-hole={JSON.stringify(holeWords)}>
+        <svg class="hole-art" viewBox="0 0 110 110" aria-hidden="true">
+          <circle class="h1" cx="55" cy="55" r="50" /><circle class="h2" cx="55" cy="55" r="36" /><circle cx="55" cy="55" r="24" /><circle class="h3" cx="55" cy="55" r="13" />
+        </svg>
+        <div class="hole-word">
+          <span class="label" data-hole-hobby>{firstWord.h}</span>
+          <h3><a href={firstWord.u} data-hole-link>{firstWord.t}</a></h3>
+          <p data-hole-text>{firstWord.s}</p>
+        </div>
+        <div class="hole-actions">
+          <a class="pill-btn" href={firstWord.u} data-hole-go>Fall in →</a>
+          <button class="hole-next" type="button" data-hole-next>Another word</button>
+        </div>
       </div>
-      <span class="play-go">Take the quiz <b aria-hidden="true">→</b></span>
+    </>
+  )}
+
+  <!-- Little games -->
+  <div class="section-head"><h2>Take a break</h2></div>
+  <div class="play2">
+    <a href="/quiz" style="--c:var(--yellow)">
+      <span class="play2-emoji" aria-hidden="true">?</span>
+      <div><strong>Which hobby fits you?</strong><span>5 quick questions, no wrong answers.</span></div>
     </a>
-    <a class="play-typing" href="/keyboards/typing-test">
-      <span class="play-big" aria-hidden="true">⌨</span>
-      <div>
-        <span class="label">Typing test · Desktop</span>
-        <h2>How fast can you type?</h2>
-        <p>Race the clock, earn a switch-themed rank and share your score.</p>
-      </div>
-      <span class="play-go">Start typing <b aria-hidden="true">→</b></span>
+    <a class="play2-typing" href="/keyboards/typing-test" style="--c:var(--lavender)">
+      <span class="play2-emoji" aria-hidden="true">Aa</span>
+      <div><strong>How fast can you type?</strong><span>Race the clock and earn a switch rank.</span></div>
     </a>
   </div>
-
-  <!-- Fresh from the wiki: the newest added or updated wiki terms. -->
-  <WikiUpdates />
-
-  <!-- Start here: three steps for first-time visitors. -->
-  <div class="section-head"><h2>Start here</h2><span class="label muted">New to the site?</span></div>
-  <ol class="start">
-    {steps.map((s, i) => (
-      <li>
-        <span class="start-num" aria-hidden="true">{pad(i + 1)}</span>
-        <h3>{s.title}</h3>
-        <p>{s.text}</p>
-        <a href={s.href} data-random={s.random ? JSON.stringify(tryUrls) : undefined}>{s.link} →</a>
-      </li>
-    ))}
-  </ol>
-
-  <!-- Every wiki word in one flowing line, like a magazine's glossary. -->
-  <div class="section-head"><h2>Glossary</h2><a class="more" href="/wiki">Open the wiki →</a></div>
-  <p class="glossary">
-    {wiki.map((w, i) => <>{i > 0 && <span aria-hidden="true">/</span>}<a href={`/wiki/${w.id}/`}>{w.data.title}</a></>)}
-  </p>
-
-  {Object.entries(HOBBIES).map(([key, h]) => {
-    // A hobby gets its own row once it has 3+ articles. Before that, its stories
-    // already show up top, so a row would only repeat them.
-    const forHobby = stories.filter((a) => a.data.hobby === key).slice(0, 3);
-    return forHobby.length >= 3 && (
-      <section>
-        <div class="section-head">
-          <h2><span class="dot" style={`background:${h.color}`}></span>{h.name}</h2>
-          <a class="more" href={`/${key}`}>All {h.name} →</a>
-        </div>
-        <div class="grid">{forHobby.map((a) => <ArticleCard article={a} />)}</div>
-      </section>
-    );
-  })}
 </Base>
 
 <script>
-  // "Try one now": swap in a random article just before the link is followed.
+  // "Try one now"-style random link (kept for any data-random links).
   document.querySelectorAll<HTMLAnchorElement>('a[data-random]').forEach((a) => {
     const urls: string[] = JSON.parse(a.dataset.random || '[]');
     const pick = () => { if (urls.length) a.href = urls[Math.floor(Math.random() * urls.length)]; };
     a.addEventListener('pointerdown', pick);
     a.addEventListener('keydown', (e) => { if (e.key === 'Enter') pick(); });
   });
+
+  // Rabbit hole: show a random wiki word on each visit, and another on "Another word".
+  const hole = document.querySelector<HTMLElement>('[data-hole]');
+  if (hole) {
+    const words: { t: string; s: string; u: string; h: string }[] = JSON.parse(hole.dataset.hole || '[]');
+    let last = -1;
+    const show = () => {
+      if (!words.length) return;
+      let i = Math.floor(Math.random() * words.length);
+      if (words.length > 1 && i === last) i = (i + 1) % words.length;
+      last = i;
+      const w = words[i];
+      hole.querySelector('[data-hole-hobby]')!.textContent = w.h;
+      const link = hole.querySelector<HTMLAnchorElement>('[data-hole-link]')!;
+      link.textContent = w.t; link.href = w.u;
+      hole.querySelector('[data-hole-text]')!.textContent = w.s;
+      hole.querySelector<HTMLAnchorElement>('[data-hole-go]')!.href = w.u;
+    };
+    show();
+    hole.querySelector('[data-hole-next]')!.addEventListener('click', show);
+  }
 </script>

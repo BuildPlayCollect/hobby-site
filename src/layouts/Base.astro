@@ -8,7 +8,7 @@ import Newsletter from '../components/Newsletter.astro';
 import '@fontsource-variable/inter';
 // The whole look of the site (colours, fonts, outlines, shadows) lives in ONE theme file.
 // To try a different design, point this line at another file in src/styles/themes/.
-import '../styles/themes/mag.css';
+import '../styles/themes/blend.css';
 
 interface Props {
   title?: string;
@@ -218,7 +218,7 @@ const shareImage = new URL(image ?? '/og-default.png', Astro.site).href;
             location.href = links[Math.max(active, 0)].href;
           }
         });
-        document.querySelector('.search-open').addEventListener('click', openSearch);
+        document.querySelectorAll('.search-open, [data-open-search]').forEach(function (b) { b.addEventListener('click', openSearch); });
         overlay.addEventListener('click', function (e) { if (e.target === overlay) closeSearch(); });
         document.addEventListener('keydown', function (e) {
           var typing = /INPUT|TEXTAREA/.test(document.activeElement.tagName);
