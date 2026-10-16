@@ -1,9 +1,9 @@
 ---
-// ArticleCard.astro: the preview box for one article,
+// ArticleCard.astro: the preview for one article,
 // used on the home page, hobby pages and type pages.
+// Mag design: a picture (or the hobby's colour with its name), a small mono label, a serif headline.
 import type { CollectionEntry } from 'astro:content';
 import { HOBBIES, TYPES, type HobbyKey, type TypeKey } from '../data/site';
-import Sticker from './Sticker.astro';
 
 interface Props {
   article: CollectionEntry<'articles'>;
@@ -12,19 +12,19 @@ interface Props {
 const { article, large = false } = Astro.props;
 const hobby = HOBBIES[article.data.hobby as HobbyKey];
 const type = TYPES[article.data.type as TypeKey];
-// A "NEW!" sticker for the first 7 days. The site rebuilds on every change, so the sticker
+// A "NEW" label for the first 7 days. The site rebuilds on every change, so the label
 // drops off at the first rebuild after that week.
 const isNew = Date.now() - article.data.date.valueOf() < 7 * 24 * 60 * 60 * 1000;
 ---
-<a class:list={['card', { 'card-large': large }]} href={`/articles/${article.id}/`} data-type={article.data.type}>
-  <div class="card-cover" style={`background-color:${hobby.color}`}>
-    {isNew && <Sticker text="NEW!" size={large ? 84 : 64} tilt={12} class="card-new" />}
+<a class:list={['card', { 'card-large': large }]} href={`/articles/${article.id}/`} data-type={article.data.type} style={`--c:${hobby.color}`}>
+  <div class="card-cover">
+    {isNew && <span class="card-new">NEW</span>}
     {article.data.cover
       ? <img src={article.data.cover} alt={article.data.coverAlt ?? ''} loading="lazy" />
-      : <span>{hobby.name}</span>}
+      : <span class="card-cover-name">{hobby.name}</span>}
   </div>
   <div class="card-body">
-    <p class="kicker"><span class="tag" style={`background:${hobby.color}`}>{hobby.name}</span><span class="tag tag-plain">{type.name}</span></p>
+    <p class="kicker"><span class="tag">{hobby.name}</span><span class="tag tag-plain">{type.name}</span></p>
     <h3>{article.data.title}</h3>
     {large && <p class="card-desc">{article.data.description}</p>}
   </div>

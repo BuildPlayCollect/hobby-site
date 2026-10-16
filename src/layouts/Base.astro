@@ -4,12 +4,11 @@
 import { SITE_NAME, SITE_TAGLINE, HOBBIES, TYPE_SLUGS } from '../data/site';
 import AdSlot from '../components/AdSlot.astro';
 import Newsletter from '../components/Newsletter.astro';
-import SideDetails from '../components/SideDetails.astro';
 // Inter font, stored on our own site (no Google Fonts request).
 import '@fontsource-variable/inter';
 // The whole look of the site (colours, fonts, outlines, shadows) lives in ONE theme file.
 // To try a different design, point this line at another file in src/styles/themes/.
-import '../styles/themes/comic.css';
+import '../styles/themes/mag.css';
 
 interface Props {
   title?: string;
@@ -57,7 +56,13 @@ const shareImage = new URL(image ?? '/og-default.png', Astro.site).href;
     </script>
   </head>
   <body>
-    <SideDetails />
+    <!-- Dateline: a thin strip above the header, like the top of a newspaper -->
+    <div class="dateline">
+      <div class="wrap">
+        <span data-today>History, guides and news for every hobby</span>
+        <span class="dateline-links"><a href="/standards">Fact-checked</a><a href="/newsletter">Newsletter</a><a href="/about">About</a></span>
+      </div>
+    </div>
     <header class="site-header">
       <div class="wrap header-row">
         <a class="logo" href="/"><span class="logo-mark" aria-hidden="true">BPC</span>{SITE_NAME}</a>
@@ -68,12 +73,14 @@ const shareImage = new URL(image ?? '/og-default.png', Astro.site).href;
               Hobbies <span class="chev" aria-hidden="true">▼</span>
             </button>
             <div class="dropdown-panel" id="hobby-menu">
-              {Object.entries(HOBBIES).map(([key, h]) => (
-                <a class="hobby-item" href={`/${key}`}>
-                  <span class="dot" style={`background:${h.color}`}></span>
-                  <span><strong>{h.name}</strong><small>{h.blurb}</small></span>
-                </a>
-              ))}
+              <div class="dropdown-inner">
+                {Object.entries(HOBBIES).map(([key, h]) => (
+                  <a class="hobby-item" href={`/${key}`} style={`--c:${h.color}`}>
+                    <span class="dot" style={`background:${h.color}`}></span>
+                    <span><strong>{h.name}</strong><small>{h.blurb}</small></span>
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
           <a class="nav-link" href={`/${TYPE_SLUGS.guide}`}>Guides</a>
@@ -92,13 +99,6 @@ const shareImage = new URL(image ?? '/og-default.png', Astro.site).href;
         </div>
       </div>
     </header>
-
-    <!-- Ticker: a scrolling strip of what's on the site. The list is written twice so it loops without a gap. -->
-    <div class="ticker" aria-hidden="true">
-      <div class="ticker-track">
-        {[0, 1].map(() => ['History', 'Guides', 'New releases', 'Giveaways', 'Wiki rabbit holes', 'Tournament rules'].map((t) => <span>{t}</span>))}
-      </div>
-    </div>
 
     <div class="search-overlay" role="dialog" aria-modal="true" aria-label="Search">
       <div class="search-box">
@@ -120,7 +120,6 @@ const shareImage = new URL(image ?? '/og-default.png', Astro.site).href;
         <div>
           <a class="logo" href="/"><span class="logo-mark" aria-hidden="true">BPC</span>{SITE_NAME}</a>
           <p>{SITE_TAGLINE}</p>
-          <p>&copy; {new Date().getFullYear()} {SITE_NAME}</p>
         </div>
         <div>
           <h2>Hobbies</h2>
@@ -141,11 +140,19 @@ const shareImage = new URL(image ?? '/og-default.png', Astro.site).href;
           </ul>
         </div>
       </div>
+      <div class="wrap">
+        <p class="footer-word" aria-hidden="true">Build Play Collect</p>
+        <div class="footer-base"><span>&copy; {new Date().getFullYear()} {SITE_NAME}</span><span>History · Guides · News · Giveaways</span></div>
+      </div>
     </footer>
 
     <script>
       (function () {
         var root = document.documentElement;
+
+        // Dateline: show the reader's date, like the top of a newspaper.
+        var today = document.querySelector('[data-today]');
+        if (today) today.textContent = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
         // Night mode button: flip the theme and remember the choice.
         document.querySelector('.theme-toggle').addEventListener('click', function () {

@@ -20,7 +20,7 @@ const results = (Object.keys(QUIZ_RESULTS) as HobbyKey[]).map((key) => ({
 <Base title="Which hobby fits you?" description="Five quick questions, one hobby match. Find out if you're a Beyblade blader, a Mini 4WD racer, a keyboard builder, a card slinger, a console collector or an esports fan.">
   <section class="quiz" data-quiz data-length={QUIZ_LENGTH}>
     <header class="quiz-head">
-      <p class="kicker"><span class="tag" style="background:var(--yellow)">Quiz</span><span class="tag tag-plain">{QUIZ_LENGTH} questions</span></p>
+      <p class="kicker"><span class="tag" style="--c:var(--yellow)">Quiz</span><span class="tag tag-plain">{QUIZ_LENGTH} questions</span></p>
       <h1>Which hobby <span class="hl">fits you?</span></h1>
       <p>Five quick questions, picked fresh from a pool of {QUIZ.length} every time you play. No wrong answers, just a hobby match at the end.</p>
       <Sticker text="NO WRONG ANSWERS" color="var(--teal)" size={104} tilt={10} class="quiz-sticker" />

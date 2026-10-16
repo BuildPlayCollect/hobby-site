@@ -43,7 +43,7 @@ const jsonLd = {
   <div class="article-layout">
     <article class="article">
       <p class="kicker">
-        <a class="tag" style={`background:${hobby.color}`} href={`/${article.data.hobby}`}>{hobby.name}</a>
+        <a class="tag" style={`--c:${hobby.color}`} href={`/${article.data.hobby}`}>{hobby.name}</a>
         <a class="tag tag-plain" href={`/${TYPE_SLUGS[typeKey]}`}>{TYPES[typeKey].name}</a>
       </p>
       <h1>{article.data.title}</h1>
