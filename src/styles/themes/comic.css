@@ -162,6 +162,8 @@ h1, h2 { font-family: var(--display); font-weight: 400; }
 .search-results .wiki-kind { color: var(--wiki); }
 .search-results small { display: block; color: var(--muted); }
 .search-hint { padding: 10px 20px 14px; font-size: .8rem; color: var(--muted); }
+/* Phones and tablets have no Esc key, so that part of the hint hides there. */
+@media (hover: none) and (pointer: coarse) { .search-hint-keys { display: none; } }
 
 /* ---------- Home page: comic panels (tiles) ---------- */
 

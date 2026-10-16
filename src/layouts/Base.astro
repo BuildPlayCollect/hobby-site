@@ -6,6 +6,9 @@ import AdSlot from '../components/AdSlot.astro';
 import Newsletter from '../components/Newsletter.astro';
 // Inter font, stored on our own site (no Google Fonts request).
 import '@fontsource-variable/inter';
+// The two main font files, fetched early (before the page needs them) so text shows in the right font straight away.
+import interFont from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+import headlineFont from '@fontsource/archivo-black/files/archivo-black-latin-400-normal.woff2?url';
 // The whole look of the site (colours, fonts, outlines, shadows) lives in ONE theme file.
 // To try a different design, point this line at another file in src/styles/themes/.
 import '../styles/themes/blend.css';
@@ -34,6 +37,8 @@ const shareImage = new URL(image ?? '/og-default.png', Astro.site).href;
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="preload" href={interFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={headlineFont} as="font" type="font/woff2" crossorigin />
     <meta property="og:site_name" content={SITE_NAME} />
     <meta property="og:title" content={title ?? SITE_NAME} />
     <meta property="og:description" content={description} />
@@ -109,7 +114,7 @@ const shareImage = new URL(image ?? '/og-default.png', Astro.site).href;
         <label class="sr-only" for="search-input">Search articles and wiki</label>
         <input id="search-input" type="search" placeholder="Search articles and wiki…" autocomplete="off" />
         <ul class="search-results"></ul>
-        <p class="search-hint">Try "Bit", "switch" or "Tamiya". Press Esc to close.</p>
+        <p class="search-hint">Try "Bit", "switch" or "Tamiya".<span class="search-hint-keys"> Press Esc to close.</span></p>
       </div>
     </div>
 
