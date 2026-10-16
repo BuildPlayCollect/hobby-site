@@ -23,7 +23,6 @@ const headlines = [featured, stories[0], ...Object.keys(HOBBIES).map((key) => st
   .slice(0, 6) as typeof stories;
 // Everything else that's new goes in "Fresh off the press", newest first, at most 6.
 const latest = stories.filter((a) => !headlines.includes(a)).slice(0, 6);
-const wiki = (await getCollection('wiki')).sort((a, b) => a.data.title.localeCompare(b.data.title));
 const rulebooks = (await getCollection('rules')).length;
 
 // "Try one now" opens a random article that has a 60-second version (any live article if none do yet).
@@ -37,9 +36,6 @@ const nick: Record<string, string> = {
   consoles: 'Game machines', esports: 'Pro gaming', general: 'Hobbies in general',
 };
 const picks = headlines.slice(0, 3);
-// Hobby dictionary: every wiki word, so the spotlight can show a new one each visit (and on "Another word").
-const holeWords = wiki.map((w) => ({ t: w.data.title, s: w.data.summary, u: `/wiki/${w.id}/`, h: HOBBIES[w.data.hobby as HobbyKey].name }));
-const firstWord = holeWords[0];
 // "New here?" steps for first-time visitors.
 const steps = [
   { title: 'Pick a hobby', text: 'Open Hobbies in the menu: every hobby has its own page of stories, guides and history.', href: '/quiz', link: 'Not sure? Take the quiz' },
@@ -107,34 +103,6 @@ const steps = [
   <!-- Fresh from the wiki: the newest added or updated words. -->
   <WikiUpdates limit={4} />
 
-  <!-- Hobby dictionary: a word spotlight plus a look-up box. Readers dig as deep as they like. -->
-  {firstWord && (
-    <section class="dict" aria-labelledby="dict-title">
-      <div class="section-head"><h2 id="dict-title">Hobby dictionary</h2><a class="more" href="/wiki">All {wiki.length} words →</a></div>
-      <div class="dict-box">
-        <div class="hole" data-hole={JSON.stringify(holeWords)}>
-          <div class="hole-word">
-            <span class="label">Word of the day · <span data-hole-hobby>{firstWord.h}</span></span>
-            <h3><a href={firstWord.u} data-hole-link>{firstWord.t}</a></h3>
-            <p data-hole-text>{firstWord.s}</p>
-          </div>
-          <div class="hole-actions">
-            <a class="pill-btn" href={firstWord.u} data-hole-go>Read more →</a>
-            <button class="hole-next" type="button" data-hole-next>Another word</button>
-          </div>
-        </div>
-        <div class="dict-look">
-          <label class="label" for="dict-input">Look up a word</label>
-          <input id="dict-input" class="dict-input" type="search" placeholder="Try “switch” or “bit”" autocomplete="off" />
-          <ul class="dict-list" data-dict>
-            {wiki.map((w) => <li><a href={`/wiki/${w.id}/`}>{w.data.title}</a><small>{HOBBIES[w.data.hobby as HobbyKey].name}</small></li>)}
-          </ul>
-          <p class="dict-none" data-dict-none hidden>No word yet. Try the <a href="/wiki">full dictionary</a>.</p>
-        </div>
-      </div>
-    </section>
-  )}
-
   <!-- Little games -->
   <div class="section-head"><h2>Take a break</h2></div>
   <div class="play2">
@@ -156,37 +124,5 @@ const steps = [
     const pick = () => { if (urls.length) a.href = urls[Math.floor(Math.random() * urls.length)]; };
     a.addEventListener('pointerdown', pick);
     a.addEventListener('keydown', (e) => { if (e.key === 'Enter') pick(); });
-  });
-
-  // Rabbit hole: show a random wiki word on each visit, and another on "Another word".
-  const hole = document.querySelector<HTMLElement>('[data-hole]');
-  if (hole) {
-    const words: { t: string; s: string; u: string; h: string }[] = JSON.parse(hole.dataset.hole || '[]');
-    let last = -1;
-    const show = () => {
-      if (!words.length) return;
-      let i = Math.floor(Math.random() * words.length);
-      if (words.length > 1 && i === last) i = (i + 1) % words.length;
-      last = i;
-      const w = words[i];
-      hole.querySelector('[data-hole-hobby]')!.textContent = w.h;
-      const link = hole.querySelector<HTMLAnchorElement>('[data-hole-link]')!;
-      link.textContent = w.t; link.href = w.u;
-      hole.querySelector('[data-hole-text]')!.textContent = w.s;
-      hole.querySelector<HTMLAnchorElement>('[data-hole-go]')!.href = w.u;
-    };
-    show();
-    hole.querySelector('[data-hole-next]')!.addEventListener('click', show);
-  }
-
-  // Look up a word: filter the dictionary list as you type.
-  const input = document.querySelector<HTMLInputElement>('#dict-input');
-  const items = Array.from(document.querySelectorAll<HTMLLIElement>('[data-dict] li'));
-  const none = document.querySelector<HTMLElement>('[data-dict-none]');
-  input?.addEventListener('input', () => {
-    const q = input.value.trim().toLowerCase();
-    let shown = 0;
-    items.forEach((li) => { const hit = !q || li.textContent!.toLowerCase().includes(q); li.hidden = !hit; if (hit) shown++; });
-    if (none) none.hidden = shown > 0;
   });
 </script>
