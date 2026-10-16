@@ -1,23 +1,21 @@
 ---
 // BoxHero.astro: the big top of the home page (replaces the island).
 // Left: the site name and intro (passed in from index.astro). Right: the box pile.
-// A pile of cartoon boxes, drawn in an old "rubber hose" cartoon style: thick ink lines,
-// pie-cut eyes and big grins. Every box is a hobby. Hover (or tap) a box and its lid
-// pops open to show what's inside. The "?" box opens the quiz.
-// When nobody is hovering, a random box peeks open every couple of seconds.
+// A pile of cartoon shipping boxes with thick ink lines. Every box is a hobby, marked with
+// its colour, a round icon sticker, packing tape and "this side up" arrows.
+// Hover (or tab to) a box and it gives a little wiggle. The "?" box opens the quiz.
 // A new hobby in src/data/site.ts needs a spot in SPOTS below
 // (and an icon in HobbyIcon.astro).
 import { HOBBIES, type HobbyKey } from '../data/site';
 import HobbyIcon from './HobbyIcon.astro';
 
-type Spot = { key: HobbyKey | 'quiz'; x: number; y: number; w: number; tilt: number; lift?: number };
-// x = centre of the box, y = where its bottom sits, w = width, tilt = degrees,
-// lift = how far the hobby pops up above the box (smaller for the back row, so it stays clear of the title).
+type Spot = { key: HobbyKey | 'quiz'; x: number; y: number; w: number; tilt: number };
+// x = centre of the box, y = where its bottom sits, w = width, tilt = degrees.
 // Boxes are drawn in this order, so later boxes sit in front of earlier ones.
 const SPOTS: Spot[] = [
-  { key: 'beyblade', lift: 40, x: 112, y: 330, w: 168, tilt: -3 },
-  { key: 'tamiya', lift: 40, x: 300, y: 325, w: 168, tilt: 2 },
-  { key: 'keyboards', lift: 40, x: 488, y: 330, w: 168, tilt: -2 },
+  { key: 'beyblade', x: 112, y: 330, w: 168, tilt: -3 },
+  { key: 'tamiya', x: 300, y: 325, w: 168, tilt: 2 },
+  { key: 'keyboards', x: 488, y: 330, w: 168, tilt: -2 },
   { key: 'tcg', x: 206, y: 535, w: 168, tilt: 3 },
   { key: 'quiz', x: 394, y: 535, w: 168, tilt: -3 },
   { key: 'consoles', x: 112, y: 740, w: 168, tilt: 2 },
@@ -56,60 +54,34 @@ const STARS = [[60, 95, .8], [540, 90, .7], [585, 430, .55], [15, 430, .55]];
 
       {list.map((b) => (
         <a class:list={['box', b.quiz && 'box-quiz']} href={b.href} aria-label={b.label}
-           transform={`translate(${b.x} ${b.y}) rotate(${b.tilt})`}
-           style={`--c:${b.color};--up:${-(b.h * 0.5 + (b.lift ?? 72))}px`}>
+           transform={`translate(${b.x} ${b.y}) rotate(${b.tilt})`} style={`--c:${b.color}`}>
           <title>{b.label}</title>
-          <rect class="box-shadow" x={-b.w / 2 + 9} y={-b.h + 9} width={b.w} height={b.h} rx="14" />
-          <!-- The dark inside of the box, seen when the lid lifts -->
-          <rect class="box-inside" x={-b.w / 2 + 8} y={-b.h - 8} width={b.w - 16} height="22" rx="8" />
-          <!-- What's inside: hidden behind the front until the box opens -->
-          <g class="box-pop-wrap"><g class="box-pop" transform={`translate(0 ${-b.h * 0.5})`}>
-            <path class="box-burst" d="M0 -66 L12 -50 L32 -58 L32 -38 L54 -34 L42 -18 L60 0 L42 18 L54 34 L32 38 L32 58 L12 50 L0 66 L-12 50 L-32 58 L-32 38 L-54 34 L-42 18 L-60 0 L-42 -18 L-54 -34 L-32 -38 L-32 -58 L-12 -50 Z" />
-            <circle class="box-pop-ball" r="40" />
-            {b.quiz
-              ? <text class="box-q" y="17">?</text>
-              : <g transform="translate(-26 -26)"><HobbyIcon hobby={b.key as HobbyKey} size={52} /></g>}
-          </g></g>
-          <!-- The front of the box, with its face -->
-          <rect class="box-front" x={-b.w / 2} y={-b.h} width={b.w} height={b.h} rx="14" />
-          <path class="box-shine" d={`M ${-b.w / 2 + 14} ${-b.h + 30} q 0 -12 12 -14`} />
-          {b.quiz ? (
-            <text class="box-q box-q-front" y={-b.h * 0.36}>?</text>
-          ) : (
-            <g class="box-face" transform={`translate(0 ${-b.h * 0.56})`}>
-              <g class="eye" transform="translate(-24 0)"><ellipse rx="13" ry="17" class="eye-white" /><ellipse cx="4" cy="3" rx="6.5" ry="10" class="eye-pupil" /><path d="M6 -4 l5 3 -5 3 z" class="eye-cut" /></g>
-              <g class="eye" transform="translate(24 0)"><ellipse rx="13" ry="17" class="eye-white" /><ellipse cx="4" cy="3" rx="6.5" ry="10" class="eye-pupil" /><path d="M6 -4 l5 3 -5 3 z" class="eye-cut" /></g>
-              <path class="box-mouth" d="M -22 22 Q 0 26 22 22 Q 18 44 0 44 Q -18 44 -22 22 Z" />
-              <path class="box-tongue" d="M -9 40 Q 0 32 9 40 Q 0 45 -9 40 Z" />
-            </g>
-          )}
-          <text class="box-name" y={-15} font-size={b.w > 170 ? 21 : 19}>{b.name.toUpperCase()}</text>
-          <!-- The lid: lifts and tilts open on hover -->
-          <g class="box-lid-wrap"><g class="box-lid">
-            <rect x={-b.w / 2 - 9} y={-b.h - 26} width={b.w + 18} height="32" rx="10" />
-            <path d={`M ${-b.w / 2 + 6} ${-b.h - 15} H ${-b.w / 2 + 40}`} class="lid-line" />
-          </g></g>
+          <!-- Everything sits in one group so the whole box can wiggle on hover -->
+          <g class="box-body">
+            <rect class="box-shadow" x={-b.w / 2 + 9} y={-b.h + 9} width={b.w} height={b.h} rx="14" />
+            <rect class="box-front" x={-b.w / 2} y={-b.h} width={b.w} height={b.h} rx="14" />
+            <path class="box-shine" d={`M ${-b.w / 2 + 14} ${-b.h + 34} q 0 -10 10 -12`} />
+            <!-- "This side up" arrows in the corner -->
+            <path class="box-arrows" d={`M ${b.w / 2 - 40} ${-b.h + 52} l 7 -9 l 7 9 M ${b.w / 2 - 33} ${-b.h + 43} v 16 M ${b.w / 2 - 22} ${-b.h + 52} l 7 -9 l 7 9 M ${b.w / 2 - 15} ${-b.h + 43} v 16`} />
+            <!-- The lid, with a strip of packing tape down the middle -->
+            <rect class="box-lid" x={-b.w / 2 - 9} y={-b.h - 24} width={b.w + 18} height="30" rx="10" />
+            <path class="lid-line" d={`M ${-b.w / 2 + 4} ${-b.h - 14} H ${-b.w / 2 + 34}`} />
+            <rect class="box-tape" x="-15" y={-b.h - 26} width="30" height="54" rx="3" />
+            <path class="box-tape-cut" d={`M -15 ${-b.h + 28} l 5 -5 l 5 5 l 5 -5 l 5 5 l 5 -5 l 5 5`} />
+            {b.quiz ? (
+              <text class="box-q box-q-front" y={-b.h * 0.3}>?</text>
+            ) : (
+              <g transform={`translate(0 ${-b.h * 0.56})`}>
+                <!-- A round sticker with the hobby's icon -->
+                <circle class="box-badge" r="34" />
+                <circle class="box-badge-ring" r="28" />
+                <g transform="translate(-25 -25)"><HobbyIcon hobby={b.key as HobbyKey} size={50} /></g>
+              </g>
+            )}
+            <text class="box-name" y={-15} font-size={b.w > 170 ? 21 : 19}>{b.name.toUpperCase()}</text>
+          </g>
         </a>
       ))}
     </svg>
   </div>
 </section>
-
-<script>
-  // When nobody is hovering, open a random box every couple of seconds so the
-  // pile looks alive (and phone visitors see that the boxes open).
-  const hero = document.querySelector<HTMLElement>('.box-hero');
-  if (hero && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    let paused = false;
-    let last: Element | undefined;
-    hero.addEventListener('pointerenter', () => { paused = true; last?.classList.remove('peek'); });
-    hero.addEventListener('pointerleave', () => { paused = false; });
-    setInterval(() => {
-      if (paused || document.hidden) return;
-      const all = [...hero.querySelectorAll('.box')].filter((b) => b !== last);
-      last?.classList.remove('peek');
-      last = all[Math.floor(Math.random() * all.length)];
-      last?.classList.add('peek');
-    }, 2200);
-  }
-</script>
