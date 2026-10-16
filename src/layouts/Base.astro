@@ -59,7 +59,7 @@ const shareImage = new URL(image ?? '/share-preview-v2.png', Astro.site).href;
         if (/[?&]photos\b/.test(location.search)) document.documentElement.classList.add('show-photo-slots');
         // Colour theme: the reader picks one with the palette button (remembered on this device).
         // ?colorway=playtime in the address also works, handy for sharing a look.
-        var themes = ['retro', 'playtime', 'curious', 'fresh'];
+        var themes = ['retro', 'playtime', 'curious', 'fresh', 'arcade', 'ocean', 'berry', 'ink'];
         var cw = (location.search.match(/[?&]colorway=(\w+)/) || [])[1];
         try { if (cw) localStorage.setItem('colorway', cw); else cw = localStorage.getItem('colorway'); } catch (e) {}
         document.documentElement.dataset.colorway = themes.indexOf(cw) > -1 ? cw : 'retro';
@@ -113,6 +113,10 @@ const shareImage = new URL(image ?? '/share-preview-v2.png', Astro.site).href;
                   { id: 'playtime', name: 'Playtime', note: 'Bright and friendly', c: ['#2f5bd3', '#ffc93c', '#dfe7fb'] },
                   { id: 'curious', name: 'Curious', note: 'Creative and bold', c: ['#6c4ab6', '#ffb547', '#e9e1fb'] },
                   { id: 'fresh', name: 'Fresh', note: 'Calm and new', c: ['#1f7a5a', '#a8db6a', '#e1f1e3'] },
+                  { id: 'arcade', name: 'Arcade', note: 'Neon game night', c: ['#c2185b', '#3ccfe0', '#fbe3ee'] },
+                  { id: 'ocean', name: 'Ocean', note: 'Cool and sunny', c: ['#0f6e7a', '#ff8a65', '#dcefef'] },
+                  { id: 'berry', name: 'Berry', note: 'Sweet and fun', c: ['#8e2a5c', '#7fd8be', '#f6e3ec'] },
+                  { id: 'ink', name: 'Ink', note: 'Comic-book classic', c: ['#26262e', '#ffd23f', '#ecebe6'] },
                 ].map((t) => (
                   <li>
                     <button class="palette-option" type="button" data-colorway-pick={t.id} aria-pressed="false">

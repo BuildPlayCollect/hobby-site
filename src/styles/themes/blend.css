@@ -897,7 +897,7 @@ a.tile:hover { background: var(--surface); transform: translate(-2px, -2px); box
 
 /* =====================================================================
    Colour themes: one shared palette for the whole site instead of
-   a different colour per hobby. Readers pick Retro, Playtime, Curious or Fresh
+   a different colour per hobby. Readers pick one of 8 colour themes
    with the palette button in the header. Retro is the default.
    c1 = main colour (white text on it), c2 = second colour (dark text on it),
    c3 = soft colour (dark text on it).
@@ -996,13 +996,25 @@ a.tile.wiki-update:hover .wu-meta, a.tile.wiki-update:hover .wu-text { color: va
 /* Fresh start: green = growth (starting a new hobby), lime = fresh energy. Analogous greens. */
 :root[data-colorway="fresh"] { --bg: #f7f8f0; --surface: #ffffff; --surface-2: #e6efdf; --ink: #15261e; --muted: #53645b; --line: #15261e; --soft-line: #dde8d6; --c1: #1f7a5a; --c2: #a8db6a; --c3: #e1f1e3; --mark: #a8db6a; --wiki: #1f7a5a; --link: #15261e; --foot: #15261e; }
 :root[data-colorway="fresh"][data-theme="dark"] { --bg: #0f1a15; --surface: #16251e; --surface-2: #1e3128; --ink: #eef4e8; --muted: #a3b5aa; --line: #eef4e8; --soft-line: #263c31; --wiki: #a8db6a; --link: #eef4e8; --foot: #08100c; }
+/* Arcade: hot pink = energy and play, electric cyan = tech and screens (esports, consoles). Complementary. */
+:root[data-colorway="arcade"] { --bg: #fcf6f8; --surface: #ffffff; --surface-2: #f6e6ee; --ink: #24142a; --muted: #625468; --line: #24142a; --soft-line: #efdde6; --c1: #c2185b; --c2: #3ccfe0; --c3: #fbe3ee; --mark: #3ccfe0; --wiki: #c2185b; --link: #24142a; --foot: #24142a; }
+:root[data-colorway="arcade"][data-theme="dark"] { --bg: #140c1c; --surface: #1e1329; --surface-2: #2a1b38; --ink: #f7eef6; --muted: #b6a6bd; --line: #f7eef6; --soft-line: #33223f; --wiki: #3ccfe0; --link: #f7eef6; --foot: #0b0611; }
+/* Ocean: deep teal = calm and trust, coral = warmth and fun. Complementary, easy on the eyes. */
+:root[data-colorway="ocean"] { --bg: #f5f7f4; --surface: #ffffff; --surface-2: #e4efee; --ink: #12262b; --muted: #50646a; --line: #12262b; --soft-line: #d9e6e5; --c1: #0f6e7a; --c2: #ff8a65; --c3: #dcefef; --mark: #ff8a65; --wiki: #0f6e7a; --link: #12262b; --foot: #12262b; }
+:root[data-colorway="ocean"][data-theme="dark"] { --bg: #0b171b; --surface: #122329; --surface-2: #1a2f36; --ink: #eaf3f2; --muted: #9fb3b5; --line: #eaf3f2; --soft-line: #213a42; --wiki: #ff8a65; --link: #eaf3f2; --foot: #060f12; }
+/* Berry: berry = playful and bold, mint = fresh and friendly. Complementary, a candy-shop feel. */
+:root[data-colorway="berry"] { --bg: #fcf7f6; --surface: #ffffff; --surface-2: #f3e5ea; --ink: #2a1520; --muted: #67535d; --line: #2a1520; --soft-line: #eedde3; --c1: #8e2a5c; --c2: #7fd8be; --c3: #f6e3ec; --mark: #7fd8be; --wiki: #8e2a5c; --link: #2a1520; --foot: #2a1520; }
+:root[data-colorway="berry"][data-theme="dark"] { --bg: #170d13; --surface: #22141c; --surface-2: #2e1c26; --ink: #f6ecf0; --muted: #b9a5ae; --line: #f6ecf0; --soft-line: #3a2530; --wiki: #7fd8be; --link: #f6ecf0; --foot: #0d070b; }
+/* Ink: black ink + bright yellow = the comic-book classic, high contrast and confident. */
+:root[data-colorway="ink"] { --bg: #f7f5ef; --surface: #ffffff; --surface-2: #ecebe6; --ink: #17171c; --muted: #5a5a63; --line: #17171c; --soft-line: #e2e0d8; --c1: #26262e; --c2: #ffd23f; --c3: #ecebe6; --mark: #ffd23f; --wiki: #26262e; --link: #17171c; --foot: #17171c; }
+:root[data-colorway="ink"][data-theme="dark"] { --bg: #111114; --surface: #1b1b20; --surface-2: #25252c; --ink: #f2f0ea; --muted: #a8a7ae; --line: #f2f0ea; --soft-line: #2d2d35; --c1: #3a3a45; --wiki: #ffd23f; --link: #f2f0ea; --foot: #09090b; }
 
 /* Colour theme picker: the palette button in the header opens a small card. */
 .palette { position: relative; }
-.palette-panel { display: none; position: absolute; top: calc(100% + 10px); right: -40px; width: 250px; z-index: 60; background: var(--surface); color: var(--ink); border: 2px solid var(--line); border-radius: 18px; box-shadow: var(--lift); padding: 14px; }
+.palette-panel { display: none; position: absolute; top: calc(100% + 10px); right: -40px; width: 340px; z-index: 60; background: var(--surface); color: var(--ink); border: 2px solid var(--line); border-radius: 18px; box-shadow: var(--lift); padding: 14px; }
 .palette.open .palette-panel { display: block; }
 .palette-title { margin: 0 0 10px; font-family: var(--display); font-weight: 700; font-size: 1rem; }
-.palette-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.palette-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .palette-option { width: 100%; display: flex; align-items: center; gap: 12px; padding: 8px 10px; font: inherit; color: var(--ink); background: none; border: 2px solid transparent; border-radius: 12px; cursor: pointer; text-align: left; transition: background .15s, border-color .15s; }
 .palette-option:hover { background: var(--surface-2); }
 .palette-option[aria-pressed="true"] { border-color: var(--line); background: var(--surface-2); }
@@ -1012,7 +1024,7 @@ a.tile.wiki-update:hover .wu-meta, a.tile.wiki-update:hover .wu-text { color: va
 .palette-name { display: grid; font-weight: 700; font-size: .92rem; line-height: 1.2; }
 .palette-name small { font-weight: 400; font-size: .76rem; color: var(--muted); }
 .palette-foot { margin: 10px 0 0; font-size: .74rem; color: var(--muted); }
-@media (max-width: 430px) { .palette-panel { right: -76px; } }
+@media (max-width: 430px) { .palette-panel { position: fixed; top: calc(var(--header-h) + 8px); left: 12px; right: 12px; width: auto; } }
 
 /* Search: same friendly fonts as the rest of the site, a normal-sized rounded box. */
 .search-box input { font-family: var(--sans); font-size: 1.15rem; font-weight: 500; text-transform: none; padding: 14px 20px; border: 2px solid var(--line); border-radius: 999px; background: var(--surface); box-shadow: var(--lift); }
