@@ -459,6 +459,8 @@ a.tile:hover { text-decoration: none; transform: translate(-2px, -2px); box-shad
 .play-row a.tile.quiz-cta { display: grid; margin-top: 0; }
 @media (min-width: 900px) { .play-row { grid-template-columns: 1fr 1fr; } .play-row .quiz-cta { grid-template-columns: 1fr; grid-template-rows: 1fr auto; } .play-row .quiz-cta .pill-btn { justify-self: start; } }
 .typing-cta { background: #ffd23f; }
+/* The typing test needs a real keyboard, so its home card hides on touch-only phones and tablets. */
+@media (hover: none) and (pointer: coarse) { .play-row a.tile.typing-cta { display: none; } }
 
 /* ---------- Tournament rules ---------- */
 .rules-list { display: grid; gap: 12px; }
@@ -733,6 +735,12 @@ a.tile.roundup { display: grid; gap: 0; padding: 0; overflow: hidden; color: var
 .tt-share-actions button { font: inherit; font-weight: 800; font-size: .85rem; cursor: pointer; background: var(--surface); color: var(--ink); }
 .quiz-actions button.yellow { background: var(--yellow); color: #141414; }
 .tt-share-note { margin: 0; font-size: .85rem; color: var(--muted); }
+.tt.is-locked .tt-options, .tt.is-locked .tt-card, .tt.is-locked .tt-note { display: none; }
+.tt-lock { padding: 28px 24px; text-align: center; background: var(--lavender); color: #141414; }
+.tt-lock h2 { margin: 4px 0 8px; text-transform: uppercase; font-size: clamp(1.5rem, 6vw, 2.2rem); }
+.tt-lock p { margin: 0 auto 18px; max-width: 46ch; color: #3a3428; }
+.tt-lock .tt-lock-icon { font-size: 3rem; margin: 0; line-height: 1; }
+.tt-lock .pill-btn { align-self: center; }
 .tt-note { margin-top: 14px; font-size: .85rem; color: var(--muted); }
 .tt-note kbd { border: 2px solid var(--ink); border-radius: 6px; padding: 0 6px; font-size: .8rem; box-shadow: 2px 2px 0 var(--ink); }
 @media (prefers-reduced-motion: reduce) { .tt-words { transition: none; } }
