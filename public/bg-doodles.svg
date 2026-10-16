@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="420" viewBox="0 0 420 420" fill="none" stroke="#000" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Hand-drawn hobby doodles for the page background (one per hobby, plus sparkles). -->
+  <!-- spinning top -->
+  <g transform="translate(40 40) rotate(-12)"><path d="M0 14h40M4 14l16 26 16-26M8 14c0-8 24-8 24 0M20 4v4"/><path d="M-6 44c8 4 44 4 52 0" stroke-dasharray="4 6"/></g>
+  <!-- race car wheel -->
+  <g transform="translate(250 40)"><circle cx="20" cy="20" r="18"/><circle cx="20" cy="20" r="7"/><path d="M20 2v11M20 27v11M2 20h11M27 20h11"/></g>
+  <!-- keycap -->
+  <g transform="translate(150 150) rotate(8)"><rect x="0" y="0" width="40" height="40" rx="7"/><rect x="7" y="5" width="26" height="24" rx="5"/></g>
+  <!-- trading card -->
+  <g transform="translate(330 160) rotate(14)"><rect x="0" y="0" width="30" height="42" rx="4"/><path d="M15 12l3 6 6 1-4.5 4 1 6-5.5-3-5.5 3 1-6L6 19l6-1z"/></g>
+  <!-- game controller -->
+  <g transform="translate(40 270) rotate(-6)"><path d="M10 0h30c8 0 12 8 13 18s-6 16-11 10l-6-6H16l-6 6C5 34-2 28-1 18S2 0 10 0z"/><path d="M14 9v10M9 14h10"/><circle cx="35" cy="11" r="1.6"/><circle cx="40" cy="17" r="1.6"/></g>
+  <!-- trophy -->
+  <g transform="translate(250 290) rotate(-10)"><path d="M8 0h24v12c0 9-5 16-12 16S8 21 8 12z"/><path d="M8 4H1c0 8 3 12 8 12M32 4h7c0 8-3 12-8 12M20 28v8M11 40h18"/></g>
+  <!-- sparkles and squiggles -->
+  <path d="M150 52l3 8 8 3-8 3-3 8-3-8-8-3 8-3z"/>
+  <path d="M352 352l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z"/>
+  <path d="M60 175c6-6 12 6 18 0s12 6 18 0"/>
+  <path d="M150 360c6-6 12 6 18 0s12 6 18 0"/>
+  <path d="M376 66v14M369 73h14"/>
+  <path d="M220 226v12M214 232h12"/>
+  <circle cx="110" cy="110" r="3"/>
+  <circle cx="300" cy="120" r="3"/>
+  <circle cx="160" cy="250" r="3"/>
+</svg>
