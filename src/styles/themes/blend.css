@@ -894,3 +894,44 @@ a.tile:hover { background: var(--surface); transform: translate(-2px, -2px); box
   .welcome { padding-top: 36px; }
 }
 @media (max-width: 520px) { .newsletter-form { border-radius: 18px; padding: 6px; } .newsletter-form input { padding: 10px 12px; } .newsletter-form button { width: 100%; } }
+
+/* =====================================================================
+   Colourways (design try): one shared palette for the whole site instead of
+   a different colour per hobby. Choose with ?colorway=retro / airy / luxe
+   (or ?colorway=hobby for the old per-hobby colours). Retro is the default.
+   c1 = main colour (white text on it), c2 = second colour (dark text on it),
+   c3 = soft colour (dark text on it).
+   ===================================================================== */
+:root[data-colorway="retro"] { --bg: #f4ece2; --surface: #fcf8f3; --surface-2: #e8d8c9; --ink: #1c2433; --muted: #5a6273; --line: #1c2433; --soft-line: #e2d3c3; --c1: #4b607f; --c2: #f3701e; --c3: #e8d8c9; --mark: #f3701e; --wiki: #4b607f; --link: #1c2433; --foot: #1c2433; }
+:root[data-colorway="retro"][data-theme="dark"] { --bg: #0b1426; --surface: #13203a; --surface-2: #1c2b48; --ink: #e8d8c9; --muted: #a9a49d; --line: #e8d8c9; --soft-line: #24355a; --c1: #4b607f; --wiki: #f3701e; --link: #e8d8c9; --foot: #070e1c; }
+:root[data-colorway="airy"] { --bg: #eef0e6; --surface: #f9faf4; --surface-2: #e2e4d2; --ink: #1f2b2a; --muted: #556664; --line: #1f2b2a; --soft-line: #d5d9c6; --c1: #455957; --c2: #7ba7af; --c3: #e2e4d2; --mark: #7ba7af; --wiki: #455957; --link: #1f2b2a; --foot: #1f2b2a; }
+:root[data-colorway="airy"][data-theme="dark"] { --bg: #182120; --surface: #212d2c; --surface-2: #2b3a38; --ink: #e2e4d2; --muted: #a6b2ad; --line: #e2e4d2; --soft-line: #33443f; --c1: #455957; --wiki: #7ba7af; --link: #e2e4d2; --foot: #101716; }
+:root[data-colorway="luxe"] { --bg: #f5efe6; --surface: #fcf9f4; --surface-2: #ece2d2; --ink: #121312; --muted: #5f574c; --line: #121312; --soft-line: #e4d7c3; --c1: #ad0013; --c2: #a67d43; --c3: #eadcc5; --mark: #a67d43; --wiki: #ad0013; --link: #121312; --foot: #121312; }
+:root[data-colorway="luxe"][data-theme="dark"] { --bg: #121312; --surface: #1c1c1b; --surface-2: #272624; --ink: #efe6d8; --muted: #a99f91; --line: #efe6d8; --soft-line: #302e2a; --c1: #ad0013; --wiki: #c9a067; --link: #efe6d8; --foot: #0a0a0a; }
+
+/* The old colour names point at the colourway, so every coloured box follows it */
+:root:not([data-colorway="hobby"]) { --yellow: var(--c2); --orange: var(--c2); --pink: var(--c2); --coral: var(--c2); --lavender: var(--c3); --teal: var(--c3); --blue: var(--c3); --on-c1: #ffffff; --on-c: #1b1a1f; }
+/* Hobby colours set right on an element (style="--c:...") switch to the main colour */
+:root:not([data-colorway="hobby"]) [style*="--c:"] { --c: var(--c1) !important; --on-c: var(--on-c1); }
+:root:not([data-colorway="hobby"]) .dot[style] { background: var(--c1) !important; }
+:root:not([data-colorway="hobby"]) .article-cover[style] { background-color: var(--c1) !important; }
+:root:not([data-colorway="hobby"]) .kicker .tag:not(.tag-plain) { color: var(--on-c, #1b1a1f); }
+:root:not([data-colorway="hobby"]) .picker a, :root:not([data-colorway="hobby"]) .play2 a { color: var(--on-c); }
+:root:not([data-colorway="hobby"]) .play2 a span { opacity: .9; }
+/* The hobby picker takes turns: main, second, soft colour */
+:root:not([data-colorway="hobby"]) .picker li:nth-child(3n+2) a { --c: var(--c2) !important; --on-c: #1b1a1f; }
+:root:not([data-colorway="hobby"]) .picker li:nth-child(3n+3) a { --c: var(--c3) !important; --on-c: #1b1a1f; }
+:root:not([data-colorway="hobby"]) .picker li:last-child a { --c: var(--surface) !important; --on-c: var(--ink); }
+:root:not([data-colorway="hobby"]) .play2 a:nth-child(2) { --c: var(--c2) !important; --on-c: #1b1a1f; }
+:root:not([data-colorway="hobby"]) .play2 a:nth-child(1) { --c: var(--c1) !important; --on-c: #ffffff; }
+:root:not([data-colorway="hobby"]) .play2 a:nth-child(1) .play2-emoji { color: #1b1a1f; }
+:root:not([data-colorway="hobby"]) .site-footer { background: var(--foot); }
+:root:not([data-colorway="hobby"]) .logo-mark { background: var(--c1); color: #fff; }
+:root:not([data-colorway="hobby"]) .hl { color: #1b1a1f; }
+:root:not([data-colorway="hobby"]) .quiz-result-badge[style] { background: var(--c2) !important; }
+:root:not([data-colorway="hobby"]) .card-new { background: var(--c2); }
+:root:not([data-colorway="hobby"]) .this-week b { background: var(--c1); color: #fff; }
+
+/* Phones: no hobby buttons on the home page (the menu already lists every hobby) */
+@media (max-width: 639px) { .picker, .welcome-ask { display: none; } .welcome-search { margin-top: 28px; } }
+.picker-icon, .play2-emoji { color: #1b1a1f !important; }

@@ -52,6 +52,10 @@ const shareImage = new URL(image ?? '/og-default.png', Astro.site).href;
         document.documentElement.dataset.theme = dark ? 'dark' : 'light';
         // Add ?photos to an article's address to see where photos still need to go.
         if (/[?&]photos\b/.test(location.search)) document.documentElement.classList.add('show-photo-slots');
+        // Design try only: pick a colourway with ?colorway=retro / airy / luxe / hobby (remembered on this device).
+        var cw = (location.search.match(/[?&]colorway=(\w+)/) || [])[1];
+        try { if (cw) localStorage.setItem('colorway', cw); else cw = localStorage.getItem('colorway'); } catch (e) {}
+        document.documentElement.dataset.colorway = cw || 'retro';
       })();
     </script>
   </head>
