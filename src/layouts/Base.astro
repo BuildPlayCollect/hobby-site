@@ -4,15 +4,14 @@
 import { SITE_NAME, SITE_TAGLINE, HOBBIES, TYPE_SLUGS } from '../data/site';
 import AdSlot from '../components/AdSlot.astro';
 import Newsletter from '../components/Newsletter.astro';
-import SideDetails from '../components/SideDetails.astro';
 // Inter font, stored on our own site (no Google Fonts request).
 import '@fontsource-variable/inter';
 // The two main font files, fetched early (before the page needs them) so text shows in the right font straight away.
 import interFont from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
-import headlineFont from '@fontsource/archivo-black/files/archivo-black-latin-400-normal.woff2?url';
+import headlineFont from '@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2?url';
 // The whole look of the site (colours, fonts, outlines, shadows) lives in ONE theme file.
 // To try a different design, point this line at another file in src/styles/themes/.
-import '../styles/themes/comic.css';
+import '../styles/themes/blend.css';
 
 interface Props {
   title?: string;
@@ -58,11 +57,23 @@ const shareImage = new URL(image ?? '/og-default.png', Astro.site).href;
         document.documentElement.dataset.theme = dark ? 'dark' : 'light';
         // Add ?photos to an article's address to see where photos still need to go.
         if (/[?&]photos\b/.test(location.search)) document.documentElement.classList.add('show-photo-slots');
+        // Colour theme: the reader picks one with the palette button (remembered on this device).
+        // ?colorway=playtime in the address also works, handy for sharing a look.
+        var themes = ['retro', 'playtime', 'curious', 'fresh'];
+        var cw = (location.search.match(/[?&]colorway=(\w+)/) || [])[1];
+        try { if (cw) localStorage.setItem('colorway', cw); else cw = localStorage.getItem('colorway'); } catch (e) {}
+        document.documentElement.dataset.colorway = themes.indexOf(cw) > -1 ? cw : 'retro';
       })();
     </script>
   </head>
   <body>
-    <SideDetails />
+    <!-- Dateline: a thin strip above the header, like the top of a newspaper -->
+    <div class="dateline">
+      <div class="wrap">
+        <span data-today>History, guides and news for every hobby</span>
+        <span class="dateline-links"><a href="/standards">Fact-checked</a><a href="/newsletter">Newsletter</a><a href="/about">About</a></span>
+      </div>
+    </div>
     <header class="site-header">
       <div class="wrap header-row">
         <a class="logo" href="/"><span class="logo-mark" aria-hidden="true">BPC</span>{SITE_NAME}</a>
@@ -73,12 +84,14 @@ const shareImage = new URL(image ?? '/og-default.png', Astro.site).href;
               Hobbies <span class="chev" aria-hidden="true">▼</span>
             </button>
             <div class="dropdown-panel" id="hobby-menu">
-              {Object.entries(HOBBIES).map(([key, h]) => (
-                <a class="hobby-item" href={`/${key}`}>
-                  <span class="dot" style={`background:${h.color}`}></span>
-                  <span><strong>{h.name}</strong><small>{h.blurb}</small></span>
-                </a>
-              ))}
+              <div class="dropdown-inner">
+                {Object.entries(HOBBIES).map(([key, h]) => (
+                  <a class="hobby-item" href={`/${key}`} style={`--c:${h.color}`}>
+                    <span class="dot" style={`background:${h.color}`}></span>
+                    <span><strong>{h.name}</strong><small>{h.blurb}</small></span>
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
           <a class="nav-link" href={`/${TYPE_SLUGS.guide}`}>Guides</a>
@@ -90,6 +103,28 @@ const shareImage = new URL(image ?? '/og-default.png', Astro.site).href;
 
         <div class="header-actions">
           <button class="icon-btn search-open" type="button" aria-label="Search (press /)" title="Search (press /)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+          <div class="palette">
+            <button class="icon-btn palette-toggle" type="button" aria-label="Colour theme" title="Colour theme" aria-expanded="false" aria-controls="palette-panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.8 1.8-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.8-1.7 1.7-1.7H16a5 5 0 0 0 5-5c0-4-4-7.2-9-7.2Z"/><circle cx="7.5" cy="11" r="1.2" fill="currentColor"/><circle cx="10.5" cy="7.2" r="1.2" fill="currentColor"/><circle cx="15" cy="7.8" r="1.2" fill="currentColor"/></svg></button>
+            <div class="palette-panel" id="palette-panel" role="group" aria-label="Pick a colour theme">
+              <p class="palette-title">Pick a colour theme</p>
+              <ul class="palette-list">
+                {[
+                  { id: 'retro', name: 'Retro', note: 'Cosy and classic', c: ['#4b607f', '#f3701e', '#e8d8c9'] },
+                  { id: 'playtime', name: 'Playtime', note: 'Bright and friendly', c: ['#2f5bd3', '#ffc93c', '#dfe7fb'] },
+                  { id: 'curious', name: 'Curious', note: 'Creative and bold', c: ['#6c4ab6', '#ffb547', '#e9e1fb'] },
+                  { id: 'fresh', name: 'Fresh', note: 'Calm and new', c: ['#1f7a5a', '#a8db6a', '#e1f1e3'] },
+                ].map((t) => (
+                  <li>
+                    <button class="palette-option" type="button" data-colorway-pick={t.id} aria-pressed="false">
+                      <span class="palette-dots" aria-hidden="true">{t.c.map((c) => <i style={`background:${c}`}></i>)}</span>
+                      <span class="palette-name">{t.name}<small>{t.note}</small></span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <p class="palette-foot">Light or dark? Use the button next to this one.</p>
+            </div>
+          </div>
           <button class="icon-btn theme-toggle" type="button" aria-label="Toggle night mode" title="Toggle night mode">
             <span class="sun">☀</span><span class="moon">☾</span>
           </button>
@@ -97,13 +132,6 @@ const shareImage = new URL(image ?? '/og-default.png', Astro.site).href;
         </div>
       </div>
     </header>
-
-    <!-- Ticker: a scrolling strip of what's on the site. The list is written twice so it loops without a gap. -->
-    <div class="ticker" aria-hidden="true">
-      <div class="ticker-track">
-        {[0, 1].map(() => ['History', 'Guides', 'New releases', 'Giveaways', 'Wiki rabbit holes', 'Tournament rules'].map((t) => <span>{t}</span>))}
-      </div>
-    </div>
 
     <div class="search-overlay" role="dialog" aria-modal="true" aria-label="Search">
       <div class="search-box">
@@ -125,7 +153,6 @@ const shareImage = new URL(image ?? '/og-default.png', Astro.site).href;
         <div>
           <a class="logo" href="/"><span class="logo-mark" aria-hidden="true">BPC</span>{SITE_NAME}</a>
           <p>{SITE_TAGLINE}</p>
-          <p>&copy; {new Date().getFullYear()} {SITE_NAME}</p>
         </div>
         <div>
           <h2>Hobbies</h2>
@@ -146,11 +173,43 @@ const shareImage = new URL(image ?? '/og-default.png', Astro.site).href;
           </ul>
         </div>
       </div>
+      <div class="wrap">
+        <p class="footer-word" aria-hidden="true">Build Play Collect</p>
+        <div class="footer-base"><span>&copy; {new Date().getFullYear()} {SITE_NAME}</span><span>History · Guides · News · Giveaways</span></div>
+      </div>
     </footer>
 
     <script>
       (function () {
         var root = document.documentElement;
+
+        // Dateline: show the reader's date, like the top of a newspaper.
+        var today = document.querySelector('[data-today]');
+        if (today) today.textContent = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+        // Colour theme picker (the palette button): swap the colours and remember the choice.
+        var palette = document.querySelector('.palette');
+        var paletteBtn = palette.querySelector('.palette-toggle');
+        var picks = palette.querySelectorAll('[data-colorway-pick]');
+        function markPick() {
+          picks.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.colorwayPick === root.dataset.colorway)); });
+        }
+        function closePalette() { palette.classList.remove('open'); paletteBtn.setAttribute('aria-expanded', 'false'); }
+        markPick();
+        paletteBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var open = palette.classList.toggle('open');
+          paletteBtn.setAttribute('aria-expanded', String(open));
+        });
+        picks.forEach(function (b) {
+          b.addEventListener('click', function () {
+            root.dataset.colorway = b.dataset.colorwayPick;
+            try { localStorage.setItem('colorway', b.dataset.colorwayPick); } catch (e) {}
+            markPick();
+          });
+        });
+        document.addEventListener('click', function (e) { if (!palette.contains(e.target)) closePalette(); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closePalette(); });
 
         // Night mode button: flip the theme and remember the choice.
         document.querySelector('.theme-toggle').addEventListener('click', function () {
@@ -216,7 +275,7 @@ const shareImage = new URL(image ?? '/og-default.png', Astro.site).href;
             location.href = links[Math.max(active, 0)].href;
           }
         });
-        document.querySelector('.search-open').addEventListener('click', openSearch);
+        document.querySelectorAll('.search-open, [data-open-search]').forEach(function (b) { b.addEventListener('click', openSearch); });
         overlay.addEventListener('click', function (e) { if (e.target === overlay) closeSearch(); });
         document.addEventListener('keydown', function (e) {
           var typing = /INPUT|TEXTAREA/.test(document.activeElement.tagName);
