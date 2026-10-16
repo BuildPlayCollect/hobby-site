@@ -57,10 +57,12 @@ const shareImage = new URL(image ?? '/og-default.png', Astro.site).href;
         document.documentElement.dataset.theme = dark ? 'dark' : 'light';
         // Add ?photos to an article's address to see where photos still need to go.
         if (/[?&]photos\b/.test(location.search)) document.documentElement.classList.add('show-photo-slots');
-        // Design try only: pick a colourway with ?colorway=playtime / curious / fresh / arena / retro / airy / luxe / hobby (remembered on this device).
+        // Colour theme: the reader picks one with the palette button (remembered on this device).
+        // ?colorway=playtime in the address also works, handy for sharing a look.
+        var themes = ['retro', 'playtime', 'curious', 'fresh'];
         var cw = (location.search.match(/[?&]colorway=(\w+)/) || [])[1];
         try { if (cw) localStorage.setItem('colorway', cw); else cw = localStorage.getItem('colorway'); } catch (e) {}
-        document.documentElement.dataset.colorway = cw || 'retro';
+        document.documentElement.dataset.colorway = themes.indexOf(cw) > -1 ? cw : 'retro';
       })();
     </script>
   </head>
@@ -101,6 +103,28 @@ const shareImage = new URL(image ?? '/og-default.png', Astro.site).href;
 
         <div class="header-actions">
           <button class="icon-btn search-open" type="button" aria-label="Search (press /)" title="Search (press /)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+          <div class="palette">
+            <button class="icon-btn palette-toggle" type="button" aria-label="Colour theme" title="Colour theme" aria-expanded="false" aria-controls="palette-panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.8 1.8-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.8-1.7 1.7-1.7H16a5 5 0 0 0 5-5c0-4-4-7.2-9-7.2Z"/><circle cx="7.5" cy="11" r="1.2" fill="currentColor"/><circle cx="10.5" cy="7.2" r="1.2" fill="currentColor"/><circle cx="15" cy="7.8" r="1.2" fill="currentColor"/></svg></button>
+            <div class="palette-panel" id="palette-panel" role="group" aria-label="Pick a colour theme">
+              <p class="palette-title">Pick a colour theme</p>
+              <ul class="palette-list">
+                {[
+                  { id: 'retro', name: 'Retro', note: 'Cosy and classic', c: ['#4b607f', '#f3701e', '#e8d8c9'] },
+                  { id: 'playtime', name: 'Playtime', note: 'Bright and friendly', c: ['#2f5bd3', '#ffc93c', '#dfe7fb'] },
+                  { id: 'curious', name: 'Curious', note: 'Creative and bold', c: ['#6c4ab6', '#ffb547', '#e9e1fb'] },
+                  { id: 'fresh', name: 'Fresh', note: 'Calm and new', c: ['#1f7a5a', '#a8db6a', '#e1f1e3'] },
+                ].map((t) => (
+                  <li>
+                    <button class="palette-option" type="button" data-colorway-pick={t.id} aria-pressed="false">
+                      <span class="palette-dots" aria-hidden="true">{t.c.map((c) => <i style={`background:${c}`}></i>)}</span>
+                      <span class="palette-name">{t.name}<small>{t.note}</small></span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <p class="palette-foot">Light or dark? Use the button next to this one.</p>
+            </div>
+          </div>
           <button class="icon-btn theme-toggle" type="button" aria-label="Toggle night mode" title="Toggle night mode">
             <span class="sun">☀</span><span class="moon">☾</span>
           </button>
@@ -162,6 +186,30 @@ const shareImage = new URL(image ?? '/og-default.png', Astro.site).href;
         // Dateline: show the reader's date, like the top of a newspaper.
         var today = document.querySelector('[data-today]');
         if (today) today.textContent = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+        // Colour theme picker (the palette button): swap the colours and remember the choice.
+        var palette = document.querySelector('.palette');
+        var paletteBtn = palette.querySelector('.palette-toggle');
+        var picks = palette.querySelectorAll('[data-colorway-pick]');
+        function markPick() {
+          picks.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.colorwayPick === root.dataset.colorway)); });
+        }
+        function closePalette() { palette.classList.remove('open'); paletteBtn.setAttribute('aria-expanded', 'false'); }
+        markPick();
+        paletteBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var open = palette.classList.toggle('open');
+          paletteBtn.setAttribute('aria-expanded', String(open));
+        });
+        picks.forEach(function (b) {
+          b.addEventListener('click', function () {
+            root.dataset.colorway = b.dataset.colorwayPick;
+            try { localStorage.setItem('colorway', b.dataset.colorwayPick); } catch (e) {}
+            markPick();
+          });
+        });
+        document.addEventListener('click', function (e) { if (!palette.contains(e.target)) closePalette(); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closePalette(); });
 
         // Night mode button: flip the theme and remember the choice.
         document.querySelector('.theme-toggle').addEventListener('click', function () {
