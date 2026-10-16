@@ -1024,3 +1024,10 @@ a.tile.wiki-update:hover .wu-meta, a.tile.wiki-update:hover .wu-text { color: va
 .search-results a:hover small, .search-results a.active small, .search-results a:hover .kind, .search-results a.active .kind { color: var(--muted); }
 .search-results .kind { font-family: var(--sans); font-weight: 700; letter-spacing: .02em; }
 .search-results small { font-weight: 400; }
+
+/* Background doodles: a faint, hand-drawn hobby pattern behind every page.
+   The SVG is only a stencil (mask), so its colour comes from the current colour theme. */
+body { position: relative; }
+body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: var(--c1); opacity: .09; -webkit-mask: url(/bg-doodles.svg) 0 0 / 420px 420px repeat; mask: url(/bg-doodles.svg) 0 0 / 420px 420px repeat; }
+:root[data-theme="dark"] body::before { background: var(--ink); opacity: .06; }
+@media (prefers-reduced-transparency: reduce) { body::before { display: none; } }
