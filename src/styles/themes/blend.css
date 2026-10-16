@@ -935,3 +935,73 @@ a.tile:hover { background: var(--surface); transform: translate(-2px, -2px); box
 /* Phones: no hobby buttons on the home page (the menu already lists every hobby) */
 @media (max-width: 639px) { .picker, .welcome-ask { display: none; } .welcome-search { margin-top: 28px; } }
 .picker-icon, .play2-emoji { color: #1b1a1f !important; }
+
+/* ---------- Blend home, round 2 ---------- */
+@media (hover: none) and (pointer: coarse) { .search-hint-keys { display: none; } }
+/* News roundup: a rounded card in the main colour, with the 60-second list beside it */
+.roundup-wrap { margin-top: 64px; }
+.roundup-wrap .section-head { display: flex; }
+a.tile.roundup { background: var(--c1, #4b607f); color: #fff; border: var(--edge); border-color: #1b1a1f; border-radius: 24px; box-shadow: var(--lift); overflow: hidden; }
+:root[data-theme="dark"] a.tile.roundup { background: var(--c1, #4b607f); border-color: #000; }
+a.tile.roundup:hover { background: var(--c1, #4b607f); }
+.roundup-masthead { font-family: var(--sans); font-weight: 800; text-transform: none; letter-spacing: 0; color: rgba(255,255,255,.8); }
+.roundup-masthead span { background: var(--c2, #ffd23f); color: #1b1a1f; border-radius: 999px; padding: 3px 10px; }
+.roundup h3 { font-family: var(--display); font-weight: 800; text-transform: none; letter-spacing: -.02em; font-size: clamp(1.5rem, 3.4vw, 2.2rem); line-height: 1.1; }
+.roundup-desc { font-family: var(--sans); color: rgba(255,255,255,.85); font-size: 1rem; }
+.roundup .pill-btn { background: #fff; color: #1b1a1f; border-color: #1b1a1f; }
+.roundup-quick { background: var(--surface); color: var(--ink); border-color: #1b1a1f !important; }
+@media (min-width: 860px) { .roundup-quick { border-left: var(--edge) !important; } }
+@media (max-width: 859px) { .roundup-quick { border-top: var(--edge) !important; } }
+.roundup-quick-label { font-family: var(--sans); font-weight: 900; color: var(--muted); }
+.roundup-quick ul { font-family: var(--sans); font-size: .95rem; }
+.roundup-quick li { border-bottom: 1px solid var(--soft-line); }
+.roundup-quick li::before { font-family: var(--sans); font-weight: 900; color: var(--c1, #4b607f); }
+/* Fresh from the wiki: small rounded cards */
+.wiki-updates-list { gap: 14px; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+.wiki-updates-list li { border: 0; }
+a.tile.wiki-update { background: var(--surface); border: 2px solid var(--soft-line); border-radius: 18px; padding: 16px; }
+a.tile.wiki-update:hover { background: var(--surface); border-color: var(--line); padding: 16px; color: var(--ink); transform: translateY(-2px); }
+a.tile.wiki-update:hover .wu-meta, a.tile.wiki-update:hover .wu-text { color: var(--muted); }
+.wu-badge { border-radius: 999px; font-family: var(--sans); font-weight: 900; }
+.wu-new { background: var(--c2, #ffd23f); color: #1b1a1f; }
+.wu-updated { background: var(--c1, #4b607f); color: #fff; }
+.wu-meta { font-family: var(--sans); font-weight: 800; text-transform: none; letter-spacing: 0; }
+.wu-term { font-family: var(--display); font-weight: 800; letter-spacing: -.02em; }
+/* New here? Three numbered steps in soft cards */
+.start { gap: 16px; }
+.start li { background: var(--surface); border: 2px solid var(--soft-line); border-radius: 20px; padding: 20px; }
+.start-num { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; background: var(--c2, #ffd23f); color: #1b1a1f; -webkit-text-stroke: 0; font-family: var(--display); font-weight: 800; font-size: 1.4rem; border: var(--edge); border-color: #1b1a1f; }
+.start h3 { font-family: var(--display); font-weight: 800; font-size: 1.2rem; letter-spacing: -.02em; }
+.start a { font-family: var(--sans); font-weight: 800; text-transform: none; letter-spacing: 0; font-size: .9rem; }
+/* Hobby dictionary: word spotlight + a look-up box with a clean list (no pills) */
+.dict-box { display: grid; gap: 18px; }
+@media (min-width: 900px) { .dict-box { grid-template-columns: 1fr 1fr; } }
+.dict .hole { grid-template-columns: 1fr; align-content: space-between; }
+.dict-look { padding: 22px; border: var(--edge); border-radius: 26px; background: var(--surface); box-shadow: var(--lift); }
+.dict-look .label { display: block; color: var(--muted); margin-bottom: 8px; }
+.dict-input { width: 100%; font: inherit; font-size: 1.05rem; padding: 12px 18px; border: var(--edge); border-radius: 999px; background: var(--bg); color: var(--ink); outline: none; }
+.dict-input:focus { box-shadow: 0 0 0 4px var(--mark); }
+.dict-list { list-style: none; margin: 14px 0 0; padding: 0; columns: 2 160px; column-gap: 20px; max-height: 248px; overflow-y: auto; }
+.dict-list li { break-inside: avoid; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding: 7px 4px; border-bottom: 1px solid var(--soft-line); }
+.dict-list li[hidden] { display: none; }
+.dict-list a { color: var(--ink); font-weight: 700; }
+.dict-list a:hover { color: var(--wiki); text-decoration: underline; }
+.dict-list small { color: var(--muted); font-size: .72rem; font-weight: 700; white-space: nowrap; }
+.dict-none { margin: 12px 0 0; color: var(--muted); }
+.dict-none a { color: var(--wiki); text-decoration: underline; }
+
+/* ---------- Brand colourways (round 2): built from what each colour tends to say ----------
+   60% calm paper, 30% main colour, 10% pop colour (Figma's 60/30/10 rule of thumb). */
+/* Playtime: blue = trust (we fact-check), sunny yellow = joy (it's play). Complementary pair. */
+:root[data-colorway="playtime"] { --bg: #fdf8ec; --surface: #ffffff; --surface-2: #f2ead6; --ink: #17213a; --muted: #56607a; --line: #17213a; --soft-line: #ece2cb; --c1: #2f5bd3; --c2: #ffc93c; --c3: #dfe7fb; --mark: #ffc93c; --wiki: #2f5bd3; --link: #17213a; --foot: #17213a; }
+:root[data-colorway="playtime"][data-theme="dark"] { --bg: #10162a; --surface: #182040; --surface-2: #212b52; --ink: #f4efe2; --muted: #a9b0c8; --line: #f4efe2; --soft-line: #273263; --wiki: #ffc93c; --link: #f4efe2; --foot: #0a0f1f; }
+/* Curious: purple = creativity and imagination, warm orange = excitement. Split complementary. */
+:root[data-colorway="curious"] { --bg: #fbf8f3; --surface: #ffffff; --surface-2: #efe8f8; --ink: #1f1a2e; --muted: #5d5770; --line: #1f1a2e; --soft-line: #e8e0f2; --c1: #6c4ab6; --c2: #ffb547; --c3: #e9e1fb; --mark: #ffb547; --wiki: #6c4ab6; --link: #1f1a2e; --foot: #1f1a2e; }
+:root[data-colorway="curious"][data-theme="dark"] { --bg: #16121f; --surface: #201a2e; --surface-2: #2a2340; --ink: #f2eefa; --muted: #b0a8c4; --line: #f2eefa; --soft-line: #322a4a; --wiki: #ffb547; --link: #f2eefa; --foot: #0d0a14; }
+/* Fresh start: green = growth (starting a new hobby), lime = fresh energy. Analogous greens. */
+:root[data-colorway="fresh"] { --bg: #f7f8f0; --surface: #ffffff; --surface-2: #e6efdf; --ink: #15261e; --muted: #53645b; --line: #15261e; --soft-line: #dde8d6; --c1: #1f7a5a; --c2: #a8db6a; --c3: #e1f1e3; --mark: #a8db6a; --wiki: #1f7a5a; --link: #15261e; --foot: #15261e; }
+:root[data-colorway="fresh"][data-theme="dark"] { --bg: #0f1a15; --surface: #16251e; --surface-2: #1e3128; --ink: #eef4e8; --muted: #a3b5aa; --line: #eef4e8; --soft-line: #263c31; --wiki: #a8db6a; --link: #eef4e8; --foot: #08100c; }
+/* Arena: red = energy and excitement (battles, races, tournaments), gold = winning, navy keeps it steady.
+   Like the red + yellow food sites use for appetite, but for the thrill of play. */
+:root[data-colorway="arena"] { --bg: #fbf6ee; --surface: #ffffff; --surface-2: #f3e9da; --ink: #1d2a44; --muted: #5a6276; --line: #1d2a44; --soft-line: #ecdfcc; --c1: #c8283a; --c2: #ffd166; --c3: #e3e9f3; --mark: #ffd166; --wiki: #c8283a; --link: #1d2a44; --foot: #1d2a44; }
+:root[data-colorway="arena"][data-theme="dark"] { --bg: #111827; --surface: #1a2336; --surface-2: #232e45; --ink: #f6efe3; --muted: #aab1c2; --line: #f6efe3; --soft-line: #2a3650; --wiki: #ffd166; --link: #f6efe3; --foot: #0a0f1a; }

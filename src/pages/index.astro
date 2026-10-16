@@ -4,6 +4,8 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import HobbyIcon from '../components/HobbyIcon.astro';
+import WikiUpdates from '../components/WikiUpdates.astro';
+import NewsRoundup from '../components/NewsRoundup.astro';
 import { HOBBIES, TYPES, type HobbyKey, type TypeKey } from '../data/site';
 
 const articles = (await getCollection('articles', ({ data }) => !data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
@@ -35,13 +37,18 @@ const nick: Record<string, string> = {
   consoles: 'Game machines', esports: 'Pro gaming', general: 'Hobbies in general',
 };
 const picks = headlines.slice(0, 3);
-// Rabbit hole: every wiki word, so the box can show a new one each visit (and on "Another word").
+// Hobby dictionary: every wiki word, so the spotlight can show a new one each visit (and on "Another word").
 const holeWords = wiki.map((w) => ({ t: w.data.title, s: w.data.summary, u: `/wiki/${w.id}/`, h: HOBBIES[w.data.hobby as HobbyKey].name }));
 const firstWord = holeWords[0];
-const newest = roundups[0];
+// "New here?" steps for first-time visitors.
+const steps = [
+  { title: 'Pick a hobby', text: 'Open Hobbies in the menu: every hobby has its own page of stories, guides and history.', href: '/quiz', link: 'Not sure? Take the quiz' },
+  { title: 'Read the 60-second version', text: 'Every article opens with a short summary, so you get the gist first.', href: headlines[0] ? `/articles/${headlines[0].id}/` : '/guides', link: 'Try one now', random: true },
+  { title: 'Look up any word', text: 'Hobby words link to our dictionary. Hover for a quick meaning, click to dig in.', href: '/wiki', link: 'Open the dictionary' },
+];
 ---
 <Base>
-  <!-- Welcome: a short hello, then one question with one big button per hobby. -->
+  <!-- Welcome: a short hello, then one question with one big button per hobby (bigger screens). -->
   <section class="welcome" aria-labelledby="welcome-title">
     <h1 id="welcome-title">Find your next <span class="hl">hobby.</span></h1>
     <p>Fun, fact-checked stories about spinning tops, tiny cars, clacky keyboards, cards, consoles and esports.</p>
@@ -64,45 +71,68 @@ const newest = roundups[0];
         </a>
       </li>
     </ul>
-    <button class="welcome-search" type="button" data-open-search>Or search everything <kbd>/</kbd></button>
+    <button class="welcome-search" type="button" data-open-search>Search everything <kbd>/</kbd></button>
   </section>
 
-  <!-- This week: one line with the newest Mon/Thu news roundup. -->
-  {newest && (
-    <a class="this-week" href={`/articles/${newest.id}/`}>
-      <b>This week</b>
-      <span>{newest.data.title}</span>
-      <i>Read →</i>
-    </a>
-  )}
+  <!-- News roundup: the latest Mon/Thu roundup. -->
+  <NewsRoundup roundups={roundups} />
 
-  <!-- Just three stories to start with. Everything else is one click away. -->
+  <!-- Top stories: up to three, then a short list of what else is new. -->
   {picks.length > 0 && (
     <>
-      <div class="section-head"><h2>Start with a <span class="hl">story</span></h2><a class="more" href="/guides">All guides →</a></div>
+      <div class="section-head"><h2>Top <span class="hl">stories</span></h2><a class="more" href="/guides">All guides →</a></div>
       <div class="grid">{picks.map((a) => <ArticleCard article={a} />)}</div>
     </>
   )}
-
-  <!-- Rabbit hole: one wiki word at a time. Readers choose to keep falling. -->
-  {firstWord && (
+  {latest.length > 0 && (
     <>
-      <div class="section-head"><h2>Rabbit hole of the day</h2><a class="more" href="/wiki">Whole wiki →</a></div>
-      <div class="hole" data-hole={JSON.stringify(holeWords)}>
-        <svg class="hole-art" viewBox="0 0 110 110" aria-hidden="true">
-          <circle class="h1" cx="55" cy="55" r="50" /><circle class="h2" cx="55" cy="55" r="36" /><circle cx="55" cy="55" r="24" /><circle class="h3" cx="55" cy="55" r="13" />
-        </svg>
-        <div class="hole-word">
-          <span class="label" data-hole-hobby>{firstWord.h}</span>
-          <h3><a href={firstWord.u} data-hole-link>{firstWord.t}</a></h3>
-          <p data-hole-text>{firstWord.s}</p>
+      <div class="section-head"><h2>Fresh off the press</h2></div>
+      <div class="grid">{latest.slice(0, 3).map((a) => <ArticleCard article={a} />)}</div>
+    </>
+  )}
+
+  <!-- New here? Three short steps for first-time visitors. -->
+  <div class="section-head"><h2>New <span class="hl">here?</span></h2></div>
+  <ol class="start">
+    {steps.map((s, i) => (
+      <li>
+        <span class="start-num" aria-hidden="true">{i + 1}</span>
+        <h3>{s.title}</h3>
+        <p>{s.text}</p>
+        <a href={s.href} data-random={s.random ? JSON.stringify(tryUrls) : undefined}>{s.link} →</a>
+      </li>
+    ))}
+  </ol>
+
+  <!-- Fresh from the wiki: the newest added or updated words. -->
+  <WikiUpdates limit={4} />
+
+  <!-- Hobby dictionary: a word spotlight plus a look-up box. Readers dig as deep as they like. -->
+  {firstWord && (
+    <section class="dict" aria-labelledby="dict-title">
+      <div class="section-head"><h2 id="dict-title">Hobby dictionary</h2><a class="more" href="/wiki">All {wiki.length} words →</a></div>
+      <div class="dict-box">
+        <div class="hole" data-hole={JSON.stringify(holeWords)}>
+          <div class="hole-word">
+            <span class="label">Word of the day · <span data-hole-hobby>{firstWord.h}</span></span>
+            <h3><a href={firstWord.u} data-hole-link>{firstWord.t}</a></h3>
+            <p data-hole-text>{firstWord.s}</p>
+          </div>
+          <div class="hole-actions">
+            <a class="pill-btn" href={firstWord.u} data-hole-go>Read more →</a>
+            <button class="hole-next" type="button" data-hole-next>Another word</button>
+          </div>
         </div>
-        <div class="hole-actions">
-          <a class="pill-btn" href={firstWord.u} data-hole-go>Fall in →</a>
-          <button class="hole-next" type="button" data-hole-next>Another word</button>
+        <div class="dict-look">
+          <label class="label" for="dict-input">Look up a word</label>
+          <input id="dict-input" class="dict-input" type="search" placeholder="Try “switch” or “bit”" autocomplete="off" />
+          <ul class="dict-list" data-dict>
+            {wiki.map((w) => <li><a href={`/wiki/${w.id}/`}>{w.data.title}</a><small>{HOBBIES[w.data.hobby as HobbyKey].name}</small></li>)}
+          </ul>
+          <p class="dict-none" data-dict-none hidden>No word yet. Try the <a href="/wiki">full dictionary</a>.</p>
         </div>
       </div>
-    </>
+    </section>
   )}
 
   <!-- Little games -->
@@ -148,4 +178,15 @@ const newest = roundups[0];
     show();
     hole.querySelector('[data-hole-next]')!.addEventListener('click', show);
   }
+
+  // Look up a word: filter the dictionary list as you type.
+  const input = document.querySelector<HTMLInputElement>('#dict-input');
+  const items = Array.from(document.querySelectorAll<HTMLLIElement>('[data-dict] li'));
+  const none = document.querySelector<HTMLElement>('[data-dict-none]');
+  input?.addEventListener('input', () => {
+    const q = input.value.trim().toLowerCase();
+    let shown = 0;
+    items.forEach((li) => { const hit = !q || li.textContent!.toLowerCase().includes(q); li.hidden = !hit; if (hit) shown++; });
+    if (none) none.hidden = shown > 0;
+  });
 </script>
