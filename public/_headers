@@ -13,3 +13,9 @@
   # We never need the camera, microphone, location or payments, so switch them off.
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
   Cross-Origin-Opener-Policy: same-origin
+
+# Fonts, styles and scripts the site builds (in /_astro/) get a new file name whenever they
+# change, so browsers can safely keep them for a year. After the first visit the fonts load
+# straight from the reader's device, with no re-download and no font "flicker".
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
