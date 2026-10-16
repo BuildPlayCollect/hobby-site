@@ -929,7 +929,6 @@ a.tile:hover { background: var(--surface); transform: translate(-2px, -2px); box
 :root:not([data-colorway="hobby"]) .this-week b { background: var(--c1); color: #fff; }
 
 /* Phones: no hobby buttons on the home page (the menu already lists every hobby) */
-@media (max-width: 639px) { .picker, .welcome-ask { display: none; } .welcome-search { margin-top: 28px; } }
 .picker-icon, .play2-emoji { color: #1b1a1f !important; }
 
 /* ---------- Blend home, round 2 ---------- */
@@ -1014,3 +1013,14 @@ a.tile.wiki-update:hover .wu-meta, a.tile.wiki-update:hover .wu-text { color: va
 .palette-name small { font-weight: 400; font-size: .76rem; color: var(--muted); }
 .palette-foot { margin: 10px 0 0; font-size: .74rem; color: var(--muted); }
 @media (max-width: 430px) { .palette-panel { right: -76px; } }
+
+/* Search: same friendly fonts as the rest of the site, a normal-sized rounded box. */
+.search-box input { font-family: var(--sans); font-size: 1.15rem; font-weight: 500; text-transform: none; padding: 14px 20px; border: 2px solid var(--line); border-radius: 999px; background: var(--surface); box-shadow: var(--lift); }
+.search-box input::placeholder { color: var(--muted); }
+.search-box input:focus-visible { outline: 3px solid var(--mark); outline-offset: 2px; }
+.search-hint { font-family: var(--sans); font-size: .85rem; text-transform: none; letter-spacing: 0; padding: 12px 6px; }
+.search-results a { font-family: var(--display); font-weight: 700; font-size: 1.05rem; border-radius: 12px; padding-inline: 10px; }
+.search-results a:hover, .search-results a.active { background: var(--surface-2); color: var(--ink); }
+.search-results a:hover small, .search-results a.active small, .search-results a:hover .kind, .search-results a.active .kind { color: var(--muted); }
+.search-results .kind { font-family: var(--sans); font-weight: 700; letter-spacing: .02em; }
+.search-results small { font-weight: 400; }
