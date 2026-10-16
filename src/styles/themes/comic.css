@@ -631,6 +631,8 @@ a.tile:hover { text-decoration: none; transform: translate(-2px, -2px); box-shad
 .box-badge { fill: #fffaf0; stroke-width: 4 !important; }
 .box-badge-ring { fill: none; stroke-width: 2 !important; stroke-dasharray: 4 5; opacity: .5; }
 .box-badge ~ g .hobby-icon { color: #141414; }
+/* Icons keep their own thin lines (the thick box outline rule above would hide their details). */
+.box-hero-svg .hobby-icon :is(rect, path, circle, ellipse) { stroke: currentColor; stroke-width: 2.2; }
 .box-name { font-family: var(--display); fill: #141414; text-anchor: middle; letter-spacing: .03em; }
 .box-q { font-family: var(--display); font-size: 70px; fill: #141414; text-anchor: middle; }
 .box-quiz .box-tape { fill: #ffd23f; }
