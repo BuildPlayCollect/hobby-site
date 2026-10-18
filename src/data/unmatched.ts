@@ -3051,8 +3051,10 @@ export const UM_FIGHTERS: UmFighter[] = [
         "Against her, decide whether to engage early or limit her card advantage.",
         "Chain lightning is strong against sidekick-heavy heroes like Eredin."
       ],
-      "combos": [],
+      "combos": [{"cards": "Polymorphy", "why": "Key card: this scheme gives Philippa a move of 5 and lets her land almost anywhere, which makes her hard to pin down. It's lost at the end of her turn unless she's in a zone with an enemy, so it pushes her to stay close to the fight."}, {"cards": "Chain Lightning", "why": "Key card against decks with lots of sidekicks: it hits every enemy in her zone for 1. In one reviewer's game it knocked out three of Eredin's Red Riders at once."}],
       "sources": [
+          "https://www.meeplemountain.com/reviews/unmatched-the-witcher-steel-and-silver/",
+          "https://spacebiff.com/2025/01/22/unmatched-witcher/",
         "https://opinionatedgamers.com/2024/12/17/unmatched-which-witcher/",
         "https://beastiegeeks.com/2025/11/30/unmatched-the-witcher-realms-fall-honest-and-precise-review/",
         "https://spacebiff.com/2025/01/22/unmatched-witcher/"
