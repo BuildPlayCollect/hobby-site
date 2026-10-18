@@ -7,6 +7,8 @@ import SourceList from '../../../components/SourceList.astro';
 import { GAME, REGULATIONS, VGC_RULES, REGULATION_SOURCES, EVENTS, EVENT_SOURCES, RESULTS, USAGE_FORMATS, LEARN } from '../../../data/champions';
 import { getUsage } from '../../../lib/champions-usage';
 import { ALL_TEAMS, seenAt as seenAtNames, ordinal } from '../../../lib/champions-teams';
+import { getPokedex, dexUrl } from '../../../lib/champions-pokedex';
+import { displayName } from '../../../lib/pokemon';
 
 const [doubles, singles] = await Promise.all([
   getUsage(USAGE_FORMATS.doubles.id, USAGE_FORMATS.rating),
@@ -26,6 +28,7 @@ const upcoming = EVENTS.filter((e) => e.to >= today);
 const current = REGULATIONS.find((r) => r.current) ?? REGULATIONS[0];
 const top = (n: number) => Math.max(n, 1);
 const seenAt = (name: string) => seenAtNames([name]);
+const { pageFor } = await getPokedex();
 // Starters that also show up on Regionals top 8 teams (base species match, so Charizard counts Charizard-Mega-Y).
 const starterTips = LEARN.starters.filter((n) => RESULTS.some((ev) => ev.top.some((t) => t.team.some((m) => m.split('-')[0] === n))));
 ---
@@ -97,7 +100,7 @@ const starterTips = LEARN.starters.filter((n) => RESULTS.some((ev) => ev.top.som
                 <details>
                   <summary>
                     <span class="pc-rank">{r.rank}</span>
-                    <Mon name={r.name} />
+                    <Mon name={r.name} link={false} />
                     <span class="pc-bar" style={`--w:${(r.usage / top(b.data!.rows[0].usage)) * 100}%`}><span></span></span>
                     <span class="pc-pct">{r.usage.toFixed(1)}%</span>
                   </summary>
@@ -128,6 +131,7 @@ const starterTips = LEARN.starters.filter((n) => RESULTS.some((ev) => ev.top.som
                       <p class="pc-hint">{b.key === 'singles' ? 'From Showdown Singles battles. Big tournaments are Doubles, so there are no Singles tournament teams to show.' : 'From Showdown battles. This Pokémon hasn\'t been on a recent Regionals team yet.'}</p>
                     </div>
                   )}
+                  {pageFor(r.name) && <p class="pc-dexlink"><a href={dexUrl(pageFor(r.name)!)}>See {displayName(pageFor(r.name)!.name)} in the Pokédex →</a></p>}
                 </details>
               </li>
             ))}
@@ -232,6 +236,7 @@ const starterTips = LEARN.starters.filter((n) => RESULTS.some((ev) => ev.top.som
   .pc-now strong { font-family: var(--display); font-size: 1.6rem; line-height: 1.1; }
   .pc-section { margin-top: 44px; }
   .pc-more { margin: 14px 0 0; }
+  .pc-dexlink { margin: 4px 16px 14px; font-weight: 700; font-size: .9rem; }
   .pc-note { color: var(--muted); font-size: .9rem; margin: 0 0 14px; }
   .pc-source { color: var(--muted); font-size: .82rem; margin: 12px 0 0; }
   .pc-source a + a::before { content: ", "; }

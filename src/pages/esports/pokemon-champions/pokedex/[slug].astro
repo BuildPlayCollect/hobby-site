@@ -24,7 +24,6 @@ const top = used[0];
 const forms: DexForm[] = [e, ...e.megas];
 const label = displayName;
 const pct = (n: number) => (n >= 10 ? n.toFixed(0) : n.toFixed(1)) + '%';
-const linkFor = (name: string) => { const p = pageFor(name); return p ? dexUrl(p) : undefined; };
 const SP_LABELS = ['HP', 'Atk', 'Def', 'SpA', 'SpD', 'Spe'];
 const spread = (sp: number[]) => sp.map((v, i) => (v ? `${v} ${SP_LABELS[i]}` : '')).filter(Boolean).join(' / ') || 'No stat points';
 const barColour = (v: number) => (v < 60 ? '#ff8a80' : v < 90 ? '#ffd166' : v < 120 ? '#9be37a' : '#5fd4c4');
@@ -127,7 +126,7 @@ const description = `${name} in Pokémon Champions VGC ${dex.regulation}: ${e.ty
           {myTeams.slice(0, 8).map((t) => (
             <li>
               <span class="dp-who"><b>{ordinal(t.place)}</b> {t.p} <small>{t.c} · {t.event}</small></span>
-              <span class="dp-team">{t.team.map((n) => <Mon name={n} size="sm" href={linkFor(n)} />)}</span>
+              <span class="dp-team">{t.team.map((n) => <Mon name={n} size="sm" />)}</span>
             </li>
           ))}
         </ol>
@@ -140,7 +139,7 @@ const description = `${name} in Pokémon Champions VGC ${dex.regulation}: ${e.ty
   {top && top.u.teammates.length > 0 && (
     <section id="partners" class="dp-section">
       <div class="section-head"><h2>Often on the same team as</h2></div>
-      <div class="dp-team dp-partners">{top.u.teammates.slice(0, 8).map((m) => <Mon name={m.name} href={linkFor(m.name)} />)}</div>
+      <div class="dp-team dp-partners">{top.u.teammates.slice(0, 8).map((m) => <Mon name={m.name} />)}</div>
       <p class="dp-hint">From the same Showdown battles. Tap a Pokémon to jump to its page.</p>
     </section>
   )}

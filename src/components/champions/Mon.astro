@@ -1,9 +1,14 @@
 ---
 // Mon.astro: one Pokémon as a small chip: icon, name, and a stripe in its type colours.
 import { types, spriteUrl, displayName, TYPE_COLOURS } from '../../lib/pokemon';
-interface Props { name: string; size?: 'sm' | 'md'; href?: string }
-const { name, size = 'md', href } = Astro.props;
-const Tag = href ? 'a' : 'span'; // with href, the chip links to that Pokémon's Pokédex page
+import { getPokedex, dexUrl } from '../../lib/champions-pokedex';
+// The chip links to the Pokémon's Pokédex page when it has one (allowed in the current regulation).
+// link={false} keeps it plain, e.g. inside a <summary> where a link would steal the tap that opens it.
+interface Props { name: string; size?: 'sm' | 'md'; href?: string; link?: boolean }
+const { name, size = 'md', link = true } = Astro.props;
+const page = link && !Astro.props.href ? (await getPokedex()).pageFor(name) : undefined;
+const href = link ? Astro.props.href ?? (page ? dexUrl(page) : undefined) : undefined;
+const Tag = href ? 'a' : 'span';
 const t = types(name);
 const c1 = TYPE_COLOURS[t[0]] ?? '#ddd';
 const c2 = TYPE_COLOURS[t[1] ?? t[0]] ?? c1;
