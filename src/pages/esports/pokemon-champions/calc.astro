@@ -4,6 +4,7 @@
 // It runs in the reader's browser; this file only lists the choices (Pokémon, moves, items ...) for the boxes.
 import Base from '../../../layouts/Base.astro';
 import { Generations } from '@smogon/calc';
+import SPRITES from '../../../data/pokemon-sprites.json';
 
 const g = Generations.get(0); // "generation 0" is Pokémon Champions in @smogon/calc
 const byName = (a: string, b: string) => a.localeCompare(b);
@@ -27,7 +28,7 @@ const SIDES = [
     <p>Pick two Pokémon and see how hard each move hits. Every Pokémon is level 50, and stat points go up to 32 in each stat, like in the game.</p>
   </header>
 
-  <form class="calc" data-calc data-lists={JSON.stringify(lists)}>
+  <form class="calc" data-calc data-sprites={JSON.stringify(SPRITES)}>
     {Object.entries(lists).map(([k, v]) => <datalist id={`calc-${k}`}>{v.map((x) => <option value={x} />)}</datalist>)}
 
     <div class="calc-sides">
@@ -100,7 +101,7 @@ const SIDES = [
   <p class="calc-note">
     The maths comes from <a href="https://github.com/smogon/damage-calc">@smogon/calc</a>, the open-source engine behind the{' '}
     <a href="https://calc.pokemonshowdown.com/champions.html?mode=champions">Pokémon Showdown damage calculator</a>. Want every option
-    (Tera, field effects, full sets)? Use the Showdown calculator. Pokémon icons from Pokémon Showdown.
+    (Tera, field effects, full sets)? Use the Showdown calculator. Pokémon icons from PokeAPI.
     Pokémon is a trademark of Nintendo, Creatures and GAME FREAK; this fan page isn't connected to them.
   </p>
   <p><a href="/esports/pokemon-champions">← Back to the Pokémon Champions hub</a></p>
@@ -118,20 +119,16 @@ const SIDES = [
   const val = (side: Element, name: string) => (side.querySelector<HTMLInputElement>(`[name="${name}"]`)?.value ?? '').trim();
   const side = (key: string) => form.querySelector<HTMLElement>(`[data-side="${key}"]`)!;
   const exists = (kind: 'species' | 'items' | 'abilities' | 'moves', name: string) => !!name && !!gen[kind].get(toID(name));
-  const sprite = (name: string) => {
-    const s = gen.species.get(toID(name));
-    if (!s) return '';
-    const base = s.baseSpecies ?? s.name;
-    const forme = s.baseSpecies ? s.name.slice(s.baseSpecies.length + 1) : '';
-    return `https://play.pokemonshowdown.com/sprites/gen5/${toID(base)}${forme ? '-' + toID(forme) : ''}.png`;
-  };
+  // Icons from PokeAPI, saved in public/sprites/pokemon/ (see src/lib/pokemon.ts).
+  const SPRITES: Record<string, number> = JSON.parse(form.dataset.sprites || '{}');
+  const sprite = (name: string) => (SPRITES[name] ? `/sprites/pokemon/${SPRITES[name]}.png` : '');
 
   // When a Pokémon is picked, show its icon and types, and fill in its usual ability.
   function pickMon(el: HTMLElement, fillAbility: boolean) {
     const s = gen.species.get(toID(val(el, 'mon')));
     const icon = el.querySelector<HTMLImageElement>('[data-icon]')!;
     icon.hidden = true; // shown once the picture loads
-    if (s) icon.src = sprite(s.name);
+    if (s && sprite(s.name)) icon.src = sprite(s.name);
     el.querySelector('[data-types]')!.textContent = s ? s.types.join(' / ') : '';
     const ability = el.querySelector<HTMLInputElement>('[name="ability"]')!;
     if (s && (fillAbility || !ability.value)) ability.value = s.abilities?.[0] ?? '';
@@ -256,7 +253,7 @@ const SIDES = [
   .calc-side { display: grid; gap: 12px; align-content: start; }
   .calc-mon { display: flex; align-items: end; gap: 10px; }
   .calc-wide { flex: 1; }
-  .calc-icon { width: 48px; height: 48px; image-rendering: pixelated; flex: none; }
+  .calc-icon { width: 56px; height: 56px; margin: -8px -4px -4px; image-rendering: pixelated; flex: none; }
   .calc-icon[hidden] { display: none; }
   .calc-types { margin: -6px 0 0; color: var(--muted); font-size: .85rem; font-weight: 700; min-height: 1.2em; }
   .calc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }

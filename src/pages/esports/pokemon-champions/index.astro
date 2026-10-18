@@ -153,7 +153,7 @@ const top = (n: number) => Math.max(n, 1);
       {GAME.sources.map((s) => <li><a href={s.url}>{s.label}</a></li>)}
       <li><a href="https://www.smogon.com/stats/">Smogon: monthly usage stats</a></li>
     </ul>
-    <p class="pc-note">Pokémon and all related names and images are trademarks and © of Nintendo, Creatures Inc., GAME FREAK and The Pokémon Company. Build Play Collect is a fan site and isn't affiliated with them. Icons from Pokémon Showdown.</p>
+    <p class="pc-note">Pokémon and all related names and images are trademarks and © of Nintendo, Creatures Inc., GAME FREAK and The Pokémon Company. Build Play Collect is a fan site and isn't affiliated with them. Icons from PokeAPI.</p>
   </section>
 </Base>
 
@@ -245,10 +245,10 @@ const top = (n: number) => Math.max(n, 1);
 
   /* Pokémon chip (used by Mon.astro) */
   :global(.mon) { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px 2px 2px; border-radius: 999px; background: linear-gradient(90deg, var(--t1) 0 50%, var(--t2) 50% 100%); border: 2px solid var(--line); color: #1b1a1f; font-weight: 700; font-size: .9rem; line-height: 1; white-space: nowrap; }
-  :global(.mon-icon) { width: 32px; height: 32px; image-rendering: pixelated; object-fit: contain; margin: -4px 0; }
+  :global(.mon-icon) { width: 40px; height: 40px; image-rendering: pixelated; object-fit: contain; margin: -8px -4px -8px -6px; }
   :global(.mon-icon.is-missing) { display: none; }
-  :global(.mon:has(.is-missing)) { padding-left: 10px; min-height: 30px; }
+  :global(.mon:has(.is-missing)), :global(.mon.no-icon) { padding-left: 10px; min-height: 30px; }
   :global(.mon-sm) { font-size: .78rem; padding-right: 8px; }
-  :global(.mon-sm .mon-icon) { width: 26px; height: 26px; }
-  :global(.mon-sm:has(.is-missing)) { min-height: 24px; }
+  :global(.mon-sm .mon-icon) { width: 32px; height: 32px; margin: -7px -3px -7px -5px; }
+  :global(.mon-sm:has(.is-missing)), :global(.mon-sm.no-icon) { min-height: 24px; }
 </style>

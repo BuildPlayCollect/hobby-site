@@ -1,6 +1,7 @@
 // pokemon.ts: looks up a Pokémon's types (for the coloured chips) and its icon address.
 // Types come from @smogon/calc (the open-source engine behind the Showdown damage calculator, MIT licence).
 import { Generations, toID } from '@smogon/calc';
+import SPRITES from '../data/pokemon-sprites.json';
 
 const CHAMPIONS = Generations.get(0); // "generation 0" is how @smogon/calc names Pokémon Champions
 
@@ -12,13 +13,13 @@ export function types(name: string): string[] {
   return [...(species(name)?.types ?? [])];
 }
 
-// Pokémon Showdown's small sprites, e.g. charizard-megay.png. New Champions-only forms may not have one yet;
-// the page hides a broken icon and just shows the name.
+// Icons are PokeAPI's sprites (github.com/PokeAPI/sprites), saved in public/sprites/pokemon/ as <PokeAPI id>.png.
+// src/data/pokemon-sprites.json matches each Champions Pokémon name to its PokeAPI id.
+// A Pokémon with no saved icon gets '' and the page just shows its name.
 export function spriteUrl(name: string) {
   const s = species(name);
-  const base = s?.baseSpecies ?? s?.name ?? name;
-  const forme = s && s.baseSpecies ? s.name.slice(s.baseSpecies.length + 1) : '';
-  return `https://play.pokemonshowdown.com/sprites/gen5/${toID(base)}${forme ? '-' + toID(forme) : ''}.png`;
+  const id = (SPRITES as Record<string, number>)[s?.name ?? name];
+  return id ? `/sprites/pokemon/${id}.png` : '';
 }
 
 // Type colours used for chips (picked to read well with dark text).

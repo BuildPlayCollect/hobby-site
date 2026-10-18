@@ -7,8 +7,9 @@ const t = types(name);
 const c1 = TYPE_COLOURS[t[0]] ?? '#ddd';
 const c2 = TYPE_COLOURS[t[1] ?? t[0]] ?? c1;
 const label = name.replace(/-/g, ' ');
+const icon = spriteUrl(name);
 ---
-<span class={`mon mon-${size}`} style={`--t1:${c1};--t2:${c2}`} title={t.length ? `${label} (${t.join(' / ')})` : label}>
-  <img class="mon-icon" src={spriteUrl(name)} alt="" width="40" height="40" loading="lazy" decoding="async" data-mon-icon />
+<span class={`mon mon-${size}${icon ? '' : ' no-icon'}`} style={`--t1:${c1};--t2:${c2}`} title={t.length ? `${label} (${t.join(' / ')})` : label}>
+  {icon && <img class="mon-icon" src={icon} alt="" width="40" height="40" loading="lazy" decoding="async" data-mon-icon />}
   <span class="mon-name">{label}</span>
 </span>
