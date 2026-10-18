@@ -12,6 +12,13 @@ export function species(name: string) {
     ?? [...CHAMPIONS.species].find((s) => s.baseSpecies === name);
 }
 
+// "Raichu-Alola" -> "Raichu Alola", but names with a hyphen of their own keep it ("Kommo-o", "Ho-Oh", "Porygon-Z").
+const HYPHENATED = /^(Kommo-o|Hakamo-o|Jangmo-o|Ho-Oh|Porygon-Z|Wo-Chien|Chien-Pao|Ting-Lu|Chi-Yu|Mr\. Mime|Mime Jr\.|Type: Null)/;
+export function displayName(name: string) {
+  const keep = name.match(HYPHENATED)?.[0] ?? '';
+  return keep + name.slice(keep.length).replace(/-/g, ' ');
+}
+
 export function types(name: string): string[] {
   return [...(species(name)?.types ?? [])];
 }
