@@ -1,0 +1,378 @@
+---
+// The Pokémon Champions team builder (/esports/pokemon-champions/team-builder).
+// Six slots; each shows what real players pick most and least (from Smogon's monthly stats, made at build time
+// into /esports/pokemon-champions/builder-data/<format>.json). Stats are worked out by @smogon/calc (MIT licence).
+// The team is kept in the reader's own browser (localStorage) and can be copied as Showdown-style text.
+import Base from '../../../layouts/Base.astro';
+import { Generations } from '@smogon/calc';
+import SPRITES from '../../../data/pokemon-sprites.json';
+import { USAGE_FORMATS } from '../../../data/champions';
+
+const g = Generations.get(0);
+const byName = (a: string, b: string) => a.localeCompare(b);
+const lists = {
+  species: [...g.species].map((s) => s.name).sort(byName),
+  moves: [...g.moves].filter((m) => m.name !== '(No Move)').map((m) => m.name).sort(byName),
+  items: [...g.items].map((i) => i.name).sort(byName),
+  abilities: [...g.abilities].map((a) => a.name).sort(byName),
+};
+const natures = [...g.natures].map((n) => n.name).sort(byName);
+const STATS = [['hp', 'HP'], ['atk', 'Atk'], ['def', 'Def'], ['spa', 'SpA'], ['spd', 'SpD'], ['spe', 'Spe']];
+---
+<Base title="Pokémon Champions team builder" description="Build a Pokémon Champions team of six and see the most and least used items, natures, stat points and moves for every Pokémon, from real battles.">
+  <header class="page-head">
+    <p class="kicker"><a class="tag" href="/esports/pokemon-champions">Pokémon Champions VGC</a></p>
+    <h1>Team builder</h1>
+    <p>Pick six Pokémon. For each one you'll see what strong players choose most (and least), so you always have a starting point. Tap any suggestion to use it.</p>
+  </header>
+
+  <div class="tb" data-tb data-sprites={JSON.stringify(SPRITES)} data-ratings={USAGE_FORMATS.rating}>
+    {Object.entries(lists).map(([k, v]) => <datalist id={`tb-${k}`}>{v.map((x) => <option value={x} />)}</datalist>)}
+
+    <div class="tb-bar">
+      <div class="pc-tabs" role="tablist" aria-label="Battle format">
+        <button type="button" role="tab" class="pc-tab" aria-selected="true" data-format="doubles">Doubles</button>
+        <button type="button" role="tab" class="pc-tab" aria-selected="false" data-format="singles">Singles</button>
+      </div>
+      <p class="tb-note" data-note>Loading usage numbers…</p>
+    </div>
+
+    <ol class="tb-slots" data-slots>
+      {[0, 1, 2, 3, 4, 5].map((i) => (
+        <li class="tb-slot" data-slot={i}>
+          <button type="button" class="tb-head" aria-expanded={i === 0 ? 'true' : 'false'} data-toggle>
+            <img class="tb-icon" alt="" width="48" height="48" hidden data-icon />
+            <span class="tb-name" data-title>Slot {i + 1}: pick a Pokémon</span>
+            <span class="tb-sub" data-sub></span>
+          </button>
+          <div class="tb-body" hidden={i !== 0} data-body>
+            <div class="tb-grid">
+              <label>Pokémon<input name="mon" list="tb-species" autocomplete="off" placeholder="Type a name" /></label>
+              <label>Item<input name="item" list="tb-items" autocomplete="off" /></label>
+              <label>Ability<input name="ability" list="tb-abilities" autocomplete="off" /></label>
+              <label>Nature<select name="nature">{natures.map((n) => <option selected={n === 'Hardy'}>{n}</option>)}</select></label>
+            </div>
+            <div class="tb-tips" data-tips="items"></div>
+            <div class="tb-tips" data-tips="abilities"></div>
+            <div class="tb-tips" data-tips="natures"></div>
+
+            <h3 class="tb-h">Stat points <small data-total></small></h3>
+            <div class="tb-stats">
+              {STATS.map(([id, label]) => (
+                <label class="tb-stat">
+                  <span>{label}</span>
+                  <input name={`sp-${id}`} type="number" min="0" max="32" value="0" inputmode="numeric" />
+                  <output data-stat={id}></output>
+                </label>
+              ))}
+            </div>
+            <div class="tb-tips" data-tips="spreads"></div>
+
+            <h3 class="tb-h">Moves</h3>
+            <div class="tb-grid">
+              {[0, 1, 2, 3].map((m) => <label>Move {m + 1}<input name={`move${m}`} list="tb-moves" autocomplete="off" /></label>)}
+            </div>
+            <div class="tb-tips" data-tips="moves"></div>
+            <div class="tb-tips" data-tips="teammates"></div>
+            <button type="button" class="tb-clear" data-clear>Clear this slot</button>
+          </div>
+        </li>
+      ))}
+    </ol>
+
+    <section class="tb-export">
+      <h2>Your team</h2>
+      <p class="tb-warn" data-warn hidden></p>
+      <textarea readonly rows="12" data-export aria-label="Team as text"></textarea>
+      <div class="tb-actions">
+        <button type="button" class="pill-btn" data-copy>Copy team</button>
+        <a href="/esports/pokemon-champions/calc">Test it in the damage calc →</a>
+      </div>
+      <p class="tb-note">Copy it to share, or to paste into Pokémon Showdown to practise. Your team is saved in this browser only.</p>
+    </section>
+  </div>
+
+  <p class="tb-note">Usage numbers come from <a href="https://www.smogon.com/stats/">Smogon's monthly stats</a> of Pokémon Showdown battles by players rated {USAGE_FORMATS.rating}+, not the in-game ladder. Stats are worked out with <a href="https://github.com/smogon/damage-calc">@smogon/calc</a>. Pokémon icons from PokeAPI. Pokémon is a trademark of Nintendo, Creatures and GAME FREAK; this fan page isn't connected to them.</p>
+  <p><a href="/esports/pokemon-champions">← Back to the Pokémon Champions hub</a></p>
+</Base>
+
+<script>
+  import { Generations, Pokemon, toID } from '@smogon/calc';
+  import type { StatID } from '@smogon/calc';
+
+  type Share = { name: string; pct: number };
+  type Mon = { usage: number; abilities: Share[]; items: Share[]; moves: Share[]; natures: Share[]; spreads: { nature: string; sp: number[]; pct: number }[]; teammates: Share[] };
+  type Data = { month: string; battles: number; mons: Record<string, Mon> } | null;
+
+  const gen = Generations.get(0);
+  const root = document.querySelector<HTMLElement>('[data-tb]')!;
+  const SPRITES: Record<string, number> = JSON.parse(root.dataset.sprites || '{}');
+  const STATS: StatID[] = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
+  const LABEL: Record<string, string> = { hp: 'HP', atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe' };
+  const MAX_TOTAL = 66; // every spread in the usage stats adds up to 66 stat points
+  const STORE = 'bpc-champions-team';
+  const slots = [...root.querySelectorAll<HTMLElement>('[data-slot]')];
+  const cache: Record<string, Data> = {};
+  let format = 'doubles';
+  let data: Data = null;
+
+  const field = (slot: HTMLElement, name: string) => slot.querySelector<HTMLInputElement>(`[name="${name}"]`)!;
+  const speciesOf = (name: string) => gen.species.get(toID(name));
+  const sprite = (name: string) => (SPRITES[name] ? `/sprites/pokemon/${SPRITES[name]}.webp` : '');
+  const monData = (name: string) => (data && speciesOf(name) ? data.mons[speciesOf(name)!.name] : undefined);
+
+  // A row of tappable suggestions: the most used up front, the least used at the end.
+  function tips(box: HTMLElement, title: string, list: Share[], onPick: ((s: Share) => void) | null, top = 6) {
+    // Only redraw when the numbers change, so a chip isn't swapped out from under a tap.
+    const sig = title + JSON.stringify(list);
+    if (box.dataset.sig === sig) return;
+    box.dataset.sig = sig;
+    box.replaceChildren();
+    if (!list.length) return;
+    const h = document.createElement('p');
+    h.className = 'tb-tips-title';
+    h.textContent = title;
+    box.append(h);
+    const row = (label: string, items: Share[]) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'tb-chips';
+      const tag = document.createElement('span');
+      tag.className = 'tb-tag';
+      tag.textContent = label;
+      wrap.append(tag);
+      for (const s of items) {
+        const b = document.createElement(onPick ? 'button' : 'span');
+        b.className = 'tb-chip';
+        if (onPick) { (b as HTMLButtonElement).type = 'button'; b.addEventListener('click', () => onPick(s)); }
+        b.textContent = `${s.name} `;
+        const pct = document.createElement('b');
+        pct.textContent = `${s.pct}%`;
+        b.append(pct);
+        wrap.append(b);
+      }
+      box.append(wrap);
+    };
+    row('Most used', list.slice(0, top));
+    if (list.length > top) row('Least used', list.slice(-Math.min(3, list.length - top)).reverse());
+  }
+
+  function render(slot: HTMLElement) {
+    const name = field(slot, 'mon').value.trim();
+    const s = speciesOf(name);
+    const icon = slot.querySelector<HTMLImageElement>('[data-icon]')!;
+    const src = s ? sprite(s.name) : '';
+    icon.hidden = !src;
+    if (src) icon.src = src;
+    const i = Number(slot.dataset.slot) + 1;
+    slot.querySelector('[data-title]')!.textContent = s ? s.name.replace(/-/g, ' ') : `Slot ${i}: pick a Pokémon`;
+    const d = s ? monData(s.name) : undefined;
+    slot.querySelector('[data-sub]')!.textContent = !s ? '' : d ? `On ${d.usage.toFixed(1)}% of teams` : 'Not enough battles for usage numbers yet';
+
+    // Stat points and the real stats they make.
+    let total = 0;
+    const evs: Partial<Record<StatID, number>> = {};
+    for (const st of STATS) {
+      const v = Math.max(0, Math.min(32, Number(field(slot, `sp-${st}`).value) || 0));
+      evs[st] = v; total += v;
+    }
+    const tot = slot.querySelector('[data-total]')!;
+    tot.textContent = `${total} / ${MAX_TOTAL} used`;
+    tot.classList.toggle('is-over', total > MAX_TOTAL);
+    if (s) {
+      const p = new Pokemon(gen, s.name, { nature: slot.querySelector<HTMLSelectElement>('[name="nature"]')!.value, evs });
+      for (const st of STATS) slot.querySelector(`[data-stat="${st}"]`)!.textContent = String(p.stats[st]);
+    } else {
+      for (const st of STATS) slot.querySelector(`[data-stat="${st}"]`)!.textContent = '';
+    }
+
+    // Suggestions from real battles.
+    const box = (k: string) => slot.querySelector<HTMLElement>(`[data-tips="${k}"]`)!;
+    const set = (n: string, v: string) => { field(slot, n).value = v; update(); };
+    tips(box('items'), 'Held items', d?.items ?? [], (x) => set('item', x.name));
+    tips(box('abilities'), 'Abilities', d?.abilities ?? [], (x) => set('ability', x.name), 3);
+    tips(box('natures'), 'Natures', d?.natures ?? [], (x) => { slot.querySelector<HTMLSelectElement>('[name="nature"]')!.value = x.name; update(); });
+    tips(box('spreads'), 'Popular stat point spreads', (d?.spreads ?? []).map((sp) => ({ name: `${sp.nature} ${sp.sp.map((v, j) => (v ? `${v} ${LABEL[STATS[j]]}` : '')).filter(Boolean).join(' / ')}`, pct: sp.pct })), (x) => {
+      const sp = d!.spreads.find((y) => x.name.startsWith(y.nature) && y.pct === x.pct)!;
+      slot.querySelector<HTMLSelectElement>('[name="nature"]')!.value = sp.nature;
+      STATS.forEach((st, j) => { field(slot, `sp-${st}`).value = String(sp.sp[j]); });
+      update();
+    }, 4);
+    tips(box('moves'), 'Moves (tap to fill the next empty move)', d?.moves ?? [], (x) => {
+      const empty = [0, 1, 2, 3].map((m) => field(slot, `move${m}`)).find((f) => !f.value.trim());
+      if (empty) { empty.value = x.name; update(); }
+    }, 8);
+    tips(box('teammates'), 'Often on the same team as', (d?.teammates ?? []).map((t) => ({ ...t, name: t.name.replace(/-/g, ' ') })), (x) => {
+      const free = slots.find((o) => !field(o, 'mon').value.trim());
+      if (free) { field(free, 'mon').value = x.name; pickMon(free); open(free); }
+    }, 6);
+  }
+
+  // A new Pokémon: fill in its most used ability, item, nature, spread and moves as a starting point.
+  function pickMon(slot: HTMLElement) {
+    const s = speciesOf(field(slot, 'mon').value);
+    if (!s) { update(); return; }
+    field(slot, 'mon').value = s.name;
+    const d = monData(s.name);
+    field(slot, 'ability').value = d?.abilities[0]?.name ?? s.abilities?.[0] ?? '';
+    field(slot, 'item').value = d?.items[0]?.name ?? '';
+    const sp = d?.spreads[0];
+    slot.querySelector<HTMLSelectElement>('[name="nature"]')!.value = sp?.nature ?? 'Hardy';
+    STATS.forEach((st, j) => { field(slot, `sp-${st}`).value = String(sp?.sp[j] ?? 0); });
+    [0, 1, 2, 3].forEach((m) => { field(slot, `move${m}`).value = d?.moves[m]?.name ?? ''; });
+    update();
+  }
+
+  function open(slot: HTMLElement) {
+    for (const o of slots) {
+      const on = o === slot;
+      o.querySelector('[data-toggle]')!.setAttribute('aria-expanded', String(on));
+      o.querySelector<HTMLElement>('[data-body]')!.hidden = !on;
+    }
+  }
+
+  // Showdown-style text for the whole team, plus checks for the Item Clause and Species Clause.
+  function exportTeam() {
+    const out: string[] = [];
+    const items: string[] = [];
+    const dex: number[] = [];
+    for (const slot of slots) {
+      const s = speciesOf(field(slot, 'mon').value);
+      if (!s) continue;
+      const item = field(slot, 'item').value.trim();
+      if (item) items.push(item);
+      dex.push((s as { num?: number }).num ?? 0);
+      const sp = STATS.map((st) => [Number(field(slot, `sp-${st}`).value) || 0, LABEL[st]] as const).filter(([v]) => v > 0);
+      const lines = [`${s.name}${item ? ` @ ${item}` : ''}`];
+      if (field(slot, 'ability').value.trim()) lines.push(`Ability: ${field(slot, 'ability').value.trim()}`);
+      lines.push('Level: 50');
+      if (sp.length) lines.push(`EVs: ${sp.map(([v, l]) => `${v} ${l}`).join(' / ')}`);
+      lines.push(`${slot.querySelector<HTMLSelectElement>('[name="nature"]')!.value} Nature`);
+      for (let m = 0; m < 4; m++) { const v = field(slot, `move${m}`).value.trim(); if (v) lines.push(`- ${v}`); }
+      out.push(lines.join('\n'));
+    }
+    root.querySelector<HTMLTextAreaElement>('[data-export]')!.value = out.join('\n\n');
+    const warn = root.querySelector<HTMLElement>('[data-warn]')!;
+    const dupItems = items.filter((x, i) => items.indexOf(x) !== i);
+    const dupDex = dex.filter((x, i) => x && dex.indexOf(x) !== i);
+    const msgs = [];
+    if (dupItems.length) msgs.push(`Item Clause: two Pokémon hold ${dupItems[0]}. Each item can only be used once.`);
+    if (dupDex.length) msgs.push('Species Clause: you have two of the same Pokémon.');
+    warn.hidden = !msgs.length;
+    warn.textContent = msgs.join(' ');
+  }
+
+  function save() {
+    try {
+      const team = slots.map((slot) => Object.fromEntries([...slot.querySelectorAll<HTMLInputElement>('input, select')].map((f) => [f.name, f.value])));
+      localStorage.setItem(STORE, JSON.stringify({ format, team }));
+    } catch {}
+  }
+
+  function update() {
+    slots.forEach(render);
+    exportTeam();
+    save();
+  }
+
+  async function load(f: string) {
+    format = f;
+    root.querySelectorAll<HTMLButtonElement>('[data-format]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.format === f)));
+    const note = root.querySelector('[data-note]')!;
+    if (!(f in cache)) {
+      try {
+        const res = await fetch(`/esports/pokemon-champions/builder-data/${f}.json`);
+        cache[f] = res.ok ? await res.json() : null;
+      } catch { cache[f] = null; }
+    }
+    data = cache[f];
+    const month = data ? new Date(data.month + '-01T00:00:00Z').toLocaleDateString('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' }) : '';
+    note.textContent = data
+      ? `${f === 'doubles' ? 'Doubles' : 'Singles'} numbers from ${data.battles.toLocaleString('en-GB')} battles in ${month}.`
+      : "Usage numbers couldn't be loaded, but you can still build a team.";
+    update();
+  }
+
+  // Wire it up.
+  for (const slot of slots) {
+    slot.querySelector('[data-toggle]')!.addEventListener('click', () => open(slot));
+    field(slot, 'mon').addEventListener('change', () => pickMon(slot));
+    slot.querySelector<HTMLImageElement>('[data-icon]')!.addEventListener('error', (e) => { (e.target as HTMLElement).hidden = true; });
+    slot.querySelector('[data-clear]')!.addEventListener('click', () => {
+      slot.querySelectorAll<HTMLInputElement>('input').forEach((f) => { f.value = f.type === 'number' ? '0' : ''; });
+      slot.querySelector<HTMLSelectElement>('[name="nature"]')!.value = 'Hardy';
+      update();
+    });
+    slot.addEventListener('input', (e) => { if ((e.target as HTMLInputElement).name !== 'mon') update(); });
+    slot.querySelector('[name="nature"]')!.addEventListener('change', update);
+  }
+  root.querySelectorAll<HTMLButtonElement>('[data-format]').forEach((b) => b.addEventListener('click', () => load(b.dataset.format!)));
+  root.querySelector('[data-copy]')!.addEventListener('click', async (e) => {
+    const btn = e.currentTarget as HTMLButtonElement;
+    try { await navigator.clipboard.writeText(root.querySelector<HTMLTextAreaElement>('[data-export]')!.value); btn.textContent = 'Copied!'; }
+    catch { root.querySelector<HTMLTextAreaElement>('[data-export]')!.select(); btn.textContent = 'Press Ctrl+C to copy'; }
+    setTimeout(() => { btn.textContent = 'Copy team'; }, 2000);
+  });
+
+  // Bring back a saved team.
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORE) || 'null');
+    if (saved?.team) {
+      format = saved.format === 'singles' ? 'singles' : 'doubles';
+      saved.team.forEach((vals: Record<string, string>, i: number) => {
+        const slot = slots[i];
+        if (!slot) return;
+        for (const [k, v] of Object.entries(vals)) { const f = slot.querySelector<HTMLInputElement>(`[name="${k}"]`); if (f) f.value = v; }
+      });
+    }
+  } catch {}
+  load(format);
+</script>
+
+<style>
+  .tb { display: grid; gap: 16px; }
+  .tb-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+  .pc-tabs { display: inline-flex; gap: 4px; padding: 4px; border: 2px solid var(--line); border-radius: 999px; background: var(--surface); }
+  .pc-tab { font: inherit; font-weight: 700; padding: 8px 18px; border: 0; border-radius: 999px; background: none; color: var(--ink); cursor: pointer; }
+  .pc-tab[aria-selected="true"] { background: var(--c1); color: #fff; }
+  .tb-note { color: var(--muted); font-size: .88rem; margin: 0; }
+  .tb-slots { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .tb-slot { border: 2px solid var(--line); border-radius: 18px; background: var(--surface); overflow: hidden; }
+  .tb-head { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 16px; border: 0; background: none; font: inherit; color: var(--ink); text-align: left; cursor: pointer; min-height: 64px; }
+  .tb-head[aria-expanded="true"] { border-bottom: 2px solid var(--soft-line); }
+  .tb-icon { width: 48px; height: 48px; object-fit: contain; flex: none; }
+  .tb-icon[hidden] { display: none; }
+  .tb-name { font-family: var(--display); font-weight: 800; font-size: 1.15rem; }
+  .tb-sub { margin-left: auto; color: var(--muted); font-size: .85rem; font-weight: 600; }
+  .tb-body { padding: 14px 16px 18px; display: grid; gap: 12px; }
+  .tb-body[hidden] { display: none; }
+  .tb-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .tb label { display: grid; gap: 4px; font-size: .75rem; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; min-width: 0; }
+  .tb input, .tb select, .tb textarea { font: inherit; font-size: .95rem; font-weight: 600; text-transform: none; letter-spacing: 0; color: var(--ink); background: var(--bg); border: 2px solid var(--soft-line); border-radius: 10px; padding: 7px 10px; width: 100%; min-width: 0; }
+  .tb input:focus, .tb select:focus { outline: none; border-color: var(--c1); }
+  .tb-h { margin: 6px 0 0; font-size: 1rem; }
+  .tb-h small { color: var(--muted); font-weight: 700; font-size: .8rem; margin-left: 6px; }
+  .tb-h small.is-over { color: #b3261e; }
+  .tb-stats { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+  .tb .tb-stat { grid-template-columns: 1fr; text-align: center; }
+  .tb-stat input { text-align: center; padding: 6px 4px; }
+  .tb-stat output { font-weight: 800; color: var(--ink); font-size: .95rem; text-transform: none; }
+  .tb-tips:empty { display: none; }
+  :global(.tb-tips-title) { margin: 0 0 4px; font-size: .75rem; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  :global(.tb-chips) { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 4px; }
+  :global(.tb-tag) { font-size: .72rem; font-weight: 800; color: var(--muted); min-width: 74px; }
+  :global(.tb-chip) { font: inherit; font-size: .82rem; font-weight: 600; padding: 4px 10px; border-radius: 999px; border: 2px solid var(--soft-line); background: var(--bg); color: var(--ink); cursor: pointer; }
+  :global(.tb-chip:hover) { border-color: var(--c1); }
+  :global(.tb-chip b) { color: var(--muted); font-weight: 800; }
+  .tb-clear { justify-self: start; font: inherit; font-size: .85rem; font-weight: 700; color: var(--muted); background: none; border: 0; text-decoration: underline; cursor: pointer; padding: 0; }
+  .tb-export { padding: 18px 20px; border: 2px solid var(--line); border-radius: 18px; background: var(--surface-2); display: grid; gap: 10px; }
+  .tb-export h2 { margin: 0; }
+  .tb-export textarea { font-family: var(--mono); font-size: .85rem; resize: vertical; }
+  .tb-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+  .tb-warn { margin: 0; color: #b3261e; font-weight: 700; }
+  :root[data-theme="dark"] .tb-warn, :root[data-theme="dark"] .tb-h small.is-over { color: #ff8a80; }
+  @media (max-width: 760px) {
+    .tb-grid { grid-template-columns: 1fr 1fr; }
+    .tb-stats { grid-template-columns: repeat(3, 1fr); }
+    .tb-sub { display: none; }
+  }
+</style>

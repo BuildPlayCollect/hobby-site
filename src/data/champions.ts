@@ -116,3 +116,25 @@ export const USAGE_FORMATS = {
   singles: { id: 'gen9championsbssregmc', label: 'Singles (Battle Stadium, Regulation M-C)' },
   rating: 1760, // only battles from players rated 1760+ on Pokémon Showdown, the strongest players
 };
+
+// "New to VGC? Start here" on the hub. Game facts are sourced below; the battle tips explain how moves work in the game.
+export const LEARN = {
+  starters: ['Charizard', 'Tyranitar', 'Armarouge', 'Palafin', 'Pikachu', 'Lucario', 'Gardevoir', 'Absol', 'Altaria', 'Snorlax'],
+  modes: [
+    { name: 'Casual Battles', text: "Battle real players without changing your rank. Perfect for testing a new team." },
+    { name: 'Ranked Battles', text: 'Battle players worldwide. Wins raise your rank, you get matched with people at your level, and you earn VP.' },
+    { name: 'Private Battles', text: 'Make a room, share its code with a friend and pick the rules.' },
+  ],
+  // Five ideas you'll see in almost every Doubles game. Each move or ability is in Pokémon Champions.
+  ideas: [
+    { name: 'Fake Out', text: 'Hits first and makes the target flinch, but only on the turn its user comes in. Great for a free first turn.' },
+    { name: 'Protect', text: 'Blocks almost every attack for one turn. Use it to dodge a big hit or to wait out the other side.' },
+    { name: 'Speed control', text: 'Tailwind doubles your side\'s Speed for a few turns, Trick Room makes slower Pokémon move first, and Icy Wind slows both foes.' },
+    { name: 'Redirection', text: 'Follow Me and Rage Powder pull attacks onto the user, so its partner can set up safely.' },
+    { name: 'Intimidate', text: 'An ability that lowers both foes\' Attack when its user comes in. Swapping it in and out softens physical attackers.' },
+  ],
+  sources: [
+    { label: 'God is a Geek: Pokémon Champions starters guide', url: 'https://godisageek.com/2026/04/pokemon-champions-starters-guide-all-teams/' },
+    { label: 'Serebii: Pokémon Champions battle modes', url: 'https://www.serebii.net/pokemonchampions/modes.shtml' },
+  ] as Source[],
+};

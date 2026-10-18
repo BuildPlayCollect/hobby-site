@@ -3,8 +3,10 @@
 // Hand-edited facts live in src/data/champions.ts; usage stats are fetched from Smogon at build time.
 import Base from '../../../layouts/Base.astro';
 import Mon from '../../../components/champions/Mon.astro';
-import { GAME, REGULATIONS, VGC_RULES, REGULATION_SOURCES, EVENTS, EVENT_SOURCES, RESULTS, USAGE_FORMATS } from '../../../data/champions';
+import { GAME, REGULATIONS, VGC_RULES, REGULATION_SOURCES, EVENTS, EVENT_SOURCES, RESULTS, USAGE_FORMATS, LEARN } from '../../../data/champions';
 import { getUsage } from '../../../lib/champions-usage';
+import { toID } from '@smogon/calc';
+import { MORE_TEAMS } from '../../../data/champions-teams';
 
 const [doubles, singles] = await Promise.all([
   getUsage(USAGE_FORMATS.doubles.id, USAGE_FORMATS.rating),
@@ -23,6 +25,17 @@ const today = new Date().toISOString().slice(0, 10);
 const upcoming = EVENTS.filter((e) => e.to >= today);
 const current = REGULATIONS.find((r) => r.current) ?? REGULATIONS[0];
 const top = (n: number) => Math.max(n, 1);
+// Real top 8 teams from RESULTS that include this Pokémon, best finish first.
+// Every real Regionals team we have: each event's top 8 (RESULTS) plus the rest of its standings (MORE_TEAMS).
+const ALL_TEAMS = [
+  ...RESULTS.flatMap((ev) => ev.top.map((t, i) => ({ ...t, place: i + 1, event: ev.name.replace(/ Regional$/, '') }))),
+  ...MORE_TEAMS.map((t) => ({ p: t.p, c: t.c, team: t.team, place: t.n, event: t.e })),
+];
+// Teams that used this Pokémon, best finish first.
+const seenAt = (name: string) => ALL_TEAMS.filter((t) => t.team.some((n) => toID(n) === toID(name))).sort((a, b) => a.place - b.place);
+// Starters that also show up on Regionals top 8 teams (base species match, so Charizard counts Charizard-Mega-Y).
+const starterTips = LEARN.starters.filter((n) => RESULTS.some((ev) => ev.top.some((t) => t.team.some((m) => m.split('-')[0] === n))));
+const ordinal = (n: number) => { const t = n % 100 >= 11 && n % 100 <= 13 ? 'th' : ['th', 'st', 'nd', 'rd'][n % 10] ?? 'th'; return `${n}${t}`; };
 ---
 <Base title="Pokémon Champions VGC" description="Pokémon Champions in one place: the current VGC rules, usage leaderboards for Doubles and Singles, top teams from Regionals, upcoming events and a damage calculator.">
   <header class="page-head">
@@ -32,7 +45,7 @@ const top = (n: number) => Math.max(n, 1);
   </header>
 
   <nav class="pc-jump" aria-label="On this page">
-    <a href="#usage">Usage</a><a href="#teams">Top teams</a><a href="#events">Events</a><a href="#rules">Rules</a><a href="/esports/pokemon-champions/calc">Damage calc</a><a href="#about">About the game</a>
+    <a href="#start">New? Start here</a><a href="#usage">Usage</a><a href="#teams">Top teams</a><a href="#events">Events</a><a href="#rules">Rules</a><a href="/esports/pokemon-champions/team-builder">Team builder</a><a href="/esports/pokemon-champions/calc">Damage calc</a><a href="#about">About the game</a>
   </nav>
 
   <section class="pc-now" aria-label="Current rules">
@@ -44,6 +57,37 @@ const top = (n: number) => Math.max(n, 1);
     <a class="pill-btn" href="/esports/pokemon-champions/calc">Open the damage calc →</a>
   </section>
 
+  <!-- Learn to play -->
+  <section id="start" class="pc-section">
+    <div class="section-head"><h2>New to VGC? Start here</h2></div>
+    <p class="pc-lead">VGC is the official way to play Pokémon battles competitively. Each player brings 6 Pokémon, picks 4, and battles two at a time (Doubles). Everyone is level 50, so it's all about the team and the plan.</p>
+    <ol class="pc-steps">
+      <li>
+        <h3>Pick a starter team</h3>
+        <p>After the first mission you choose one of 10 starters, and each comes with a full team of 6. You can swap moves, items, stat points and team members later.</p>
+        <div class="pc-team">{LEARN.starters.map((n) => <Mon name={n} size="sm" />)}</div>
+        {starterTips.length > 0 && <p class="pc-hint">Tip: {starterTips.join(' and ')} {starterTips.length > 1 ? 'were' : 'was'} on Regionals top 8 teams this season, so {starterTips.length > 1 ? 'they make' : 'it makes'} a strong first pick.</p>}
+      </li>
+      <li>
+        <h3>Practise, then climb</h3>
+        <ul class="pc-modes">{LEARN.modes.map((m) => <li><strong>{m.name}</strong> <span>{m.text}</span></li>)}</ul>
+      </li>
+      <li>
+        <h3>Learn the five big ideas</h3>
+        <ul class="pc-modes">{LEARN.ideas.map((m) => <li><strong>{m.name}</strong> <span>{m.text}</span></li>)}</ul>
+      </li>
+      <li>
+        <h3>Copy a team that works</h3>
+        <p>No need to build from scratch. Tap any Pokémon in the <a href="#usage">usage leaderboard</a> to see real Regionals teams that used it, then build your own version in the <a href="/esports/pokemon-champions/team-builder">team builder</a>. Check your big hits with the <a href="/esports/pokemon-champions/calc">damage calculator</a>.</p>
+      </li>
+      <li>
+        <h3>Find an event</h3>
+        <p>When you feel ready, see what's <a href="#events">coming up</a>, and always check the organiser's page for sign-up rules.</p>
+      </li>
+    </ol>
+    <p class="pc-source">Sources: {LEARN.sources.map((s) => <a href={s.url}>{s.label}</a>)}</p>
+  </section>
+
   <!-- Usage leaderboards -->
   <section id="usage" class="pc-section">
     <div class="section-head"><h2>Usage leaderboards</h2></div>
@@ -52,7 +96,7 @@ const top = (n: number) => Math.max(n, 1);
     </div>
     {boards.map((b, i) => (
       <div class="pc-board" data-board={b.key} hidden={i !== 0}>
-        <p class="pc-note">{b.title}. Share of teams using each Pokémon, from {b.data ? `${b.data.battles.toLocaleString('en-GB')} battles in ${monthName(b.data.month)}` : 'Pokémon Showdown'} by players rated {USAGE_FORMATS.rating}+. Tap a Pokémon to see its moves, items and partners.</p>
+        <p class="pc-note">{b.title}. Share of teams using each Pokémon, from {b.data ? `${b.data.battles.toLocaleString('en-GB')} battles in ${monthName(b.data.month)}` : 'Pokémon Showdown'} by players rated {USAGE_FORMATS.rating}+. Tap a Pokémon to see its moves, items and {b.key === 'doubles' ? 'the teams that used it' : 'its usual partners'}.</p>
         {b.data ? (
           <ol class="pc-usage">
             {b.data.rows.map((r) => (
@@ -69,9 +113,28 @@ const top = (n: number) => Math.max(n, 1);
                       {[['Moves', r.moves], ['Items', r.items], ['Abilities', r.abilities]].map(([title, list]) => (list as typeof r.moves).length > 0 && (
                         <div><h4>{title}</h4><ul>{(list as typeof r.moves).map((m) => <li><span>{m.name}</span><b>{m.pct.toFixed(1)}%</b></li>)}</ul></div>
                       ))}
-                      {r.teammates.length > 0 && <div><h4>Common partners</h4><div class="pc-mates">{r.teammates.map((m) => <Mon name={m.name} size="sm" />)}</div></div>}
                     </div>
-                  ) : <p class="pc-note">No move details for this one yet.</p>}
+                  ) : <p class="pc-note pc-pad">No move details for this one yet.</p>}
+                  {b.key === 'doubles' && seenAt(r.name).length > 0 ? (
+                    <div class="pc-teamblock">
+                      <h4>Teams that used it</h4>
+                      <p class="pc-hint pc-hint-top">On {seenAt(r.name).length} of {ALL_TEAMS.length} teams from recent Regionals. Here are the best finishes:</p>
+                      <ul class="pc-seen">
+                        {seenAt(r.name).slice(0, 4).map((t) => (
+                          <li>
+                            <span class="pc-seen-who">{ordinal(t.place)} {t.p} <small>{t.event}</small></span>
+                            <span class="pc-team">{t.team.map((n) => <Mon name={n} size="sm" />)}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : r.teammates.length > 0 && (
+                    <div class="pc-teamblock">
+                      <h4>Often on the same team as</h4>
+                      <div class="pc-team">{r.teammates.slice(0, 5).map((m) => <Mon name={m.name} size="sm" />)}</div>
+                      <p class="pc-hint">{b.key === 'singles' ? 'From Showdown Singles battles. Big tournaments are Doubles, so there are no Singles tournament teams to show.' : 'From Showdown battles. This Pokémon hasn\'t been on a recent Regionals team yet.'}</p>
+                    </div>
+                  )}
                 </details>
               </li>
             ))}
@@ -201,7 +264,24 @@ const top = (n: number) => Math.max(n, 1);
   .pc-detail ul { list-style: none; margin: 0; padding: 0; }
   .pc-detail li { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; border-bottom: 1px solid var(--soft-line); font-size: .9rem; }
   .pc-detail b { font-variant-numeric: tabular-nums; }
-  .pc-mates { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pc-pad { padding: 14px 16px 0; }
+  .pc-steps { list-style: none; counter-reset: step; margin: 16px 0 0; padding: 0; display: grid; gap: 12px; }
+  .pc-steps > li { counter-increment: step; position: relative; padding: 16px 18px 16px 62px; border: 2px solid var(--line); border-radius: 16px; background: var(--surface); }
+  .pc-steps > li::before { content: counter(step); position: absolute; left: 16px; top: 14px; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; background: var(--c1); color: #fff; font-family: var(--display); font-weight: 800; }
+  .pc-steps h3 { margin: 0 0 6px; font-size: 1.1rem; }
+  .pc-steps p { margin: 0 0 8px; }
+  .pc-modes { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+  .pc-modes li { padding: 6px 0; border-top: 1px solid var(--soft-line); }
+  .pc-modes li:first-child { border-top: 0; }
+  .pc-modes span { color: var(--muted); }
+  .pc-teamblock { padding: 0 16px 16px; }
+  .pc-teamblock h4 { margin: 0 0 8px; font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .pc-hint { margin: 6px 0 0; color: var(--muted); font-size: .8rem; }
+  .pc-hint-top { margin: -2px 0 10px; }
+  .pc-seen { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .pc-seen li { display: grid; grid-template-columns: minmax(150px, 220px) 1fr; gap: 6px 10px; align-items: center; }
+  .pc-seen-who { font-weight: 700; font-size: .9rem; }
+  .pc-seen-who small { color: var(--muted); font-weight: 600; margin-left: 4px; }
   .pc-event { border: 2px solid var(--line); border-radius: 16px; background: var(--surface); margin-bottom: 12px; padding: 0 16px; }
   .pc-event > summary { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; padding: 14px 0; cursor: pointer; }
   .pc-event > summary strong { font-family: var(--display); font-size: 1.15rem; }
@@ -240,6 +320,7 @@ const top = (n: number) => Math.max(n, 1);
     .pc-usage summary { grid-template-columns: 26px 1fr 54px; }
     .pc-bar { grid-column: 2 / -1; grid-row: 2; }
     .pc-teams li { grid-template-columns: 22px 1fr; }
+    .pc-seen li { grid-template-columns: 1fr; }
     .pc-team { grid-column: 1 / -1; }
   }
 
