@@ -2742,11 +2742,13 @@ export const UM_FIGHTERS: UmFighter[] = [
         "Use Not To Be for big hits since his best printed attack is only 3.",
         "Play aggressively but protect his health, since Not To Be costs life."
       ],
-      "combos": [],
+      "combos": [{"cards": "Not To Be + The Play's the Thing", "why": "Take Not To Be's 2 damage on Hamlet himself, then attack with The Play's the Thing. One player says it hits for 5, makes your opponent discard a random card and can heal Hamlet back up, so the health you paid comes right back. Put the damage on Rosencrantz & Guildenstern instead and the heal usually does nothing.", "source": "https://boardgamegeek.com/thread/3510389/article/46647528"}, {"cards": "The Rest Is Silence", "why": "A defense card that ends the turn after combat. Hamlet defends first, so the attacker loses any actions they had left and their own after-combat tricks never happen.", "source": "https://boardgamegeek.com/thread/3351575/article/44723060"}],
       "sources": [
         "https://www.thefamilygamers.com/unmatched-slings-arrows/",
         "https://opinionatedgamers.com/2024/05/31/unmatched-the-valiant-never-taste-of-death-but-once/",
-        "https://gridbeast.gg/unmatched-slings-and-arrows/"
+        "https://gridbeast.gg/unmatched-slings-and-arrows/",
+        "https://boardgamegeek.com/thread/3510389",
+        "https://boardgamegeek.com/thread/3351575"
       ]
     }
   },
@@ -2879,12 +2881,15 @@ export const UM_FIGHTERS: UmFighter[] = [
         "Pick gear for the specific opponent; the loadout defines his early game.",
         "Dandelion is fragile and has few cards; reviewers often saw him removed early."
       ],
-      "combos": [],
+      "combos": [{"cards": "Tawny Owl", "why": "While this potion is ongoing, Geralt may ignore effects that would make him discard from his hand. That shrugs off discard attacks like Triss's Merigold's Hailstorm, but not Yennefer's Incinerate, which needs real discards.", "source": "https://boardgamegeek.com/thread/3422551/article/45335631"}, {"cards": "Witcher Senses", "why": "Lets Geralt dig through his deck for a GEAR card, then shuffles itself back in, so he can fetch the gear he needs right now.", "source": "https://boardgamegeek.com/thread/3427585/article/45421344"}, {"cards": "GEAR: Armor of the Forgotten Wolf", "why": "Its after-combat text ends the turn. Geralt defends first, so the attacker's after-combat effects and leftover actions simply vanish.", "source": "https://boardgamegeek.com/thread/3687825/article/47508567"}],
       "sources": [
         "https://opinionatedgamers.com/2024/12/17/unmatched-which-witcher/",
         "https://www.meeplemountain.com/reviews/unmatched-the-witcher-steel-and-silver/",
         "https://spacebiff.com/2025/01/22/unmatched-witcher/",
-        "https://boardgamegumbo.wordpress.com/2025/02/01/the-next-wish-unmatched-the-witcher-steel-silver-review/"
+        "https://boardgamegumbo.wordpress.com/2025/02/01/the-next-wish-unmatched-the-witcher-steel-silver-review/",
+        "https://boardgamegeek.com/thread/3422551",
+        "https://boardgamegeek.com/thread/3427585",
+        "https://boardgamegeek.com/thread/3687825"
       ]
     }
   },
@@ -3014,11 +3019,13 @@ export const UM_FIGHTERS: UmFighter[] = [
         "Yennefer can boost her attacks; Triss damages an adjacent fighter when she plays a scheme.",
         "Treat the sidekick as a strong second fighter since most cards are 'Any'."
       ],
-      "combos": [],
+      "combos": [{"cards": "Incinerate + Yennefer's boost", "why": "A 7-value attack whose effects can't be cancelled. The only way out is to discard 2 cards, and Yennefer can boost it even higher. One player calls it 'just broken', while others say she's still beatable.", "source": "https://boardgamegeek.com/thread/3414701/article/45263450"}, {"cards": "Merigold's Hailstorm, then Incinerate", "why": "After a Hailstorm hit, the opponent picks a punishment: discard 2 cards, take 3 damage, or lose the top 4 cards of their deck. Drain their hand first, and they can't afford the 2 discards that Incinerate demands.", "source": "https://boardgamegeek.com/thread/3422551/article/45357434"}],
       "sources": [
         "https://opinionatedgamers.com/2024/12/17/unmatched-which-witcher/",
         "https://beastiegeeks.com/2025/11/30/unmatched-the-witcher-realms-fall-honest-and-precise-review/",
-        "https://spacebiff.com/2025/01/22/unmatched-witcher/"
+        "https://spacebiff.com/2025/01/22/unmatched-witcher/",
+        "https://boardgamegeek.com/thread/3414701",
+        "https://boardgamegeek.com/thread/3422551"
       ]
     }
   },
@@ -3090,11 +3097,13 @@ export const UM_FIGHTERS: UmFighter[] = [
         "Riders limit how far prey can retreat.",
         "Philippa's chain lightning is his main counter."
       ],
-      "combos": [],
+      "combos": [{"cards": "Icy Guile + a Red Rider", "why": "Defeat one of your own Red Riders to ignore the value of your opponent's card. It even blanks Yennefer's uncancellable Incinerate, and every Rider you spend brings Eredin closer to Enraged.", "source": "https://boardgamegeek.com/thread/3559770/article/46477446"}, {"cards": "Portal Defense", "why": "Eredin swaps places with a friendly fighter next to him, who becomes the defender, and you draw the cards. An experienced player warns it gets much weaker once he's Enraged, because his Red Riders are gone.", "source": "https://boardgamegeek.com/thread/3446819/article/45536749"}],
       "sources": [
         "https://opinionatedgamers.com/2024/12/17/unmatched-which-witcher/",
         "https://beastiegeeks.com/2025/11/30/unmatched-the-witcher-realms-fall-honest-and-precise-review/",
-        "https://spacebiff.com/2025/01/22/unmatched-witcher/"
+        "https://spacebiff.com/2025/01/22/unmatched-witcher/",
+        "https://boardgamegeek.com/thread/3559770",
+        "https://boardgamegeek.com/thread/3446819"
       ]
     }
   },
@@ -3128,11 +3137,13 @@ export const UM_FIGHTERS: UmFighter[] = [
         "Starving the opponent of doubloons limits their ability to cancel his effects.",
         "Reviewers note he does well on Venice and struggles against Loki."
       ],
-      "combos": [],
+      "combos": [{"cards": "Scourge of the Seven Seas", "why": "Three treats in one card: Blackbeard heals 2, summons a Sea Dog and gains an action. Your opponent can pay doubloons to cancel some of it, but every coin they pay goes straight into Blackbeard's pocket.", "source": "https://boardgamegeek.com/thread/3763692/article/48140315"}, {"cards": "Queen Anne's Revenge", "why": "A 7-value attack that your opponent can shrink by paying a ransom. In one player's game, Yennefer defended with Paralyzing Fetters, which locks the value at its printed 7, so nobody could pay to shrink it and her own card backfired.", "source": "https://boardgamegeek.com/thread/3560354/article/46484327"}],
       "sources": [
         "https://opinionatedgamers.com/2025/07/25/unmatched-battle-of-legends-volume-iii/",
         "https://www.thefamilygamers.com/unmatched-volume-3/",
-        "https://whatsericplaying.com/2026/07/13/unmatched-volume-3/"
+        "https://whatsericplaying.com/2026/07/13/unmatched-volume-3/",
+        "https://boardgamegeek.com/thread/3763692",
+        "https://boardgamegeek.com/thread/3560354"
       ]
     }
   },
@@ -3212,12 +3223,14 @@ export const UM_FIGHTERS: UmFighter[] = [
         "Let enemies come to you rather than chasing them.",
         "Use Kakodaemons to block routes to Pandora."
       ],
-      "combos": [],
+      "combos": [{"cards": "Woe (misery card)", "why": "This is the misery that summons a Kakodaemon into Pandora's zone, and her sidekicks don't start on the board, so it's how her helpers show up. It needs an empty space in her zone, and one fan says not flipping it turn after turn is one of the few times she feels bad to play.", "source": "https://boardgamegeek.com/thread/3606687/article/46852128"}, {"cards": "Celestial Raiments", "why": "Its text says to ignore the value of your opponent's card, so even a giant attack's number counts for nothing.", "source": "https://boardgamegeek.com/thread/3738527/article/47935989"}],
       "sources": [
         "https://opinionatedgamers.com/2025/07/25/unmatched-battle-of-legends-volume-iii/",
         "https://www.thefamilygamers.com/unmatched-volume-3/",
         "https://whatsericplaying.com/2026/07/13/unmatched-volume-3/",
-        "https://gamingtrend.com/reviews/unmatched-battle-of-legends-volume-three-review-a-fitting-finale/"
+        "https://gamingtrend.com/reviews/unmatched-battle-of-legends-volume-three-review-a-fitting-finale/",
+        "https://boardgamegeek.com/thread/3606687",
+        "https://boardgamegeek.com/thread/3738527"
       ]
     }
   },
@@ -3245,11 +3258,13 @@ export const UM_FIGHTERS: UmFighter[] = [
         "Against Loki, hit hard and fast; reviewers found aggression works best.",
         "Against Loki, playing his Tricks removes them from play, while holding them speeds him up and discarding returns them."
       ],
-      "combos": [],
+      "combos": [{"cards": "Looking for Trouble", "why": "When Loki attacks with it, he looks in your hand and picks which card you defend with. A player who helped test the set calls it 'a very powerful card'.", "source": "https://boardgamegeek.com/thread/3519757/article/46146627"}, {"cards": "Freyja's Rescue", "why": "It swaps the values of the two cards in the fight, so a puny 2 can steal the opponent's big number. It's also a Trick: if an opponent plays it from their hand, Loki heals 3.", "source": "https://boardgamegeek.com/thread/3645942/article/47167312"}],
       "sources": [
         "https://opinionatedgamers.com/2025/07/25/unmatched-battle-of-legends-volume-iii/",
         "https://www.thefamilygamers.com/unmatched-volume-3/",
-        "https://whatsericplaying.com/2026/07/13/unmatched-volume-3/"
+        "https://whatsericplaying.com/2026/07/13/unmatched-volume-3/",
+        "https://boardgamegeek.com/thread/3519757",
+        "https://boardgamegeek.com/thread/3645942"
       ]
     }
   },
@@ -3281,10 +3296,11 @@ export const UM_FIGHTERS: UmFighter[] = [
         "Use the start-of-turn nudge to set up attacks without moving yourself.",
         "Some cards gain extra effects (e.g. +2) when he or the target is adjacent to an ally."
       ],
-      "combos": [],
+      "combos": [{"cards": "Fearless Leader", "why": "One player calls it his best card, but it shines in team games and is much weaker one-on-one, so Leo is at his best with friends around.", "source": "https://boardgamegeek.com/thread/3627045/article/47020118"}],
       "sources": [
         "https://restorationgames.com/leader-to-wild-card-turtles-of-unmatched-adventures/",
-        "https://medium.com/meeplegamers/unmatched-adventures-teenage-mutant-ninja-turtles-from-restoration-games-review-7628d3e1224d"
+        "https://medium.com/meeplegamers/unmatched-adventures-teenage-mutant-ninja-turtles-from-restoration-games-review-7628d3e1224d",
+        "https://boardgamegeek.com/thread/3627045"
       ]
     }
   },
@@ -3316,10 +3332,12 @@ export const UM_FIGHTERS: UmFighter[] = [
         "Treat a lost combat as setup for follow-ups, not a waste.",
         "Play multiple cards in a turn to power cards that count cards played."
       ],
-      "combos": [],
+      "combos": [{"cards": "Crowd Control + Payback Time", "why": "Throw a small attack that draws you a card, lose the fight on purpose, and Raph's ability hands you an extra action. Then Payback Time hits for 5 because you lost a combat.", "source": "https://boardgamegeek.com/thread/3636693/article/47090719"}, {"cards": "Turtle Power boosted by Unbridled Rage", "why": "Use Unbridled Rage's boost of 4 on Turtle Power for a 7-value hit, when you'd rather not dump your whole hand into Unbridled Rage itself.", "source": "https://boardgamegeek.com/thread/3636693/article/47090719"}, {"cards": "Relentless", "why": "It comes back AND replaces itself with a fresh card. One player found it so strong they house-ruled it, while others point to Raph's win rate and say he's fine.", "source": "https://boardgamegeek.com/thread/3768803/article/48180684"}],
       "sources": [
         "https://restorationgames.com/leader-to-wild-card-turtles-of-unmatched-adventures/",
-        "https://medium.com/meeplegamers/unmatched-adventures-teenage-mutant-ninja-turtles-from-restoration-games-review-7628d3e1224d"
+        "https://medium.com/meeplegamers/unmatched-adventures-teenage-mutant-ninja-turtles-from-restoration-games-review-7628d3e1224d",
+        "https://boardgamegeek.com/thread/3636693",
+        "https://boardgamegeek.com/thread/3768803"
       ]
     }
   },
@@ -3351,10 +3369,11 @@ export const UM_FIGHTERS: UmFighter[] = [
         "Play upgrades early so their benefits accumulate.",
         "Suited to optimising turns and quietly supporting teammates."
       ],
-      "combos": [],
+      "combos": [{"cards": "The Future of Ninjutsu", "why": "A scheme that peeks at the top card of a deck, draws you a card and gains an action. One player says this deck control helps him find his inventions, and he's slow until they're out.", "source": "https://boardgamegeek.com/thread/3627045/article/47020118"}, {"cards": "Smoke Bomb", "why": "One player says Donatello's extra actions really start once Smoke Bomb is played, and after his inventions are in, his attacks, defenses and schemes all get better.", "source": "https://boardgamegeek.com/thread/3627045/article/47020118"}],
       "sources": [
         "https://restorationgames.com/leader-to-wild-card-turtles-of-unmatched-adventures/",
-        "https://medium.com/meeplegamers/unmatched-adventures-teenage-mutant-ninja-turtles-from-restoration-games-review-7628d3e1224d"
+        "https://medium.com/meeplegamers/unmatched-adventures-teenage-mutant-ninja-turtles-from-restoration-games-review-7628d3e1224d",
+        "https://boardgamegeek.com/thread/3627045"
       ]
     }
   },
@@ -3386,10 +3405,11 @@ export const UM_FIGHTERS: UmFighter[] = [
         "He draws after attacks and schemes, offsetting his small hand.",
         "Use extra-action cards to chain attacks."
       ],
-      "combos": [],
+      "combos": [{"cards": "Nunchaku + Boisterous Beatdown + Cowabunga!!", "why": "Nunchaku gains an action and powers up his attacks, Boisterous Beatdown gains even more, and Cowabunga!! gets +1 for every other card you played this turn. One player's dream turn ended with a 12-value Cowabunga!!, but you need lucky draws.", "source": "https://boardgamegeek.com/thread/3628010/article/47024259"}, {"cards": "Shell Insertion", "why": "April O'Neil's card gains an action and makes the opponent discard. One player thinks it makes April a sidekick worth knocking out early.", "source": "https://boardgamegeek.com/thread/3628010/article/47031148"}],
       "sources": [
         "https://restorationgames.com/leader-to-wild-card-turtles-of-unmatched-adventures/",
-        "https://medium.com/meeplegamers/unmatched-adventures-teenage-mutant-ninja-turtles-from-restoration-games-review-7628d3e1224d"
+        "https://medium.com/meeplegamers/unmatched-adventures-teenage-mutant-ninja-turtles-from-restoration-games-review-7628d3e1224d",
+        "https://boardgamegeek.com/thread/3628010"
       ]
     }
   },
@@ -3553,11 +3573,12 @@ export const UM_FIGHTERS: UmFighter[] = [
         "Plan turns around movement distance to power Hammer cards.",
         "Do not dump your hand in one burst; with no sidekick you can't easily rebuild it."
       ],
-      "combos": [],
+      "combos": [{"cards": "Striking Fire + a HAMMER attack", "why": "HAMMER cards get their bonus when John Henry has crossed 4 different paths this turn. Striking Fire moves him up to 4 spaces and gives an extra action, so he can line up two powered hammers, even on his first turn (5 spaces if he lays a track first).", "source": "https://boardgamegeek.com/thread/3697297/article/47585883"}],
       "sources": [
         "https://restorationgames.com/gameplay-of-unmatched-stars-and-stripes/",
         "https://opinionatedgamers.com/2026/05/08/unmatched-stars-stripes-forever/",
-        "https://gamingtrend.com/reviews/unmatched-stars-and-stripes-review/"
+        "https://gamingtrend.com/reviews/unmatched-stars-and-stripes-review/",
+        "https://boardgamegeek.com/thread/3697297"
       ]
     }
   },
@@ -3628,11 +3649,12 @@ export const UM_FIGHTERS: UmFighter[] = [
         "Doc's exclusive cards are all worth playing.",
         "Defense is weaker than offense; against him, removing Doc is a priority."
       ],
-      "combos": [],
+      "combos": [{"cards": "Gunfight at the O.K. Corral", "why": "After combat you deal 1 damage, then your opponent deals 1, twice over, and it can hit ANY fighter on the board. One player's tip: use it to wipe out sidekicks with 1 health, like Medusa's Harpies.", "source": "https://boardgamegeek.com/thread/3752464/article/48053493"}],
       "sources": [
         "https://restorationgames.com/gameplay-of-unmatched-stars-and-stripes/",
         "https://opinionatedgamers.com/2026/05/08/unmatched-stars-stripes-forever/",
-        "https://gamingtrend.com/reviews/unmatched-stars-and-stripes-review/"
+        "https://gamingtrend.com/reviews/unmatched-stars-and-stripes-review/",
+        "https://boardgamegeek.com/thread/3752464"
       ]
     }
   },
@@ -3665,11 +3687,12 @@ export const UM_FIGHTERS: UmFighter[] = [
         "Defenders can discard a random card to void a Ruse, so manage when you commit tokens.",
         "Some cards regain used Ruse tokens."
       ],
-      "combos": [],
+      "combos": [{"cards": "Agent 711 + a ruse token", "why": "Attack with a ruse on Agent 711 and, if Washington wins the combat, it deals 7 more damage after combat. Per the official rulings it still goes off even if Washington is knocked out in that same fight.", "source": "https://boardgamegeek.com/thread/3746560/article/48005956"}],
       "sources": [
         "https://restorationgames.com/gameplay-of-unmatched-stars-and-stripes/",
         "https://opinionatedgamers.com/2026/05/08/unmatched-stars-stripes-forever/",
-        "https://gamingtrend.com/reviews/unmatched-stars-and-stripes-review/"
+        "https://gamingtrend.com/reviews/unmatched-stars-and-stripes-review/",
+        "https://boardgamegeek.com/thread/3746560"
       ]
     }
   }
