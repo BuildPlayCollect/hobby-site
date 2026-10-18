@@ -45,7 +45,7 @@ const ordinal = (n: number) => { const t = n % 100 >= 11 && n % 100 <= 13 ? 'th'
   </header>
 
   <nav class="pc-jump" aria-label="On this page">
-    <a href="#start">New? Start here</a><a href="#usage">Usage</a><a href="#teams">Top teams</a><a href="#events">Events</a><a href="#rules">Rules</a><a href="/esports/pokemon-champions/team-builder">Team builder</a><a href="/esports/pokemon-champions/calc">Damage calc</a><a href="#about">About the game</a>
+    <a href="#start">New? Start here</a><a href="/esports/pokemon-champions/learn">Learn to play</a><a href="#usage">Usage</a><a href="#teams">Top teams</a><a href="#events">Events</a><a href="#rules">Rules</a><a href="/esports/pokemon-champions/team-builder">Team builder</a><a href="/esports/pokemon-champions/calc">Damage calc</a><a href="#about">About the game</a>
   </nav>
 
   <section class="pc-now" aria-label="Current rules">
@@ -85,6 +85,7 @@ const ordinal = (n: number) => { const t = n % 100 >= 11 && n % 100 <= 13 ? 'th'
         <p>When you feel ready, see what's <a href="#events">coming up</a>, and always check the organiser's page for sign-up rules.</p>
       </li>
     </ol>
+    <p class="pc-more"><a class="pill-btn" href="/esports/pokemon-champions/learn">Read the full beginner's guide →</a></p>
     <p class="pc-source">Sources: {LEARN.sources.map((s) => <a href={s.url}>{s.label}</a>)}</p>
   </section>
 
@@ -243,6 +244,7 @@ const ordinal = (n: number) => { const t = n % 100 >= 11 && n % 100 <= 13 ? 'th'
   .pc-now .label { color: inherit; opacity: .85; }
   .pc-now strong { font-family: var(--display); font-size: 1.6rem; line-height: 1.1; }
   .pc-section { margin-top: 44px; }
+  .pc-more { margin: 14px 0 0; }
   .pc-note { color: var(--muted); font-size: .9rem; margin: 0 0 14px; }
   .pc-source { color: var(--muted); font-size: .82rem; margin: 12px 0 0; }
   .pc-source a + a::before { content: ", "; }
