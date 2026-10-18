@@ -3,10 +3,10 @@
 // The facts live in src/data/champions-learn.ts, each with its sources.
 import Base from '../../../layouts/Base.astro';
 import Mon from '../../../components/champions/Mon.astro';
+import SourceList from '../../../components/SourceList.astro';
 import { LEARN_TURN, LEARN_TEAM, LEARN_TYPES, LEARN_WORDS, LEARN_TIPS, LEARN_RANKED, type LearnItem } from '../../../data/champions-learn';
 import { LEARN, REGULATIONS } from '../../../data/champions';
 
-const host = (u: string) => new URL(u).hostname.replace(/^www\./, '');
 // Every source used on the page, once each, for the list at the bottom.
 const allSources = [...new Set([LEARN_TURN, LEARN_TEAM, LEARN_TYPES, LEARN_WORDS, LEARN_TIPS, LEARN_RANKED].flat().flatMap((x) => x.sources))];
 const current = REGULATIONS.find((r) => r.current) ?? REGULATIONS[0];
@@ -128,10 +128,7 @@ const turnExtras = LEARN_TURN.filter((x) => !ORDER.includes(x.title));
     <p>Pick a starter, play a few Casual battles, then copy a team from the <a href="/esports/pokemon-champions#teams">Regionals results</a> and tweak it in the <a href="/esports/pokemon-champions/team-builder">team builder</a>. Every champion started as a beginner too.</p>
   </section>
 
-  <section class="lp-section">
-    <h2 class="lp-sources-h">Sources</h2>
-    <ul class="lp-sources">{allSources.map((u) => <li><a href={u}>{(host(u) + new URL(u).pathname).replace(/\/$/, '')}</a></li>)}</ul>
-  </section>
+  <SourceList sources={allSources} />
 </Base>
 
 <style>
@@ -172,7 +169,5 @@ const turnExtras = LEARN_TURN.filter((x) => !ORDER.includes(x.title));
   .lp-end h2 { margin: 0 0 6px; }
   .lp-end p { margin: 0; max-width: 75ch; }
   .lp-end a { color: #1b1a1f; font-weight: 800; text-decoration: underline; }
-  .lp-sources-h { font-size: 1.1rem; }
-  .lp-sources { margin: 0; padding-left: 20px; font-size: .82rem; color: var(--muted); overflow-wrap: anywhere; columns: 2 320px; }
   @media (max-width: 560px) { .lp-steps > li { padding: 52px 14px 14px; } .lp-steps > li + li::after { display: none; } }
 </style>

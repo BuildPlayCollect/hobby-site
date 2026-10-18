@@ -1,0 +1,41 @@
+---
+// A tidy "Sources" box for data pages (Pokémon Champions, Unmatched): folded into one line
+// like the article Sources, and grouped by site with readable page names when opened.
+import { groupSources, type SourceInput } from '../lib/sources';
+
+interface Props { sources: SourceInput[]; note?: string; open?: boolean }
+const { sources, note, open = false } = Astro.props;
+const groups = groupSources(sources);
+const count = groups.reduce((n, g) => n + g.pages.length, 0);
+---
+<details class="src-box" open={open}>
+  <summary><span class="src-plus" aria-hidden="true"></span>Sources <span class="src-count">({count} from {groups.length} {groups.length === 1 ? 'site' : 'sites'})</span></summary>
+  <div class="src-groups">
+    {groups.map((g) => (
+      <div class="src-group">
+        <h3>{g.site}</h3>
+        <ul>{g.pages.map((p) => <li><a href={p.url} rel="noopener">{p.title}</a></li>)}</ul>
+      </div>
+    ))}
+  </div>
+  {note && <p class="src-note">{note}</p>}
+</details>
+
+<style>
+  .src-box { margin-top: 44px; padding: 14px 18px; border: 2px solid var(--line); border-radius: 16px; background: var(--surface); }
+  .src-box summary { cursor: pointer; list-style: none; display: inline-flex; align-items: center; gap: 10px; font-weight: 800; font-family: var(--display); font-size: 1.05rem; }
+  .src-box summary::-webkit-details-marker { display: none; }
+  .src-plus { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--c1); color: #fff; font-size: 1rem; line-height: 1; transition: transform .2s; }
+  .src-plus::before { content: "+"; }
+  .src-box[open] .src-plus { transform: rotate(45deg); }
+  .src-count { font-family: var(--sans, inherit); font-weight: 600; font-size: .85rem; color: var(--muted); }
+  .src-groups { columns: 3 220px; column-gap: 24px; margin-top: 14px; }
+  .src-group { break-inside: avoid; margin-bottom: 16px; }
+  .src-group h3 { margin: 0 0 4px; font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; color: var(--ink); }
+  .src-group ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 3px; }
+  .src-group li { font-size: .85rem; line-height: 1.35; padding-left: 12px; position: relative; overflow-wrap: anywhere; }
+  .src-group li::before { content: ""; position: absolute; left: 0; top: .55em; width: 5px; height: 5px; border-radius: 50%; background: var(--c1); }
+  .src-group a { color: var(--muted); }
+  .src-group a:hover { color: var(--ink); }
+  .src-note { margin: 4px 0 0; font-size: .8rem; color: var(--muted); }
+</style>
