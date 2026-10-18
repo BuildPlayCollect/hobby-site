@@ -3,6 +3,7 @@
 // Hand-edited facts live in src/data/champions.ts; usage stats are fetched from Smogon at build time.
 import Base from '../../../layouts/Base.astro';
 import Mon from '../../../components/champions/Mon.astro';
+import SourceList from '../../../components/SourceList.astro';
 import { GAME, REGULATIONS, VGC_RULES, REGULATION_SOURCES, EVENTS, EVENT_SOURCES, RESULTS, USAGE_FORMATS, LEARN } from '../../../data/champions';
 import { getUsage } from '../../../lib/champions-usage';
 import { toID } from '@smogon/calc';
@@ -211,14 +212,8 @@ const ordinal = (n: number) => { const t = n % 100 >= 11 && n % 100 <= 13 ? 'th'
     </dl>
   </section>
 
-  <section class="pc-section">
-    <h2 class="pc-sources-title">Sources</h2>
-    <ul class="pc-sources">
-      {GAME.sources.map((s) => <li><a href={s.url}>{s.label}</a></li>)}
-      <li><a href="https://www.smogon.com/stats/">Smogon: monthly usage stats</a></li>
-    </ul>
-    <p class="pc-note">Pokémon and all related names and images are trademarks and © of Nintendo, Creatures Inc., GAME FREAK and The Pokémon Company. Build Play Collect is a fan site and isn't affiliated with them. Icons from PokeAPI.</p>
-  </section>
+  <SourceList sources={[...GAME.sources, { url: 'https://www.smogon.com/stats/', label: 'Monthly usage stats' }]} />
+  <p class="pc-note">Pokémon and all related names and images are trademarks and © of Nintendo, Creatures Inc., GAME FREAK and The Pokémon Company. Build Play Collect is a fan site and isn't affiliated with them. Icons from PokeAPI.</p>
 </Base>
 
 <script>
@@ -316,8 +311,6 @@ const ordinal = (n: number) => { const t = n % 100 >= 11 && n % 100 <= 13 ? 'th'
   .pc-facts div { padding: 12px 14px; border-radius: 12px; background: var(--surface-2); }
   .pc-facts dt { font-size: .75rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
   .pc-facts dd { margin: 2px 0 0; font-weight: 600; }
-  .pc-sources-title { font-size: 1.1rem; }
-  .pc-sources { padding-left: 18px; font-size: .9rem; }
   @media (max-width: 640px) {
     .pc-usage summary { grid-template-columns: 26px 1fr 54px; }
     .pc-bar { grid-column: 2 / -1; grid-row: 2; }

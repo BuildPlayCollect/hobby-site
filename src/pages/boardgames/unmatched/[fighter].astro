@@ -3,6 +3,7 @@
 // where they sit on the tier list, and a play guide with card combos when a trustworthy one exists.
 import Base from '../../../layouts/Base.astro';
 import Badge from '../../../components/unmatched/Badge.astro';
+import SourceList from '../../../components/SourceList.astro';
 import { UM_FIGHTERS, UM_TIER_SOURCE, type UmFighter } from '../../../data/unmatched';
 import { setOf, displayName, fighterUrl, fewGames, lineColor } from '../../../lib/unmatched';
 import { getUnmatchedArt } from '../../../lib/unmatched-art';
@@ -103,10 +104,7 @@ const sources = [...new Set([f.url, ...(g?.sources ?? [])])];
     )}
   </section>
 
-  <section class="f-section">
-    <h2>Sources</h2>
-    <ul class="f-sources">{sources.map((u) => <li><a href={u}>{(host(u) + new URL(u).pathname).replace(/\/$/, '')}</a></li>)}</ul>
-  </section>
+  <div class="f-section"><SourceList sources={sources} /></div>
 
   <p class="f-back"><a class="pill-btn" href="/boardgames/unmatched#fighters">← All fighters</a></p>
 </Base>
@@ -142,7 +140,6 @@ const sources = [...new Set([f.url, ...(g?.sources ?? [])])];
   .f-combos li { display: grid; gap: 2px; padding: 12px 14px; border: 2px solid var(--line); border-radius: 14px; background: var(--surface); }
   .f-combos a, .f-tips a { color: var(--muted); font-size: .82rem; }
   .f-empty { padding: 16px; border: 2px dashed var(--soft-line); border-radius: 14px; color: var(--muted); }
-  .f-sources { margin: 0; padding-left: 20px; font-size: .9rem; overflow-wrap: anywhere; }
   .f-back { margin-top: 32px; }
   @media (max-width: 640px) {
     .fs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
