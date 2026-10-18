@@ -1,0 +1,26 @@
+---
+// Badge.astro: our own drawn icon for an Unmatched fighter (no official art).
+// A coloured disc in the colour of the fighter's product line, two letters, and a tiny sword (melee) or arrow (ranged).
+import type { UmFighter } from '../../data/unmatched';
+import { fighterColor, initials, displayName } from '../../lib/unmatched';
+interface Props { fighter: UmFighter; size?: number }
+const { fighter, size = 44 } = Astro.props;
+const color = fighterColor(fighter);
+const text = initials(fighter);
+---
+<svg class="um-badge" width={size} height={size} viewBox="0 0 48 48" role="img" aria-label={displayName(fighter)}>
+  <circle cx="22" cy="22" r="19.5" fill={color} stroke="#1b1a1f" stroke-width="2.5" />
+  <circle cx="22" cy="22" r="15" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="1.5" stroke-dasharray="3 3" />
+  <text x="22" y="27" text-anchor="middle" font-size={text.length > 1 ? 14 : 17} font-weight="800" fill="#fff" font-family="var(--display, sans-serif)">{text}</text>
+  {fighter.attack && (
+    <g transform="translate(38.5 38.5)">
+      <circle r="8" fill="#fff" stroke="#1b1a1f" stroke-width="2" />
+      {fighter.attack === 'melee'
+        ? <path d="M0 -5V1.5M-3 1.5H3M0 1.5V4.5" fill="none" stroke="#1b1a1f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        : <path d="M-4 4L3.5 -3.5M-0.5 -4H4V0.5" fill="none" stroke="#1b1a1f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />}
+    </g>
+  )}
+</svg>
+<style>
+  .um-badge { flex: none; display: block; }
+</style>

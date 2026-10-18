@@ -49,6 +49,8 @@ content:
               label: Consoles
             - name: esports
               label: Esports
+            - name: boardgames
+              label: Board games
             - name: general
               label: General (about hobbies in general)
       - name: type
@@ -144,6 +146,8 @@ content:
               label: Consoles
             - name: esports
               label: Esports
+            - name: boardgames
+              label: Board games
       - name: summary
         label: One-line definition
         description: Shown when readers hover over the word, and at the top of the wiki page.
@@ -206,6 +210,8 @@ content:
               label: Consoles
             - name: esports
               label: Esports
+            - name: boardgames
+              label: Board games
       - name: scope
         label: Official or local
         description: Local = rules from your community's own copy. Official = the organizer's rulebook.

@@ -1,0 +1,137 @@
+---
+// One page per Unmatched fighter (/boardgames/unmatched/medusa ...): stats, what makes them special,
+// where they sit on the tier list, and a play guide with card combos when a trustworthy one exists.
+import Base from '../../../layouts/Base.astro';
+import Badge from '../../../components/unmatched/Badge.astro';
+import { UM_FIGHTERS, UM_TIER_SOURCE, type UmFighter } from '../../../data/unmatched';
+import { setOf, displayName, fighterUrl, fewGames, lineColor } from '../../../lib/unmatched';
+
+export function getStaticPaths() {
+  return UM_FIGHTERS.map((f) => ({ params: { fighter: f.id }, props: { f } }));
+}
+
+const { f } = Astro.props as { f: UmFighter };
+const set = setOf(f);
+const name = displayName(f);
+const host = (u: string) => new URL(u).hostname.replace(/^www\./, '');
+const fmtMonth = (m: string) => new Date(m + '-01T00:00:00Z').toLocaleDateString('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+const teammates = UM_FIGHTERS.filter((x) => x.set === f.set && x.id !== f.id);
+const sk = f.sidekick;
+const sidekickText = sk
+  ? [sk.count && sk.count > 1 ? `${sk.count} × ${sk.name}` : sk.name, sk.health != null ? `${sk.health} health${sk.count && sk.count > 1 ? ' each' : ''}` : null, sk.attack]
+      .filter(Boolean).join(' · ')
+  : 'None';
+const g = f.guide;
+const sources = [...new Set([f.url, ...(g?.sources ?? [])])];
+---
+<Base title={`${name} in Unmatched: stats, tips and combos`} description={`How to play ${name} in Unmatched: ${f.health ?? '?'} health, ${f.attack ?? 'unconfirmed'} attacks, ${f.tier ? `tier ${f.tier.tier} with a ${f.tier.win}% average win rate` : 'not ranked yet'}. ${f.ability}`}>
+  <header class="page-head fh" style={`--c:${lineColor(set.line)}`}>
+    <p class="kicker"><a class="tag" href="/boardgames">Board games</a> <a class="tag tag-plain" href="/boardgames/unmatched">Unmatched</a></p>
+    <div class="fh-row">
+      <Badge fighter={f} size={88} />
+      <div>
+        <h1>{name}</h1>
+        <p>From <strong>{set.short}</strong> ({fmtMonth(set.released)}){teammates.length > 0 && <>, alongside {teammates.map((t, i) => <>{i > 0 && (i === teammates.length - 1 ? ' and ' : ', ')}<a href={fighterUrl(t)}>{displayName(t)}</a></>)}</>}.</p>
+      </div>
+    </div>
+  </header>
+
+  <dl class="fs">
+    <div><dt>Health</dt><dd>{f.health ?? '?'}</dd></div>
+    <div><dt>Move</dt><dd>{f.move ?? '?'}</dd></div>
+    <div><dt>Attack</dt><dd>{f.attack ? (f.attack === 'melee' ? 'Melee' : 'Ranged') : '?'}</dd></div>
+    <div class="fs-wide"><dt>Sidekick</dt><dd>{sidekickText}</dd></div>
+  </dl>
+  {f.attack && <p class="f-hint">{f.attack === 'melee' ? 'Melee means this fighter can only attack someone right next to them.' : 'Ranged means this fighter can attack anyone in the same zone, not just next door.'}</p>}
+
+  <section class="f-section">
+    <h2>What makes {name} special</h2>
+    <p class="f-ability">{f.ability}</p>
+    {f.notes && <p class="f-hint">Note: {f.notes}</p>}
+  </section>
+
+  <section class="f-section">
+    <h2>Tier list</h2>
+    {f.tier ? (
+      <div class={`f-tier f-tier-${f.tier.tier}`}>
+        <strong>{f.tier.tier}</strong>
+        <p>Ranked <b>#{f.tier.rank}</b> of 74 with a <b>{f.tier.win}%</b> average win rate across its matchups. {fewGames(f) ? `Only ${f.tier.proven} of its matchups have 10+ games yet, so treat this as a rough guess.` : `${f.tier.proven} of its matchups have 10+ games, so the number is fairly solid.`}</p>
+      </div>
+    ) : <p>Not ranked yet: there aren't enough recorded games.</p>}
+    <p class="f-source">From <a href={UM_TIER_SOURCE.url}>{UM_TIER_SOURCE.name}</a> ({UM_TIER_SOURCE.games.toLocaleString('en-GB')} games, {UM_TIER_SOURCE.from}). <a href="/boardgames/unmatched#tiers">See the full tier list</a>.</p>
+  </section>
+
+  <section class="f-section">
+    <h2>How to play {name}</h2>
+    {g ? (
+      <>
+        {g.playstyle && <p class="f-lead">{g.playstyle}</p>}
+        {g.tips.length > 0 && (
+          <>
+            <h3>Tips</h3>
+            <ul class="f-tips">{g.tips.map((t) => <li>{t}</li>)}</ul>
+          </>
+        )}
+        {g.combos.length > 0 && (
+          <>
+            <h3>Key cards and combos</h3>
+            <ul class="f-combos">
+              {g.combos.map((c) => (
+                <li>
+                  <strong>{c.cards}</strong>
+                  <span>{c.why}{c.source && <> <a href={c.source}>({host(c.source)})</a></>}</span>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+        <p class="f-source">Put together from the fan guides and reviews listed under Sources, in our own words. Card names are as those guides wrote them, so check the cards in your own box.</p>
+      </>
+    ) : (
+      <p class="f-empty">We haven't found a trustworthy guide for {name} yet, so we're not guessing. Start with the special ability above, and check back: we add guides as good ones turn up.</p>
+    )}
+  </section>
+
+  <section class="f-section">
+    <h2>Sources</h2>
+    <ul class="f-sources">{sources.map((u) => <li><a href={u}>{(host(u) + new URL(u).pathname).replace(/\/$/, '')}</a></li>)}</ul>
+  </section>
+
+  <p class="f-back"><a class="pill-btn" href="/boardgames/unmatched#fighters">← All fighters</a></p>
+</Base>
+
+<style>
+  .fh-row { display: flex; align-items: center; gap: 18px; }
+  .fh-row h1 { margin: 0 0 4px; }
+  .fh-row p { margin: 0; }
+  .kicker .tag + .tag { margin-left: 6px; }
+  .fs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 2fr); gap: 10px; margin: 8px 0 6px; }
+  .fs div { padding: 12px 14px; border: 2px solid var(--line); border-radius: 14px; background: var(--surface); }
+  .fs dt { font-size: .75rem; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  .fs dd { margin: 2px 0 0; font-family: var(--display); font-weight: 800; font-size: 1.4rem; line-height: 1.2; }
+  .fs-wide dd { font-size: 1rem; font-family: inherit; }
+  .f-hint { color: var(--muted); font-size: .85rem; margin: 6px 0 0; }
+  .f-section { margin-top: 36px; max-width: 760px; }
+  .f-section h2 { margin: 0 0 10px; }
+  .f-section h3 { margin: 18px 0 8px; font-size: 1.05rem; }
+  .f-ability { font-size: 1.1rem; padding: 14px 18px; border-left: 6px solid var(--c1); background: var(--surface); border-radius: 0 14px 14px 0; margin: 0; }
+  .f-lead { font-size: 1.05rem; }
+  .f-tier { display: flex; align-items: center; gap: 16px; padding: 12px 16px; border: 2px solid var(--line); border-radius: 16px; background: var(--surface); }
+  .f-tier strong { display: grid; place-items: center; width: 56px; height: 56px; flex: none; border-radius: 14px; border: 2px solid var(--line); background: var(--tc); color: #1b1a1f; font-family: var(--display); font-size: 1.8rem; }
+  .f-tier p { margin: 0; }
+  .f-tier-S { --tc: #ff7b72; } .f-tier-A { --tc: #ffb36b; } .f-tier-B { --tc: #ffe06b; } .f-tier-C { --tc: #b9e66f; } .f-tier-D { --tc: #8fd3f4; }
+  .f-source { color: var(--muted); font-size: .82rem; margin: 8px 0 0; }
+  .f-tips { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+  .f-combos { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .f-combos li { display: grid; gap: 2px; padding: 12px 14px; border: 2px solid var(--line); border-radius: 14px; background: var(--surface); }
+  .f-combos a, .f-tips a { color: var(--muted); font-size: .82rem; }
+  .f-empty { padding: 16px; border: 2px dashed var(--soft-line); border-radius: 14px; color: var(--muted); }
+  .f-sources { margin: 0; padding-left: 20px; font-size: .9rem; overflow-wrap: anywhere; }
+  .f-back { margin-top: 32px; }
+  @media (max-width: 640px) {
+    .fs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .fs-wide { grid-column: 1 / -1; }
+    .fh-row { gap: 12px; }
+    .fh-row :global(.um-badge) { width: 64px; height: 64px; }
+  }
+</style>

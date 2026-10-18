@@ -870,13 +870,11 @@ a.tile:hover { background: var(--surface); transform: translate(-2px, -2px); box
 .play2 strong { display: block; font-family: var(--display); font-weight: 800; font-size: 1.3rem; letter-spacing: -.02em; }
 .play2 span { font-size: .92rem; }
 @media (hover: none) and (pointer: coarse) { .play2 .play2-typing { display: none; } }
-/* Picker grid: all 7 in one row on big screens, 4 + 3 on tablets, 2 per row on phones */
+/* Picker grid: 7 hobbies + the quiz = 8 buttons. All 8 in one row on big screens, 4 + 4 on tablets, 2 per row on phones */
 .picker { grid-template-columns: repeat(2, 1fr); max-width: 1180px; }
-.picker li:last-child { grid-column: 1 / -1; }
-.picker li:last-child a { flex-direction: row; justify-content: center; padding: 14px; }
-.picker li:last-child .picker-icon { width: 44px; height: 44px; }
-@media (min-width: 640px) { .picker { grid-template-columns: repeat(4, 1fr); } .picker li:last-child { grid-column: auto; } .picker li:last-child a { flex-direction: column; padding: 22px 12px 18px; } .picker li:last-child .picker-icon { width: 64px; height: 64px; } }
-@media (min-width: 1040px) { .picker { grid-template-columns: repeat(7, 1fr); } }
+@media (min-width: 640px) { .picker { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 1040px) { .picker { grid-template-columns: repeat(8, 1fr); } .picker strong { font-size: 1.08rem; } }
+.picker a { height: 100%; box-sizing: border-box; }
 .welcome-ask { margin: 40px 0 20px; }
 :is(.quiz-head, .tt-head, .lead, .page-head, .wiki-hero, .article) p.kicker { font-family: var(--sans); font-weight: 800; }
 .quick-more { font-family: var(--sans); font-weight: 800; text-transform: none; letter-spacing: 0; font-size: .85rem; }
@@ -891,8 +889,6 @@ a.tile:hover { background: var(--surface); transform: translate(-2px, -2px); box
   .picker-icon { grid-row: span 2; }
   .picker strong { font-size: 1.02rem; }
   .picker small { font-size: .72rem; }
-  .picker li:last-child a { display: grid; justify-content: stretch; padding: 10px 12px; }
-  .picker li:last-child .picker-icon { width: 42px; height: 42px; }
   .welcome { padding-top: 36px; }
 }
 @media (max-width: 520px) { .newsletter-form { border-radius: 18px; padding: 6px; } .newsletter-form input { padding: 10px 12px; } .newsletter-form button { width: 100%; } }

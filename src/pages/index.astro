@@ -33,7 +33,7 @@ const tryUrls = (withQuick.length ? withQuick : articles).map((a) => `/articles/
 // Short, plain words for each hobby on the picker.
 const nick: Record<string, string> = {
   beyblade: 'Spinning tops', tamiya: 'Tiny fast cars', keyboards: 'Clacky boards', tcg: 'Card battles',
-  consoles: 'Game machines', esports: 'Pro gaming', general: 'Hobbies in general',
+  consoles: 'Game machines', esports: 'Pro gaming', boardgames: 'Table battles', general: 'Hobbies in general',
 };
 const picks = headlines.slice(0, 3);
 // "New here?" steps for first-time visitors.
@@ -47,7 +47,7 @@ const steps = [
   <!-- Welcome: a short hello, then one question with one big button per hobby (bigger screens). -->
   <section class="welcome" aria-labelledby="welcome-title">
     <h1 id="welcome-title">Find your next <span class="hl">hobby.</span></h1>
-    <p>Fun, fact-checked stories about spinning tops, tiny cars, clacky keyboards, cards, consoles and esports.</p>
+    <p>Fun, fact-checked stories about spinning tops, tiny cars, clacky keyboards, cards, consoles, esports and board games.</p>
     <p class="welcome-ask">What are you into?</p>
     <ul class="picker">
       {Object.entries(HOBBIES).filter(([key]) => key !== 'general').map(([key, h]) => (
