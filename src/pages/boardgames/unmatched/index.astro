@@ -7,7 +7,7 @@ import { UM_SETS, UM_FIGHTERS, UM_TIER_SOURCE, UM_RULES, UM_RULEBOOKS, UM_TIPS, 
 import { TIERS, byTier, fewGames, fighterUrl, displayName, lineColor } from '../../../lib/unmatched';
 import { getUnmatchedArt } from '../../../lib/unmatched-art';
 
-// Deck art and the logo from Pages CMS. Fighters without art keep their drawn badge.
+// Deck art and the logo from Pages CMS. Fighters without a small deck-back picture keep their drawn badge.
 const art = await getUnmatchedArt();
 const logo = art.get('logo');
 
@@ -124,7 +124,7 @@ const guides = UM_FIGHTERS.filter((f) => f.guide).length;
             {inSet(s.id).map((f) => (
               <li>
                 <a href={fighterUrl(f)}>
-                  {art.get(f.id) ? <img class="um-thumb" src={art.get(f.id)!.image} alt="" loading="lazy" width="48" height="48" /> : <Badge fighter={f} size={48} />}
+                  {art.get(f.id)?.thumb ? <img class="um-thumb" src={art.get(f.id)!.thumb} alt="" loading="lazy" width="48" height="48" /> : <Badge fighter={f} size={48} />}
                   <span class="um-card-text">
                     <strong>{displayName(f)}</strong>
                     <small>
