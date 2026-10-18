@@ -5,6 +5,7 @@ import Base from '../../../layouts/Base.astro';
 import Badge from '../../../components/unmatched/Badge.astro';
 import { UM_FIGHTERS, UM_TIER_SOURCE, type UmFighter } from '../../../data/unmatched';
 import { setOf, displayName, fighterUrl, fewGames, lineColor } from '../../../lib/unmatched';
+import { getUnmatchedArt } from '../../../lib/unmatched-art';
 
 export function getStaticPaths() {
   return UM_FIGHTERS.map((f) => ({ params: { fighter: f.id }, props: { f } }));
@@ -21,12 +22,15 @@ const sidekickText = sk
   ? [sk.count && sk.count > 1 ? `${sk.count} × ${sk.name}` : sk.name, sk.health != null ? `${sk.health} health${sk.count && sk.count > 1 ? ' each' : ''}` : null, sk.attack]
       .filter(Boolean).join(' · ')
   : 'None';
+const allArt = await getUnmatchedArt();
+const art = allArt.get(f.id);
+const logo = allArt.get('logo');
 const g = f.guide;
 const sources = [...new Set([f.url, ...(g?.sources ?? [])])];
 ---
 <Base title={`${name} in Unmatched: stats, tips and combos`} description={`How to play ${name} in Unmatched: ${f.health ?? '?'} health, ${f.attack ?? 'unconfirmed'} attacks, ${f.tier ? `tier ${f.tier.tier} with a ${f.tier.win}% average win rate` : 'not ranked yet'}. ${f.ability}`}>
   <header class="page-head fh" style={`--c:${lineColor(set.line)}`}>
-    <p class="kicker"><a class="tag" href="/boardgames">Board games</a> <a class="tag tag-plain" href="/boardgames/unmatched">Unmatched</a></p>
+    <p class="kicker"><a class="tag" href="/boardgames">Board games</a> {logo ? <a class="fh-logo" href="/boardgames/unmatched"><img src={logo.image} alt="Unmatched" /></a> : <a class="tag tag-plain" href="/boardgames/unmatched">Unmatched</a>}</p>
     <div class="fh-row">
       <Badge fighter={f} size={88} />
       <div>
@@ -35,6 +39,13 @@ const sources = [...new Set([f.url, ...(g?.sources ?? [])])];
       </div>
     </div>
   </header>
+
+  {art && (
+    <figure class="f-art">
+      <img src={art.image} alt={art.alt} />
+      <figcaption>{art.credit}</figcaption>
+    </figure>
+  )}
 
   <dl class="fs">
     <div><dt>Health</dt><dd>{f.health ?? '?'}</dd></div>
@@ -101,6 +112,11 @@ const sources = [...new Set([f.url, ...(g?.sources ?? [])])];
 </Base>
 
 <style>
+  .fh-logo { display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .fh-logo img { display: block; height: 26px; width: auto; }
+  .f-art { margin: 6px 0 22px; max-width: 760px; }
+  .f-art img { display: block; width: 100%; height: auto; max-height: 520px; object-fit: contain; border: 2px solid var(--line); border-radius: 16px; background: var(--surface-2); }
+  .f-art figcaption { color: var(--muted); font-size: .8rem; margin-top: 6px; }
   .fh-row { display: flex; align-items: center; gap: 18px; }
   .fh-row h1 { margin: 0 0 4px; }
   .fh-row p { margin: 0; }

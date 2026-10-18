@@ -289,3 +289,195 @@ content:
         label: Permission note (not shown on the site)
         description: For photos you didn't take, where the "yes" is saved, e.g. "Reddit DM screenshot, 2026-10-14".
         type: text
+
+  - name: unmatched-art
+    label: Unmatched art
+    description: Deck art for an Unmatched fighter's page, or the Unmatched logo. Only use art from a press kit or with written permission, and save where the permission came from.
+    type: collection
+    path: src/content/unmatched-art
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      fields: [fighter, credit]
+      primary: fighter
+      sort: [fighter]
+    fields:
+      - name: fighter
+        label: Fighter
+        description: Pick the fighter this art is for, or "The Unmatched logo".
+        type: select
+        required: true
+        options:
+          values:
+            - name: logo
+              label: "The Unmatched logo"
+            - name: achilles
+              label: "Achilles"
+            - name: alice
+              label: "Alice"
+            - name: ancient-leshen
+              label: "Ancient Leshen"
+            - name: angel
+              label: "Angel"
+            - name: annie-christmas
+              label: "Annie Christmas"
+            - name: beowulf
+              label: "Beowulf"
+            - name: bigfoot
+              label: "Bigfoot"
+            - name: black-panther
+              label: "Black Panther"
+            - name: black-widow
+              label: "Black Widow"
+            - name: blackbeard
+              label: "Blackbeard"
+            - name: bloody-mary
+              label: "Bloody Mary"
+            - name: bruce-lee
+              label: "Bruce Lee"
+            - name: bruce-lee-2
+              label: "Bruce Lee (2025 version)"
+            - name: buffy
+              label: "Buffy"
+            - name: bullseye
+              label: "Bullseye"
+            - name: chupacabra
+              label: "Chupacabra"
+            - name: ciri
+              label: "Ciri"
+            - name: cloak-dagger
+              label: "Cloak & Dagger"
+            - name: daredevil
+              label: "Daredevil"
+            - name: deadpool
+              label: "Deadpool"
+            - name: doctor-strange
+              label: "Doctor Strange"
+            - name: donatello
+              label: "Donatello"
+            - name: dr-sattler
+              label: "Dr. Ellie Sattler"
+            - name: dr-jill-trent
+              label: "Dr. Jill Trent"
+            - name: dracula
+              label: "Dracula"
+            - name: elektra
+              label: "Elektra"
+            - name: eredin
+              label: "Eredin"
+            - name: george-washington
+              label: "George Washington"
+            - name: geralt-of-rivia
+              label: "Geralt of Rivia"
+            - name: ghost-rider
+              label: "Ghost Rider"
+            - name: hamlet
+              label: "Hamlet"
+            - name: houdini
+              label: "Harry Houdini"
+            - name: jekyll-hyde
+              label: "Jekyll & Hyde"
+            - name: john-henry
+              label: "John Henry"
+            - name: king-arthur
+              label: "King Arthur"
+            - name: krang
+              label: "Krang"
+            - name: leonardo
+              label: "Leonardo"
+            - name: little-red
+              label: "Little Red Riding Hood"
+            - name: loki
+              label: "Loki"
+            - name: luke-cage
+              label: "Luke Cage"
+            - name: medusa
+              label: "Medusa"
+            - name: michelangelo
+              label: "Michelangelo"
+            - name: moon-knight
+              label: "Moon Knight"
+            - name: ms-marvel
+              label: "Ms. Marvel"
+            - name: muhammad-ali
+              label: "Muhammad Ali"
+            - name: nikola-tesla
+              label: "Nikola Tesla"
+            - name: oda-nobunaga
+              label: "Oda Nobunaga"
+            - name: pandora
+              label: "Pandora"
+            - name: philippa
+              label: "Philippa"
+            - name: raphael
+              label: "Raphael"
+            - name: raptors
+              label: "Raptors"
+            - name: robert-muldoon
+              label: "Robert Muldoon (InGen)"
+            - name: robin-hood
+              label: "Robin Hood"
+            - name: rosie-the-riveter
+              label: "Rosie the Riveter"
+            - name: she-hulk
+              label: "She-Hulk"
+            - name: sherlock-holmes
+              label: "Sherlock Holmes"
+            - name: shredder
+              label: "Shredder"
+            - name: sinbad
+              label: "Sinbad"
+            - name: spider-man
+              label: "Spider-Man"
+            - name: spike
+              label: "Spike"
+            - name: squirrel-girl
+              label: "Squirrel Girl"
+            - name: sun-wukong
+              label: "Sun Wukong"
+            - name: t-rex
+              label: "T. Rex"
+            - name: the-genie
+              label: "The Genie"
+            - name: golden-bat
+              label: "The Golden Bat"
+            - name: invisible-man
+              label: "The Invisible Man"
+            - name: the-wayward-sisters
+              label: "The Wayward Sisters"
+            - name: titania
+              label: "Titania"
+            - name: tomoe-gozen
+              label: "Tomoe Gozen"
+            - name: shakespeare
+              label: "William Shakespeare"
+            - name: willow
+              label: "Willow"
+            - name: winter-soldier
+              label: "Winter Soldier"
+            - name: wyatt-earp
+              label: "Wyatt Earp"
+            - name: yennefer-triss
+              label: "Yennefer & Triss"
+            - name: yennenga
+              label: "Yennenga"
+      - name: image
+        label: Image
+        description: Deck or box art works best. Big images are fine; keep them under about 500 KB.
+        type: image
+        required: true
+      - name: alt
+        label: Image description
+        description: Describe the image for screen readers, e.g. "Medusa's deck box art".
+        type: string
+        required: true
+      - name: credit
+        label: Credit
+        description: 'Shown under the image, e.g. "Art: Restoration Games press kit".'
+        type: string
+        default: "Art: Restoration Games press kit"
+        required: true
+      - name: permission
+        label: Permission note (not shown on the site)
+        description: Where the permission is saved, e.g. "Press kit Dropbox link, 2026-10-18" or "Email from Restoration Games, 2026-10-20".
+        type: text
