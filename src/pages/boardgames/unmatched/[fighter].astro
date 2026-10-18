@@ -7,6 +7,8 @@ import SourceList from '../../../components/SourceList.astro';
 import { UM_FIGHTERS, UM_TIER_SOURCE, type UmFighter } from '../../../data/unmatched';
 import { setOf, displayName, fighterUrl, fewGames, lineColor } from '../../../lib/unmatched';
 import { getUnmatchedArt } from '../../../lib/unmatched-art';
+import CardTile from '../../../components/unmatched/CardTile.astro';
+import { deckOf, cardsInCombo, UM_CARDS_SOURCE } from '../../../lib/unmatched-cards';
 
 export function getStaticPaths() {
   return UM_FIGHTERS.map((f) => ({ params: { fighter: f.id }, props: { f } }));
@@ -27,7 +29,9 @@ const allArt = await getUnmatchedArt();
 const art = allArt.get(f.id);
 const logo = allArt.get('logo');
 const g = f.guide;
-const sources = [...new Set([f.url, ...(g?.sources ?? [])])];
+const deck = deckOf(f.id)?.cards ?? [];
+const deckSize = deck.reduce((n, c) => n + c.qty, 0);
+const sources = [...new Set([f.url, ...(g?.sources ?? [])]), ...(deck.length ? [{ url: UM_CARDS_SOURCE.url, label: `Card list and card text (checked ${UM_CARDS_SOURCE.fetched})` }] : [])];
 ---
 <Base title={`${name} in Unmatched: stats, tips and combos`} description={`How to play ${name} in Unmatched: ${f.health ?? '?'} health, ${f.attack ?? 'unconfirmed'} attacks, ${f.tier ? `tier ${f.tier.tier} with a ${f.tier.win}% average win rate` : 'not ranked yet'}. ${f.ability}`}>
   <header class="page-head fh" style={`--c:${lineColor(set.line)}`}>
@@ -92,6 +96,19 @@ const sources = [...new Set([f.url, ...(g?.sources ?? [])])];
                 <li>
                   <strong>{c.cards}</strong>
                   <span>{c.why}{c.source && <> <a href={c.source}>({host(c.source)})</a></>}</span>
+                  {deck.length > 0 && (() => {
+                    const found = cardsInCombo(c.cards, deck).found;
+                    return found.length > 0 && (
+                      <span class="f-combo-cards">
+                        {found.map((card) => (
+                          <a href={`#card-${card.slug}`} class={`umc-chip umc-chip-${card.type}`}>
+                            {card.img ? <img src={card.img} alt="" width="40" height="56" loading="lazy" /> : <i aria-hidden="true">{card.value ?? '•'}</i>}
+                            See {card.title}
+                          </a>
+                        ))}
+                      </span>
+                    );
+                  })()}
                 </li>
               ))}
             </ul>
@@ -103,6 +120,15 @@ const sources = [...new Set([f.url, ...(g?.sources ?? [])])];
       <p class="f-empty">We haven't found a trustworthy guide for {name} yet, so we're not guessing. Start with the special ability above, and check back: we add guides as good ones turn up.</p>
     )}
   </section>
+
+  {deck.length > 0 && (
+    <section class="f-section f-deck" id="cards">
+      <h2>Cards in {name}'s deck</h2>
+      <p>{deck.length} different cards, {deckSize} copies in all as the card database lists them{deckSize < 20 ? ' (the database only has part of this deck so far)' : ''}. The number on a card's corner is how many copies there are. Tap a card name in the combos above to jump to it.</p>
+      <ul class="f-cards">{deck.map((card) => <CardTile card={card} fighter={name} />)}</ul>
+      <p class="f-source">Card list and card text from <a href={UM_CARDS_SOURCE.url}>unmatched.cards</a>, a fan-made card database. The cards are Restoration Games' work.</p>
+    </section>
+  )}
 
   <div class="f-section"><SourceList sources={sources} /></div>
 
@@ -139,6 +165,15 @@ const sources = [...new Set([f.url, ...(g?.sources ?? [])])];
   .f-combos { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
   .f-combos li { display: grid; gap: 2px; padding: 12px 14px; border: 2px solid var(--line); border-radius: 14px; background: var(--surface); }
   .f-combos a, .f-tips a { color: var(--muted); font-size: .82rem; }
+  .f-combo-cards { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .f-combos a.umc-chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px 3px 4px; border: 2px solid var(--soft-line); border-radius: 999px; background: var(--surface-2); color: var(--ink); font-size: .8rem; font-weight: 700; text-decoration: none; transition: transform .15s, border-color .15s; }
+  .f-combos a.umc-chip:hover { transform: translateY(-1px); border-color: var(--line); }
+  .umc-chip i { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--tc); color: #fff; font-style: normal; font-size: .75rem; }
+  .umc-chip img { width: 28px; height: auto; border-radius: 4px; }
+  .umc-chip-attack { --tc: #e5484d; } .umc-chip-defense { --tc: #3e7bd6; } .umc-chip-versatile { --tc: #8b5cc9; } .umc-chip-scheme { --tc: #e8b10f; }
+  .f-deck { max-width: none; }
+  .f-deck > p { max-width: 760px; }
+  .f-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 18px 14px; margin: 14px 0 0; padding: 8px 6px 0 0; }
   .f-empty { padding: 16px; border: 2px dashed var(--soft-line); border-radius: 14px; color: var(--muted); }
   .f-back { margin-top: 32px; }
   @media (max-width: 640px) {
@@ -146,5 +181,6 @@ const sources = [...new Set([f.url, ...(g?.sources ?? [])])];
     .fs-wide { grid-column: 1 / -1; }
     .fh-row { gap: 12px; }
     .fh-row :global(.um-badge) { width: 64px; height: 64px; }
+    .f-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 10px; }
   }
 </style>

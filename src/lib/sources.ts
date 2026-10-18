@@ -23,6 +23,7 @@ const SITE_NAMES: Record<string, string> = {
   'gridbeast.gg': 'Gridbeast',
   'restorationgames.com': 'Restoration Games',
   'unmatched.machaka.net': 'Unmatched stats (machaka)',
+  'unmatched.cards': 'unmatched.cards (fan card database)',
   'opinionatedgamers.com': 'The Opinionated Gamers',
   'gamingtrend.com': 'GamingTrend',
   'spacebiff.com': 'Space-Biff!',
