@@ -17,7 +17,14 @@ export type UsageRow = {
 };
 export type Usage = { month: string; battles: number; url: string; rows: UsageRow[] };
 
-async function text(url: string): Promise<string | null> {
+// Several pages read the same files during one build, so each address is downloaded once.
+const downloads = new Map<string, Promise<string | null>>();
+function text(url: string): Promise<string | null> {
+  if (!downloads.has(url)) downloads.set(url, download(url));
+  return downloads.get(url)!;
+}
+
+async function download(url: string): Promise<string | null> {
   // For testing without internet: CHAMPIONS_STATS_DIR=/some/folder npm run build reads a saved copy instead.
   const dir = process.env.CHAMPIONS_STATS_DIR;
   if (dir) {
@@ -123,7 +130,14 @@ function shares(obj: Record<string, number> | undefined, total: number, names: M
     .sort((a, b) => b.pct - a.pct);
 }
 
-export async function getBuilderData(format: string, rating: number, minUsage = 0.5, names = new Map<string, string>()): Promise<BuilderData | null> {
+const builderCache = new Map<string, Promise<BuilderData | null>>();
+export function getBuilderData(format: string, rating: number, minUsage = 0.5, names = new Map<string, string>()): Promise<BuilderData | null> {
+  const key = `${format}|${rating}|${minUsage}`;
+  if (!builderCache.has(key)) builderCache.set(key, buildBuilderData(format, rating, minUsage, names));
+  return builderCache.get(key)!;
+}
+
+async function buildBuilderData(format: string, rating: number, minUsage: number, names: Map<string, string>): Promise<BuilderData | null> {
   for (const month of (await months()).slice(0, 3)) {
     const url = `${BASE}${month}/chaos/${format}-${rating}.json`;
     const raw = await text(url);

@@ -6,8 +6,7 @@ import Mon from '../../../components/champions/Mon.astro';
 import SourceList from '../../../components/SourceList.astro';
 import { GAME, REGULATIONS, VGC_RULES, REGULATION_SOURCES, EVENTS, EVENT_SOURCES, RESULTS, USAGE_FORMATS, LEARN } from '../../../data/champions';
 import { getUsage } from '../../../lib/champions-usage';
-import { toID } from '@smogon/calc';
-import { MORE_TEAMS } from '../../../data/champions-teams';
+import { ALL_TEAMS, seenAt as seenAtNames, ordinal } from '../../../lib/champions-teams';
 
 const [doubles, singles] = await Promise.all([
   getUsage(USAGE_FORMATS.doubles.id, USAGE_FORMATS.rating),
@@ -26,17 +25,9 @@ const today = new Date().toISOString().slice(0, 10);
 const upcoming = EVENTS.filter((e) => e.to >= today);
 const current = REGULATIONS.find((r) => r.current) ?? REGULATIONS[0];
 const top = (n: number) => Math.max(n, 1);
-// Real top 8 teams from RESULTS that include this Pokémon, best finish first.
-// Every real Regionals team we have: each event's top 8 (RESULTS) plus the rest of its standings (MORE_TEAMS).
-const ALL_TEAMS = [
-  ...RESULTS.flatMap((ev) => ev.top.map((t, i) => ({ ...t, place: i + 1, event: ev.name.replace(/ Regional$/, '') }))),
-  ...MORE_TEAMS.map((t) => ({ p: t.p, c: t.c, team: t.team, place: t.n, event: t.e })),
-];
-// Teams that used this Pokémon, best finish first.
-const seenAt = (name: string) => ALL_TEAMS.filter((t) => t.team.some((n) => toID(n) === toID(name))).sort((a, b) => a.place - b.place);
+const seenAt = (name: string) => seenAtNames([name]);
 // Starters that also show up on Regionals top 8 teams (base species match, so Charizard counts Charizard-Mega-Y).
 const starterTips = LEARN.starters.filter((n) => RESULTS.some((ev) => ev.top.some((t) => t.team.some((m) => m.split('-')[0] === n))));
-const ordinal = (n: number) => { const t = n % 100 >= 11 && n % 100 <= 13 ? 'th' : ['th', 'st', 'nd', 'rd'][n % 10] ?? 'th'; return `${n}${t}`; };
 ---
 <Base title="Pokémon Champions VGC" description="Pokémon Champions in one place: the current VGC rules, usage leaderboards for Doubles and Singles, top teams from Regionals, upcoming events and a damage calculator.">
   <header class="page-head">
@@ -46,7 +37,7 @@ const ordinal = (n: number) => { const t = n % 100 >= 11 && n % 100 <= 13 ? 'th'
   </header>
 
   <nav class="pc-jump" aria-label="On this page">
-    <a href="#start">New? Start here</a><a href="/esports/pokemon-champions/learn">Learn to play</a><a href="#usage">Usage</a><a href="#teams">Top teams</a><a href="#events">Events</a><a href="#rules">Rules</a><a href="/esports/pokemon-champions/team-builder">Team builder</a><a href="/esports/pokemon-champions/calc">Damage calc</a><a href="#about">About the game</a>
+    <a href="#start">New? Start here</a><a href="/esports/pokemon-champions/learn">Learn to play</a><a href="/esports/pokemon-champions/pokedex">Pokédex</a><a href="#usage">Usage</a><a href="#teams">Top teams</a><a href="#events">Events</a><a href="#rules">Rules</a><a href="/esports/pokemon-champions/team-builder">Team builder</a><a href="/esports/pokemon-champions/calc">Damage calc</a><a href="#about">About the game</a>
   </nav>
 
   <section class="pc-now" aria-label="Current rules">
@@ -55,7 +46,7 @@ const ordinal = (n: number) => { const t = n % 100 >= 11 && n % 100 <= 13 ? 'th'
       <strong>{current.name}</strong>
       <span>{range(current.from, current.to)}</span>
     </div>
-    <a class="pill-btn" href="/esports/pokemon-champions/calc">Open the damage calc →</a>
+    <span class="pc-now-links"><a class="pill-btn" href="/esports/pokemon-champions/pokedex">Every allowed Pokémon →</a> <a class="pill-btn" href="/esports/pokemon-champions/calc">Open the damage calc →</a></span>
   </section>
 
   <!-- Learn to play -->
@@ -236,6 +227,7 @@ const ordinal = (n: number) => { const t = n % 100 >= 11 && n % 100 <= 13 ? 'th'
   .pc-jump a:hover { text-decoration: none; background: var(--mark); color: #1b1a1f; }
   .pc-now { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding: 18px 22px; border: 2px solid var(--line); border-radius: 18px; background: var(--c1); color: #fff; box-shadow: var(--lift); }
   .pc-now div { display: grid; gap: 2px; }
+  .pc-now-links { display: flex; flex-wrap: wrap; gap: 8px; }
   .pc-now .label { color: inherit; opacity: .85; }
   .pc-now strong { font-family: var(--display); font-size: 1.6rem; line-height: 1.1; }
   .pc-section { margin-top: 44px; }
@@ -320,11 +312,4 @@ const ordinal = (n: number) => { const t = n % 100 >= 11 && n % 100 <= 13 ? 'th'
   }
 
   /* Pokémon chip (used by Mon.astro) */
-  :global(.mon) { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px 2px 2px; border-radius: 999px; background: linear-gradient(90deg, var(--t1) 0 50%, var(--t2) 50% 100%); border: 2px solid var(--line); color: #1b1a1f; font-weight: 700; font-size: .9rem; line-height: 1; white-space: nowrap; }
-  :global(.mon-icon) { width: 38px; height: 38px; object-fit: contain; margin: -7px -1px -7px -2px; }
-  :global(.mon-icon.is-missing) { display: none; }
-  :global(.mon:has(.is-missing)), :global(.mon.no-icon) { padding-left: 10px; min-height: 30px; }
-  :global(.mon-sm) { font-size: .78rem; padding-right: 8px; }
-  :global(.mon-sm .mon-icon) { width: 30px; height: 30px; margin: -5px -1px -5px -1px; }
-  :global(.mon-sm:has(.is-missing)), :global(.mon-sm.no-icon) { min-height: 24px; }
 </style>

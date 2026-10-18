@@ -1,0 +1,227 @@
+---
+// One page per Pokémon allowed in the current regulation (/esports/pokemon-champions/pokedex/garchomp):
+// base stats (and Mega Evolutions), what strong players pick for it, and the real Regionals teams it was on.
+import Base from '../../../../layouts/Base.astro';
+import Mon from '../../../../components/champions/Mon.astro';
+import SourceList from '../../../../components/SourceList.astro';
+import { USAGE_FORMATS } from '../../../../data/champions';
+import { DEX_SOURCE, type DexEntry, type DexForm } from '../../../../lib/champions-dex';
+import { getPokedex, dexUrl, POKEDEX_URL, STAT_NAMES, total } from '../../../../lib/champions-pokedex';
+import { ordinal } from '../../../../lib/champions-teams';
+import { spriteUrl, displayName, TYPE_COLOURS } from '../../../../lib/pokemon';
+
+export async function getStaticPaths() {
+  const { dex } = await getPokedex();
+  const sorted = [...dex.entries].sort((a, b) => a.num - b.num);
+  return sorted.map((e, i) => ({ params: { slug: e.slug }, props: { e, prev: sorted[i - 1], next: sorted[i + 1] } }));
+}
+
+const { e, prev, next } = Astro.props as { e: DexEntry; prev?: DexEntry; next?: DexEntry };
+const { dex, code, usage, usageOf, teamsOf, teams, pageFor } = await getPokedex();
+const used = usageOf(e);
+const myTeams = teamsOf(e);
+const top = used[0];
+const forms: DexForm[] = [e, ...e.megas];
+const label = displayName;
+const pct = (n: number) => (n >= 10 ? n.toFixed(0) : n.toFixed(1)) + '%';
+const linkFor = (name: string) => { const p = pageFor(name); return p ? dexUrl(p) : undefined; };
+const SP_LABELS = ['HP', 'Atk', 'Def', 'SpA', 'SpD', 'Spe'];
+const spread = (sp: number[]) => sp.map((v, i) => (v ? `${v} ${SP_LABELS[i]}` : '')).filter(Boolean).join(' / ') || 'No stat points';
+const barColour = (v: number) => (v < 60 ? '#ff8a80' : v < 90 ? '#ffd166' : v < 120 ? '#9be37a' : '#5fd4c4');
+const monthName = (m: string) => new Date(m + '-01T00:00:00Z').toLocaleDateString('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+const c1 = TYPE_COLOURS[e.types[0]] ?? '#ddd';
+const c2 = TYPE_COLOURS[e.types[1] ?? e.types[0]] ?? c1;
+const icon = spriteUrl(e.name);
+const name = label(e.name);
+const eventUrls = [...new Set(myTeams.map((t) => t.url).filter(Boolean))];
+const description = `${name} in Pokémon Champions VGC ${dex.regulation}: ${e.types.join('/')} type, base stats, ${e.megas.length ? 'Mega Evolution, ' : ''}top moves, items and natures from real battles${myTeams.length ? `, and ${myTeams.length} tournament teams that used it` : ''}.`;
+---
+<Base title={`${name}: Pokémon Champions Pokédex`} description={description}>
+  <header class="page-head dp-head" style={`--t1:${c1};--t2:${c2}`}>
+    <p class="kicker"><a class="tag" href="/esports/pokemon-champions">Pokémon Champions</a> <a class="tag tag-plain" href={POKEDEX_URL}>Pokédex</a></p>
+    <div class="dp-hero">
+      <div class="dp-art">{icon ? <img src={icon} alt={name} width="128" height="128" /> : <span aria-hidden="true">?</span>}</div>
+      <div>
+        <p class="dp-num">#{String(e.num).padStart(4, '0')}</p>
+        <h1>{name}</h1>
+        <p class="dp-types">
+          {e.types.map((t) => <span style={`--tc:${TYPE_COLOURS[t]}`}>{t}</span>)}
+          {e.megas.length > 0 && <span class="dp-badge dp-mega">Can Mega Evolve</span>}
+          {e.isNew && <span class="dp-badge dp-new">New in {code}</span>}
+        </p>
+        <p class="dp-lead">
+          {top ? <>On <strong>{pct(top.u.usage)}</strong> of Doubles teams{top.form.id !== e.id && <> (as {label(top.form.name)})</>}, the <strong>{ordinal(top.u.rank)}</strong> most used Pokémon in {dex.regulation}.</> : usage ? <>Allowed in {dex.regulation}, but hardly anyone used it in rated battles last month. A hidden gem, or a challenge.</> : <>Allowed in {dex.regulation}. Usage numbers couldn't be loaded this time.</>}
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <nav class="dp-jump" aria-label="On this page">
+    <a href="#stats">Stats</a>{used.length > 0 && <a href="#sets">How players use it</a>}<a href="#teams">Tournament teams</a>{top && top.u.teammates.length > 0 && <a href="#partners">Partners</a>}
+  </nav>
+
+  <section id="stats" class="dp-section">
+    <div class="section-head"><h2>{e.megas.length ? 'Stats and Mega Evolution' : 'Base stats'}</h2></div>
+    <div class="dp-forms">
+      {forms.map((f) => (
+        <article class="dp-form">
+          <h3>{label(f.name)}</h3>
+          <p class="dp-form-meta">
+            {f.types.map((t) => <span class="dp-chip" style={`--tc:${TYPE_COLOURS[t]}`}>{t}</span>)}
+            {f.item && <span class="dp-hold">Holds {f.item}</span>}
+            {f !== e && f.isNew && <span class="dp-badge dp-new">New</span>}
+          </p>
+          <p class="dp-abil"><b>{f.abilities.length + (f.hidden ? 1 : 0) > 1 ? 'Abilities' : 'Ability'}:</b> {f.abilities.join(', ')}{f.hidden && <>{f.abilities.length ? ', ' : ''}{f.hidden} <small>(hidden)</small></>}</p>
+          <dl class="dp-stats">
+            {STAT_NAMES.map(([k, l]) => {
+              const v = f.stats[k];
+              const diff = f !== e ? v - e.stats[k] : 0;
+              return (
+                <div>
+                  <dt>{l}</dt>
+                  <dd><b>{v}</b>{diff !== 0 && <small class={diff > 0 ? 'up' : 'down'}>{diff > 0 ? `+${diff}` : diff}</small>}<span class="dp-bar"><span style={`width:${Math.min(100, (v / 200) * 100)}%;background:${barColour(v)}`}></span></span></dd>
+                </div>
+              );
+            })}
+            <div class="dp-total"><dt>Total</dt><dd><b>{total(f)}</b></dd></div>
+          </dl>
+        </article>
+      ))}
+    </div>
+    <p class="dp-hint">Base stats are the same as in the main games. In Champions you shape them with 66 stat points (up to 32 in one stat) and a nature.</p>
+  </section>
+
+  {used.length > 0 && usage && (
+    <section id="sets" class="dp-section">
+      <div class="section-head"><h2>How strong players use it</h2></div>
+      <p class="dp-note">From {usage.battles.toLocaleString('en-GB')} Doubles battles on Pokémon Showdown in {monthName(usage.month)}, by players rated {USAGE_FORMATS.rating}+. Percentages are the share of {name} sets that picked it.</p>
+      {used.map(({ form, u }) => (
+        <div class="dp-set">
+          {(used.length > 1 || form.id !== e.id) && <h3>As {label(form.name)} <small>{pct(u.usage)} of teams · {ordinal(u.rank)} most used</small></h3>}
+          <div class="dp-cols">
+            {[['Top moves', u.moves.slice(0, 8)], ['Items', u.items.slice(0, 5)], ['Abilities', u.abilities.slice(0, 3)], ['Natures', u.natures.slice(0, 5)]].map(([title, list]) => (list as typeof u.moves).length > 0 && (
+              <div class="dp-list">
+                <h4>{title}</h4>
+                <ul>{(list as typeof u.moves).map((m) => <li><span>{m.name}</span><b>{pct(m.pct)}</b></li>)}</ul>
+              </div>
+            ))}
+            {u.spreads.length > 0 && (
+              <div class="dp-list dp-spreads">
+                <h4>Stat points</h4>
+                <ul>{u.spreads.slice(0, 3).map((s) => <li><span><em>{s.nature}</em> {spread(s.sp)}</span><b>{pct(s.pct)}</b></li>)}</ul>
+              </div>
+            )}
+          </div>
+        </div>
+      ))}
+      <p class="dp-next"><a class="pill-btn" href="/esports/pokemon-champions/team-builder">Build a team with {name} →</a></p>
+    </section>
+  )}
+
+  <section id="teams" class="dp-section">
+    <div class="section-head"><h2>Tournament teams</h2></div>
+    {myTeams.length > 0 ? (
+      <>
+        <p class="dp-note">On {myTeams.length} of the {teams.length} {dex.regulation} Regionals teams we have. Best finishes first:</p>
+        <ol class="dp-teams">
+          {myTeams.slice(0, 8).map((t) => (
+            <li>
+              <span class="dp-who"><b>{ordinal(t.place)}</b> {t.p} <small>{t.c} · {t.event}</small></span>
+              <span class="dp-team">{t.team.map((n) => <Mon name={n} size="sm" href={linkFor(n)} />)}</span>
+            </li>
+          ))}
+        </ol>
+      </>
+    ) : (
+      <p class="dp-empty">{name} wasn't on any of the {teams.length} {dex.regulation} Regionals teams we have yet. Be the first to bring it!</p>
+    )}
+  </section>
+
+  {top && top.u.teammates.length > 0 && (
+    <section id="partners" class="dp-section">
+      <div class="section-head"><h2>Often on the same team as</h2></div>
+      <div class="dp-team dp-partners">{top.u.teammates.slice(0, 8).map((m) => <Mon name={m.name} href={linkFor(m.name)} />)}</div>
+      <p class="dp-hint">From the same Showdown battles. Tap a Pokémon to jump to its page.</p>
+    </section>
+  )}
+
+  <nav class="dp-pager" aria-label="Pokédex">
+    {prev ? <a href={dexUrl(prev)}>← #{String(prev.num).padStart(4, '0')} {label(prev.name)}</a> : <span></span>}
+    <a class="dp-all" href={POKEDEX_URL}>All Pokémon</a>
+    {next ? <a href={dexUrl(next)}>{label(next.name)} #{String(next.num).padStart(4, '0')} →</a> : <span></span>}
+  </nav>
+
+  <SourceList sources={[
+    { url: DEX_SOURCE, label: 'Pokémon Showdown: rules, Pokédex and allowed Pokémon' },
+    ...(usage ? [{ url: usage.url, label: `Smogon: usage stats, ${monthName(usage.month)}` }] : []),
+    ...eventUrls,
+  ]} />
+</Base>
+
+<style>
+  .kicker .tag + .tag { margin-left: 6px; }
+  .dp-hero { display: flex; align-items: center; gap: 22px; }
+  .dp-art { flex: none; display: grid; place-items: center; width: 150px; height: 150px; border: 2px solid var(--line); border-radius: 24px; background: linear-gradient(135deg, var(--t1), var(--t2)); box-shadow: var(--lift); }
+  .dp-art img { width: 128px; height: 128px; object-fit: contain; }
+  .dp-art span { font-family: var(--display); font-size: 3rem; color: #1b1a1f; }
+  .dp-num { margin: 0; font-weight: 800; color: var(--muted); font-size: .9rem; }
+  .dp-hero h1 { margin: 0 0 8px; }
+  .dp-types { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; }
+  .dp-types > span:not(.dp-badge), .dp-chip { padding: 3px 12px; border-radius: 99px; background: var(--tc); color: #1b1a1f; font-weight: 800; font-size: .82rem; border: 2px solid var(--line); }
+  .dp-chip { padding: 1px 9px; font-size: .74rem; }
+  .dp-badge { padding: 4px 10px; border-radius: 8px; font-size: .74rem; font-weight: 800; }
+  .dp-mega { background: var(--ink); color: var(--bg); }
+  .dp-new { background: var(--c2); color: #1b1a1f; }
+  .dp-lead { margin: 0; max-width: 60ch; }
+  .dp-jump { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 0; }
+  .dp-jump a { padding: 6px 14px; border: 2px solid var(--line); border-radius: 999px; font-weight: 700; font-size: .85rem; color: var(--ink); background: var(--surface); }
+  .dp-jump a:hover { text-decoration: none; background: var(--mark); color: #1b1a1f; }
+  .dp-section { margin-top: 40px; }
+  .dp-forms { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr)); gap: 12px; }
+  .dp-form { padding: 16px 18px; border: 2px solid var(--line); border-radius: 18px; background: var(--surface); }
+  .dp-form h3 { margin: 0 0 6px; font-size: 1.1rem; }
+  .dp-form-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0 0 8px; }
+  .dp-hold { font-size: .78rem; font-weight: 700; color: var(--muted); }
+  .dp-abil { margin: 0 0 12px; font-size: .9rem; }
+  .dp-abil small { color: var(--muted); }
+  .dp-stats { display: grid; gap: 6px; margin: 0; }
+  .dp-stats div { display: grid; grid-template-columns: 70px 1fr; align-items: center; gap: 10px; }
+  .dp-stats dt { font-size: .8rem; font-weight: 800; color: var(--muted); }
+  .dp-stats dd { margin: 0; display: grid; grid-template-columns: 34px auto 1fr; align-items: center; gap: 6px; }
+  .dp-stats dd b { font-variant-numeric: tabular-nums; }
+  .dp-stats small { font-size: .72rem; font-weight: 800; }
+  .dp-stats small.up { color: #2e9e5b; }
+  .dp-stats small.down { color: #d0543c; }
+  .dp-bar { grid-column: 3; height: 10px; border-radius: 99px; background: var(--surface-2); overflow: hidden; border: 1.5px solid var(--line); }
+  .dp-bar span { display: block; height: 100%; border-radius: 99px; }
+  .dp-total { padding-top: 6px; border-top: 2px solid var(--soft-line); }
+  .dp-hint, .dp-note { color: var(--muted); font-size: .85rem; margin: 10px 0 0; max-width: 80ch; }
+  .dp-note { margin: 0 0 14px; }
+  .dp-set + .dp-set { margin-top: 24px; }
+  .dp-set h3 { margin: 0 0 10px; font-size: 1.05rem; }
+  .dp-set h3 small { font-family: var(--sans, inherit); font-weight: 600; font-size: .82rem; color: var(--muted); margin-left: 6px; }
+  .dp-cols { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+  .dp-list { padding: 12px 14px; border: 2px solid var(--line); border-radius: 16px; background: var(--surface); }
+  .dp-list h4 { margin: 0 0 8px; font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+  .dp-list ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  .dp-list li { display: flex; justify-content: space-between; gap: 10px; font-size: .9rem; }
+  .dp-list li b { flex: none; min-width: 52px; text-align: right; font-variant-numeric: tabular-nums; }
+  .dp-spreads em { font-style: normal; font-weight: 800; }
+  .dp-spreads li span { font-size: .84rem; }
+  .dp-next { margin-top: 16px; }
+  .dp-teams { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .dp-teams li { display: grid; gap: 6px; padding: 10px 14px; border: 2px solid var(--line); border-radius: 16px; background: var(--surface); }
+  .dp-who small { color: var(--muted); }
+  .dp-team { display: flex; flex-wrap: wrap; gap: 6px; }
+  .dp-partners { gap: 8px; }
+  .dp-empty { padding: 16px; border: 2px dashed var(--soft-line); border-radius: 14px; color: var(--muted); }
+  .dp-pager { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 40px; padding-top: 16px; border-top: 2px solid var(--soft-line); font-weight: 700; }
+  .dp-all { padding: 6px 14px; border: 2px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); }
+  @media (max-width: 560px) {
+    .dp-hero { flex-direction: column; align-items: flex-start; gap: 14px; }
+    .dp-art { width: 110px; height: 110px; }
+    .dp-art img { width: 96px; height: 96px; }
+    .dp-pager { justify-content: center; }
+    .dp-pager .dp-all { order: -1; width: 100%; text-align: center; box-sizing: border-box; }
+  }
+</style>

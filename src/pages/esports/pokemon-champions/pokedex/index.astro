@@ -1,0 +1,174 @@
+---
+// The Pokédex (/esports/pokemon-champions/pokedex): every Pokémon allowed in the current VGC regulation.
+// The list comes from Pokémon Showdown when the site builds (src/lib/champions-dex.ts), so it changes by itself
+// when a new regulation starts. Tap a Pokémon for its stats, how players use it and the teams it was on.
+import Base from '../../../../layouts/Base.astro';
+import SourceList from '../../../../components/SourceList.astro';
+import { REGULATION_SOURCES, USAGE_FORMATS } from '../../../../data/champions';
+import { DEX_SOURCE } from '../../../../lib/champions-dex';
+import { getPokedex, dexUrl } from '../../../../lib/champions-pokedex';
+import { spriteUrl, displayName, TYPE_COLOURS } from '../../../../lib/pokemon';
+
+const { dex, code, usage, usageOf } = await getPokedex();
+const entries = dex.entries.map((e) => {
+  const top = usageOf(e)[0];
+  return { e, usage: top?.u.usage ?? 0, rank: top?.u.rank ?? 9999 };
+}).sort((a, b) => a.e.num - b.e.num);
+const megaCount = dex.entries.reduce((n, e) => n + e.megas.length, 0);
+const newCount = dex.entries.filter((e) => e.isNew).length;
+const types = Object.keys(TYPE_COLOURS);
+const monthName = (m: string) => new Date(m + '-01T00:00:00Z').toLocaleDateString('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+---
+<Base title={`Pokémon Champions Pokédex: every Pokémon in ${dex.regulation}`} description={`All ${dex.entries.length} Pokémon (and ${megaCount} Mega Evolutions) allowed in Pokémon Champions VGC ${dex.regulation}, with stats, top moves, natures and real tournament teams for each.`}>
+  <header class="page-head">
+    <p class="kicker"><a class="tag" href="/esports">Esports</a> <a class="tag tag-plain" href="/esports/pokemon-champions">Pokémon Champions</a></p>
+    <h1>Pokédex</h1>
+    <p>Every Pokémon you can use in <strong>{dex.regulation}</strong>. Tap one to see its stats, the moves and natures strong players pick, and the real tournament teams it was on.</p>
+  </header>
+
+  <ul class="dx-facts">
+    <li><strong>{dex.entries.length}</strong><span>Pokémon allowed</span></li>
+    <li><strong>{megaCount}</strong><span>Mega Evolutions</span></li>
+    {dex.previous && newCount > 0 && <li><strong>{newCount}</strong><span>new since {dex.previous.replace('Regulation ', 'Reg ')}</span></li>}
+  </ul>
+
+  <form class="dx-tools" data-dx-tools>
+    <label class="dx-search">
+      <span class="sr-only">Find a Pokémon</span>
+      <input type="search" name="q" placeholder="Find a Pokémon" autocomplete="off" />
+    </label>
+    <label>
+      <span class="sr-only">Type</span>
+      <select name="type">
+        <option value="">All types</option>
+        {types.map((t) => <option value={t}>{t}</option>)}
+      </select>
+    </label>
+    <label>
+      <span class="sr-only">Sort</span>
+      <select name="sort">
+        <option value="num">Pokédex order</option>
+        <option value="usage">Most used</option>
+        <option value="name">A to Z</option>
+      </select>
+    </label>
+    <div class="dx-toggles">
+      <label class="dx-toggle"><input type="checkbox" name="mega" /> Can Mega Evolve</label>
+      {newCount > 0 && <label class="dx-toggle"><input type="checkbox" name="new" /> New in {code}</label>}
+    </div>
+  </form>
+  <p class="dx-count" data-dx-count aria-live="polite">Showing all {dex.entries.length}</p>
+
+  <ul class="dx-grid" data-dx-grid>
+    {entries.map(({ e, usage: u, rank }) => {
+      const c1 = TYPE_COLOURS[e.types[0]] ?? '#ddd';
+      const c2 = TYPE_COLOURS[e.types[1] ?? e.types[0]] ?? c1;
+      const icon = spriteUrl(e.name);
+      return (
+        <li data-name={e.name.toLowerCase()} data-types={[...new Set([...e.types, ...e.megas.flatMap((m) => m.types)])].join(' ')} data-num={e.num} data-usage={u} data-mega={e.megas.length ? '1' : ''} data-new={e.isNew ? '1' : ''} data-rank={rank}>
+          <a href={dexUrl(e)} style={`--t1:${c1};--t2:${c2}`}>
+            <span class="dx-num">#{String(e.num).padStart(4, '0')}</span>
+            {icon ? <img src={icon} alt="" width="72" height="72" loading="lazy" decoding="async" data-mon-icon /> : <span class="dx-noicon" aria-hidden="true">?</span>}
+            <strong>{displayName(e.name)}</strong>
+            <span class="dx-types">{e.types.map((t) => <span style={`--tc:${TYPE_COLOURS[t]}`}>{t}</span>)}</span>
+            <span class="dx-badges">
+              {e.megas.length > 0 && <span class="dx-badge dx-mega">Mega</span>}
+              {e.isNew && <span class="dx-badge dx-new">New</span>}
+              {u > 0 && <span class="dx-use">{u >= 1 ? u.toFixed(1) : u.toFixed(2)}% of teams</span>}
+            </span>
+          </a>
+        </li>
+      );
+    })}
+  </ul>
+  <p class="dx-empty" data-dx-empty hidden>No Pokémon match that. Try clearing a filter.</p>
+
+  <p class="dx-note">The list of allowed Pokémon comes from <a href={DEX_SOURCE}>Pokémon Showdown</a>, which follows each official regulation, and updates by itself when the site is rebuilt after a new regulation starts. {usage ? <>Usage is the share of Doubles teams using that Pokémon, from {usage.battles.toLocaleString('en-GB')} Pokémon Showdown battles in {monthName(usage.month)} by players rated {USAGE_FORMATS.rating}+.</> : 'Usage numbers could not be loaded this time.'}</p>
+
+  <SourceList sources={[
+    { url: DEX_SOURCE, label: 'Pokémon Showdown: rules, Pokédex and allowed Pokémon' },
+    ...(usage ? [{ url: usage.url, label: `Smogon: usage stats, ${monthName(usage.month)}` }] : []),
+    ...REGULATION_SOURCES,
+  ]} />
+</Base>
+
+<script>
+  // Search, type filter, toggles and sorting, all in the reader's browser.
+  const form = document.querySelector<HTMLFormElement>('[data-dx-tools]')!;
+  const grid = document.querySelector<HTMLElement>('[data-dx-grid]')!;
+  const count = document.querySelector<HTMLElement>('[data-dx-count]')!;
+  const empty = document.querySelector<HTMLElement>('[data-dx-empty]')!;
+  const items = [...grid.children] as HTMLElement[];
+  const total = items.length;
+  const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]/g, '');
+
+  function apply() {
+    const f = new FormData(form);
+    const q = norm(String(f.get('q') ?? ''));
+    const type = String(f.get('type') ?? '');
+    const mega = f.has('mega');
+    const isNew = f.has('new');
+    const sort = String(f.get('sort') ?? 'num');
+    let shown = 0;
+    for (const li of items) {
+      const d = li.dataset;
+      const ok = (!q || norm(d.name!).includes(q)) && (!type || d.types!.split(' ').includes(type)) && (!mega || d.mega) && (!isNew || d.new);
+      li.hidden = !ok;
+      if (ok) shown++;
+    }
+    const key = (li: HTMLElement) => sort === 'usage' ? Number(li.dataset.rank) : sort === 'name' ? 0 : Number(li.dataset.num);
+    const sorted = [...items].sort((a, b) => sort === 'name' ? a.dataset.name!.localeCompare(b.dataset.name!) : key(a) - key(b) || Number(a.dataset.num) - Number(b.dataset.num));
+    grid.append(...sorted);
+    count.textContent = shown === total ? `Showing all ${total}` : `Showing ${shown} of ${total}`;
+    empty.hidden = shown > 0;
+  }
+  form.addEventListener('submit', (e) => e.preventDefault());
+  form.addEventListener('input', apply);
+  form.addEventListener('change', apply);
+
+  // If a picture fails to load, hide it so just the name shows.
+  grid.querySelectorAll<HTMLImageElement>('[data-mon-icon]').forEach((img) => {
+    img.addEventListener('error', () => { img.style.visibility = 'hidden'; });
+  });
+</script>
+
+<style>
+  .kicker .tag + .tag { margin-left: 6px; }
+  .dx-facts { list-style: none; margin: 0 0 22px; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+  .dx-facts li { display: grid; padding: 12px 18px; border: 2px solid var(--line); border-radius: 16px; background: var(--surface); box-shadow: var(--lift); }
+  .dx-facts strong { font-family: var(--display); font-size: 1.7rem; line-height: 1; color: var(--c1); }
+  .dx-facts span { font-size: .82rem; font-weight: 700; color: var(--muted); }
+  .dx-tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 12px; border: 2px solid var(--line); border-radius: 18px; background: var(--surface); }
+  .dx-tools input[type="search"], .dx-tools select { font: inherit; font-weight: 600; padding: 9px 14px; border: 2px solid var(--line); border-radius: 12px; background: var(--bg); color: var(--ink); }
+  .dx-search { flex: 1 1 220px; }
+  .dx-search input { width: 100%; box-sizing: border-box; }
+  .dx-toggles { display: flex; flex-wrap: wrap; gap: 8px; }
+  .dx-toggle { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border: 2px solid var(--line); border-radius: 999px; font-weight: 700; font-size: .85rem; cursor: pointer; background: var(--bg); }
+  .dx-toggle:has(input:checked) { background: var(--c1); color: #fff; }
+  .dx-toggle input { accent-color: var(--c2); margin: 0; }
+  .dx-count { color: var(--muted); font-size: .85rem; font-weight: 700; margin: 12px 0 10px; }
+  .dx-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+  .dx-grid a { position: relative; display: grid; justify-items: center; gap: 4px; height: 100%; box-sizing: border-box; padding: 26px 10px 12px; border: 2px solid var(--line); border-radius: 16px; background: linear-gradient(180deg, color-mix(in srgb, var(--t1) 35%, var(--surface)) 0 46%, var(--surface) 46%); color: var(--ink); text-align: center; transition: transform .15s, box-shadow .15s; }
+  .dx-grid a:hover { text-decoration: none; transform: translateY(-3px); box-shadow: var(--lift); }
+  .dx-num { position: absolute; top: 8px; left: 10px; font-size: .72rem; font-weight: 800; color: var(--muted); }
+  .dx-grid img { width: 72px; height: 72px; object-fit: contain; }
+  .dx-noicon { display: grid; place-items: center; width: 72px; height: 72px; font-family: var(--display); font-size: 2rem; color: var(--muted); }
+  .dx-grid strong { font-family: var(--display); font-size: 1rem; line-height: 1.15; }
+  .dx-types { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
+  .dx-types span { padding: 1px 8px; border-radius: 99px; background: var(--tc); color: #1b1a1f; font-size: .7rem; font-weight: 800; border: 1.5px solid var(--line); }
+  .dx-badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; min-height: 18px; }
+  .dx-badge { padding: 1px 7px; border-radius: 6px; font-size: .66rem; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
+  .dx-mega { background: var(--ink); color: var(--bg); }
+  .dx-new { background: var(--c2); color: #1b1a1f; }
+  .dx-use { font-size: .72rem; font-weight: 700; color: var(--muted); }
+  .dx-grid li[hidden] { display: none; }
+  .dx-empty { padding: 16px; border: 2px dashed var(--soft-line); border-radius: 14px; color: var(--muted); }
+  .dx-note { color: var(--muted); font-size: .85rem; margin: 22px 0 0; max-width: 80ch; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  @media (max-width: 560px) {
+    .dx-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .dx-tools select { flex: 1 1 140px; }
+    .dx-tools label:has(select) { flex: 1 1 140px; display: flex; }
+    .dx-tools label:has(select) select { width: 100%; }
+  }
+</style>
