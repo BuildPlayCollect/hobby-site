@@ -99,3 +99,62 @@ export async function getUsage(format: string, rating: number, top = 30): Promis
   }
   return null;
 }
+
+// ---- Team builder data ----
+// The "chaos" file has every Pokémon's full numbers (every item, move, nature and stat-point spread, weighted by player rating),
+// so the team builder can show the most AND least used choices. Percentages = share of that Pokémon's sets.
+export type BuilderMon = {
+  usage: number;
+  abilities: Share[];
+  items: Share[];
+  moves: Share[];
+  natures: Share[];
+  spreads: { nature: string; sp: number[]; pct: number }[];
+  teammates: Share[];
+};
+export type BuilderData = { month: string; battles: number; url: string; mons: Record<string, BuilderMon> };
+
+const round = (n: number) => Math.round(n * 10) / 10;
+function shares(obj: Record<string, number> | undefined, total: number, names: Map<string, string>, min = 0.1) {
+  return Object.entries(obj ?? {})
+    .filter(([k]) => k !== '' && k !== 'nothing')
+    .map(([k, v]) => ({ name: names.get(k) ?? k, pct: round((v / total) * 100) }))
+    .filter((s) => s.pct >= min)
+    .sort((a, b) => b.pct - a.pct);
+}
+
+export async function getBuilderData(format: string, rating: number, minUsage = 0.5, names = new Map<string, string>()): Promise<BuilderData | null> {
+  for (const month of (await months()).slice(0, 3)) {
+    const url = `${BASE}${month}/chaos/${format}-${rating}.json`;
+    const raw = await text(url);
+    if (!raw) continue;
+    let json: { info: Record<string, number>; data: Record<string, Record<string, any>> };
+    try { json = JSON.parse(raw); } catch { continue; }
+    const usageText = await text(`${BASE}${month}/${format}-${rating}.txt`);
+    const usage = new Map(usageText ? parseUsage(usageText).rows.map((r) => [r.name, r.usage]) : []);
+    const mons: Record<string, BuilderMon> = {};
+    for (const [name, d] of Object.entries(json.data)) {
+      const u = usage.get(name) ?? 0;
+      if (u < minUsage) continue;
+      const total = Object.values(d.Abilities ?? {}).reduce((a: number, b) => a + (b as number), 0) as number;
+      if (!total) continue;
+      const natureTotals: Record<string, number> = {};
+      const spreads = Object.entries((d.Spreads ?? {}) as Record<string, number>).map(([k, v]) => {
+        const [nature, sp] = k.split(':');
+        natureTotals[nature] = (natureTotals[nature] ?? 0) + v;
+        return { nature, sp: sp.split('/').map(Number), pct: round((v / total) * 100) };
+      }).sort((a, b) => b.pct - a.pct);
+      mons[name] = {
+        usage: u,
+        abilities: shares(d.Abilities, total, names),
+        items: shares(d.Items, total, names),
+        moves: shares(d.Moves, total, names),
+        natures: shares(natureTotals, total, names, 0.05),
+        spreads: spreads.slice(0, 8),
+        teammates: shares(d.Teammates, total, names, 1).slice(0, 10),
+      };
+    }
+    return { month, battles: json.info['number of battles'] ?? 0, url, mons };
+  }
+  return null;
+}

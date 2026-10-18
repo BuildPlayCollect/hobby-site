@@ -6,7 +6,10 @@ import SPRITES from '../data/pokemon-sprites.json';
 const CHAMPIONS = Generations.get(0); // "generation 0" is how @smogon/calc names Pokémon Champions
 
 export function species(name: string) {
-  return CHAMPIONS.species.get(toID(name)) ?? CHAMPIONS.species.get(toID(name.split('-')[0]));
+  return CHAMPIONS.species.get(toID(name))
+    ?? CHAMPIONS.species.get(toID(name.split('-')[0]))
+    // Some Pokémon only exist as a form in the data, e.g. Aegislash is "Aegislash-Both".
+    ?? [...CHAMPIONS.species].find((s) => s.baseSpecies === name);
 }
 
 export function types(name: string): string[] {

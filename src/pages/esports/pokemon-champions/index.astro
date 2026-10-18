@@ -6,6 +6,7 @@ import Mon from '../../../components/champions/Mon.astro';
 import { GAME, REGULATIONS, VGC_RULES, REGULATION_SOURCES, EVENTS, EVENT_SOURCES, RESULTS, USAGE_FORMATS, LEARN } from '../../../data/champions';
 import { getUsage } from '../../../lib/champions-usage';
 import { toID } from '@smogon/calc';
+import { MORE_TEAMS } from '../../../data/champions-teams';
 
 const [doubles, singles] = await Promise.all([
   getUsage(USAGE_FORMATS.doubles.id, USAGE_FORMATS.rating),
@@ -25,12 +26,16 @@ const upcoming = EVENTS.filter((e) => e.to >= today);
 const current = REGULATIONS.find((r) => r.current) ?? REGULATIONS[0];
 const top = (n: number) => Math.max(n, 1);
 // Real top 8 teams from RESULTS that include this Pokémon, best finish first.
-const seenAt = (name: string) => RESULTS.flatMap((ev) => ev.top.map((t, i) => ({ ...t, place: i + 1, event: ev.name.replace(/ Regional$/, '') })))
-  .filter((t) => t.team.some((n) => toID(n) === toID(name)))
-  .sort((a, b) => a.place - b.place);
+// Every real Regionals team we have: each event's top 8 (RESULTS) plus the rest of its standings (MORE_TEAMS).
+const ALL_TEAMS = [
+  ...RESULTS.flatMap((ev) => ev.top.map((t, i) => ({ ...t, place: i + 1, event: ev.name.replace(/ Regional$/, '') }))),
+  ...MORE_TEAMS.map((t) => ({ p: t.p, c: t.c, team: t.team, place: t.n, event: t.e })),
+];
+// Teams that used this Pokémon, best finish first.
+const seenAt = (name: string) => ALL_TEAMS.filter((t) => t.team.some((n) => toID(n) === toID(name))).sort((a, b) => a.place - b.place);
 // Starters that also show up on Regionals top 8 teams (base species match, so Charizard counts Charizard-Mega-Y).
 const starterTips = LEARN.starters.filter((n) => RESULTS.some((ev) => ev.top.some((t) => t.team.some((m) => m.split('-')[0] === n))));
-const ordinal = (n: number) => (n === 1 ? '1st' : n === 2 ? '2nd' : n === 3 ? '3rd' : `${n}th`);
+const ordinal = (n: number) => { const t = n % 100 >= 11 && n % 100 <= 13 ? 'th' : ['th', 'st', 'nd', 'rd'][n % 10] ?? 'th'; return `${n}${t}`; };
 ---
 <Base title="Pokémon Champions VGC" description="Pokémon Champions in one place: the current VGC rules, usage leaderboards for Doubles and Singles, top teams from Regionals, upcoming events and a damage calculator.">
   <header class="page-head">
@@ -40,7 +45,7 @@ const ordinal = (n: number) => (n === 1 ? '1st' : n === 2 ? '2nd' : n === 3 ? '3
   </header>
 
   <nav class="pc-jump" aria-label="On this page">
-    <a href="#start">New? Start here</a><a href="#usage">Usage</a><a href="#teams">Top teams</a><a href="#events">Events</a><a href="#rules">Rules</a><a href="/esports/pokemon-champions/calc">Damage calc</a><a href="#about">About the game</a>
+    <a href="#start">New? Start here</a><a href="#usage">Usage</a><a href="#teams">Top teams</a><a href="#events">Events</a><a href="#rules">Rules</a><a href="/esports/pokemon-champions/team-builder">Team builder</a><a href="/esports/pokemon-champions/calc">Damage calc</a><a href="#about">About the game</a>
   </nav>
 
   <section class="pc-now" aria-label="Current rules">
@@ -73,7 +78,7 @@ const ordinal = (n: number) => (n === 1 ? '1st' : n === 2 ? '2nd' : n === 3 ? '3
       </li>
       <li>
         <h3>Copy a team that works</h3>
-        <p>No need to build from scratch. Tap any Pokémon in the <a href="#usage">usage leaderboard</a> to see its usual team, or borrow one of the <a href="#teams">Regionals top 8 teams</a>. Then check your big hits with the <a href="/esports/pokemon-champions/calc">damage calculator</a>.</p>
+        <p>No need to build from scratch. Tap any Pokémon in the <a href="#usage">usage leaderboard</a> to see real Regionals teams that used it, then build your own version in the <a href="/esports/pokemon-champions/team-builder">team builder</a>. Check your big hits with the <a href="/esports/pokemon-champions/calc">damage calculator</a>.</p>
       </li>
       <li>
         <h3>Find an event</h3>
@@ -91,7 +96,7 @@ const ordinal = (n: number) => (n === 1 ? '1st' : n === 2 ? '2nd' : n === 3 ? '3
     </div>
     {boards.map((b, i) => (
       <div class="pc-board" data-board={b.key} hidden={i !== 0}>
-        <p class="pc-note">{b.title}. Share of teams using each Pokémon, from {b.data ? `${b.data.battles.toLocaleString('en-GB')} battles in ${monthName(b.data.month)}` : 'Pokémon Showdown'} by players rated {USAGE_FORMATS.rating}+. Tap a Pokémon to see its moves, items and usual team.</p>
+        <p class="pc-note">{b.title}. Share of teams using each Pokémon, from {b.data ? `${b.data.battles.toLocaleString('en-GB')} battles in ${monthName(b.data.month)}` : 'Pokémon Showdown'} by players rated {USAGE_FORMATS.rating}+. Tap a Pokémon to see its moves, items and {b.key === 'doubles' ? 'the teams that used it' : 'its usual partners'}.</p>
         {b.data ? (
           <ol class="pc-usage">
             {b.data.rows.map((r) => (
@@ -110,25 +115,24 @@ const ordinal = (n: number) => (n === 1 ? '1st' : n === 2 ? '2nd' : n === 3 ? '3
                       ))}
                     </div>
                   ) : <p class="pc-note pc-pad">No move details for this one yet.</p>}
-                  {r.teammates.length > 0 && (
+                  {b.key === 'doubles' && seenAt(r.name).length > 0 ? (
                     <div class="pc-teamblock">
-                      <h4>Usual team</h4>
-                      <div class="pc-team">{[r.name, ...r.teammates.slice(0, 5).map((m) => m.name)].map((n) => <Mon name={n} size="sm" />)}</div>
-                      <p class="pc-hint">{r.name.replace(/-/g, ' ')} plus the 5 Pokémon most often on the same team in these battles.</p>
-                    </div>
-                  )}
-                  {seenAt(r.name).length > 0 && (
-                    <div class="pc-teamblock">
-                      <h4>Regionals top 8 teams with it</h4>
+                      <h4>Teams that used it</h4>
+                      <p class="pc-hint pc-hint-top">On {seenAt(r.name).length} of {ALL_TEAMS.length} teams from recent Regionals. Here are the best finishes:</p>
                       <ul class="pc-seen">
-                        {seenAt(r.name).slice(0, 3).map((t) => (
+                        {seenAt(r.name).slice(0, 4).map((t) => (
                           <li>
                             <span class="pc-seen-who">{ordinal(t.place)} {t.p} <small>{t.event}</small></span>
                             <span class="pc-team">{t.team.map((n) => <Mon name={n} size="sm" />)}</span>
                           </li>
                         ))}
                       </ul>
-                      <p class="pc-hint">Top 8 teams from recent Regionals (see <a href="#teams">Top teams</a>).</p>
+                    </div>
+                  ) : r.teammates.length > 0 && (
+                    <div class="pc-teamblock">
+                      <h4>Often on the same team as</h4>
+                      <div class="pc-team">{r.teammates.slice(0, 5).map((m) => <Mon name={m.name} size="sm" />)}</div>
+                      <p class="pc-hint">{b.key === 'singles' ? 'From Showdown Singles battles. Big tournaments are Doubles, so there are no Singles tournament teams to show.' : 'From Showdown battles. This Pokémon hasn\'t been on a recent Regionals team yet.'}</p>
                     </div>
                   )}
                 </details>
@@ -273,6 +277,7 @@ const ordinal = (n: number) => (n === 1 ? '1st' : n === 2 ? '2nd' : n === 3 ? '3
   .pc-teamblock { padding: 0 16px 16px; }
   .pc-teamblock h4 { margin: 0 0 8px; font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
   .pc-hint { margin: 6px 0 0; color: var(--muted); font-size: .8rem; }
+  .pc-hint-top { margin: -2px 0 10px; }
   .pc-seen { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
   .pc-seen li { display: grid; grid-template-columns: minmax(150px, 220px) 1fr; gap: 6px 10px; align-items: center; }
   .pc-seen-who { font-weight: 700; font-size: .9rem; }
