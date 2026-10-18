@@ -109,8 +109,10 @@ const SIDES = [
 
 <script>
   import { calculate, Generations, Pokemon, Move, Field, toID } from '@smogon/calc';
+  import { enhanceDatalists } from '../../../scripts/combobox';
   import type { StatID } from '@smogon/calc';
 
+  enhanceDatalists();
   const gen = Generations.get(0);
   const form = document.querySelector<HTMLFormElement>('[data-calc]')!;
   const STATS: StatID[] = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
