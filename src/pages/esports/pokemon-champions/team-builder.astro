@@ -98,12 +98,14 @@ const STATS = [['hp', 'HP'], ['atk', 'Atk'], ['def', 'Def'], ['spa', 'SpA'], ['s
 
 <script>
   import { Generations, Pokemon, toID } from '@smogon/calc';
+  import { enhanceDatalists } from '../../../scripts/combobox';
   import type { StatID } from '@smogon/calc';
 
   type Share = { name: string; pct: number };
   type Mon = { usage: number; abilities: Share[]; items: Share[]; moves: Share[]; natures: Share[]; spreads: { nature: string; sp: number[]; pct: number }[]; teammates: Share[] };
   type Data = { month: string; battles: number; mons: Record<string, Mon> } | null;
 
+  enhanceDatalists();
   const gen = Generations.get(0);
   const root = document.querySelector<HTMLElement>('[data-tb]')!;
   const SPRITES: Record<string, number> = JSON.parse(root.dataset.sprites || '{}');
@@ -336,7 +338,7 @@ const STATS = [['hp', 'HP'], ['atk', 'Atk'], ['def', 'Def'], ['spa', 'SpA'], ['s
   .pc-tab[aria-selected="true"] { background: var(--c1); color: #fff; }
   .tb-note { color: var(--muted); font-size: .88rem; margin: 0; }
   .tb-slots { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-  .tb-slot { border: 2px solid var(--line); border-radius: 18px; background: var(--surface); overflow: hidden; }
+  .tb-slot { border: 2px solid var(--line); border-radius: 18px; background: var(--surface); }
   .tb-head { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 16px; border: 0; background: none; font: inherit; color: var(--ink); text-align: left; cursor: pointer; min-height: 64px; }
   .tb-head[aria-expanded="true"] { border-bottom: 2px solid var(--soft-line); }
   .tb-icon { width: 48px; height: 48px; object-fit: contain; flex: none; }
