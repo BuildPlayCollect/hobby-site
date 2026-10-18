@@ -1,0 +1,293 @@
+---
+// The Pokémon Champions damage calculator (/esports/pokemon-champions/calc).
+// The maths is @smogon/calc, the open-source engine behind the Pokémon Showdown calculator (MIT licence).
+// It runs in the reader's browser; this file only lists the choices (Pokémon, moves, items ...) for the boxes.
+import Base from '../../../layouts/Base.astro';
+import { Generations } from '@smogon/calc';
+
+const g = Generations.get(0); // "generation 0" is Pokémon Champions in @smogon/calc
+const byName = (a: string, b: string) => a.localeCompare(b);
+const lists = {
+  species: [...g.species].map((s) => s.name).sort(byName),
+  moves: [...g.moves].filter((m) => m.category !== 'Status' && m.name !== '(No Move)').map((m) => m.name).sort(byName),
+  items: [...g.items].map((i) => i.name).sort(byName),
+  abilities: [...g.abilities].map((a) => a.name).sort(byName),
+  natures: [...g.natures].map((n) => n.name).sort(byName),
+};
+const STATS = [['hp', 'HP'], ['atk', 'Atk'], ['def', 'Def'], ['spa', 'SpA'], ['spd', 'SpD'], ['spe', 'Spe']];
+const SIDES = [
+  { key: 'a', title: 'Attacker', mon: 'Rillaboom', item: 'Miracle Seed', nature: 'Adamant', sp: { atk: 32, hp: 2, spe: 32 }, moves: ['Wood Hammer', 'Grassy Glide', 'High Horsepower', 'U-turn'] },
+  { key: 'd', title: 'Defender', mon: 'Incineroar', item: 'Sitrus Berry', nature: 'Careful', sp: { hp: 32, spd: 32, def: 2 }, moves: [] },
+];
+---
+<Base title="Pokémon Champions damage calculator" description="Work out how much damage one Pokémon does to another in Pokémon Champions, for Doubles and Singles, with stat points, items, abilities, weather and terrain.">
+  <header class="page-head">
+    <p class="kicker"><a class="tag" href="/esports/pokemon-champions">Pokémon Champions VGC</a></p>
+    <h1>Damage calculator</h1>
+    <p>Pick two Pokémon and see how hard each move hits. Every Pokémon is level 50, and stat points go up to 32 in each stat, like in the game.</p>
+  </header>
+
+  <form class="calc" data-calc data-lists={JSON.stringify(lists)}>
+    {Object.entries(lists).map(([k, v]) => <datalist id={`calc-${k}`}>{v.map((x) => <option value={x} />)}</datalist>)}
+
+    <div class="calc-sides">
+      {SIDES.map((s) => (
+        <fieldset class="calc-side" data-side={s.key}>
+          <legend>{s.title}</legend>
+          <div class="calc-mon">
+            <img class="calc-icon" alt="" width="40" height="40" hidden data-icon />
+            <label class="calc-wide">Pokémon<input name="mon" list="calc-species" value={s.mon} autocomplete="off" required /></label>
+          </div>
+          <p class="calc-types" data-types></p>
+          <div class="calc-row">
+            <label>Item<input name="item" list="calc-items" value={s.item} autocomplete="off" /></label>
+            <label>Ability<input name="ability" list="calc-abilities" autocomplete="off" /></label>
+          </div>
+          <div class="calc-row">
+            <label>Nature<select name="nature">{lists.natures.map((n) => <option selected={n === s.nature}>{n}</option>)}</select></label>
+            <label>Status<select name="status"><option value="">Healthy</option><option value="brn">Burned</option><option value="par">Paralysed</option><option value="psn">Poisoned</option></select></label>
+          </div>
+          <div class="calc-stats">
+            <span></span><span class="calc-head">Stat points</span><span class="calc-head">Boost</span><span class="calc-head">Stat</span>
+            {STATS.map(([id, label]) => (
+              <>
+                <span class="calc-stat-name">{label}</span>
+                <input name={`sp-${id}`} type="number" min="0" max="32" value={(s.sp as Record<string, number>)[id] ?? 0} inputmode="numeric" aria-label={`${label} stat points`} />
+                {id === 'hp' ? <span></span> : (
+                  <select name={`boost-${id}`} aria-label={`${label} boost`}>
+                    {[6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5, -6].map((b) => <option value={b} selected={b === 0}>{b > 0 ? `+${b}` : b}</option>)}
+                  </select>
+                )}
+                <output data-stat={id}></output>
+              </>
+            ))}
+          </div>
+          {s.key === 'a' && (
+            <div class="calc-moves">
+              {[0, 1, 2, 3].map((i) => (
+                <label>Move {i + 1}<input name={`move${i}`} list="calc-moves" value={s.moves[i] ?? ''} autocomplete="off" /></label>
+              ))}
+              <label class="calc-check"><input type="checkbox" name="crit" /> Critical hit</label>
+              <label class="calc-check"><input type="checkbox" name="helping" /> Helping Hand</label>
+            </div>
+          )}
+          {s.key === 'd' && (
+            <div class="calc-row">
+              <label class="calc-check"><input type="checkbox" name="reflect" /> Reflect</label>
+              <label class="calc-check"><input type="checkbox" name="screen" /> Light Screen</label>
+              <label class="calc-check"><input type="checkbox" name="friend" /> Friend Guard</label>
+            </div>
+          )}
+        </fieldset>
+      ))}
+    </div>
+
+    <fieldset class="calc-field">
+      <legend>Battle</legend>
+      <label>Format<select name="format"><option value="Doubles">Doubles</option><option value="Singles">Singles</option></select></label>
+      <label>Weather<select name="weather"><option value="">None</option><option>Sun</option><option>Rain</option><option>Sand</option><option>Snow</option></select></label>
+      <label>Terrain<select name="terrain"><option value="">None</option><option>Electric</option><option>Grassy</option><option>Psychic</option><option>Misty</option></select></label>
+      <button type="button" class="pill-btn" data-swap>⇄ Swap sides</button>
+    </fieldset>
+
+    <section class="calc-results" aria-live="polite">
+      <h2>Results</h2>
+      <ol data-results></ol>
+      <p class="calc-error" data-error hidden></p>
+    </section>
+  </form>
+
+  <p class="calc-note">
+    The maths comes from <a href="https://github.com/smogon/damage-calc">@smogon/calc</a>, the open-source engine behind the{' '}
+    <a href="https://calc.pokemonshowdown.com/champions.html?mode=champions">Pokémon Showdown damage calculator</a>. Want every option
+    (Tera, field effects, full sets)? Use the Showdown calculator. Pokémon icons from Pokémon Showdown.
+    Pokémon is a trademark of Nintendo, Creatures and GAME FREAK; this fan page isn't connected to them.
+  </p>
+  <p><a href="/esports/pokemon-champions">← Back to the Pokémon Champions hub</a></p>
+</Base>
+
+<script>
+  import { calculate, Generations, Pokemon, Move, Field, toID } from '@smogon/calc';
+  import type { StatID } from '@smogon/calc';
+
+  const gen = Generations.get(0);
+  const form = document.querySelector<HTMLFormElement>('[data-calc]')!;
+  const STATS: StatID[] = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
+  const WEATHER: Record<string, string> = { Sun: 'Sun', Rain: 'Rain', Sand: 'Sand', Snow: 'Snow' };
+
+  const val = (side: Element, name: string) => (side.querySelector<HTMLInputElement>(`[name="${name}"]`)?.value ?? '').trim();
+  const side = (key: string) => form.querySelector<HTMLElement>(`[data-side="${key}"]`)!;
+  const exists = (kind: 'species' | 'items' | 'abilities' | 'moves', name: string) => !!name && !!gen[kind].get(toID(name));
+  const sprite = (name: string) => {
+    const s = gen.species.get(toID(name));
+    if (!s) return '';
+    const base = s.baseSpecies ?? s.name;
+    const forme = s.baseSpecies ? s.name.slice(s.baseSpecies.length + 1) : '';
+    return `https://play.pokemonshowdown.com/sprites/gen5/${toID(base)}${forme ? '-' + toID(forme) : ''}.png`;
+  };
+
+  // When a Pokémon is picked, show its icon and types, and fill in its usual ability.
+  function pickMon(el: HTMLElement, fillAbility: boolean) {
+    const s = gen.species.get(toID(val(el, 'mon')));
+    const icon = el.querySelector<HTMLImageElement>('[data-icon]')!;
+    icon.hidden = true; // shown once the picture loads
+    if (s) icon.src = sprite(s.name);
+    el.querySelector('[data-types]')!.textContent = s ? s.types.join(' / ') : '';
+    const ability = el.querySelector<HTMLInputElement>('[name="ability"]')!;
+    if (s && (fillAbility || !ability.value)) ability.value = s.abilities?.[0] ?? '';
+  }
+
+  function build(el: HTMLElement) {
+    const name = val(el, 'mon');
+    if (!exists('species', name)) throw new Error(`"${name || 'blank'}" isn't a Pokémon in Champions. Pick one from the list.`);
+    const evs: Partial<Record<StatID, number>> = {};
+    const boosts: Partial<Record<StatID, number>> = {};
+    for (const st of STATS) {
+      evs[st] = Math.max(0, Math.min(32, Number(val(el, `sp-${st}`)) || 0));
+      if (st !== 'hp') boosts[st] = Number(val(el, `boost-${st}`)) || 0;
+    }
+    const item = val(el, 'item');
+    const ability = val(el, 'ability');
+    return new Pokemon(gen, name, {
+      nature: val(el, 'nature'),
+      item: exists('items', item) ? item : undefined,
+      ability: exists('abilities', ability) ? ability : undefined,
+      status: (val(el, 'status') || '') as '' | 'brn' | 'par' | 'psn',
+      evs, boosts,
+    });
+  }
+
+  function run() {
+    const results = form.querySelector('[data-results]')!;
+    const error = form.querySelector<HTMLElement>('[data-error]')!;
+    const a = side('a'), d = side('d');
+    const checked = (n: string) => form.querySelector<HTMLInputElement>(`[name="${n}"]`)!.checked;
+    results.innerHTML = '';
+    try {
+      const attacker = build(a);
+      const defender = build(d);
+      for (const [el, mon] of [[a, attacker], [d, defender]] as const) {
+        for (const st of STATS) el.querySelector(`[data-stat="${st}"]`)!.textContent = String(mon.stats[st]);
+      }
+      const field = new Field({
+        gameType: val(form, 'format') as 'Singles' | 'Doubles',
+        weather: (WEATHER[val(form, 'weather')] || undefined) as never,
+        terrain: (val(form, 'terrain') || undefined) as never,
+        attackerSide: { isHelpingHand: checked('helping') },
+        defenderSide: { isReflect: checked('reflect'), isLightScreen: checked('screen'), isFriendGuard: checked('friend') },
+      });
+      let shown = 0;
+      for (let i = 0; i < 4; i++) {
+        const name = val(a, `move${i}`);
+        if (!name) continue;
+        const li = document.createElement('li');
+        if (!exists('moves', name)) {
+          li.className = 'calc-bad';
+          li.textContent = `"${name}" isn't a damaging move in Champions.`;
+        } else {
+          const r = calculate(gen, attacker, defender, new Move(gen, name, { isCrit: checked('crit') }), field);
+          const [lo, hi] = r.range();
+          const hp = defender.maxHP();
+          const pct = (n: number) => Math.round((n / hp) * 1000) / 10;
+          const head = document.createElement('div');
+          head.className = 'calc-hit';
+          const strong = document.createElement('strong');
+          strong.textContent = name;
+          const big = document.createElement('span');
+          big.textContent = hi === 0 ? 'No damage' : `${pct(lo)}% – ${pct(hi)}%`;
+          head.append(strong, big);
+          const bar = document.createElement('div');
+          bar.className = 'calc-bar';
+          bar.style.setProperty('--lo', `${Math.min(100, pct(lo))}%`);
+          bar.style.setProperty('--hi', `${Math.min(100, pct(hi))}%`);
+          bar.innerHTML = '<span></span>';
+          const ko = document.createElement('p');
+          ko.className = 'calc-ko';
+          ko.textContent = hi === 0 ? '' : r.kochance().text || 'Not a KO within 4 hits';
+          const desc = document.createElement('p');
+          desc.className = 'calc-desc';
+          desc.textContent = hi === 0 ? '' : r.desc();
+          li.append(head, bar, ko, desc);
+        }
+        results.append(li);
+        shown++;
+      }
+      error.hidden = shown > 0;
+      if (!shown) error.textContent = 'Add a move for the attacker to see results.';
+    } catch (e) {
+      error.hidden = false;
+      error.textContent = (e as Error).message;
+    }
+  }
+
+  // Swap: trade Pokémon, item, ability, nature, status, stat points and boosts between the two sides.
+  form.querySelector('[data-swap]')!.addEventListener('click', () => {
+    const names = ['mon', 'item', 'ability', 'nature', 'status', ...STATS.map((s) => `sp-${s}`), ...STATS.slice(1).map((s) => `boost-${s}`)];
+    for (const n of names) {
+      const x = side('a').querySelector<HTMLInputElement>(`[name="${n}"]`)!;
+      const y = side('d').querySelector<HTMLInputElement>(`[name="${n}"]`)!;
+      [x.value, y.value] = [y.value, x.value];
+    }
+    pickMon(side('a'), false);
+    pickMon(side('d'), false);
+    run();
+  });
+
+  for (const key of ['a', 'd']) {
+    const el = side(key);
+    el.querySelector('[name="mon"]')!.addEventListener('change', () => { pickMon(el, true); run(); });
+    el.querySelector<HTMLImageElement>('[data-icon]')!.addEventListener('load', (e) => { (e.target as HTMLElement).hidden = false; });
+    pickMon(el, false);
+  }
+  form.addEventListener('submit', (e) => e.preventDefault());
+  form.addEventListener('input', run);
+  form.addEventListener('change', run);
+  run();
+</script>
+
+<style>
+  .calc { display: grid; gap: 16px; }
+  .calc fieldset { margin: 0; padding: 16px 18px 18px; border: 2px solid var(--line); border-radius: 18px; background: var(--surface); min-width: 0; }
+  .calc legend { font-family: var(--display); font-weight: 800; font-size: 1.15rem; padding: 0 6px; }
+  .calc label { display: grid; gap: 4px; font-size: .78rem; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; min-width: 0; }
+  .calc input:not([type="checkbox"]), .calc select { font: inherit; font-size: .95rem; text-transform: none; letter-spacing: 0; font-weight: 600; color: var(--ink); background: var(--bg); border: 2px solid var(--soft-line); border-radius: 10px; padding: 7px 10px; width: 100%; min-width: 0; }
+  .calc input:focus, .calc select:focus { outline: none; border-color: var(--c1); }
+  .calc-sides { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .calc-side { display: grid; gap: 12px; align-content: start; }
+  .calc-mon { display: flex; align-items: end; gap: 10px; }
+  .calc-wide { flex: 1; }
+  .calc-icon { width: 48px; height: 48px; image-rendering: pixelated; flex: none; }
+  .calc-icon[hidden] { display: none; }
+  .calc-types { margin: -6px 0 0; color: var(--muted); font-size: .85rem; font-weight: 700; min-height: 1.2em; }
+  .calc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .calc-stats { display: grid; grid-template-columns: 44px 1fr 1fr 48px; gap: 6px 8px; align-items: center; }
+  .calc-head { font-size: .7rem; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  .calc-stat-name { font-weight: 800; font-size: .88rem; }
+  .calc-stats output { font-weight: 800; text-align: right; font-variant-numeric: tabular-nums; }
+  .calc .calc-stats input, .calc .calc-stats select { padding: 5px 8px; }
+  .calc-moves { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .calc .calc-check { display: flex; align-items: center; gap: 8px; text-transform: none; letter-spacing: 0; font-size: .9rem; color: var(--ink); font-weight: 700; cursor: pointer; }
+  .calc-check input { width: 18px; height: 18px; accent-color: var(--c1); }
+  .calc-field { display: grid; grid-template-columns: repeat(3, 1fr) auto; gap: 12px; align-items: end; }
+  .calc-results { padding: 18px 20px; border: 2px solid var(--line); border-radius: 18px; background: var(--surface-2); }
+  .calc-results h2 { margin: 0 0 10px; }
+  .calc-results ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .calc-results :global(li) { padding: 12px 14px; border-radius: 14px; background: var(--surface); border: 2px solid var(--soft-line); }
+  :global(.calc-hit) { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  :global(.calc-hit strong) { font-family: var(--display); font-size: 1.1rem; }
+  :global(.calc-hit span) { font-weight: 800; font-size: 1.2rem; font-variant-numeric: tabular-nums; color: var(--c1); }
+  :root[data-theme="dark"] :global(.calc-hit span) { color: var(--wiki); }
+  :global(.calc-bar) { position: relative; height: 12px; margin: 8px 0 6px; border-radius: 99px; background: var(--surface-2); overflow: hidden; }
+  :global(.calc-bar::before) { content: ""; position: absolute; inset: 0 auto 0 0; width: var(--lo); background: var(--c1); }
+  :global(.calc-bar span) { position: absolute; inset: 0 auto 0 var(--lo); width: calc(var(--hi) - var(--lo)); background: var(--c1); opacity: .45; }
+  :global(.calc-ko) { margin: 0; font-weight: 700; }
+  :global(.calc-desc) { margin: 4px 0 0; color: var(--muted); font-size: .82rem; }
+  :global(.calc-bad), :global(.calc-error) { color: #b3261e; font-weight: 700; }
+  :root[data-theme="dark"] :global(.calc-bad), :root[data-theme="dark"] :global(.calc-error) { color: #ff8a80; }
+  .calc-note { color: var(--muted); font-size: .85rem; margin-top: 20px; }
+  @media (max-width: 760px) {
+    .calc-sides { grid-template-columns: 1fr; }
+    .calc-field { grid-template-columns: 1fr 1fr; }
+    .calc-field .pill-btn { grid-column: 1 / -1; justify-self: start; }
+  }
+</style>
