@@ -90,4 +90,17 @@ const partPhotos = defineCollection({
   }),
 });
 
-export const collections = { articles, wiki, rules, bxParts, partPhotos };
+// Unmatched art: one file per picture (src/content/unmatched-art), added from Pages CMS.
+// "fighter" is the fighter's id (e.g. medusa) or "logo" for the Unmatched logo. Only use art you have permission for.
+const unmatchedArt = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/unmatched-art' }),
+  schema: z.object({
+    fighter: z.string(),
+    image: z.string(),
+    alt: z.string(),
+    credit: z.string(),
+    permission: z.string().optional(),
+  }),
+});
+
+export const collections = { articles, wiki, rules, bxParts, partPhotos, unmatchedArt };
