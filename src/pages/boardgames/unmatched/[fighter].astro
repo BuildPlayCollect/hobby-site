@@ -31,7 +31,7 @@ const logo = allArt.get('logo');
 const g = f.guide;
 const deck = deckOf(f.id)?.cards ?? [];
 const deckSize = deck.reduce((n, c) => n + c.qty, 0);
-const sources = [...new Set([f.url, ...(g?.sources ?? [])]), ...(deck.length ? [{ url: UM_CARDS_SOURCE.url, label: `Card list and card text (checked ${UM_CARDS_SOURCE.fetched})` }] : [])];
+const sources = [...new Set([f.url, ...(g?.sources ?? [])]), ...(deck.length ? [{ url: UM_CARDS_SOURCE.url, label: `Card list, text and pictures (checked ${UM_CARDS_SOURCE.fetched})` }] : [])];
 ---
 <Base title={`${name} in Unmatched: stats, tips and combos`} description={`How to play ${name} in Unmatched: ${f.health ?? '?'} health, ${f.attack ?? 'unconfirmed'} attacks, ${f.tier ? `tier ${f.tier.tier} with a ${f.tier.win}% average win rate` : 'not ranked yet'}. ${f.ability}`}>
   <header class="page-head fh" style={`--c:${lineColor(set.line)}`}>
@@ -102,7 +102,7 @@ const sources = [...new Set([f.url, ...(g?.sources ?? [])]), ...(deck.length ? [
                       <span class="f-combo-cards">
                         {found.map((card) => (
                           <a href={`#card-${card.slug}`} class={`umc-chip umc-chip-${card.type}`}>
-                            {card.img ? <img src={card.img} alt="" width="40" height="56" loading="lazy" /> : <i aria-hidden="true">{card.value ?? '•'}</i>}
+                            {card.img ? <img src={card.img} alt="" width="56" height="78" loading="lazy" /> : <i aria-hidden="true">{card.value ?? '•'}</i>}
                             See {card.title}
                           </a>
                         ))}
@@ -126,7 +126,7 @@ const sources = [...new Set([f.url, ...(g?.sources ?? [])]), ...(deck.length ? [
       <h2>Cards in {name}'s deck</h2>
       <p>{deck.length} different cards, {deckSize} copies in all as the card database lists them{deckSize < 20 ? ' (the database only has part of this deck so far)' : ''}. The number on a card's corner is how many copies there are. Tap a card name in the combos above to jump to it.</p>
       <ul class="f-cards">{deck.map((card) => <CardTile card={card} fighter={name} />)}</ul>
-      <p class="f-source">Card list and card text from <a href={UM_CARDS_SOURCE.url}>unmatched.cards</a>, a fan-made card database. The cards are Restoration Games' work.</p>
+      <p class="f-source">Card list, card text and card pictures from <a href={UM_CARDS_SOURCE.url}>unmatched.cards</a>, a fan-made card database. Card images: Restoration Games (and the brands they license), via unmatched.cards. Some cards only have a small scan there, so we print their text underneath.</p>
     </section>
   )}
 
@@ -166,10 +166,10 @@ const sources = [...new Set([f.url, ...(g?.sources ?? [])]), ...(deck.length ? [
   .f-combos li { display: grid; gap: 2px; padding: 12px 14px; border: 2px solid var(--line); border-radius: 14px; background: var(--surface); }
   .f-combos a, .f-tips a { color: var(--muted); font-size: .82rem; }
   .f-combo-cards { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-  .f-combos a.umc-chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px 3px 4px; border: 2px solid var(--soft-line); border-radius: 999px; background: var(--surface-2); color: var(--ink); font-size: .8rem; font-weight: 700; text-decoration: none; transition: transform .15s, border-color .15s; }
+  .f-combos a.umc-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px 4px 4px; border: 2px solid var(--soft-line); border-radius: 12px; background: var(--surface-2); color: var(--ink); font-size: .8rem; font-weight: 700; text-decoration: none; transition: transform .15s, border-color .15s; }
   .f-combos a.umc-chip:hover { transform: translateY(-1px); border-color: var(--line); }
   .umc-chip i { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--tc); color: #fff; font-style: normal; font-size: .75rem; }
-  .umc-chip img { width: 28px; height: auto; border-radius: 4px; }
+  .umc-chip img { width: 56px; height: auto; border-radius: 6px; }
   .umc-chip-attack { --tc: #e5484d; } .umc-chip-defense { --tc: #3e7bd6; } .umc-chip-versatile { --tc: #8b5cc9; } .umc-chip-scheme { --tc: #e8b10f; }
   .f-deck { max-width: none; }
   .f-deck > p { max-width: 760px; }

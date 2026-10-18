@@ -4,7 +4,7 @@ import data from '../data/unmatched-cards.json' with { type: 'json' };
 
 export type UmCard = {
   slug: string; title: string; type: 'attack' | 'defense' | 'versatile' | 'scheme'; value: number | null; boost: number | null;
-  qty: number; who: string; text: { basic?: string; immediate?: string; during?: string; after?: string }; img?: string;
+  qty: number; who: string; text: { basic?: string; immediate?: string; during?: string; after?: string }; img?: string; small?: boolean;
 };
 export type UmDeck = { deck: string; cards: UmCard[] };
 
