@@ -468,11 +468,11 @@ export const UM_FIGHTERS: UmFighter[] = [
           "why": "Raises each Jeet Kune Do hit by 1, and Feint cannot remove that bonus."
         },
         {
-          "cards": "Bring It On + High Straight Lead",
+          "cards": "Bring It On + Jeet Kune Do: High Straight Lead",
           "why": "High Straight Lead grows when a fighter started in a different space, which Bring It On enables."
         },
         {
-          "cards": "Short Lead Hook + Momentous Shift",
+          "cards": "Jeet Kune Do: Short Lead Hook + Momentous Shift",
           "why": "Swapping spaces sets up Momentous Shift's moved-fighter bonus."
         },
         {
@@ -1176,7 +1176,7 @@ export const UM_FIGHTERS: UmFighter[] = [
           "why": "Wiglaf's adjacent 1-damage pulse also hits Beowulf, but that feeds him Rage, so play it next to him."
         },
         {
-          "cards": "Hot for Battle",
+          "cards": "Hot for the Battle",
           "why": "Swaps Wiglaf and Beowulf after combat, rescuing Wiglaf and positioning Beowulf to attack."
         }
       ],
@@ -1552,7 +1552,7 @@ export const UM_FIGHTERS: UmFighter[] = [
         "Keep Control the Demon for defense since it scales with held Hellfire.",
         "Sometimes take 1-2 damage to save Hellfire.",
         "Blaze of Glory and Penance Stare are finishers but cost Hellfire.",
-        "Plan refills with Chains of Hellfire and Stroke the Flames."
+        "Plan refills with Chains of Hellfire and Stoke the Flames."
       ],
       "combos": [
         {
@@ -1564,7 +1564,7 @@ export const UM_FIGHTERS: UmFighter[] = [
           "why": "Refill Hellfire to 5, then spend it on a max-damage finisher (also Penance Stare)."
         },
         {
-          "cards": "Stroke the Flames",
+          "cards": "Stoke the Flames",
           "why": "Regains Hellfire equal to damage taken, best when absorbing a big hit."
         }
       ],
@@ -1594,14 +1594,14 @@ export const UM_FIGHTERS: UmFighter[] = [
       "playstyle": "Resilient melee hero with a small deck who blind-boosts when his hand is low and recycles key cards from discard.",
       "tips": [
         "Blind boost when your hand is 2 or fewer, but not carelessly.",
-        "Use Breather to recover key cards such as The Devil of Hell's Kitchen.",
+        "Use Breather to recover key cards such as Devil of Hell's Kitchen.",
         "Take a Knee is a good defense that heals.",
-        "Time The Devil of Hell's Kitchen for when the deck runs out or as a mid-game surprise."
+        "Time Devil of Hell's Kitchen for when the deck runs out or as a mid-game surprise."
       ],
       "combos": [
         {
-          "cards": "The Devil of Hell's Kitchen + Breather",
-          "why": "Breather can recover The Devil of Hell's Kitchen if it gets discarded; the guide calls this key to his success."
+          "cards": "Devil of Hell's Kitchen + Breather",
+          "why": "Breather can recover Devil of Hell's Kitchen if it gets discarded; the guide calls this key to his success."
         },
         {
           "cards": "Man Without Fear",
@@ -1797,7 +1797,7 @@ export const UM_FIGHTERS: UmFighter[] = [
       ],
       "combos": [
         {
-          "cards": "Closer than She Appears + Ripples In Water",
+          "cards": "Closer than She Appears + Ripples in the Water",
           "why": "Both help a slow T. Rex close distance (draw/action, and placement with a forced discard)."
         },
         {
@@ -2196,8 +2196,8 @@ export const UM_FIGHTERS: UmFighter[] = [
       ],
       "combos": [
         {
-          "cards": "A Boy Named Bucky + Reflexive Memories",
-          "why": "The guide advises playing Reflexive Memories only with Bucky to avoid its random self-discard."
+          "cards": "A Boy Named Bucky + Reflex Memories",
+          "why": "The guide advises playing Reflex Memories only with Bucky to avoid its random self-discard."
         },
         {
           "cards": "A Boy Named Bucky + Bionic Arm",
@@ -2349,11 +2349,11 @@ export const UM_FIGHTERS: UmFighter[] = [
       ],
       "combos": [
         {
-          "cards": "Leap Towards + The Savage She-Hulk",
-          "why": "Leap Towards closes distance so The Savage She-Hulk's adjacency mode is live."
+          "cards": "Leap Toward + The Savage She-Hulk",
+          "why": "Leap Toward closes distance so The Savage She-Hulk's adjacency mode is live."
         },
         {
-          "cards": "Omega-Level Threat + Leap Towards",
+          "cards": "Omega-Level Threat + Leap Toward",
           "why": "Shrinking their hand first makes the follow-up harder to answer."
         },
         {
@@ -2599,7 +2599,7 @@ export const UM_FIGHTERS: UmFighter[] = [
           "why": "Swap so a friendly fighter defends, saving Oda and setting up a flank."
         },
         {
-          "cards": "Demon of the Sixth Heaven",
+          "cards": "Demon King of the Sixth Heaven",
           "why": "Scheme that damages each flanked opponent."
         },
         {
@@ -2792,7 +2792,7 @@ export const UM_FIGHTERS: UmFighter[] = [
           "why": "Oberon lands next to Titania, drawing enemies into her zone for A Momentary Glance damage."
         },
         {
-          "cards": "Glamour of Rhyme + Gift of the Fairy Folk",
+          "cards": "Glamour of Rhyme + Gift of the Fair Folk",
           "why": "Free schemes set up a big attack turn."
         },
         {
@@ -2881,7 +2881,7 @@ export const UM_FIGHTERS: UmFighter[] = [
         "Pick gear for the specific opponent; the loadout defines his early game.",
         "Dandelion is fragile and has few cards; reviewers often saw him removed early."
       ],
-      "combos": [{"cards": "Tawny Owl", "why": "While this potion is ongoing, Geralt may ignore effects that would make him discard from his hand. That shrugs off discard attacks like Triss's Merigold's Hailstorm, but not Yennefer's Incinerate, which needs real discards.", "source": "https://boardgamegeek.com/thread/3422551/article/45335631"}, {"cards": "Witcher Senses", "why": "Lets Geralt dig through his deck for a GEAR card, then shuffles itself back in, so he can fetch the gear he needs right now.", "source": "https://boardgamegeek.com/thread/3427585/article/45421344"}, {"cards": "GEAR: Armor of the Forgotten Wolf", "why": "Its after-combat text ends the turn. Geralt defends first, so the attacker's after-combat effects and leftover actions simply vanish.", "source": "https://boardgamegeek.com/thread/3687825/article/47508567"}],
+      "combos": [{"cards": "GEAR: Tawny Owl", "why": "While this potion is ongoing, Geralt may ignore effects that would make him discard from his hand. That shrugs off discard attacks like Triss's Merigold's Hailstorm, but not Yennefer's Incinerate, which needs real discards.", "source": "https://boardgamegeek.com/thread/3422551/article/45335631"}, {"cards": "Witcher Senses", "why": "Lets Geralt dig through his deck for a GEAR card, then shuffles itself back in, so he can fetch the gear he needs right now.", "source": "https://boardgamegeek.com/thread/3427585/article/45421344"}, {"cards": "GEAR: Armor of the Forgotten Wolf", "why": "Its after-combat text ends the turn. Geralt defends first, so the attacker's after-combat effects and leftover actions simply vanish.", "source": "https://boardgamegeek.com/thread/3687825/article/47508567"}],
       "sources": [
         "https://opinionatedgamers.com/2024/12/17/unmatched-which-witcher/",
         "https://www.meeplemountain.com/reviews/unmatched-the-witcher-steel-and-silver/",
