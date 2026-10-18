@@ -124,8 +124,13 @@ const sources = [...new Set([f.url, ...(g?.sources ?? [])]), ...(deck.length ? [
   {deck.length > 0 && (
     <section class="f-section f-deck" id="cards">
       <h2>Cards in {name}'s deck</h2>
-      <p>{deck.length} different cards, {deckSize} copies in all as the card database lists them{deckSize < 20 ? ' (the database only has part of this deck so far)' : ''}. The number on a card's corner is how many copies there are. Tap a card name in the combos above to jump to it.</p>
+      <p>{deck.length} different cards, {deckSize} copies in all as the card database lists them{deckSize < 20 ? ' (the database only has part of this deck so far)' : ''}. The number on a card's corner is how many copies there are. Tap a card to see it bigger, or tap a card name in the combos above to jump to it.</p>
       <ul class="f-cards">{deck.map((card) => <CardTile card={card} fighter={name} />)}</ul>
+      <dialog class="umc-big" id="umc-big" aria-label="Card close-up">
+        <button type="button" class="umc-big-close" aria-label="Close">×</button>
+        <img src="" alt="" />
+        <div class="umc-big-text"></div>
+      </dialog>
       <p class="f-source">Card list, card text and card pictures from <a href={UM_CARDS_SOURCE.url}>unmatched.cards</a>, a fan-made card database. Card images: Restoration Games (and the brands they license), via unmatched.cards. Some cards only have a small scan there, so we print their text underneath.</p>
     </section>
   )}
@@ -134,6 +139,29 @@ const sources = [...new Set([f.url, ...(g?.sources ?? [])]), ...(deck.length ? [
 
   <p class="f-back"><a class="pill-btn" href="/boardgames/unmatched#fighters">← All fighters</a></p>
 </Base>
+
+<script>
+  // Tap a card picture to see it bigger. Tiny scans also show their text, since the picture alone is hard to read.
+  const big = document.getElementById('umc-big') as HTMLDialogElement | null;
+  if (big) {
+    const img = big.querySelector('img')!;
+    const text = big.querySelector('.umc-big-text')!;
+    document.querySelectorAll<HTMLButtonElement>('.umc-open').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const small = btn.querySelector('img')!;
+        img.src = small.currentSrc || small.src;
+        img.alt = small.alt;
+        big.classList.toggle('is-small', btn.hasAttribute('data-small'));
+        const under = btn.parentElement?.querySelector('.umc-under');
+        text.replaceChildren(...(under ? [under.cloneNode(true)] : []));
+        big.showModal();
+      });
+    });
+    big.querySelector('.umc-big-close')!.addEventListener('click', () => big.close());
+    // a tap outside the card (on the dimmed backdrop) closes it too
+    big.addEventListener('click', (e) => { if (e.target === big) big.close(); });
+  }
+</script>
 
 <style>
   .fh-logo { display: inline-block; vertical-align: middle; margin-left: 8px; }
@@ -173,6 +201,13 @@ const sources = [...new Set([f.url, ...(g?.sources ?? [])]), ...(deck.length ? [
   .umc-chip-attack { --tc: #e5484d; } .umc-chip-defense { --tc: #3e7bd6; } .umc-chip-versatile { --tc: #8b5cc9; } .umc-chip-scheme { --tc: #e8b10f; }
   .f-deck { max-width: none; }
   .f-deck > p { max-width: 760px; }
+  .umc-big { padding: 18px; border: 2px solid var(--line); border-radius: 16px; background: var(--surface); color: var(--ink); max-width: min(460px, 92vw); max-height: 92vh; overflow: auto; }
+  .umc-big::backdrop { background: rgba(10, 10, 14, .7); }
+  .umc-big img { display: block; width: min(420px, 82vw); height: auto; border-radius: 14px; }
+  .umc-big.is-small img { width: min(260px, 70vw); margin: 0 auto; }
+  .umc-big-text { font-size: .9rem; line-height: 1.45; }
+  .umc-big-text :global(.umc-under) { margin-top: 12px; font-size: .9rem; color: var(--ink); }
+  .umc-big-close { position: absolute; top: 6px; right: 6px; width: 34px; height: 34px; border: 2px solid var(--line); border-radius: 50%; background: var(--surface); color: var(--ink); font-size: 1.3rem; line-height: 1; cursor: pointer; z-index: 1; }
   .f-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 18px 14px; margin: 14px 0 0; padding: 8px 6px 0 0; }
   .f-empty { padding: 16px; border: 2px dashed var(--soft-line); border-radius: 14px; color: var(--muted); }
   .f-back { margin-top: 32px; }

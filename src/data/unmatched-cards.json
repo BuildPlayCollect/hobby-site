@@ -5036,7 +5036,7 @@
      "qty": 2,
      "who": "ELEKTRA",
      "text": {
-      "after": "Elektra takes 3 damage.RESURRECTED: Elektra takes no damage instead."
+      "after": "Elektra takes 3 damage. RESURRECTED: Elektra takes no damage instead."
      },
      "img": "/images/unmatched/cards/elektra/mystic-assassin.webp",
      "small": true
@@ -5149,7 +5149,7 @@
      "qty": 2,
      "who": "ELEKTRA",
      "text": {
-      "basic": "Choose an opponent and look at their hand. Gain 1 action.RESURRECTED: Choose 1 card for them to discard."
+      "basic": "Choose an opponent and look at their hand. Gain 1 action. RESURRECTED: Choose 1 card for them to discard."
      },
      "img": "/images/unmatched/cards/elektra/mesmerize.webp",
      "small": true
@@ -5306,7 +5306,7 @@
      "qty": 2,
      "who": "BULLSEYE",
      "text": {
-      "basic": "Draw 2 cards.If you won a combat this turn, draw 1 additional card and gain 1 action."
+      "basic": "Draw 2 cards. If you won a combat this turn, draw 1 additional card and gain 1 action."
      },
      "img": "/images/unmatched/cards/bullseye/study-the-target.webp",
      "small": true
