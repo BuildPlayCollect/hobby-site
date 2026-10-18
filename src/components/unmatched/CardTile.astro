@@ -18,7 +18,9 @@ const summary = [TYPE[card.type], card.value != null && `value ${card.value}`, c
 <li class={`umc umc-${card.type}`} id={`card-${card.slug}`}>
   {card.img ? (
     <>
-      <img src={card.img} alt={`${card.title}: ${summary}. ${parts.map((p) => (p.label ? p.label + ': ' : '') + p.text).join(' ')}`} width="400" height="560" loading="lazy" decoding="async" />
+      <button type="button" class="umc-open" data-small={card.small ? '' : undefined} aria-label={`Enlarge ${card.title}`}>
+        <img src={card.img} alt={`${card.title}: ${summary}. ${parts.map((p) => (p.label ? p.label + ': ' : '') + p.text).join(' ')}`} width="400" height="560" loading="lazy" decoding="async" />
+      </button>
       {card.small && (
         <div class="umc-under" aria-hidden="true">{parts.map((p) => <p>{p.label && <b>{p.label}: </b>}{p.text}</p>)}</div>
       )}
@@ -43,6 +45,9 @@ const summary = [TYPE[card.type], card.value != null && `value ${card.value}`, c
   .umc { position: relative; list-style: none; scroll-margin-top: 90px; display: flex; flex-direction: column; }
   .umc > .umc-face { flex: 1; }
   .umc:target .umc-face, .umc:target img { outline: 4px solid var(--c2, var(--c1)); outline-offset: 3px; }
+  .umc-open { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: 12px; transition: transform .15s; }
+  .umc-open:hover { transform: translateY(-2px); }
+  .umc-open:focus-visible { outline: 3px solid var(--c1); outline-offset: 3px; }
   .umc img { display: block; width: 100%; height: auto; border-radius: 12px; border: 2px solid var(--line); background: var(--surface-2); }
   .umc-under { margin-top: 6px; font-size: .74rem; line-height: 1.35; color: var(--muted); }
   .umc-under p { margin: 0 0 4px; }
