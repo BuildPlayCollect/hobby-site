@@ -1,0 +1,216 @@
+---
+// The Unmatched hub (/boardgames/unmatched): learn to play, the rules, a tier list and every fighter.
+// All facts live in src/data/unmatched.ts, each with its source.
+import Base from '../../../layouts/Base.astro';
+import Badge from '../../../components/unmatched/Badge.astro';
+import { UM_SETS, UM_FIGHTERS, UM_TIER_SOURCE, UM_RULES, UM_RULEBOOKS, UM_TIPS, UM_STARTER_SETS, UM_UPCOMING } from '../../../data/unmatched';
+import { TIERS, byTier, fewGames, fighterUrl, displayName, lineColor } from '../../../lib/unmatched';
+
+const fmtMonth = (m: string) => new Date(m + '-01T00:00:00Z').toLocaleDateString('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+const fmtDay = (d: string) => new Date(d + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+// Newest boxes first.
+const sets = [...UM_SETS].sort((a, b) => b.released.localeCompare(a.released));
+const inSet = (id: string) => UM_FIGHTERS.filter((f) => f.set === id);
+const host = (u: string) => new URL(u).hostname.replace(/^www\./, '');
+const ruleLabel = (u: string) => (u.includes('BaB') ? 'Marvel: Brains and Brawn rulebook' : u.includes('RobinHood') ? 'Robin Hood vs. Bigfoot rulebook' : 'Restoration Games rulebook');
+const TIER_WORDS: Record<string, string> = {
+  S: 'Wins the most', A: 'Strong', B: 'Solid', C: 'Needs practice', D: 'Hard mode',
+};
+const TIER_RANGE: Record<string, string> = { S: '56% or more', A: '53–56%', B: '50–53%', C: '47–50%', D: 'under 47%' };
+const guides = UM_FIGHTERS.filter((f) => f.guide).length;
+---
+<Base title="Unmatched: learn to play, tier list and every fighter" description={`Unmatched in one place: how to play, the core rules, a tier list from ${UM_TIER_SOURCE.games.toLocaleString('en-GB')} real games, and all ${UM_FIGHTERS.length} fighters with tips for each deck.`}>
+  <header class="page-head">
+    <p class="kicker"><a class="tag" href="/boardgames">Board games</a></p>
+    <h1>Unmatched</h1>
+    <p>Two heroes who should never meet, one small board, and a deck of cards each. Medusa vs. Spider-Man? Sherlock Holmes vs. a T. Rex? In Unmatched, that's a Tuesday.</p>
+  </header>
+
+  <nav class="um-jump" aria-label="On this page">
+    <a href="#start">New? Start here</a><a href="#rules">Rules</a><a href="#tiers">Tier list</a><a href="#fighters">All {UM_FIGHTERS.length} fighters</a><a href="#next">Coming soon</a>
+  </nav>
+
+  <!-- Learn to play -->
+  <section id="start" class="um-section">
+    <div class="section-head"><h2>New to Unmatched? Start here</h2></div>
+    <p class="um-lead">Each player picks a hero. Your hero comes with their own deck of cards, and sometimes a sidekick or two. Take turns moving, scheming and attacking. Knock out the other hero and you win, simple as that.</p>
+    <ol class="um-steps">
+      <li>
+        <h3>Pick a box</h3>
+        <ul class="um-list">
+          {UM_STARTER_SETS.map((s) => <li><strong>{s.set}.</strong> <span>{s.claim} <a href={s.source}>(source)</a></span></li>)}
+        </ul>
+      </li>
+      <li>
+        <h3>Set up in a minute</h3>
+        <p>{UM_RULES.find((r) => r.topic === 'Setup')?.text}</p>
+      </li>
+      <li>
+        <h3>Take 2 actions a turn</h3>
+        <p>Every turn you do exactly two things, and you can do the same one twice:</p>
+        <ul class="um-list">
+          <li><strong>Maneuver.</strong> <span>Draw a card, then move. You can throw away a card to move further (that's a <em>boost</em>).</span></li>
+          <li><strong>Scheme.</strong> <span>Play a scheme card for its special effect.</span></li>
+          <li><strong>Attack.</strong> <span>Play an attack card face down. Your opponent can answer with a defense card. Flip them both, and the difference is the damage.</span></li>
+        </ul>
+        <p class="um-hint">Full details are in the <a href="#rules">rules</a> below.</p>
+      </li>
+      <li>
+        <h3>Tips from people who play a lot</h3>
+        <ul class="um-list">
+          {UM_TIPS.map((t) => <li><span>{t.tip} <a href={t.source}>({t.author})</a></span></li>)}
+        </ul>
+      </li>
+      <li>
+        <h3>Pick a fighter and read their guide</h3>
+        <p>Every fighter below has a page with their stats and what makes them special{guides > 0 ? `, and ${guides} have a play guide with card combos` : ''}. The <a href="#tiers">tier list</a> shows who wins the most, but any fighter can win in the right hands.</p>
+      </li>
+    </ol>
+  </section>
+
+  <!-- Rules -->
+  <section id="rules" class="um-section">
+    <div class="section-head"><h2>The rules, in plain words</h2></div>
+    <p class="um-note">The core rules every set shares. Some heroes break a rule or two on purpose, and their card always wins.</p>
+    <div class="um-rules">
+      {UM_RULES.map((r) => (
+        <div class="um-rule">
+          <h3>{r.topic}</h3>
+          <p>{r.text}</p>
+        </div>
+      ))}
+    </div>
+    <p class="um-source">Sources: {UM_RULEBOOKS.map((u) => <a href={u}>{ruleLabel(u)}</a>)} (Restoration Games). Always check the rulebook in your own box too.</p>
+  </section>
+
+  <!-- Tier list -->
+  <section id="tiers" class="um-section">
+    <div class="section-head"><h2>Tier list</h2></div>
+    <p class="um-note">Ranked by each fighter's average win rate across all their matchups, from {UM_TIER_SOURCE.games.toLocaleString('en-GB')} online games played on {UM_TIER_SOURCE.from} (data as of {fmtDay(UM_TIER_SOURCE.asOf)}). Tiers show what wins most often, not what's most fun. A <span class="um-few">*</span> means the fighter hasn't played enough games yet for the number to mean much.</p>
+    <div class="um-tiers">
+      {TIERS.map((t) => (
+        <div class={`um-tier um-tier-${t}`}>
+          <div class="um-tier-label"><strong>{t}</strong><span>{TIER_WORDS[t]}</span><small>{TIER_RANGE[t]}</small></div>
+          <ul>
+            {byTier(t).map((f) => (
+              <li>
+                <a href={fighterUrl(f)} title={`${displayName(f)}: ${f.tier!.win}% average win rate`}>
+                  <Badge fighter={f} size={40} />
+                  <span><b>{displayName(f)}</b><small>{f.tier!.win}%{fewGames(f) && <span class="um-few">*</span>}</small></span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+    <p class="um-source">Source: <a href={UM_TIER_SOURCE.url}>{UM_TIER_SOURCE.name}</a> (a fan site, not Restoration Games), using games from Tabletop League and UnmatchedRu. {UM_FIGHTERS.filter((f) => !f.tier).map(displayName).join(', ')} {UM_FIGHTERS.filter((f) => !f.tier).length === 1 ? 'is' : 'are'} not ranked yet.</p>
+  </section>
+
+  <!-- Every fighter, by box -->
+  <section id="fighters" class="um-section">
+    <div class="section-head"><h2>Every fighter</h2></div>
+    <p class="um-note">{UM_FIGHTERS.length} fighters from {UM_SETS.length} boxes, newest first. The badge colour shows the family of boxes, and the little icon shows <span class="um-key">sword = melee</span> or <span class="um-key">arrow = ranged</span>. Tap a fighter for their guide.</p>
+    <div class="um-sets">
+      {sets.map((s) => (
+        <section class="um-set" style={`--c:${lineColor(s.line)}`}>
+          <h3>{s.short} <small>{fmtMonth(s.released)}</small></h3>
+          <ul class="um-cards">
+            {inSet(s.id).map((f) => (
+              <li>
+                <a href={fighterUrl(f)}>
+                  <Badge fighter={f} size={48} />
+                  <span class="um-card-text">
+                    <strong>{displayName(f)}</strong>
+                    <small>
+                      {f.health != null ? `${f.health} health` : 'Stats not confirmed'}
+                      {f.move != null && ` · move ${f.move}`}
+                      {f.attack && ` · ${f.attack}`}
+                    </small>
+                    {f.tier && <span class={`um-pill um-pill-${f.tier.tier}`}>Tier {f.tier.tier}</span>}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
+    <p class="um-source">Fighter stats: <a href="https://www.the-unmatched.club/">The Unmatched Club</a> (fan site). Each fighter's page links the exact source.</p>
+  </section>
+
+  <!-- Coming soon -->
+  <section id="next" class="um-section">
+    <div class="section-head"><h2>Coming soon</h2></div>
+    <ul class="um-next">
+      {UM_UPCOMING.map((u) => (
+        <li><strong>{u.name.replace(/^Unmatched( Adventures)?: /, '')}</strong><span>{u.status}.{u.heroes && ` Heroes: ${u.heroes.join(', ')}.`} <a href={u.url}>Source</a></span></li>
+      ))}
+    </ul>
+    <p class="um-source">Dates can move, so check the publisher before you buy.</p>
+  </section>
+</Base>
+
+<style>
+  .um-jump { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 24px; }
+  .um-jump a { padding: 6px 14px; border: 2px solid var(--line); border-radius: 999px; font-weight: 700; font-size: .85rem; color: var(--ink); background: var(--surface); }
+  .um-jump a:hover { text-decoration: none; background: var(--mark); color: #1b1a1f; }
+  .um-section { margin-top: 44px; }
+  .um-lead { font-size: 1.05rem; max-width: 70ch; }
+  .um-note { color: var(--muted); font-size: .9rem; margin: 0 0 14px; max-width: 80ch; }
+  .um-source { color: var(--muted); font-size: .82rem; margin: 12px 0 0; }
+  .um-source a + a::before { content: ", "; color: var(--muted); }
+  .um-hint { color: var(--muted); font-size: .85rem; margin: 6px 0 0; }
+  .um-steps { list-style: none; counter-reset: step; margin: 16px 0 0; padding: 0; display: grid; gap: 12px; }
+  .um-steps > li { counter-increment: step; position: relative; padding: 16px 18px 16px 62px; border: 2px solid var(--line); border-radius: 16px; background: var(--surface); }
+  .um-steps > li::before { content: counter(step); position: absolute; left: 16px; top: 14px; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; background: var(--c1); color: #fff; font-family: var(--display); font-weight: 800; }
+  .um-steps h3 { margin: 0 0 6px; font-size: 1.1rem; }
+  .um-steps p { margin: 0 0 8px; }
+  .um-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+  .um-list li { padding: 6px 0; border-top: 1px solid var(--soft-line); }
+  .um-list li:first-child { border-top: 0; }
+  .um-list a { font-size: .82rem; color: var(--muted); }
+  .um-rules { columns: 3 280px; column-gap: 10px; }
+  .um-rule { break-inside: avoid; margin-bottom: 10px; border: 2px solid var(--line); border-radius: 14px; background: var(--surface); padding: 12px 16px; }
+  .um-rule h3 { margin: 0 0 4px; font-size: 1rem; }
+  .um-rule p { margin: 0; font-size: .92rem; }
+  .um-tiers { display: grid; gap: 8px; }
+  .um-tier { display: grid; grid-template-columns: 120px 1fr; border: 2px solid var(--line); border-radius: 16px; background: var(--surface); overflow: hidden; }
+  .um-tier-label { display: grid; align-content: center; justify-items: center; gap: 2px; padding: 12px 8px; background: var(--tc); color: #1b1a1f; text-align: center; border-right: 2px solid var(--line); }
+  .um-tier-label strong { font-family: var(--display); font-size: 2rem; line-height: 1; }
+  .um-tier-label span { font-weight: 800; font-size: .8rem; }
+  .um-tier-label small { font-size: .72rem; opacity: .8; }
+  .um-tier-S { --tc: #ff7b72; } .um-tier-A { --tc: #ffb36b; } .um-tier-B { --tc: #ffe06b; } .um-tier-C { --tc: #b9e66f; } .um-tier-D { --tc: #8fd3f4; }
+  .um-tier ul { list-style: none; margin: 0; padding: 10px; display: flex; flex-wrap: wrap; gap: 6px; align-content: center; }
+  .um-tier a { display: flex; align-items: center; gap: 8px; padding: 4px 12px 4px 4px; border-radius: 999px; color: var(--ink); border: 2px solid transparent; transition: transform .15s, border-color .15s; }
+  .um-tier a:hover { text-decoration: none; border-color: var(--line); transform: translateY(-2px); }
+  .um-tier a > span { display: grid; line-height: 1.15; }
+  .um-tier b { font-size: .88rem; }
+  .um-tier small { color: var(--muted); font-size: .76rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .um-few { color: var(--c1); font-weight: 800; margin-left: 1px; }
+  .um-key { font-weight: 700; white-space: nowrap; }
+  .um-sets { display: grid; gap: 18px; }
+  .um-set h3 { display: flex; align-items: baseline; gap: 10px; margin: 0 0 8px; padding-left: 12px; border-left: 6px solid var(--c); font-size: 1.15rem; }
+  .um-set h3 small { color: var(--muted); font-weight: 600; font-size: .82rem; }
+  .um-cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+  .um-cards a { display: flex; align-items: center; gap: 12px; height: 100%; padding: 10px 12px; border: 2px solid var(--line); border-radius: 16px; background: var(--surface); color: var(--ink); transition: transform .15s, box-shadow .15s; }
+  .um-cards a:hover { text-decoration: none; transform: translateY(-3px); box-shadow: var(--lift); }
+  .um-card-text { display: grid; gap: 2px; justify-items: start; }
+  .um-card-text strong { line-height: 1.15; }
+  .um-card-text small { color: var(--muted); font-size: .8rem; }
+  .um-pill { font-size: .7rem; font-weight: 800; padding: 1px 8px; border-radius: 99px; border: 1.5px solid var(--line); color: #1b1a1f; }
+  .um-pill-S { background: #ff7b72; } .um-pill-A { background: #ffb36b; } .um-pill-B { background: #ffe06b; } .um-pill-C { background: #b9e66f; } .um-pill-D { background: #8fd3f4; }
+  .um-next { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+  .um-next li { display: grid; gap: 4px; padding: 14px 16px; border: 2px dashed var(--soft-line); border-radius: 14px; }
+  .um-next span { color: var(--muted); font-size: .88rem; }
+  @media (max-width: 560px) {
+    .um-steps > li { padding: 56px 14px 14px; }
+    .um-tier { grid-template-columns: 1fr; }
+    .um-tier-label { grid-auto-flow: column; justify-content: start; gap: 10px; border-right: 0; border-bottom: 2px solid var(--line); padding: 8px 14px; }
+    .um-tier-label strong { font-size: 1.4rem; }
+    .um-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    .um-cards a { flex-direction: column; align-items: flex-start; gap: 6px; padding: 10px; }
+    .um-cards :global(.um-badge) { width: 40px; height: 40px; }
+    .um-card-text small { font-size: .74rem; }
+  }
+</style>

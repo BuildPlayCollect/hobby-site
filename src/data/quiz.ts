@@ -10,7 +10,7 @@ export interface QuizQuestion { question: string; answers: QuizAnswer[] }
 // so the quiz is a little different every time someone takes it.
 export const QUIZ_LENGTH = 5;
 
-// The question pool. Fairness rule: in every question, each of the 6 hobbies gets exactly
+// The question pool. Fairness rule: in every question, each of the 7 hobbies gets exactly
 // 1 point from exactly one answer. That way any random mix of questions is fair to every hobby.
 // To add a question, copy one below and keep that rule (the build checks it).
 export const QUIZ: QuizQuestion[] = [
@@ -19,6 +19,7 @@ export const QUIZ: QuizQuestion[] = [
     answers: [
       { text: 'Taking something apart to see how it works', points: { tamiya: 1, keyboards: 1 } },
       { text: 'Challenging a friend to a quick match', points: { beyblade: 1, tcg: 1 } },
+      { text: 'Hosting a game night at my place', points: { boardgames: 1 } },
       { text: 'Gaming until the sun goes down', points: { consoles: 1 } },
       { text: 'Watching a big tournament stream', points: { esports: 1 } },
     ],
@@ -32,12 +33,13 @@ export const QUIZ: QuizQuestion[] = [
       { text: 'Shuffling a deck before a match', points: { tcg: 1 } },
       { text: 'The startup chime of an old console', points: { consoles: 1 } },
       { text: 'A crowd going wild after a team fight', points: { esports: 1 } },
+      { text: 'Dice rolling across a table', points: { boardgames: 1 } },
     ],
   },
   {
     question: 'Your favourite kind of win?',
     answers: [
-      { text: 'Out-thinking my opponent', points: { tcg: 1, esports: 1 } },
+      { text: 'Out-thinking my opponent', points: { tcg: 1, esports: 1, boardgames: 1 } },
       { text: 'Building something better than last time', points: { tamiya: 1, keyboards: 1 } },
       { text: 'A fast, loud, dramatic finish', points: { beyblade: 1 } },
       { text: 'Finally tracking down a game I wanted for years', points: { consoles: 1 } },
@@ -49,6 +51,7 @@ export const QUIZ: QuizQuestion[] = [
       { text: 'A little at a time, upgrading as I go', points: { tamiya: 1, beyblade: 1 } },
       { text: 'One big project, done properly', points: { keyboards: 1 } },
       { text: 'Packs and surprises, please', points: { tcg: 1 } },
+      { text: 'One box that friends can share', points: { boardgames: 1 } },
       { text: "As little as possible, I'll play what I have", points: { esports: 1, consoles: 1 } },
     ],
   },
@@ -60,6 +63,7 @@ export const QUIZ: QuizQuestion[] = [
       { text: 'A desk setup that sparks joy', points: { keyboards: 1 } },
       { text: 'Climbing the ranked ladder', points: { esports: 1 } },
       { text: 'A shelf full of classics', points: { consoles: 1 } },
+      { text: 'A table full of friends', points: { boardgames: 1 } },
     ],
   },
   {
@@ -71,6 +75,7 @@ export const QUIZ: QuizQuestion[] = [
       { text: 'Fixing anything with my hands', points: { keyboards: 1 } },
       { text: 'Never getting tired of a good story', points: { consoles: 1 } },
       { text: 'Perfect balance, no matter what hits me', points: { beyblade: 1 } },
+      { text: 'Seeing my opponent\'s next move coming', points: { boardgames: 1 } },
     ],
   },
   {
@@ -82,6 +87,7 @@ export const QUIZ: QuizQuestion[] = [
       { text: 'A controller within arm\'s reach', points: { consoles: 1 } },
       { text: 'Two monitors and a headset', points: { esports: 1 } },
       { text: 'A little arena and a launcher', points: { beyblade: 1 } },
+      { text: 'A board, some cards and a few little figures', points: { boardgames: 1 } },
     ],
   },
   {
@@ -89,6 +95,7 @@ export const QUIZ: QuizQuestion[] = [
     answers: [
       { text: 'A racing movie', points: { tamiya: 1 } },
       { text: 'A heist where every step is planned', points: { tcg: 1 } },
+      { text: 'A crossover where heroes from different stories fight', points: { boardgames: 1 } },
       { text: 'A sports underdog story', points: { esports: 1, beyblade: 1 } },
       { text: 'A cosy retro classic', points: { consoles: 1 } },
       { text: 'A "how it\'s made" documentary', points: { keyboards: 1 } },
@@ -99,6 +106,7 @@ export const QUIZ: QuizQuestion[] = [
     answers: [
       { text: 'Swap a part and go again', points: { beyblade: 1, tamiya: 1 } },
       { text: 'Rethink my whole strategy', points: { tcg: 1 } },
+      { text: 'Ask for a rematch with a different hero', points: { boardgames: 1 } },
       { text: 'Watch the replay and find my mistake', points: { esports: 1 } },
       { text: 'Take a break with a different game', points: { consoles: 1 } },
       { text: 'Losing? I was building, not competing', points: { keyboards: 1 } },
@@ -113,6 +121,7 @@ export const QUIZ: QuizQuestion[] = [
       { text: 'The designer who makes it look good', points: { keyboards: 1 } },
       { text: 'The one who goes first and goes big', points: { beyblade: 1 } },
       { text: 'The one who knows every old game', points: { consoles: 1 } },
+      { text: 'The one who explains the rules to everyone', points: { boardgames: 1 } },
     ],
   },
   {
@@ -121,13 +130,13 @@ export const QUIZ: QuizQuestion[] = [
       { text: 'A few minutes here and there', points: { beyblade: 1 } },
       { text: 'An evening at a time', points: { esports: 1, consoles: 1 } },
       { text: 'Whole weekends on one project', points: { keyboards: 1, tamiya: 1 } },
-      { text: 'A long match with a friend', points: { tcg: 1 } },
+      { text: 'A long match with a friend', points: { tcg: 1, boardgames: 1 } },
     ],
   },
   {
     question: 'Pick a place to hang out.',
     answers: [
-      { text: 'A hobby shop with a play area', points: { beyblade: 1, tcg: 1 } },
+      { text: 'A hobby shop with a play area', points: { beyblade: 1, tcg: 1, boardgames: 1 } },
       { text: 'A race track', points: { tamiya: 1 } },
       { text: 'A cosy room with good lighting', points: { keyboards: 1 } },
       { text: 'A gaming café', points: { esports: 1 } },
@@ -143,6 +152,7 @@ export const QUIZ: QuizQuestion[] = [
       { text: 'Competitor', points: { esports: 1 } },
       { text: 'Collector', points: { consoles: 1 } },
       { text: 'Battler', points: { beyblade: 1 } },
+      { text: 'Tactician', points: { boardgames: 1 } },
     ],
   },
   {
@@ -154,6 +164,7 @@ export const QUIZ: QuizQuestion[] = [
       { text: 'My rank', points: { esports: 1 } },
       { text: 'A console older than me that still works', points: { consoles: 1 } },
       { text: 'My best combo and who it beat', points: { beyblade: 1 } },
+      { text: 'My favourite hero and their best comeback', points: { boardgames: 1 } },
     ],
   },
   {
@@ -165,12 +176,13 @@ export const QUIZ: QuizQuestion[] = [
       { text: 'Build a new deck and test it', points: { tcg: 1 } },
       { text: 'Finish a game I started years ago', points: { consoles: 1 } },
       { text: 'Reach a new rank', points: { esports: 1 } },
+      { text: 'Teach a friend a new board game', points: { boardgames: 1 } },
     ],
   },
 ];
 
 // The build stops with a clear message if a question breaks the fairness rule above.
-const QUIZ_HOBBIES: HobbyKey[] = ['beyblade', 'tamiya', 'keyboards', 'tcg', 'consoles', 'esports'];
+const QUIZ_HOBBIES: HobbyKey[] = ['beyblade', 'tamiya', 'keyboards', 'tcg', 'consoles', 'esports', 'boardgames'];
 for (const q of QUIZ) {
   for (const h of QUIZ_HOBBIES) {
     const total = q.answers.reduce((sum, a) => sum + (a.points[h] ?? 0), 0);
@@ -186,4 +198,5 @@ export const QUIZ_RESULTS: Partial<Record<HobbyKey, string>> = {
   tcg: "You're a strategist who loves a surprise. Trading card games mix deck-building brains with the thrill of opening packs.",
   consoles: "You love games and the machines that play them. Old or new, consoles are part playing, part collecting.",
   esports: "You're here for the competition and the hype. Esports is something you can play, watch, or both, often for free.",
+  boardgames: "You love a battle of wits with real people across a real table. Board games like Unmatched pack big strategy into one box you can share.",
 };
