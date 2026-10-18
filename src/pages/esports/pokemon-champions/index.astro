@@ -5,6 +5,7 @@ import Base from '../../../layouts/Base.astro';
 import Mon from '../../../components/champions/Mon.astro';
 import { GAME, REGULATIONS, VGC_RULES, REGULATION_SOURCES, EVENTS, EVENT_SOURCES, RESULTS, USAGE_FORMATS } from '../../../data/champions';
 import { getUsage } from '../../../lib/champions-usage';
+import { toID } from '@smogon/calc';
 
 const [doubles, singles] = await Promise.all([
   getUsage(USAGE_FORMATS.doubles.id, USAGE_FORMATS.rating),
@@ -23,6 +24,11 @@ const today = new Date().toISOString().slice(0, 10);
 const upcoming = EVENTS.filter((e) => e.to >= today);
 const current = REGULATIONS.find((r) => r.current) ?? REGULATIONS[0];
 const top = (n: number) => Math.max(n, 1);
+// Real top 8 teams from RESULTS that include this Pokémon, best finish first.
+const seenAt = (name: string) => RESULTS.flatMap((ev) => ev.top.map((t, i) => ({ ...t, place: i + 1, event: ev.name.replace(/ Regional$/, '') })))
+  .filter((t) => t.team.some((n) => toID(n) === toID(name)))
+  .sort((a, b) => a.place - b.place);
+const ordinal = (n: number) => (n === 1 ? '1st' : n === 2 ? '2nd' : n === 3 ? '3rd' : `${n}th`);
 ---
 <Base title="Pokémon Champions VGC" description="Pokémon Champions in one place: the current VGC rules, usage leaderboards for Doubles and Singles, top teams from Regionals, upcoming events and a damage calculator.">
   <header class="page-head">
@@ -52,7 +58,7 @@ const top = (n: number) => Math.max(n, 1);
     </div>
     {boards.map((b, i) => (
       <div class="pc-board" data-board={b.key} hidden={i !== 0}>
-        <p class="pc-note">{b.title}. Share of teams using each Pokémon, from {b.data ? `${b.data.battles.toLocaleString('en-GB')} battles in ${monthName(b.data.month)}` : 'Pokémon Showdown'} by players rated {USAGE_FORMATS.rating}+. Tap a Pokémon to see its moves, items and partners.</p>
+        <p class="pc-note">{b.title}. Share of teams using each Pokémon, from {b.data ? `${b.data.battles.toLocaleString('en-GB')} battles in ${monthName(b.data.month)}` : 'Pokémon Showdown'} by players rated {USAGE_FORMATS.rating}+. Tap a Pokémon to see its moves, items and usual team.</p>
         {b.data ? (
           <ol class="pc-usage">
             {b.data.rows.map((r) => (
@@ -69,9 +75,29 @@ const top = (n: number) => Math.max(n, 1);
                       {[['Moves', r.moves], ['Items', r.items], ['Abilities', r.abilities]].map(([title, list]) => (list as typeof r.moves).length > 0 && (
                         <div><h4>{title}</h4><ul>{(list as typeof r.moves).map((m) => <li><span>{m.name}</span><b>{m.pct.toFixed(1)}%</b></li>)}</ul></div>
                       ))}
-                      {r.teammates.length > 0 && <div><h4>Common partners</h4><div class="pc-mates">{r.teammates.map((m) => <Mon name={m.name} size="sm" />)}</div></div>}
                     </div>
-                  ) : <p class="pc-note">No move details for this one yet.</p>}
+                  ) : <p class="pc-note pc-pad">No move details for this one yet.</p>}
+                  {r.teammates.length > 0 && (
+                    <div class="pc-teamblock">
+                      <h4>Usual team</h4>
+                      <div class="pc-team">{[r.name, ...r.teammates.slice(0, 5).map((m) => m.name)].map((n) => <Mon name={n} size="sm" />)}</div>
+                      <p class="pc-hint">{r.name.replace(/-/g, ' ')} plus the 5 Pokémon most often on the same team in these battles.</p>
+                    </div>
+                  )}
+                  {seenAt(r.name).length > 0 && (
+                    <div class="pc-teamblock">
+                      <h4>Regionals top 8 teams with it</h4>
+                      <ul class="pc-seen">
+                        {seenAt(r.name).slice(0, 3).map((t) => (
+                          <li>
+                            <span class="pc-seen-who">{ordinal(t.place)} {t.p} <small>{t.event}</small></span>
+                            <span class="pc-team">{t.team.map((n) => <Mon name={n} size="sm" />)}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <p class="pc-hint">Top 8 teams from recent Regionals (see <a href="#teams">Top teams</a>).</p>
+                    </div>
+                  )}
                 </details>
               </li>
             ))}
@@ -201,7 +227,14 @@ const top = (n: number) => Math.max(n, 1);
   .pc-detail ul { list-style: none; margin: 0; padding: 0; }
   .pc-detail li { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; border-bottom: 1px solid var(--soft-line); font-size: .9rem; }
   .pc-detail b { font-variant-numeric: tabular-nums; }
-  .pc-mates { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pc-pad { padding: 14px 16px 0; }
+  .pc-teamblock { padding: 0 16px 16px; }
+  .pc-teamblock h4 { margin: 0 0 8px; font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .pc-hint { margin: 6px 0 0; color: var(--muted); font-size: .8rem; }
+  .pc-seen { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .pc-seen li { display: grid; grid-template-columns: minmax(150px, 220px) 1fr; gap: 6px 10px; align-items: center; }
+  .pc-seen-who { font-weight: 700; font-size: .9rem; }
+  .pc-seen-who small { color: var(--muted); font-weight: 600; margin-left: 4px; }
   .pc-event { border: 2px solid var(--line); border-radius: 16px; background: var(--surface); margin-bottom: 12px; padding: 0 16px; }
   .pc-event > summary { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; padding: 14px 0; cursor: pointer; }
   .pc-event > summary strong { font-family: var(--display); font-size: 1.15rem; }
@@ -240,6 +273,7 @@ const top = (n: number) => Math.max(n, 1);
     .pc-usage summary { grid-template-columns: 26px 1fr 54px; }
     .pc-bar { grid-column: 2 / -1; grid-row: 2; }
     .pc-teams li { grid-template-columns: 22px 1fr; }
+    .pc-seen li { grid-template-columns: 1fr; }
     .pc-team { grid-column: 1 / -1; }
   }
 
