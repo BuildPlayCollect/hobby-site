@@ -370,6 +370,8 @@ a.tile:hover { text-decoration: none; background: var(--surface-2); }
 .footer-grid p { max-width: 36ch; }
 .footer-word { font-family: var(--display); text-transform: uppercase; font-size: clamp(2.2rem, 10.6vw, 9.6rem); line-height: .82; color: transparent; -webkit-text-stroke: 1px #3a3935; margin: 44px 0 0; white-space: nowrap; text-align: center; user-select: none; transition: color .4s; }
 .footer-word:hover { color: var(--lime); -webkit-text-stroke-color: var(--lime); }
+.footer-note { margin: 22px 0 0; max-width: 90ch; font-size: .8rem; line-height: 1.5; opacity: .75; }
+.footer-note a { color: inherit; text-decoration: underline; }
 .footer-base { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 18px; padding-top: 14px; border-top: 1px solid #2a2a27; font-family: var(--mono); font-size: .68rem; text-transform: uppercase; letter-spacing: .08em; }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
