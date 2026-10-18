@@ -862,6 +862,8 @@ a.tile:hover { background: var(--surface); transform: translate(-2px, -2px); box
 /* Play: two small game cards */
 .play2 { display: grid; gap: 18px; }
 @media (min-width: 760px) { .play2 { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1100px) { .play2 { grid-template-columns: repeat(3, 1fr); } }
+.play2-emoji img { width: 46px; height: 46px; object-fit: contain; }
 .play2 a { display: flex; align-items: center; gap: 18px; padding: 20px 22px; border: var(--edge); border-color: #1b1a1f; border-radius: 22px; background: var(--c); color: #1b1a1f; box-shadow: var(--lift); transition: transform .15s, box-shadow .15s; }
 .play2 a:hover { text-decoration: none; transform: translate(-2px, -2px); box-shadow: 6px 6px 0 #1b1a1f; }
 .play2-emoji { flex: none; display: grid; place-items: center; width: 58px; height: 58px; border-radius: 16px; background: #fff; border: var(--edge); border-color: #1b1a1f; font-family: var(--display); font-weight: 800; font-size: 1.7rem; }
@@ -921,6 +923,7 @@ a.tile:hover { background: var(--surface); transform: translate(-2px, -2px); box
 :root:not([data-colorway="hobby"]) .play2 a:nth-child(2) { --c: var(--c2) !important; --on-c: #1b1a1f; }
 :root:not([data-colorway="hobby"]) .play2 a:nth-child(1) { --c: var(--c1) !important; --on-c: #ffffff; }
 :root:not([data-colorway="hobby"]) .play2 a:nth-child(1) .play2-emoji { color: #1b1a1f; }
+:root:not([data-colorway="hobby"]) .play2 a:nth-child(3) { --c: var(--c3) !important; --on-c: #1b1a1f; }
 :root:not([data-colorway="hobby"]) .site-footer { background: var(--foot); }
 :root:not([data-colorway="hobby"]) .logo-mark { background: var(--c1); color: #fff; }
 :root:not([data-colorway="hobby"]) .hl { color: #1b1a1f; }
