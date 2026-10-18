@@ -92,6 +92,29 @@ const PART_CARDS = [
     </>
   )}
 
+  {title === 'Esports' && (
+    <>
+      <div class="section-head"><h2>Pokémon Champions VGC</h2><a class="more" href="/esports/pokemon-champions">Open the hub →</a></div>
+      <div class="rules-list parts-cards">
+        <a class="rules-item" href="/esports/pokemon-champions#usage">
+          <span class="badge badge-official">Updated monthly</span>
+          <strong>Usage leaderboards</strong>
+          <small>The most used Pokémon in Doubles and Singles, with their top moves, items and partners.</small>
+        </a>
+        <a class="rules-item" href="/esports/pokemon-champions#teams">
+          <span class="badge badge-official">Regionals</span>
+          <strong>Top teams and events</strong>
+          <small>The top 8 teams from recent Regionals, and what's coming up next.</small>
+        </a>
+        <a class="rules-item" href="/esports/pokemon-champions/calc">
+          <span class="badge badge-official">Free</span>
+          <strong>Damage calculator</strong>
+          <small>See how hard a move hits, with stat points, items, weather and terrain.</small>
+        </a>
+      </div>
+    </>
+  )}
+
   {rulebooks.length > 0 && (
     <>
       <div class="section-head"><h2>{title} tournament rules</h2><a class="more" href="/rules">All rules →</a></div>

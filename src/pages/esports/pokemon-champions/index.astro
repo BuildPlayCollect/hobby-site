@@ -1,0 +1,254 @@
+---
+// The Pokémon Champions VGC hub (/esports/pokemon-champions).
+// Hand-edited facts live in src/data/champions.ts; usage stats are fetched from Smogon at build time.
+import Base from '../../../layouts/Base.astro';
+import Mon from '../../../components/champions/Mon.astro';
+import { GAME, REGULATIONS, VGC_RULES, REGULATION_SOURCES, EVENTS, EVENT_SOURCES, RESULTS, USAGE_FORMATS } from '../../../data/champions';
+import { getUsage } from '../../../lib/champions-usage';
+
+const [doubles, singles] = await Promise.all([
+  getUsage(USAGE_FORMATS.doubles.id, USAGE_FORMATS.rating),
+  getUsage(USAGE_FORMATS.singles.id, USAGE_FORMATS.rating),
+]);
+const boards = [
+  { key: 'doubles', label: 'Doubles', title: USAGE_FORMATS.doubles.label, data: doubles },
+  { key: 'singles', label: 'Singles', title: USAGE_FORMATS.singles.label, data: singles },
+];
+
+const fmt = (d: string, opts: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short', year: 'numeric' }) =>
+  new Date(d + 'T00:00:00Z').toLocaleDateString('en-GB', { ...opts, timeZone: 'UTC' });
+const range = (a: string, b: string) => (a === b ? fmt(a) : `${fmt(a, { day: 'numeric', month: 'short' })} – ${fmt(b)}`);
+const monthName = (m: string) => new Date(m + '-01T00:00:00Z').toLocaleDateString('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+const today = new Date().toISOString().slice(0, 10);
+const upcoming = EVENTS.filter((e) => e.to >= today);
+const current = REGULATIONS.find((r) => r.current) ?? REGULATIONS[0];
+const top = (n: number) => Math.max(n, 1);
+---
+<Base title="Pokémon Champions VGC" description="Pokémon Champions in one place: the current VGC rules, usage leaderboards for Doubles and Singles, top teams from Regionals, upcoming events and a damage calculator.">
+  <header class="page-head">
+    <p class="kicker"><a class="tag" href="/esports">Esports</a></p>
+    <h1>Pokémon Champions VGC</h1>
+    <p>The rules, the most used Pokémon, the teams winning Regionals and what's coming up next. Usage stats refresh by themselves every month.</p>
+  </header>
+
+  <nav class="pc-jump" aria-label="On this page">
+    <a href="#usage">Usage</a><a href="#teams">Top teams</a><a href="#events">Events</a><a href="#rules">Rules</a><a href="/esports/pokemon-champions/calc">Damage calc</a><a href="#about">About the game</a>
+  </nav>
+
+  <section class="pc-now" aria-label="Current rules">
+    <div>
+      <span class="label">Playing now</span>
+      <strong>{current.name}</strong>
+      <span>{range(current.from, current.to)}</span>
+    </div>
+    <a class="pill-btn" href="/esports/pokemon-champions/calc">Open the damage calc →</a>
+  </section>
+
+  <!-- Usage leaderboards -->
+  <section id="usage" class="pc-section">
+    <div class="section-head"><h2>Usage leaderboards</h2></div>
+    <div class="pc-tabs" role="tablist" aria-label="Battle format">
+      {boards.map((b, i) => <button type="button" role="tab" class="pc-tab" aria-selected={i === 0 ? 'true' : 'false'} data-board-tab={b.key}>{b.label}</button>)}
+    </div>
+    {boards.map((b, i) => (
+      <div class="pc-board" data-board={b.key} hidden={i !== 0}>
+        <p class="pc-note">{b.title}. Share of teams using each Pokémon, from {b.data ? `${b.data.battles.toLocaleString('en-GB')} battles in ${monthName(b.data.month)}` : 'Pokémon Showdown'} by players rated {USAGE_FORMATS.rating}+. Tap a Pokémon to see its moves, items and partners.</p>
+        {b.data ? (
+          <ol class="pc-usage">
+            {b.data.rows.map((r) => (
+              <li>
+                <details>
+                  <summary>
+                    <span class="pc-rank">{r.rank}</span>
+                    <Mon name={r.name} />
+                    <span class="pc-bar" style={`--w:${(r.usage / top(b.data!.rows[0].usage)) * 100}%`}><span></span></span>
+                    <span class="pc-pct">{r.usage.toFixed(1)}%</span>
+                  </summary>
+                  {(r.moves.length > 0 || r.items.length > 0) ? (
+                    <div class="pc-detail">
+                      {[['Moves', r.moves], ['Items', r.items], ['Abilities', r.abilities]].map(([title, list]) => (list as typeof r.moves).length > 0 && (
+                        <div><h4>{title}</h4><ul>{(list as typeof r.moves).map((m) => <li><span>{m.name}</span><b>{m.pct.toFixed(1)}%</b></li>)}</ul></div>
+                      ))}
+                      {r.teammates.length > 0 && <div><h4>Common partners</h4><div class="pc-mates">{r.teammates.map((m) => <Mon name={m.name} size="sm" />)}</div></div>}
+                    </div>
+                  ) : <p class="pc-note">No move details for this one yet.</p>}
+                </details>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <p class="pc-empty">Usage stats couldn't be loaded when this page was last built. See them straight from the source: <a href="https://www.smogon.com/stats/">Smogon usage stats</a>.</p>
+        )}
+        {b.data && <p class="pc-source">Source: <a href={b.data.url}>Smogon usage stats, {monthName(b.data.month)}</a> (Pokémon Showdown battles, not the in-game ladder).</p>}
+      </div>
+    ))}
+  </section>
+
+  <!-- Top teams -->
+  <section id="teams" class="pc-section">
+    <div class="section-head"><h2>Top teams from big events</h2></div>
+    {RESULTS.map((ev, i) => (
+      <details class="pc-event" open={i === 0}>
+        <summary><strong>{ev.name}</strong><span>{ev.place} · {fmt(ev.date)} · {ev.players} · Reg {ev.reg}</span></summary>
+        <ol class="pc-teams">
+          {ev.top.map((t, j) => (
+            <li>
+              <span class="pc-place">{j + 1}</span>
+              <span class="pc-player">{t.p} <small>{t.c}</small></span>
+              <span class="pc-team">{t.team.map((m) => <Mon name={m} size="sm" />)}</span>
+            </li>
+          ))}
+        </ol>
+        <p class="pc-source">Source: <a href={ev.source.url}>{ev.source.label}</a> (full team sheets with moves and items are linked there).</p>
+      </details>
+    ))}
+  </section>
+
+  <!-- Events -->
+  <section id="events" class="pc-section">
+    <div class="section-head"><h2>Upcoming events</h2></div>
+    <div class="pc-events">
+      {upcoming.map((e) => (
+        <div class="pc-ev">
+          <span class="pc-date">{range(e.from, e.to)}</span>
+          <strong>{e.name}</strong>
+          <span>{e.place}</span>
+          <span class="badge">{e.reg === 'TBA' ? 'Rules TBA' : `Reg ${e.reg}`}</span>
+        </div>
+      ))}
+    </div>
+    <p class="pc-source">Source: {EVENT_SOURCES.map((s) => <a href={s.url}>{s.label}</a>)}. Always check the organiser's page before you travel.</p>
+  </section>
+
+  <!-- Rules -->
+  <section id="rules" class="pc-section">
+    <div class="section-head"><h2>Rules and regulation sets</h2></div>
+    <div class="pc-rules">
+      <div class="pc-card">
+        <h3>The basics (every set)</h3>
+        <ul>{VGC_RULES.map((r) => <li>{r}</li>)}</ul>
+      </div>
+      <div class="pc-card">
+        <h3>Regulation sets</h3>
+        <ul class="pc-regs">
+          {REGULATIONS.map((r) => <li class={r.current ? 'is-current' : ''}><strong>{r.name}</strong>{r.current && <span class="badge">Now</span>}<span>{range(r.from, r.to)}</span><small>{r.notes}</small></li>)}
+        </ul>
+      </div>
+    </div>
+    <p class="pc-source">Source: {REGULATION_SOURCES.map((s) => <a href={s.url}>{s.label}</a>)}. The full list of allowed Pokémon is on that page.</p>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="pc-section">
+    <div class="section-head"><h2>What is Pokémon Champions?</h2></div>
+    <p class="pc-lead">{GAME.summary}</p>
+    <dl class="pc-facts">
+      {GAME.facts.map((f) => <div><dt>{f.label}</dt><dd>{f.value}</dd></div>)}
+    </dl>
+  </section>
+
+  <section class="pc-section">
+    <h2 class="pc-sources-title">Sources</h2>
+    <ul class="pc-sources">
+      {GAME.sources.map((s) => <li><a href={s.url}>{s.label}</a></li>)}
+      <li><a href="https://www.smogon.com/stats/">Smogon: monthly usage stats</a></li>
+    </ul>
+    <p class="pc-note">Pokémon and all related names and images are trademarks and © of Nintendo, Creatures Inc., GAME FREAK and The Pokémon Company. Build Play Collect is a fan site and isn't affiliated with them. Icons from PokeAPI.</p>
+  </section>
+</Base>
+
+<script>
+  // Doubles / Singles tabs.
+  const tabs = document.querySelectorAll<HTMLButtonElement>('[data-board-tab]');
+  tabs.forEach((tab) => tab.addEventListener('click', () => {
+    tabs.forEach((t) => t.setAttribute('aria-selected', String(t === tab)));
+    document.querySelectorAll<HTMLElement>('[data-board]').forEach((b) => { b.hidden = b.dataset.board !== tab.dataset.boardTab; });
+  }));
+  // A Pokémon with no icon yet (new Champions forms): hide the broken picture, keep the name.
+  document.querySelectorAll<HTMLImageElement>('[data-mon-icon]').forEach((img) => {
+    const hide = () => img.classList.add('is-missing');
+    if (img.complete && img.naturalWidth === 0) hide(); else img.addEventListener('error', hide);
+  });
+</script>
+
+<style>
+  .pc-jump { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 24px; }
+  .pc-jump a { padding: 6px 14px; border: 2px solid var(--line); border-radius: 999px; font-weight: 700; font-size: .85rem; color: var(--ink); background: var(--surface); }
+  .pc-jump a:hover { text-decoration: none; background: var(--mark); color: #1b1a1f; }
+  .pc-now { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding: 18px 22px; border: 2px solid var(--line); border-radius: 18px; background: var(--c1); color: #fff; box-shadow: var(--lift); }
+  .pc-now div { display: grid; gap: 2px; }
+  .pc-now .label { color: inherit; opacity: .85; }
+  .pc-now strong { font-family: var(--display); font-size: 1.6rem; line-height: 1.1; }
+  .pc-section { margin-top: 44px; }
+  .pc-note { color: var(--muted); font-size: .9rem; margin: 0 0 14px; }
+  .pc-source { color: var(--muted); font-size: .82rem; margin: 12px 0 0; }
+  .pc-source a + a::before { content: ", "; }
+  .pc-empty { padding: 18px; border: 2px dashed var(--soft-line); border-radius: 14px; }
+  .pc-tabs { display: inline-flex; gap: 4px; padding: 4px; border: 2px solid var(--line); border-radius: 999px; background: var(--surface); margin-bottom: 14px; }
+  .pc-tab { font: inherit; font-weight: 700; padding: 8px 18px; border: 0; border-radius: 999px; background: none; color: var(--ink); cursor: pointer; }
+  .pc-tab[aria-selected="true"] { background: var(--c1); color: #fff; }
+  .pc-usage { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .pc-usage details { border: 2px solid var(--line); border-radius: 14px; background: var(--surface); }
+  .pc-usage summary { display: grid; grid-template-columns: 34px minmax(150px, 220px) 1fr 62px; align-items: center; gap: 12px; padding: 8px 14px; cursor: pointer; list-style: none; }
+  .pc-usage summary::-webkit-details-marker { display: none; }
+  .pc-usage details[open] summary { border-bottom: 2px solid var(--soft-line); }
+  .pc-rank { font-family: var(--display); font-weight: 800; font-size: 1.1rem; color: var(--muted); text-align: center; }
+  .pc-bar { height: 12px; border-radius: 99px; background: var(--surface-2); overflow: hidden; }
+  .pc-bar span { display: block; height: 100%; width: var(--w); background: var(--c1); border-radius: inherit; }
+  .pc-pct { font-weight: 800; text-align: right; font-variant-numeric: tabular-nums; }
+  .pc-detail { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; padding: 14px 16px 16px; }
+  .pc-detail h4 { margin: 0 0 6px; font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .pc-detail ul { list-style: none; margin: 0; padding: 0; }
+  .pc-detail li { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; border-bottom: 1px solid var(--soft-line); font-size: .9rem; }
+  .pc-detail b { font-variant-numeric: tabular-nums; }
+  .pc-mates { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pc-event { border: 2px solid var(--line); border-radius: 16px; background: var(--surface); margin-bottom: 12px; padding: 0 16px; }
+  .pc-event > summary { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; padding: 14px 0; cursor: pointer; }
+  .pc-event > summary strong { font-family: var(--display); font-size: 1.15rem; }
+  .pc-event > summary span { color: var(--muted); font-size: .88rem; }
+  .pc-event > .pc-source { margin-bottom: 14px; }
+  .pc-teams { list-style: none; margin: 0; padding: 0; }
+  .pc-teams li { display: grid; grid-template-columns: 28px minmax(140px, 200px) 1fr; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid var(--soft-line); }
+  .pc-place { font-family: var(--display); font-weight: 800; color: var(--muted); }
+  .pc-player { font-weight: 700; }
+  .pc-player small { color: var(--muted); font-weight: 600; margin-left: 4px; }
+  .pc-team { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pc-events { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+  .pc-ev { display: grid; gap: 2px; padding: 14px 16px; border: 2px solid var(--line); border-radius: 14px; background: var(--surface); }
+  .pc-ev .pc-date { font-size: .8rem; font-weight: 800; color: var(--c1); text-transform: uppercase; letter-spacing: .04em; }
+  :root[data-theme="dark"] .pc-ev .pc-date { color: var(--wiki); }
+  .pc-ev span:not(.pc-date):not(.badge) { color: var(--muted); font-size: .88rem; }
+  .pc-ev .badge { justify-self: start; margin-top: 6px; }
+  .pc-rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+  .pc-card { padding: 18px 20px; border: 2px solid var(--line); border-radius: 16px; background: var(--surface); }
+  .pc-card h3 { margin: 0 0 10px; }
+  .pc-card ul { margin: 0; padding-left: 18px; }
+  .pc-card li { margin: 4px 0; }
+  .pc-regs { list-style: none; padding: 0 !important; }
+  .pc-regs li { display: grid; grid-template-columns: auto auto 1fr; gap: 2px 10px; align-items: center; padding: 8px 0; border-top: 1px solid var(--soft-line); }
+  .pc-regs li:first-child { border-top: 0; }
+  .pc-regs span:not(.badge) { color: var(--muted); font-size: .85rem; grid-column: 1 / -1; }
+  .pc-regs small { grid-column: 1 / -1; color: var(--muted); }
+  .pc-lead { font-size: 1.1rem; max-width: 70ch; }
+  .pc-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin: 16px 0 0; }
+  .pc-facts div { padding: 12px 14px; border-radius: 12px; background: var(--surface-2); }
+  .pc-facts dt { font-size: .75rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+  .pc-facts dd { margin: 2px 0 0; font-weight: 600; }
+  .pc-sources-title { font-size: 1.1rem; }
+  .pc-sources { padding-left: 18px; font-size: .9rem; }
+  @media (max-width: 640px) {
+    .pc-usage summary { grid-template-columns: 26px 1fr 54px; }
+    .pc-bar { grid-column: 2 / -1; grid-row: 2; }
+    .pc-teams li { grid-template-columns: 22px 1fr; }
+    .pc-team { grid-column: 1 / -1; }
+  }
+
+  /* Pokémon chip (used by Mon.astro) */
+  :global(.mon) { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px 2px 2px; border-radius: 999px; background: linear-gradient(90deg, var(--t1) 0 50%, var(--t2) 50% 100%); border: 2px solid var(--line); color: #1b1a1f; font-weight: 700; font-size: .9rem; line-height: 1; white-space: nowrap; }
+  :global(.mon-icon) { width: 38px; height: 38px; object-fit: contain; margin: -7px -1px -7px -2px; }
+  :global(.mon-icon.is-missing) { display: none; }
+  :global(.mon:has(.is-missing)), :global(.mon.no-icon) { padding-left: 10px; min-height: 30px; }
+  :global(.mon-sm) { font-size: .78rem; padding-right: 8px; }
+  :global(.mon-sm .mon-icon) { width: 30px; height: 30px; margin: -5px -1px -5px -1px; }
+  :global(.mon-sm:has(.is-missing)), :global(.mon-sm.no-icon) { min-height: 24px; }
+</style>

@@ -18,7 +18,7 @@ export default defineConfig({
       directives: [
         "default-src 'self'",
         "img-src 'self' data: https:",
-        "font-src 'self'",
+        "font-src 'self' data:",
         "connect-src 'self'",
         "form-action 'self' https://app.kit.com",
         "frame-src https://www.youtube-nocookie.com https://www.youtube.com",
