@@ -13,19 +13,19 @@ The World Beyblade Organization (WBO) is a fan-run volunteer group that has supp
 ## The basics
 
 - Two bladers launch Beys into a stadium. The last Bey still spinning in the battle zone wins the battle.
-- A Bey is **finished** when it stops spinning, bursts, or can't return to the battle zone.
+- A Bey is **finished** once it has stopped spinning, burst apart, or got stuck somewhere it can't get back to the battle zone from.
 - The winner of each battle gets points based on how the other Bey was finished. By default, the first to 4 points wins the match.
 
 ## Beys and decks
 
 - A complete Bey has a Blade, a Ratchet and a Bit. CX Blades need all three parts (Lock Chip, Main Blade, Assist Blade). CX Expand Blades need all four (Lock Chip, Over Blade, Metal Blade, Assist Blade).
 - Parts with a built-in ratchet, such as the BulletGriffon Blade and the Operate Bit, can't be used with a separate Ratchet.
-- A **deck** is a set of 3 Beys. A deck can't contain more than one copy of any part, except basic Lock Chips, which can repeat. The metal Lock Chips Valkyrie and Emperor can be used once each.
-- Parts can't be swapped between Beys in a deck during a match.
+- A **deck** is three Beys. It can't contain more than one copy of any part, except basic Lock Chips, which can repeat. The metal Lock Chips Valkyrie and Emperor can be used once each.
+- Once a match starts, parts stay on the Bey they started on. No swapping between your Beys mid-match.
 
 ### When are two parts "the same"?
 
-- Parts with the same name are the same part. Japanese product names take priority.
+- Same name, same part. If names differ between countries, the Japanese name wins.
 - **Recolors** and **re-released versions** (such as TyrannoBeat Jurassic World Version) are the same part as the original.
 - **Different molds** of a part (such as PhoenixWing's revisions) and **Version 2.0 Blades** are the same part as the original.
 - **Retools**, parts based on another part's design (such as OptimusPrimal from SharkEdge), are different parts and can be in the same deck.
@@ -83,11 +83,11 @@ These are **launch errors**: launching out of range, launching early, launching 
 
 ## How a battle is decided
 
-- The battle starts once both Beys have passed through the launch area and touched the stadium with no errors.
-- It ends when one Bey is spinning in the battle zone and the other is finished, or both are finished.
-- **Don't touch any Beys or the stadium until the judge confirms the result.** If you do, you lose the battle and your opponent gets 3 points.
-- A Bey is **spinning** while it turns in its original direction at any speed with no detached parts, even when rolling, flipped, or outside the battle zone.
-- A Bey **bursts** when a part fully separates. A Bit that pops out but stays partly inside the Ratchet is not a burst.
+- The battle is on once both Beys have gone through the launch area and landed in the stadium cleanly (no launch errors, failed launches, interference or mid-air collisions).
+- It's over when one Bey is still spinning in the battle zone and the other is finished, or when both are finished.
+- **Hands off the Beys and the stadium until the judge calls the result.** Touch them early and you lose that battle, with 3 points to your opponent.
+- A Bey still counts as **spinning** as long as it keeps turning its original way, however slowly, with nothing fallen off. Rolling on its side, upside down or outside the battle zone all still count. It stops spinning the moment it stops or starts turning the other way.
+- A **burst** means a part has come completely off. A Bit that pops out but is still partly in the Ratchet doesn't count.
 - For BulletGriffon, only Griffon (the lower part) can be finished. Bullet detaching is not a burst.
 
 | Finish | Points | When it counts |
@@ -106,7 +106,7 @@ A battle restarts after a launch error, failed launch, interference or mid-air c
 
 ## Judges and conduct
 
-- Every match has a judge, and the judge's final decision stands. Raise any concern immediately, because once the next battle starts the previous result can't change.
+- A judge watches every match and has the final say. Raise any concern immediately, because once the next battle starts the previous result can't change.
 - Be on time, be ready with legal equipment, respect others and the venue, put fairness first, and follow staff instructions.
 - You may record your own matches with the judge's permission, as one continuous video. Judges don't use player footage to make decisions.
 - A disqualified blader loses the match, forfeits any placement and prizes, and may be suspended from future events.
@@ -127,4 +127,4 @@ Organizers can switch these on for an event. The list includes registered deck l
 
 ## Read the full rules
 
-This is a summary of the WBO's Beyblade X rulebook, which includes diagrams and photo examples of legal and illegal decks, launch range and rubber Bit wear. Read it at [worldbeyblade.org](https://worldbeyblade.org/Thread-Beyblade-X-Rules).
+This is our own plain-words summary of the WBO's Beyblade X rulebook, not a copy of it. The rulebook itself belongs to the WBO and includes diagrams and photo examples of legal and illegal decks, launch range and rubber Bit wear. Read it at [worldbeyblade.org](https://worldbeyblade.org/Thread-Beyblade-X-Rules).
