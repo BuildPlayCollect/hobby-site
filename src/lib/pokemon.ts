@@ -13,13 +13,13 @@ export function types(name: string): string[] {
   return [...(species(name)?.types ?? [])];
 }
 
-// Icons are PokeAPI's sprites (github.com/PokeAPI/sprites), saved in public/sprites/pokemon/ as <PokeAPI id>.png.
+// Icons are PokeAPI's Pokémon HOME pictures (github.com/PokeAPI/sprites), shrunk to 128px and saved in public/sprites/pokemon/ as <PokeAPI id>.webp.
 // src/data/pokemon-sprites.json matches each Champions Pokémon name to its PokeAPI id.
 // A Pokémon with no saved icon gets '' and the page just shows its name.
 export function spriteUrl(name: string) {
   const s = species(name);
   const id = (SPRITES as Record<string, number>)[s?.name ?? name];
-  return id ? `/sprites/pokemon/${id}.png` : '';
+  return id ? `/sprites/pokemon/${id}.webp` : '';
 }
 
 // Type colours used for chips (picked to read well with dark text).
