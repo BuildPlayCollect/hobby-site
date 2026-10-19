@@ -1,0 +1,398 @@
+{
+ "updated": "2026-10-19",
+ "version": "16.20.1",
+ "set": 18,
+ "source": "https://developer.riotgames.com/docs/tft#static-data",
+ "units": [
+  {
+   "slug": "akali",
+   "name": "Akali",
+   "cost": 1,
+   "icon": "/images/esports/tft/set-18/akali.webp"
+  },
+  {
+   "slug": "camille",
+   "name": "Camille",
+   "cost": 1,
+   "icon": "/images/esports/tft/set-18/camille.webp"
+  },
+  {
+   "slug": "cinderling",
+   "name": "Cinderling",
+   "cost": 1,
+   "icon": "/images/esports/tft/set-18/cinderling.webp"
+  },
+  {
+   "slug": "karma",
+   "name": "Karma",
+   "cost": 1,
+   "icon": "/images/esports/tft/set-18/karma.webp"
+  },
+  {
+   "slug": "kobuko",
+   "name": "Kobuko",
+   "cost": 1,
+   "icon": "/images/esports/tft/set-18/kobuko.webp"
+  },
+  {
+   "slug": "leona",
+   "name": "Leona",
+   "cost": 1,
+   "icon": "/images/esports/tft/set-18/leona.webp"
+  },
+  {
+   "slug": "ornn",
+   "name": "Ornn",
+   "cost": 1,
+   "icon": "/images/esports/tft/set-18/ornn.webp"
+  },
+  {
+   "slug": "pebbles",
+   "name": "Pebbles",
+   "cost": 1,
+   "icon": "/images/esports/tft/set-18/pebbles.webp"
+  },
+  {
+   "slug": "rakan",
+   "name": "Rakan",
+   "cost": 1,
+   "icon": "/images/esports/tft/set-18/rakan.webp"
+  },
+  {
+   "slug": "reksai",
+   "name": "Rek'Sai",
+   "cost": 1,
+   "icon": "/images/esports/tft/set-18/reksai.webp"
+  },
+  {
+   "slug": "varus",
+   "name": "Varus",
+   "cost": 1,
+   "icon": "/images/esports/tft/set-18/varus.webp"
+  },
+  {
+   "slug": "veigar",
+   "name": "Veigar",
+   "cost": 1,
+   "icon": "/images/esports/tft/set-18/veigar.webp"
+  },
+  {
+   "slug": "xayah",
+   "name": "Xayah",
+   "cost": 1,
+   "icon": "/images/esports/tft/set-18/xayah.webp"
+  },
+  {
+   "slug": "yorick",
+   "name": "Yorick",
+   "cost": 1,
+   "icon": "/images/esports/tft/set-18/yorick.webp"
+  },
+  {
+   "slug": "alistar",
+   "name": "Alistar",
+   "cost": 2,
+   "icon": "/images/esports/tft/set-18/alistar.webp"
+  },
+  {
+   "slug": "caitlyn",
+   "name": "Caitlyn",
+   "cost": 2,
+   "icon": "/images/esports/tft/set-18/caitlyn.webp"
+  },
+  {
+   "slug": "elise",
+   "name": "Elise",
+   "cost": 2,
+   "icon": "/images/esports/tft/set-18/elise.webp"
+  },
+  {
+   "slug": "gromp",
+   "name": "Gromp",
+   "cost": 2,
+   "icon": "/images/esports/tft/set-18/gromp.webp"
+  },
+  {
+   "slug": "kayle",
+   "name": "Kayle",
+   "cost": 2,
+   "icon": "/images/esports/tft/set-18/kayle.webp"
+  },
+  {
+   "slug": "leblanc",
+   "name": "LeBlanc",
+   "cost": 2,
+   "icon": "/images/esports/tft/set-18/leblanc.webp"
+  },
+  {
+   "slug": "murkwolf",
+   "name": "Murkwolf",
+   "cost": 2,
+   "icon": "/images/esports/tft/set-18/murkwolf.webp"
+  },
+  {
+   "slug": "scuttlecrab",
+   "name": "Scuttlecrab",
+   "cost": 2,
+   "icon": "/images/esports/tft/set-18/scuttlecrab.webp"
+  },
+  {
+   "slug": "sejuani",
+   "name": "Sejuani",
+   "cost": 2,
+   "icon": "/images/esports/tft/set-18/sejuani.webp"
+  },
+  {
+   "slug": "shen",
+   "name": "Shen",
+   "cost": 2,
+   "icon": "/images/esports/tft/set-18/shen.webp"
+  },
+  {
+   "slug": "teemo",
+   "name": "Teemo",
+   "cost": 2,
+   "icon": "/images/esports/tft/set-18/teemo.webp"
+  },
+  {
+   "slug": "warwick",
+   "name": "Warwick",
+   "cost": 2,
+   "icon": "/images/esports/tft/set-18/warwick.webp"
+  },
+  {
+   "slug": "yunara",
+   "name": "Yunara",
+   "cost": 2,
+   "icon": "/images/esports/tft/set-18/yunara.webp"
+  },
+  {
+   "slug": "azir",
+   "name": "Azir",
+   "cost": 3,
+   "icon": "/images/esports/tft/set-18/azir.webp"
+  },
+  {
+   "slug": "cassiopeia",
+   "name": "Cassiopeia",
+   "cost": 3,
+   "icon": "/images/esports/tft/set-18/cassiopeia.webp"
+  },
+  {
+   "slug": "diana",
+   "name": "Diana",
+   "cost": 3,
+   "icon": "/images/esports/tft/set-18/diana.webp"
+  },
+  {
+   "slug": "fiddlesticks",
+   "name": "Fiddlesticks",
+   "cost": 3,
+   "icon": "/images/esports/tft/set-18/fiddlesticks.webp"
+  },
+  {
+   "slug": "hecarim",
+   "name": "Hecarim",
+   "cost": 3,
+   "icon": "/images/esports/tft/set-18/hecarim.webp"
+  },
+  {
+   "slug": "khazix",
+   "name": "Kha'Zix",
+   "cost": 3,
+   "icon": "/images/esports/tft/set-18/khazix.webp"
+  },
+  {
+   "slug": "kogmaw",
+   "name": "Kog'Maw",
+   "cost": 3,
+   "icon": "/images/esports/tft/set-18/kogmaw.webp"
+  },
+  {
+   "slug": "krug",
+   "name": "Krug",
+   "cost": 3,
+   "icon": "/images/esports/tft/set-18/krug.webp"
+  },
+  {
+   "slug": "mama-beak",
+   "name": "Mama Beak",
+   "cost": 3,
+   "icon": "/images/esports/tft/set-18/mama-beak.webp"
+  },
+  {
+   "slug": "master-yi",
+   "name": "Master Yi",
+   "cost": 3,
+   "icon": "/images/esports/tft/set-18/master-yi.webp"
+  },
+  {
+   "slug": "rammus",
+   "name": "Rammus",
+   "cost": 3,
+   "icon": "/images/esports/tft/set-18/rammus.webp"
+  },
+  {
+   "slug": "rengar",
+   "name": "Rengar",
+   "cost": 3,
+   "icon": "/images/esports/tft/set-18/rengar.webp"
+  },
+  {
+   "slug": "tristana",
+   "name": "Tristana",
+   "cost": 3,
+   "icon": "/images/esports/tft/set-18/tristana.webp"
+  },
+  {
+   "slug": "vi",
+   "name": "Vi",
+   "cost": 3,
+   "icon": "/images/esports/tft/set-18/vi.webp"
+  },
+  {
+   "slug": "ahri",
+   "name": "Ahri",
+   "cost": 4,
+   "icon": "/images/esports/tft/set-18/ahri.webp"
+  },
+  {
+   "slug": "amumu",
+   "name": "Amumu",
+   "cost": 4,
+   "icon": "/images/esports/tft/set-18/amumu.webp"
+  },
+  {
+   "slug": "aphelios",
+   "name": "Aphelios",
+   "cost": 4,
+   "icon": "/images/esports/tft/set-18/aphelios.webp"
+  },
+  {
+   "slug": "brambleback",
+   "name": "Brambleback",
+   "cost": 4,
+   "icon": "/images/esports/tft/set-18/brambleback.webp"
+  },
+  {
+   "slug": "ezreal",
+   "name": "Ezreal",
+   "cost": 4,
+   "icon": "/images/esports/tft/set-18/ezreal.webp"
+  },
+  {
+   "slug": "lillia",
+   "name": "Lillia",
+   "cost": 4,
+   "icon": "/images/esports/tft/set-18/lillia.webp"
+  },
+  {
+   "slug": "malphite",
+   "name": "Malphite",
+   "cost": 4,
+   "icon": "/images/esports/tft/set-18/malphite.webp"
+  },
+  {
+   "slug": "morgana",
+   "name": "Morgana",
+   "cost": 4,
+   "icon": "/images/esports/tft/set-18/morgana.webp"
+  },
+  {
+   "slug": "nidalee",
+   "name": "Nidalee",
+   "cost": 4,
+   "icon": "/images/esports/tft/set-18/nidalee.webp"
+  },
+  {
+   "slug": "sentinel",
+   "name": "Sentinel",
+   "cost": 4,
+   "icon": "/images/esports/tft/set-18/sentinel.webp"
+  },
+  {
+   "slug": "sett",
+   "name": "Sett",
+   "cost": 4,
+   "icon": "/images/esports/tft/set-18/sett.webp"
+  },
+  {
+   "slug": "sivir",
+   "name": "Sivir",
+   "cost": 4,
+   "icon": "/images/esports/tft/set-18/sivir.webp"
+  },
+  {
+   "slug": "soraka",
+   "name": "Soraka",
+   "cost": 4,
+   "icon": "/images/esports/tft/set-18/soraka.webp"
+  },
+  {
+   "slug": "zyra",
+   "name": "Zyra",
+   "cost": 4,
+   "icon": "/images/esports/tft/set-18/zyra.webp"
+  },
+  {
+   "slug": "alune",
+   "name": "Alune",
+   "cost": 5,
+   "icon": "/images/esports/tft/set-18/alune.webp"
+  },
+  {
+   "slug": "ashe",
+   "name": "Ashe",
+   "cost": 5,
+   "icon": "/images/esports/tft/set-18/ashe.webp"
+  },
+  {
+   "slug": "draven",
+   "name": "Draven",
+   "cost": 5,
+   "icon": "/images/esports/tft/set-18/draven.webp"
+  },
+  {
+   "slug": "elder-dragon",
+   "name": "Elder Dragon",
+   "cost": 5,
+   "icon": "/images/esports/tft/set-18/elder-dragon.webp"
+  },
+  {
+   "slug": "gnar",
+   "name": "Gnar",
+   "cost": 5,
+   "icon": "/images/esports/tft/set-18/gnar.webp"
+  },
+  {
+   "slug": "ivern",
+   "name": "Ivern",
+   "cost": 5,
+   "icon": "/images/esports/tft/set-18/ivern.webp"
+  },
+  {
+   "slug": "kennen",
+   "name": "Kennen",
+   "cost": 5,
+   "icon": "/images/esports/tft/set-18/kennen.webp"
+  },
+  {
+   "slug": "lux",
+   "name": "Lux",
+   "cost": 5,
+   "icon": "/images/esports/tft/set-18/lux.webp"
+  },
+  {
+   "slug": "maokai",
+   "name": "Maokai",
+   "cost": 5,
+   "icon": "/images/esports/tft/set-18/maokai.webp"
+  },
+  {
+   "slug": "taric",
+   "name": "Taric",
+   "cost": 5,
+   "icon": "/images/esports/tft/set-18/taric.webp"
+  }
+ ]
+}

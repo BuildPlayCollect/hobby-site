@@ -1,0 +1,141 @@
+---
+// Roster.astro: a grid of every agent, champion or hero in a game, with a search box and filter chips.
+// Used by /esports/valorant/agents, /esports/league-of-legends/champions, /esports/tft/champions and /esports/dota-2/heroes.
+// Items with `detail` are buttons: tapping one opens the site's photo viewer (Lightbox.astro) with the details underneath.
+
+export type RosterAbility = { key: string; name: string; text: string; icon?: string | null };
+export type RosterItem = {
+  name: string;
+  icon: string;
+  sub?: string;        // one short line under the name (a role, a title)
+  chips?: string[];    // small labels on the card
+  filter: string[];    // which filter chips this item belongs to
+  tone?: string;       // a colour for the card's top stripe
+  detail?: { lines?: string[]; abilities?: RosterAbility[] };
+};
+interface Props {
+  items: RosterItem[];
+  filterLabel: string;
+  filters: { value: string; label?: string; tone?: string }[];
+  shape?: 'square' | 'wide';
+  noun: string;        // "Agents", "champions", "heroes"
+  find: string;        // the search box hint, e.g. "Find an Agent"
+  w: number;           // icon size in the files
+  h: number;
+}
+const { items, filterLabel, filters, shape = 'square', noun, find, w, h } = Astro.props;
+---
+<form class="rs-tools" data-rs-tools>
+  <label class="rs-search">
+    <span class="sr-only">{find}</span>
+    <input type="search" name="q" placeholder={find} autocomplete="off" />
+  </label>
+  <fieldset class="rs-chips">
+    <legend class="sr-only">{filterLabel}</legend>
+    <label class="rs-chip"><input type="radio" name="f" value="" checked /> All</label>
+    {filters.map((f) => <label class="rs-chip" style={f.tone ? `--tone:${f.tone}` : ''}><input type="radio" name="f" value={f.value} /> {f.label ?? f.value}</label>)}
+  </fieldset>
+</form>
+<p class="rs-count" data-rs-count aria-live="polite">Showing all {items.length} {noun}</p>
+
+<ul class={`rs-grid rs-${shape}`} data-rs-grid data-noun={noun}>
+  {items.map((it) => {
+    const inner = (
+      <>
+        <img src={it.icon} width={w} height={h} alt={it.detail ? it.name : ''} loading="lazy" decoding="async" />
+        <strong>{it.name}</strong>
+        {it.sub && <span class="rs-sub">{it.sub}</span>}
+        {it.chips && it.chips.length > 0 && <span class="rs-tags">{it.chips.map((c) => <span>{c}</span>)}</span>}
+      </>
+    );
+    return (
+      <li data-name={it.name.toLowerCase()} data-filter={it.filter.join('|')} style={it.tone ? `--tone:${it.tone}` : ''}>
+        {it.detail ? <button type="button" class="rs-card" data-lb-open aria-label={`${it.name}: more about them`}>{inner}</button> : <div class="rs-card">{inner}</div>}
+        {it.detail && (
+          <div class="rs-detail" data-lb-text hidden>
+            <p class="rs-detail-name"><strong>{it.name}</strong>{it.sub && <> · {it.sub}</>}</p>
+            {it.detail.lines?.map((l) => <p>{l}</p>)}
+            {it.detail.abilities && (
+              <ul class="rs-abilities">
+                {it.detail.abilities.map((a) => (
+                  <li>
+                    <span class="rs-key">{a.icon ? <img src={a.icon} width="64" height="64" alt="" loading="lazy" /> : null}<span>{a.key}</span></span>
+                    <div><strong>{a.name}</strong><span>{a.text}</span></div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
+      </li>
+    );
+  })}
+</ul>
+<p class="rs-empty" data-rs-empty hidden>Nothing matches that. Try another name or tap All.</p>
+
+<script>
+  // Search and filter chips, all in the reader's browser.
+  const form = document.querySelector<HTMLFormElement>('[data-rs-tools]');
+  const grid = document.querySelector<HTMLElement>('[data-rs-grid]');
+  if (form && grid) {
+    const count = document.querySelector<HTMLElement>('[data-rs-count]')!;
+    const empty = document.querySelector<HTMLElement>('[data-rs-empty]')!;
+    const items = [...grid.children] as HTMLElement[];
+    const noun = grid.dataset.noun;
+    const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]/g, '');
+    const apply = () => {
+      const f = new FormData(form);
+      const q = norm(String(f.get('q') ?? ''));
+      const pick = String(f.get('f') ?? '');
+      let shown = 0;
+      for (const li of items) {
+        const ok = (!q || norm(li.dataset.name!).includes(q)) && (!pick || li.dataset.filter!.split('|').includes(pick));
+        li.hidden = !ok;
+        if (ok) shown++;
+      }
+      count.textContent = shown === items.length ? `Showing all ${items.length} ${noun}` : `Showing ${shown} of ${items.length} ${noun}`;
+      empty.hidden = shown > 0;
+    };
+    form.addEventListener('submit', (e) => e.preventDefault());
+    form.addEventListener('input', apply);
+    form.addEventListener('change', apply);
+  }
+</script>
+
+<style is:global>
+  .rs-tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 12px; border: 2px solid var(--line); border-radius: 18px; background: var(--surface); }
+  .rs-search { flex: 1 1 220px; }
+  .rs-search input { width: 100%; box-sizing: border-box; font: inherit; font-weight: 600; padding: 9px 14px; border: 2px solid var(--line); border-radius: 12px; background: var(--bg); color: var(--ink); }
+  .rs-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; border: 0; }
+  .rs-chip { display: inline-flex; align-items: center; padding: 6px 12px; border: 2px solid var(--line); border-radius: 999px; font-weight: 700; font-size: .85rem; cursor: pointer; background: var(--bg); }
+  .rs-chip input { position: absolute; opacity: 0; pointer-events: none; }
+  .rs-chip:has(input:checked) { background: var(--tone, var(--c1)); color: #1b1a1f; }
+  .rs-chip:has(input:focus-visible) { outline: 3px solid var(--c2); outline-offset: 2px; }
+  .rs-count { color: var(--muted); font-size: .85rem; font-weight: 700; margin: 12px 0 10px; }
+  .rs-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); gap: 10px; }
+  .rs-wide { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+  .rs-grid li[hidden] { display: none; }
+  .rs-card { display: grid; justify-items: center; align-content: start; gap: 4px; width: 100%; height: 100%; box-sizing: border-box; padding: 0 0 12px; border: 2px solid var(--line); border-radius: 16px; background: var(--surface); color: var(--ink); font: inherit; text-align: center; overflow: hidden; border-top: 6px solid var(--tone, var(--line)); }
+  button.rs-card { cursor: pointer; transition: transform .15s, box-shadow .15s; }
+  button.rs-card:hover { transform: translateY(-3px); box-shadow: var(--lift); }
+  button.rs-card:focus-visible { outline: 3px solid var(--c2); outline-offset: 2px; }
+  .rs-card img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; background: #1b1a1f; border-bottom: 2px solid var(--line); }
+  .rs-wide .rs-card img { aspect-ratio: 16 / 9; }
+  .rs-card strong { font-family: var(--display); font-size: 1rem; line-height: 1.15; padding: 4px 8px 0; }
+  .rs-sub { color: var(--muted); font-size: .78rem; font-weight: 700; padding: 0 8px; }
+  .rs-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; padding: 0 8px; }
+  .rs-tags span { padding: 1px 7px; border-radius: 99px; border: 1.5px solid var(--soft-line); font-size: .68rem; font-weight: 700; color: var(--muted); }
+  .rs-empty { padding: 16px; border: 2px dashed var(--soft-line); border-radius: 14px; color: var(--muted); }
+  .rs-detail p { margin: 0 0 8px; }
+  .rs-detail-name strong { font-family: var(--display); font-size: 1.15rem; }
+  .rs-abilities { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 10px; }
+  .rs-abilities li { display: grid; grid-template-columns: 52px 1fr; gap: 10px; align-items: start; }
+  .rs-abilities strong { display: block; }
+  .rs-abilities div span { color: var(--muted); font-size: .88rem; }
+  .rs-key { position: relative; display: grid; place-items: center; width: 52px; height: 52px; border-radius: 12px; background: #1b1a1f; border: 2px solid var(--line); }
+  .rs-key img { width: 34px; height: 34px; }
+  .rs-key span { position: absolute; right: -6px; bottom: -6px; min-width: 20px; padding: 0 4px; border-radius: 8px; background: var(--mark); color: #1b1a1f; border: 2px solid #1b1a1f; font-size: .62rem; font-weight: 800; line-height: 16px; text-transform: uppercase; }
+  .rs-note { color: var(--muted); font-size: .85rem; margin: 22px 0 0; max-width: 80ch; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  @media (max-width: 560px) { .rs-grid, .rs-wide { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+</style>

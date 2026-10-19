@@ -1,6 +1,6 @@
 // tft.ts: everything on the Teamfight Tactics hub (/esports/tft).
 // Edit by hand; every fact needs a source. No press images yet: Echo can add Riot press-kit images later.
-import type { GameHubData, Source } from '../lib/esports-hub';
+import { type GameHubData, type Source, LOGOS } from '../lib/esports-hub';
 
 const S = {
   site: { label: 'Teamfight Tactics: official site', url: 'https://teamfighttactics.leagueoflegends.com/en-us/' },
@@ -19,6 +19,10 @@ export const TFT: GameHubData = {
   tagline: 'Eight players, one board each, and only one survives. The strategy game where your team fights for you.',
   description: 'Teamfight Tactics (TFT) for beginners: what the game is, how the TFT Pro Circuit and Tactician\'s Crown work, the 2026 champions and what\'s happening in the Enchanted Wilds set.',
   badge: 'hexes',
+  logo: LOGOS.tft,
+  tools: [
+    { href: '/esports/tft/champions', label: 'Set champions', text: 'Every champion in the current set, sorted by cost.' },
+  ],
   about: [
     'Teamfight Tactics, or TFT, is a free strategy auto-battler from Riot Games. You draft champions from a shop, place them on a board made of hexagons, and then they fight by themselves. Your job is the planning, not the button mashing.',
     'Every game has eight players. You fight a different opponent each round, and losing costs you health. Run out and you\'re out. The last player still standing wins, so even finishing second feels like a tiny tragedy.',

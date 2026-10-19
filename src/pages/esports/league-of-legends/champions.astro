@@ -1,0 +1,40 @@
+---
+// Every League of Legends champion (/esports/league-of-legends/champions), from Riot's own Data Dragon feed.
+// Run `npm run esports:data` to refresh it after a patch adds a champion.
+import RosterPage from '../../../components/esports/RosterPage.astro';
+import Roster, { type RosterItem } from '../../../components/esports/Roster.astro';
+import { LEAGUE } from '../../../data/league-of-legends';
+import DATA from '../../../data/esports/lol-champions.json';
+import { fmtDate } from '../../../lib/esports-hub';
+
+// Riot's six champion classes, with a colour each.
+const ROLES = [
+  { value: 'Assassin', tone: '#ff6b57' },
+  { value: 'Fighter', tone: '#ffb057' },
+  { value: 'Mage', tone: '#b48cff' },
+  { value: 'Marksman', tone: '#ffd23f' },
+  { value: 'Support', tone: '#5fd3a8' },
+  { value: 'Tank', tone: '#6ea8fe' },
+];
+// Riot rates how hard each champion is from 1 to 10; we turn that into three easy words.
+const level = (d: number) => (d <= 3 ? 'Easy' : d <= 6 ? 'Medium' : 'Hard');
+const items: RosterItem[] = DATA.champions.map((c) => ({
+  name: c.name,
+  icon: c.icon,
+  sub: c.title.charAt(0).toUpperCase() + c.title.slice(1),
+  chips: [...c.roles, level(c.difficulty)],
+  filter: [...c.roles, level(c.difficulty)],
+  tone: ROLES.find((r) => r.value === c.roles[0])?.tone,
+}));
+const easy = DATA.champions.filter((c) => c.difficulty <= 3).length;
+---
+<RosterPage game={LEAGUE} hub="/esports/league-of-legends" title="Every League of Legends champion" heading="Every champion"
+  description={`All ${DATA.champions.length} League of Legends champions with their class and how hard each one is to learn.`}
+  sources={[{ label: 'Riot Games: Data Dragon (official champion data)', url: 'https://developer.riotgames.com/docs/lol#data-dragon' }, { label: 'League of Legends: official champions page', url: 'https://www.leagueoflegends.com/en-us/champions/' }]}
+  note={`From Riot's Data Dragon, game version ${DATA.version}, last updated on ${fmtDate(DATA.updated)}.`}>
+  <p slot="intro">There are {DATA.champions.length} champions in League of Legends. Riot sorts each one into a class (some have two) and rates how hard they are. New to the game? Tap <strong>Easy</strong> to see the {easy} friendliest picks.</p>
+
+  <Roster items={items} noun="champions" find="Find a champion" filterLabel="Class or difficulty" filters={[...ROLES, { value: 'Easy', tone: '#c8f0dc' }]} w={96} h={96} />
+
+  <p class="rs-note">"Easy", "Medium" and "Hard" are Riot's own 1 to 10 difficulty ratings grouped into three (1 to 3, 4 to 6, 7 to 10).</p>
+</RosterPage>

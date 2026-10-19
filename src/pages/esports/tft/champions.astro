@@ -1,0 +1,33 @@
+---
+// Every champion in the current TFT set (/esports/tft/champions), from Riot's own Data Dragon feed.
+// The set number is found by the script, so a new set shows up after `npm run esports:data`.
+import RosterPage from '../../../components/esports/RosterPage.astro';
+import Roster, { type RosterItem } from '../../../components/esports/Roster.astro';
+import { TFT } from '../../../data/tft';
+import DATA from '../../../data/esports/tft-champions.json';
+import { fmtDate } from '../../../lib/esports-hub';
+
+// The colours the game uses for each cost: grey, green, blue, purple and gold.
+const COST = [
+  { value: '1', label: '1 gold', tone: '#c9c9c9' },
+  { value: '2', label: '2 gold', tone: '#5fd38a' },
+  { value: '3', label: '3 gold', tone: '#4fa3ff' },
+  { value: '4', label: '4 gold', tone: '#c77dff' },
+  { value: '5', label: '5 gold', tone: '#ffc94a' },
+];
+const items: RosterItem[] = DATA.units.map((u) => ({
+  name: u.name,
+  icon: u.icon,
+  sub: `${u.cost} gold`,
+  filter: [String(u.cost)],
+  tone: COST[u.cost - 1].tone,
+}));
+---
+<RosterPage game={TFT} hub="/esports/tft" title={`TFT Set ${DATA.set} champions, by cost`} heading={`Set ${DATA.set} champions`}
+  description={`All ${DATA.units.length} champions in Teamfight Tactics Set ${DATA.set}, sorted by how much gold they cost.`}
+  sources={[{ label: 'Riot Games: TFT static data (Data Dragon)', url: 'https://developer.riotgames.com/docs/tft#static-data' }, { label: 'Teamfight Tactics: official site', url: 'https://teamfighttactics.leagueoflegends.com/en-us/' }]}
+  note={`From Riot's Data Dragon, game version ${DATA.version}, last updated on ${fmtDate(DATA.updated)}. Riot's feed lists names and costs only, so traits aren't shown here yet.`}>
+  <p slot="intro">Set {DATA.set} has {DATA.units.length} champions you can buy from the shop. Cheap ones show up all game; the 5 gold ones are rare and strong. Tap a cost to see just those.</p>
+
+  <Roster items={items} noun="champions" find="Find a champion" filterLabel="Cost" filters={COST} shape="wide" w={192} h={128} />
+</RosterPage>

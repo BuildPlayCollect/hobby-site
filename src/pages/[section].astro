@@ -7,6 +7,8 @@ import Base from '../layouts/Base.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import { HOBBIES, TYPES, TYPE_SLUGS, SCOPE_LABEL } from '../data/site';
 import { SPECIAL_EDITIONS } from '../data/bx-special-editions';
+import GameLogo from '../components/esports/GameLogo.astro';
+import { LOGOS, LEGAL } from '../lib/esports-hub';
 
 export async function getStaticPaths() {
   const articles = (await getCollection('articles', ({ data }) => !data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
@@ -154,25 +156,26 @@ const PART_CARDS = [
       <div class="rules-list parts-cards">
         <a class="rules-item" href="/esports/valorant">
           <span class="badge badge-official">New Agent: Hush</span>
-          <strong>VALORANT</strong>
+          <strong class="game-name"><GameLogo logo={LOGOS.valorant} size={34} />VALORANT</strong>
           <small>The 5v5 shooter: how the VCT works, the 2026 champions, what's new in the game and the words you'll hear.</small>
         </a>
         <a class="rules-item" href="/esports/league-of-legends">
           <span class="badge badge-official">Worlds 2026</span>
-          <strong>League of Legends</strong>
+          <strong class="game-name"><GameLogo logo={LOGOS.lol} size={34} />League of Legends</strong>
           <small>Worlds from the Play-Ins in Los Angeles to the final in Brooklyn, plus how a match works.</small>
         </a>
         <a class="rules-item" href="/esports/tft">
           <span class="badge badge-official">Set 18</span>
-          <strong>Teamfight Tactics</strong>
+          <strong class="game-name"><GameLogo logo={LOGOS.tft} size={34} />Teamfight Tactics</strong>
           <small>The auto-battler for eight players: the Pro Circuit, the Tactician's Crown and the current set.</small>
         </a>
         <a class="rules-item" href="/esports/dota-2">
           <span class="badge badge-official">TI 2026</span>
-          <strong>Dota 2</strong>
+          <strong class="game-name"><GameLogo logo={LOGOS.dota} size={34} />Dota 2</strong>
           <small>The International, the all-Filipino OG lineup, and what Roshan and the Ancient are.</small>
         </a>
       </div>
+      <p class="esports-legal">{LEGAL.riot} {LEGAL.valve} Game logos: Riot Games press kit and dota2.com.</p>
     </>
   )}
 
@@ -211,3 +214,8 @@ const PART_CARDS = [
     });
   </script>
 </Base>
+
+<style>
+  .game-name { display: flex; align-items: center; gap: 10px; }
+  .esports-legal { margin: 12px 0 0; color: var(--muted); font-size: .78rem; max-width: 80ch; }
+</style>

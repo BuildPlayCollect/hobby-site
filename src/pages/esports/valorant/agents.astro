@@ -1,0 +1,45 @@
+---
+// Every VALORANT Agent (/esports/valorant/agents). The list and pictures come from valorant-api.com, a fan-run
+// copy of the game's own files (Riot has no official image feed for VALORANT). Run `npm run esports:data` to refresh.
+import RosterPage from '../../../components/esports/RosterPage.astro';
+import Roster, { type RosterItem } from '../../../components/esports/Roster.astro';
+import { VALORANT } from '../../../data/valorant';
+import DATA from '../../../data/esports/valorant-agents.json';
+import { fmtDate } from '../../../lib/esports-hub';
+
+// Riot's four roles, in the order the game lists them, with a colour each.
+const ROLES = [
+  { value: 'Duelist', tone: '#ff6b57', text: 'jump in first and win fights' },
+  { value: 'Initiator', tone: '#ffd23f', text: 'find enemies and set up the push' },
+  { value: 'Controller', tone: '#6ea8fe', text: 'block sight lines with smokes and walls' },
+  { value: 'Sentinel', tone: '#5fd3a8', text: 'guard a site and watch your back' },
+];
+const tone = (r: string) => ROLES.find((x) => x.value === r)?.tone;
+const items: RosterItem[] = DATA.agents.map((a) => ({
+  name: a.name,
+  icon: a.icon,
+  sub: a.role,
+  filter: [a.role],
+  tone: tone(a.role),
+  detail: { lines: [a.text], abilities: a.abilities },
+}));
+---
+<RosterPage game={VALORANT} hub="/esports/valorant" title="Every VALORANT Agent, with abilities" heading="Every Agent"
+  description={`All ${DATA.agents.length} VALORANT Agents with their role, story and every ability (C, Q, E and X).`}
+  sources={[{ label: 'valorant-api.com: Agents (fan-run copy of the game files)', url: 'https://valorant-api.com/v1/agents' }, { label: 'VALORANT: official Agents page', url: 'https://playvalorant.com/en-us/agents/' }]}
+  note={`The list was last updated on ${fmtDate(DATA.updated)}. It comes from valorant-api.com, a fan site that copies Riot's game files, so a brand-new Agent can take a few days to appear.`}>
+  <p slot="intro">VALORANT has {DATA.agents.length} Agents to pick from, and each one has four abilities. Every Agent fits one of four roles. Tap an Agent to see what they do.</p>
+
+  <ul class="va-roles">
+    {ROLES.map((r) => <li style={`--tone:${r.tone}`}><strong>{r.value}s</strong> {r.text}</li>)}
+  </ul>
+
+  <Roster items={items} noun="Agents" find="Find an Agent" filterLabel="Role" filters={ROLES.map((r) => ({ value: r.value, tone: r.tone }))} w={128} h={128} />
+
+  <p class="rs-note">Keys: <strong>C</strong>, <strong>Q</strong> and <strong>E</strong> are the everyday abilities, <strong>X</strong> is the ultimate, which charges up during the match. Hush, the newest Agent, will show up here once the game files list her.</p>
+</RosterPage>
+
+<style>
+  .va-roles { list-style: none; margin: 0 0 16px; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); gap: 8px; }
+  .va-roles li { padding: 10px 14px; border-radius: 14px; background: var(--surface-2); box-shadow: inset 5px 0 0 var(--tone); font-size: .92rem; }
+</style>

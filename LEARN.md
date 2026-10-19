@@ -131,3 +131,11 @@ Every article has a **Draft** switch in Pages CMS. While it's on, the article st
 ## Google and SEO
 
 Every page tells search engines its title, description, official address (canonical) and share picture; articles also tell Google they're articles, who wrote them and when (all in `src/layouts/Base.astro` and `src/pages/articles/[id].astro`). `public/robots.txt` lets search engines read everything and points them to the sitemap. The default share picture is `public/share-preview-v2.png` (give it a new name whenever it changes, because Facebook keeps old pictures by name); an article with a cover image uses its cover instead. The full checklist for articles and the one-time Google Search Console steps are in the project's `resources/seo-guide.md`.
+
+## Esports rosters and the map planner
+
+The VALORANT, League of Legends, TFT and Dota 2 hubs each have a page with every Agent, champion or hero, and VALORANT has a map planner. Their names, roles and icons are saved in `src/data/esports/` (the lists) and `public/images/esports/` (the pictures), so the site never depends on another site being up.
+
+To update them after a patch adds a new champion, agent or map, run `npm run esports:data`. It reads each game's own data feed (Riot's Data Dragon for League and TFT, valorant-api.com for VALORANT, dota2.com for Dota 2), downloads only the new pictures, and rewrites the lists. When a new TFT set starts, it finds the new set by itself.
+
+The game logos (next to each game's name) are Riot's press-kit logos and Valve's logo from dota2.com, in `public/images/esports/logos/`. Riot's rules say to use them unedited and to keep Riot's notice on the page, which the hubs do.

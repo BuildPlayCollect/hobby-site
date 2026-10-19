@@ -21,11 +21,25 @@ export type Patch = { name: string; date: string; highlights: string[]; source: 
 // A roster change or bit of team news. `unconfirmed` when only one unofficial source reports it.
 export type TeamUpdate = { date: string; team: string; text: string; source: Source; unconfirmed?: boolean };
 
+// Official logos, unedited, only resized. Riot's come from its press page (riotgames.com/en/press, "Assets").
+// Valve has no press kit, so the Dota 2 logo is the one on Valve's own dota2.com.
+// The pictures are light on a see-through background, so they always sit on a dark tile.
+export type GameLogo = { src: string; w: number; h: number; credit: string; source: Source };
+const RIOT_PRESS: Source = { label: 'Riot Games press page: logos', url: 'https://www.riotgames.com/en/press' };
+export const LOGOS = {
+  valorant: { src: '/images/esports/logos/valorant.webp', w: 195, h: 160, credit: 'VALORANT logo: Riot Games press kit', source: RIOT_PRESS },
+  lol: { src: '/images/esports/logos/league-of-legends.webp', w: 256, h: 109, credit: 'League of Legends logo: Riot Games press kit', source: RIOT_PRESS },
+  tft: { src: '/images/esports/logos/tft.webp', w: 160, h: 160, credit: 'Teamfight Tactics logo: Riot Games press kit', source: RIOT_PRESS },
+  dota: { src: '/images/esports/logos/dota-2.webp', w: 172, h: 160, credit: 'Dota 2 logo: Valve, from dota2.com', source: { label: 'Dota 2 official site', url: 'https://www.dota2.com/home' } },
+} satisfies Record<string, GameLogo>;
+
 export type GameHubData = {
   name: string;          // shown as the page title
   tagline: string;       // one line under the title
   description: string;   // for search engines and link previews
   badge: 'shooter' | 'lanes' | 'hexes' | 'aegis'; // the little illustration (ours, not a game logo)
+  logo: GameLogo;        // the game's official logo, shown next to its name
+  tools?: { href: string; label: string; text: string }[]; // our pages for this game (every agent, map planner)
   about: string[];       // "What is it?" in 2 or 3 short paragraphs
   facts: { label: string; value: string }[];
   scene: { intro: string[]; parts: { name: string; text: string }[] };

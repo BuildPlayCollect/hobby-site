@@ -1,0 +1,1867 @@
+{
+ "updated": "2026-10-19",
+ "version": "16.20.1",
+ "source": "https://developer.riotgames.com/docs/lol#data-dragon",
+ "champions": [
+  {
+   "slug": "aatrox",
+   "name": "Aatrox",
+   "title": "the Darkin Blade",
+   "roles": [
+    "Fighter"
+   ],
+   "difficulty": 4,
+   "icon": "/images/esports/league-of-legends/champions/aatrox.webp"
+  },
+  {
+   "slug": "ahri",
+   "name": "Ahri",
+   "title": "the Nine-Tailed Fox",
+   "roles": [
+    "Mage",
+    "Assassin"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/ahri.webp"
+  },
+  {
+   "slug": "akali",
+   "name": "Akali",
+   "title": "the Rogue Assassin",
+   "roles": [
+    "Assassin"
+   ],
+   "difficulty": 7,
+   "icon": "/images/esports/league-of-legends/champions/akali.webp"
+  },
+  {
+   "slug": "akshan",
+   "name": "Akshan",
+   "title": "the Rogue Sentinel",
+   "roles": [
+    "Marksman",
+    "Assassin"
+   ],
+   "difficulty": 0,
+   "icon": "/images/esports/league-of-legends/champions/akshan.webp"
+  },
+  {
+   "slug": "alistar",
+   "name": "Alistar",
+   "title": "the Minotaur",
+   "roles": [
+    "Tank",
+    "Support"
+   ],
+   "difficulty": 7,
+   "icon": "/images/esports/league-of-legends/champions/alistar.webp"
+  },
+  {
+   "slug": "ambessa",
+   "name": "Ambessa",
+   "title": "Matriarch of War",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "difficulty": 10,
+   "icon": "/images/esports/league-of-legends/champions/ambessa.webp"
+  },
+  {
+   "slug": "amumu",
+   "name": "Amumu",
+   "title": "the Sad Mummy",
+   "roles": [
+    "Tank",
+    "Support"
+   ],
+   "difficulty": 3,
+   "icon": "/images/esports/league-of-legends/champions/amumu.webp"
+  },
+  {
+   "slug": "anivia",
+   "name": "Anivia",
+   "title": "the Cryophoenix",
+   "roles": [
+    "Mage"
+   ],
+   "difficulty": 10,
+   "icon": "/images/esports/league-of-legends/champions/anivia.webp"
+  },
+  {
+   "slug": "annie",
+   "name": "Annie",
+   "title": "the Dark Child",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "difficulty": 6,
+   "icon": "/images/esports/league-of-legends/champions/annie.webp"
+  },
+  {
+   "slug": "aphelios",
+   "name": "Aphelios",
+   "title": "the Weapon of the Faithful",
+   "roles": [
+    "Marksman"
+   ],
+   "difficulty": 10,
+   "icon": "/images/esports/league-of-legends/champions/aphelios.webp"
+  },
+  {
+   "slug": "ashe",
+   "name": "Ashe",
+   "title": "the Frost Archer",
+   "roles": [
+    "Marksman",
+    "Support"
+   ],
+   "difficulty": 4,
+   "icon": "/images/esports/league-of-legends/champions/ashe.webp"
+  },
+  {
+   "slug": "aurelion-sol",
+   "name": "Aurelion Sol",
+   "title": "The Star Forger",
+   "roles": [
+    "Mage"
+   ],
+   "difficulty": 7,
+   "icon": "/images/esports/league-of-legends/champions/aurelion-sol.webp"
+  },
+  {
+   "slug": "aurora",
+   "name": "Aurora",
+   "title": "the Witch Between Worlds",
+   "roles": [
+    "Mage",
+    "Assassin"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/aurora.webp"
+  },
+  {
+   "slug": "azir",
+   "name": "Azir",
+   "title": "the Emperor of the Sands",
+   "roles": [
+    "Mage",
+    "Marksman"
+   ],
+   "difficulty": 9,
+   "icon": "/images/esports/league-of-legends/champions/azir.webp"
+  },
+  {
+   "slug": "bard",
+   "name": "Bard",
+   "title": "the Wandering Caretaker",
+   "roles": [
+    "Support",
+    "Mage"
+   ],
+   "difficulty": 9,
+   "icon": "/images/esports/league-of-legends/champions/bard.webp"
+  },
+  {
+   "slug": "belveth",
+   "name": "Bel'Veth",
+   "title": "the Empress of the Void",
+   "roles": [
+    "Fighter"
+   ],
+   "difficulty": 10,
+   "icon": "/images/esports/league-of-legends/champions/belveth.webp"
+  },
+  {
+   "slug": "blitzcrank",
+   "name": "Blitzcrank",
+   "title": "the Great Steam Golem",
+   "roles": [
+    "Tank",
+    "Support"
+   ],
+   "difficulty": 4,
+   "icon": "/images/esports/league-of-legends/champions/blitzcrank.webp"
+  },
+  {
+   "slug": "brand",
+   "name": "Brand",
+   "title": "the Burning Vengeance",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "difficulty": 4,
+   "icon": "/images/esports/league-of-legends/champions/brand.webp"
+  },
+  {
+   "slug": "braum",
+   "name": "Braum",
+   "title": "the Heart of the Freljord",
+   "roles": [
+    "Tank",
+    "Support"
+   ],
+   "difficulty": 3,
+   "icon": "/images/esports/league-of-legends/champions/braum.webp"
+  },
+  {
+   "slug": "briar",
+   "name": "Briar",
+   "title": "the Restrained Hunger",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "difficulty": 3,
+   "icon": "/images/esports/league-of-legends/champions/briar.webp"
+  },
+  {
+   "slug": "caitlyn",
+   "name": "Caitlyn",
+   "title": "the Sheriff of Piltover",
+   "roles": [
+    "Marksman"
+   ],
+   "difficulty": 6,
+   "icon": "/images/esports/league-of-legends/champions/caitlyn.webp"
+  },
+  {
+   "slug": "camille",
+   "name": "Camille",
+   "title": "the Steel Shadow",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "difficulty": 4,
+   "icon": "/images/esports/league-of-legends/champions/camille.webp"
+  },
+  {
+   "slug": "cassiopeia",
+   "name": "Cassiopeia",
+   "title": "the Serpent's Embrace",
+   "roles": [
+    "Mage"
+   ],
+   "difficulty": 10,
+   "icon": "/images/esports/league-of-legends/champions/cassiopeia.webp"
+  },
+  {
+   "slug": "chogath",
+   "name": "Cho'Gath",
+   "title": "the Terror of the Void",
+   "roles": [
+    "Tank",
+    "Mage"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/chogath.webp"
+  },
+  {
+   "slug": "corki",
+   "name": "Corki",
+   "title": "the Daring Bombardier",
+   "roles": [
+    "Marksman",
+    "Mage"
+   ],
+   "difficulty": 6,
+   "icon": "/images/esports/league-of-legends/champions/corki.webp"
+  },
+  {
+   "slug": "darius",
+   "name": "Darius",
+   "title": "the Hand of Noxus",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "difficulty": 2,
+   "icon": "/images/esports/league-of-legends/champions/darius.webp"
+  },
+  {
+   "slug": "diana",
+   "name": "Diana",
+   "title": "Scorn of the Moon",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "difficulty": 4,
+   "icon": "/images/esports/league-of-legends/champions/diana.webp"
+  },
+  {
+   "slug": "dr-mundo",
+   "name": "Dr. Mundo",
+   "title": "the Madman of Zaun",
+   "roles": [
+    "Tank",
+    "Fighter"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/dr-mundo.webp"
+  },
+  {
+   "slug": "draven",
+   "name": "Draven",
+   "title": "the Glorious Executioner",
+   "roles": [
+    "Marksman"
+   ],
+   "difficulty": 8,
+   "icon": "/images/esports/league-of-legends/champions/draven.webp"
+  },
+  {
+   "slug": "ekko",
+   "name": "Ekko",
+   "title": "the Boy Who Shattered Time",
+   "roles": [
+    "Assassin",
+    "Mage"
+   ],
+   "difficulty": 8,
+   "icon": "/images/esports/league-of-legends/champions/ekko.webp"
+  },
+  {
+   "slug": "elise",
+   "name": "Elise",
+   "title": "the Spider Queen",
+   "roles": [
+    "Assassin",
+    "Mage"
+   ],
+   "difficulty": 9,
+   "icon": "/images/esports/league-of-legends/champions/elise.webp"
+  },
+  {
+   "slug": "evelynn",
+   "name": "Evelynn",
+   "title": "Agony's Embrace",
+   "roles": [
+    "Assassin",
+    "Mage"
+   ],
+   "difficulty": 10,
+   "icon": "/images/esports/league-of-legends/champions/evelynn.webp"
+  },
+  {
+   "slug": "ezreal",
+   "name": "Ezreal",
+   "title": "the Prodigal Explorer",
+   "roles": [
+    "Marksman",
+    "Mage"
+   ],
+   "difficulty": 7,
+   "icon": "/images/esports/league-of-legends/champions/ezreal.webp"
+  },
+  {
+   "slug": "fiddlesticks",
+   "name": "Fiddlesticks",
+   "title": "the Ancient Fear",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "difficulty": 9,
+   "icon": "/images/esports/league-of-legends/champions/fiddlesticks.webp"
+  },
+  {
+   "slug": "fiora",
+   "name": "Fiora",
+   "title": "the Grand Duelist",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "difficulty": 3,
+   "icon": "/images/esports/league-of-legends/champions/fiora.webp"
+  },
+  {
+   "slug": "fizz",
+   "name": "Fizz",
+   "title": "the Tidal Trickster",
+   "roles": [
+    "Assassin",
+    "Fighter"
+   ],
+   "difficulty": 6,
+   "icon": "/images/esports/league-of-legends/champions/fizz.webp"
+  },
+  {
+   "slug": "galio",
+   "name": "Galio",
+   "title": "the Colossus",
+   "roles": [
+    "Tank",
+    "Mage"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/galio.webp"
+  },
+  {
+   "slug": "gangplank",
+   "name": "Gangplank",
+   "title": "the Saltwater Scourge",
+   "roles": [
+    "Fighter"
+   ],
+   "difficulty": 9,
+   "icon": "/images/esports/league-of-legends/champions/gangplank.webp"
+  },
+  {
+   "slug": "garen",
+   "name": "Garen",
+   "title": "The Might of Demacia",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/garen.webp"
+  },
+  {
+   "slug": "gnar",
+   "name": "Gnar",
+   "title": "the Missing Link",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "difficulty": 8,
+   "icon": "/images/esports/league-of-legends/champions/gnar.webp"
+  },
+  {
+   "slug": "gragas",
+   "name": "Gragas",
+   "title": "the Rabble Rouser",
+   "roles": [
+    "Fighter",
+    "Mage"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/gragas.webp"
+  },
+  {
+   "slug": "graves",
+   "name": "Graves",
+   "title": "the Outlaw",
+   "roles": [
+    "Marksman"
+   ],
+   "difficulty": 3,
+   "icon": "/images/esports/league-of-legends/champions/graves.webp"
+  },
+  {
+   "slug": "gwen",
+   "name": "Gwen",
+   "title": "The Hallowed Seamstress",
+   "roles": [
+    "Fighter"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/gwen.webp"
+  },
+  {
+   "slug": "hecarim",
+   "name": "Hecarim",
+   "title": "the Shadow of War",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "difficulty": 6,
+   "icon": "/images/esports/league-of-legends/champions/hecarim.webp"
+  },
+  {
+   "slug": "heimerdinger",
+   "name": "Heimerdinger",
+   "title": "the Revered Inventor",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "difficulty": 8,
+   "icon": "/images/esports/league-of-legends/champions/heimerdinger.webp"
+  },
+  {
+   "slug": "hwei",
+   "name": "Hwei",
+   "title": "the Visionary",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "difficulty": 9,
+   "icon": "/images/esports/league-of-legends/champions/hwei.webp"
+  },
+  {
+   "slug": "illaoi",
+   "name": "Illaoi",
+   "title": "the Kraken Priestess",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "difficulty": 4,
+   "icon": "/images/esports/league-of-legends/champions/illaoi.webp"
+  },
+  {
+   "slug": "irelia",
+   "name": "Irelia",
+   "title": "the Blade Dancer",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/irelia.webp"
+  },
+  {
+   "slug": "ivern",
+   "name": "Ivern",
+   "title": "the Green Father",
+   "roles": [
+    "Support",
+    "Mage"
+   ],
+   "difficulty": 7,
+   "icon": "/images/esports/league-of-legends/champions/ivern.webp"
+  },
+  {
+   "slug": "janna",
+   "name": "Janna",
+   "title": "the Storm's Fury",
+   "roles": [
+    "Support",
+    "Mage"
+   ],
+   "difficulty": 7,
+   "icon": "/images/esports/league-of-legends/champions/janna.webp"
+  },
+  {
+   "slug": "jarvan-iv",
+   "name": "Jarvan IV",
+   "title": "the Exemplar of Demacia",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/jarvan-iv.webp"
+  },
+  {
+   "slug": "jax",
+   "name": "Jax",
+   "title": "Grandmaster at Arms",
+   "roles": [
+    "Fighter"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/jax.webp"
+  },
+  {
+   "slug": "jayce",
+   "name": "Jayce",
+   "title": "the Defender of Tomorrow",
+   "roles": [
+    "Fighter",
+    "Marksman"
+   ],
+   "difficulty": 7,
+   "icon": "/images/esports/league-of-legends/champions/jayce.webp"
+  },
+  {
+   "slug": "jhin",
+   "name": "Jhin",
+   "title": "the Virtuoso",
+   "roles": [
+    "Marksman",
+    "Mage"
+   ],
+   "difficulty": 6,
+   "icon": "/images/esports/league-of-legends/champions/jhin.webp"
+  },
+  {
+   "slug": "jinx",
+   "name": "Jinx",
+   "title": "the Loose Cannon",
+   "roles": [
+    "Marksman"
+   ],
+   "difficulty": 6,
+   "icon": "/images/esports/league-of-legends/champions/jinx.webp"
+  },
+  {
+   "slug": "ksante",
+   "name": "K'Sante",
+   "title": "the Pride of Nazumah",
+   "roles": [
+    "Tank",
+    "Fighter"
+   ],
+   "difficulty": 9,
+   "icon": "/images/esports/league-of-legends/champions/ksante.webp"
+  },
+  {
+   "slug": "kaisa",
+   "name": "Kai'Sa",
+   "title": "Daughter of the Void",
+   "roles": [
+    "Marksman",
+    "Mage"
+   ],
+   "difficulty": 6,
+   "icon": "/images/esports/league-of-legends/champions/kaisa.webp"
+  },
+  {
+   "slug": "kalista",
+   "name": "Kalista",
+   "title": "the Spear of Vengeance",
+   "roles": [
+    "Marksman"
+   ],
+   "difficulty": 7,
+   "icon": "/images/esports/league-of-legends/champions/kalista.webp"
+  },
+  {
+   "slug": "karma",
+   "name": "Karma",
+   "title": "the Enlightened One",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/karma.webp"
+  },
+  {
+   "slug": "karthus",
+   "name": "Karthus",
+   "title": "the Deathsinger",
+   "roles": [
+    "Mage"
+   ],
+   "difficulty": 7,
+   "icon": "/images/esports/league-of-legends/champions/karthus.webp"
+  },
+  {
+   "slug": "kassadin",
+   "name": "Kassadin",
+   "title": "the Void Walker",
+   "roles": [
+    "Assassin",
+    "Mage"
+   ],
+   "difficulty": 8,
+   "icon": "/images/esports/league-of-legends/champions/kassadin.webp"
+  },
+  {
+   "slug": "katarina",
+   "name": "Katarina",
+   "title": "the Sinister Blade",
+   "roles": [
+    "Assassin",
+    "Mage"
+   ],
+   "difficulty": 8,
+   "icon": "/images/esports/league-of-legends/champions/katarina.webp"
+  },
+  {
+   "slug": "kayle",
+   "name": "Kayle",
+   "title": "the Righteous",
+   "roles": [
+    "Marksman",
+    "Mage"
+   ],
+   "difficulty": 7,
+   "icon": "/images/esports/league-of-legends/champions/kayle.webp"
+  },
+  {
+   "slug": "kayn",
+   "name": "Kayn",
+   "title": "the Shadow Reaper",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "difficulty": 8,
+   "icon": "/images/esports/league-of-legends/champions/kayn.webp"
+  },
+  {
+   "slug": "kennen",
+   "name": "Kennen",
+   "title": "the Heart of the Tempest",
+   "roles": [
+    "Mage"
+   ],
+   "difficulty": 4,
+   "icon": "/images/esports/league-of-legends/champions/kennen.webp"
+  },
+  {
+   "slug": "khazix",
+   "name": "Kha'Zix",
+   "title": "the Voidreaver",
+   "roles": [
+    "Assassin"
+   ],
+   "difficulty": 6,
+   "icon": "/images/esports/league-of-legends/champions/khazix.webp"
+  },
+  {
+   "slug": "kindred",
+   "name": "Kindred",
+   "title": "The Eternal Hunters",
+   "roles": [
+    "Marksman"
+   ],
+   "difficulty": 4,
+   "icon": "/images/esports/league-of-legends/champions/kindred.webp"
+  },
+  {
+   "slug": "kled",
+   "name": "Kled",
+   "title": "the Cantankerous Cavalier",
+   "roles": [
+    "Fighter"
+   ],
+   "difficulty": 7,
+   "icon": "/images/esports/league-of-legends/champions/kled.webp"
+  },
+  {
+   "slug": "kogmaw",
+   "name": "Kog'Maw",
+   "title": "the Mouth of the Abyss",
+   "roles": [
+    "Marksman",
+    "Mage"
+   ],
+   "difficulty": 6,
+   "icon": "/images/esports/league-of-legends/champions/kogmaw.webp"
+  },
+  {
+   "slug": "leblanc",
+   "name": "LeBlanc",
+   "title": "the Deceiver",
+   "roles": [
+    "Assassin",
+    "Mage"
+   ],
+   "difficulty": 9,
+   "icon": "/images/esports/league-of-legends/champions/leblanc.webp"
+  },
+  {
+   "slug": "lee-sin",
+   "name": "Lee Sin",
+   "title": "the Blind Monk",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "difficulty": 6,
+   "icon": "/images/esports/league-of-legends/champions/lee-sin.webp"
+  },
+  {
+   "slug": "leona",
+   "name": "Leona",
+   "title": "the Radiant Dawn",
+   "roles": [
+    "Tank",
+    "Support"
+   ],
+   "difficulty": 4,
+   "icon": "/images/esports/league-of-legends/champions/leona.webp"
+  },
+  {
+   "slug": "lillia",
+   "name": "Lillia",
+   "title": "the Bashful Bloom",
+   "roles": [
+    "Fighter",
+    "Mage"
+   ],
+   "difficulty": 8,
+   "icon": "/images/esports/league-of-legends/champions/lillia.webp"
+  },
+  {
+   "slug": "lissandra",
+   "name": "Lissandra",
+   "title": "the Ice Witch",
+   "roles": [
+    "Mage"
+   ],
+   "difficulty": 6,
+   "icon": "/images/esports/league-of-legends/champions/lissandra.webp"
+  },
+  {
+   "slug": "locke",
+   "name": "Locke",
+   "title": "the Ashen Exorcist",
+   "roles": [
+    "Assassin",
+    "Mage"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/locke.webp"
+  },
+  {
+   "slug": "lucian",
+   "name": "Lucian",
+   "title": "the Purifier",
+   "roles": [
+    "Marksman",
+    "Assassin"
+   ],
+   "difficulty": 6,
+   "icon": "/images/esports/league-of-legends/champions/lucian.webp"
+  },
+  {
+   "slug": "lulu",
+   "name": "Lulu",
+   "title": "the Fae Sorceress",
+   "roles": [
+    "Support",
+    "Mage"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/lulu.webp"
+  },
+  {
+   "slug": "lux",
+   "name": "Lux",
+   "title": "the Lady of Luminosity",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/lux.webp"
+  },
+  {
+   "slug": "malphite",
+   "name": "Malphite",
+   "title": "Shard of the Monolith",
+   "roles": [
+    "Tank",
+    "Mage"
+   ],
+   "difficulty": 2,
+   "icon": "/images/esports/league-of-legends/champions/malphite.webp"
+  },
+  {
+   "slug": "malzahar",
+   "name": "Malzahar",
+   "title": "the Prophet of the Void",
+   "roles": [
+    "Mage"
+   ],
+   "difficulty": 6,
+   "icon": "/images/esports/league-of-legends/champions/malzahar.webp"
+  },
+  {
+   "slug": "maokai",
+   "name": "Maokai",
+   "title": "the Twisted Treant",
+   "roles": [
+    "Tank",
+    "Support"
+   ],
+   "difficulty": 3,
+   "icon": "/images/esports/league-of-legends/champions/maokai.webp"
+  },
+  {
+   "slug": "master-yi",
+   "name": "Master Yi",
+   "title": "the Wuju Bladesman",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "difficulty": 4,
+   "icon": "/images/esports/league-of-legends/champions/master-yi.webp"
+  },
+  {
+   "slug": "mel",
+   "name": "Mel",
+   "title": "the Soul's Reflection",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/mel.webp"
+  },
+  {
+   "slug": "milio",
+   "name": "Milio",
+   "title": "The Gentle Flame",
+   "roles": [
+    "Support",
+    "Mage"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/milio.webp"
+  },
+  {
+   "slug": "miss-fortune",
+   "name": "Miss Fortune",
+   "title": "the Bounty Hunter",
+   "roles": [
+    "Marksman",
+    "Mage"
+   ],
+   "difficulty": 1,
+   "icon": "/images/esports/league-of-legends/champions/miss-fortune.webp"
+  },
+  {
+   "slug": "mordekaiser",
+   "name": "Mordekaiser",
+   "title": "the Iron Revenant",
+   "roles": [
+    "Fighter",
+    "Mage"
+   ],
+   "difficulty": 4,
+   "icon": "/images/esports/league-of-legends/champions/mordekaiser.webp"
+  },
+  {
+   "slug": "morgana",
+   "name": "Morgana",
+   "title": "the Fallen",
+   "roles": [
+    "Support",
+    "Mage"
+   ],
+   "difficulty": 1,
+   "icon": "/images/esports/league-of-legends/champions/morgana.webp"
+  },
+  {
+   "slug": "naafiri",
+   "name": "Naafiri",
+   "title": "the Hound of a Hundred Bites",
+   "roles": [
+    "Assassin",
+    "Fighter"
+   ],
+   "difficulty": 2,
+   "icon": "/images/esports/league-of-legends/champions/naafiri.webp"
+  },
+  {
+   "slug": "nami",
+   "name": "Nami",
+   "title": "the Tidecaller",
+   "roles": [
+    "Support",
+    "Mage"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/nami.webp"
+  },
+  {
+   "slug": "nasus",
+   "name": "Nasus",
+   "title": "the Curator of the Sands",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "difficulty": 6,
+   "icon": "/images/esports/league-of-legends/champions/nasus.webp"
+  },
+  {
+   "slug": "nautilus",
+   "name": "Nautilus",
+   "title": "the Titan of the Depths",
+   "roles": [
+    "Tank",
+    "Support"
+   ],
+   "difficulty": 6,
+   "icon": "/images/esports/league-of-legends/champions/nautilus.webp"
+  },
+  {
+   "slug": "neeko",
+   "name": "Neeko",
+   "title": "the Curious Chameleon",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/neeko.webp"
+  },
+  {
+   "slug": "nidalee",
+   "name": "Nidalee",
+   "title": "the Bestial Huntress",
+   "roles": [
+    "Assassin",
+    "Mage"
+   ],
+   "difficulty": 8,
+   "icon": "/images/esports/league-of-legends/champions/nidalee.webp"
+  },
+  {
+   "slug": "nilah",
+   "name": "Nilah",
+   "title": "the Joy Unbound",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "difficulty": 10,
+   "icon": "/images/esports/league-of-legends/champions/nilah.webp"
+  },
+  {
+   "slug": "nocturne",
+   "name": "Nocturne",
+   "title": "the Eternal Nightmare",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "difficulty": 4,
+   "icon": "/images/esports/league-of-legends/champions/nocturne.webp"
+  },
+  {
+   "slug": "nunu-willump",
+   "name": "Nunu & Willump",
+   "title": "the Boy and His Yeti",
+   "roles": [
+    "Tank",
+    "Mage"
+   ],
+   "difficulty": 4,
+   "icon": "/images/esports/league-of-legends/champions/nunu-willump.webp"
+  },
+  {
+   "slug": "olaf",
+   "name": "Olaf",
+   "title": "the Berserker",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "difficulty": 3,
+   "icon": "/images/esports/league-of-legends/champions/olaf.webp"
+  },
+  {
+   "slug": "orianna",
+   "name": "Orianna",
+   "title": "the Lady of Clockwork",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "difficulty": 7,
+   "icon": "/images/esports/league-of-legends/champions/orianna.webp"
+  },
+  {
+   "slug": "ornn",
+   "name": "Ornn",
+   "title": "The Fire below the Mountain",
+   "roles": [
+    "Tank"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/ornn.webp"
+  },
+  {
+   "slug": "pantheon",
+   "name": "Pantheon",
+   "title": "the Unbreakable Spear",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "difficulty": 4,
+   "icon": "/images/esports/league-of-legends/champions/pantheon.webp"
+  },
+  {
+   "slug": "poppy",
+   "name": "Poppy",
+   "title": "Keeper of the Hammer",
+   "roles": [
+    "Tank",
+    "Fighter"
+   ],
+   "difficulty": 6,
+   "icon": "/images/esports/league-of-legends/champions/poppy.webp"
+  },
+  {
+   "slug": "pyke",
+   "name": "Pyke",
+   "title": "the Bloodharbor Ripper",
+   "roles": [
+    "Support",
+    "Assassin"
+   ],
+   "difficulty": 7,
+   "icon": "/images/esports/league-of-legends/champions/pyke.webp"
+  },
+  {
+   "slug": "qiyana",
+   "name": "Qiyana",
+   "title": "Empress of the Elements",
+   "roles": [
+    "Assassin"
+   ],
+   "difficulty": 8,
+   "icon": "/images/esports/league-of-legends/champions/qiyana.webp"
+  },
+  {
+   "slug": "quinn",
+   "name": "Quinn",
+   "title": "Demacia's Wings",
+   "roles": [
+    "Marksman",
+    "Assassin"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/quinn.webp"
+  },
+  {
+   "slug": "rakan",
+   "name": "Rakan",
+   "title": "The Charmer",
+   "roles": [
+    "Support"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/rakan.webp"
+  },
+  {
+   "slug": "rammus",
+   "name": "Rammus",
+   "title": "the Armordillo",
+   "roles": [
+    "Tank"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/rammus.webp"
+  },
+  {
+   "slug": "reksai",
+   "name": "Rek'Sai",
+   "title": "the Void Burrower",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "difficulty": 3,
+   "icon": "/images/esports/league-of-legends/champions/reksai.webp"
+  },
+  {
+   "slug": "rell",
+   "name": "Rell",
+   "title": "the Iron Maiden",
+   "roles": [
+    "Tank",
+    "Support"
+   ],
+   "difficulty": 0,
+   "icon": "/images/esports/league-of-legends/champions/rell.webp"
+  },
+  {
+   "slug": "renata-glasc",
+   "name": "Renata Glasc",
+   "title": "the Chem-Baroness",
+   "roles": [
+    "Support",
+    "Mage"
+   ],
+   "difficulty": 8,
+   "icon": "/images/esports/league-of-legends/champions/renata-glasc.webp"
+  },
+  {
+   "slug": "renekton",
+   "name": "Renekton",
+   "title": "the Butcher of the Sands",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "difficulty": 3,
+   "icon": "/images/esports/league-of-legends/champions/renekton.webp"
+  },
+  {
+   "slug": "rengar",
+   "name": "Rengar",
+   "title": "the Pridestalker",
+   "roles": [
+    "Assassin",
+    "Fighter"
+   ],
+   "difficulty": 8,
+   "icon": "/images/esports/league-of-legends/champions/rengar.webp"
+  },
+  {
+   "slug": "riven",
+   "name": "Riven",
+   "title": "the Exile",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "difficulty": 8,
+   "icon": "/images/esports/league-of-legends/champions/riven.webp"
+  },
+  {
+   "slug": "rumble",
+   "name": "Rumble",
+   "title": "the Mechanized Menace",
+   "roles": [
+    "Fighter",
+    "Mage"
+   ],
+   "difficulty": 10,
+   "icon": "/images/esports/league-of-legends/champions/rumble.webp"
+  },
+  {
+   "slug": "ryze",
+   "name": "Ryze",
+   "title": "the Rune Mage",
+   "roles": [
+    "Mage"
+   ],
+   "difficulty": 7,
+   "icon": "/images/esports/league-of-legends/champions/ryze.webp"
+  },
+  {
+   "slug": "samira",
+   "name": "Samira",
+   "title": "the Desert Rose",
+   "roles": [
+    "Marksman",
+    "Assassin"
+   ],
+   "difficulty": 6,
+   "icon": "/images/esports/league-of-legends/champions/samira.webp"
+  },
+  {
+   "slug": "sejuani",
+   "name": "Sejuani",
+   "title": "Fury of the North",
+   "roles": [
+    "Tank"
+   ],
+   "difficulty": 4,
+   "icon": "/images/esports/league-of-legends/champions/sejuani.webp"
+  },
+  {
+   "slug": "senna",
+   "name": "Senna",
+   "title": "the Redeemer",
+   "roles": [
+    "Support",
+    "Marksman"
+   ],
+   "difficulty": 7,
+   "icon": "/images/esports/league-of-legends/champions/senna.webp"
+  },
+  {
+   "slug": "seraphine",
+   "name": "Seraphine",
+   "title": "the Starry-Eyed Songstress",
+   "roles": [
+    "Support",
+    "Mage"
+   ],
+   "difficulty": 0,
+   "icon": "/images/esports/league-of-legends/champions/seraphine.webp"
+  },
+  {
+   "slug": "sett",
+   "name": "Sett",
+   "title": "the Boss",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "difficulty": 2,
+   "icon": "/images/esports/league-of-legends/champions/sett.webp"
+  },
+  {
+   "slug": "shaco",
+   "name": "Shaco",
+   "title": "the Demon Jester",
+   "roles": [
+    "Assassin"
+   ],
+   "difficulty": 9,
+   "icon": "/images/esports/league-of-legends/champions/shaco.webp"
+  },
+  {
+   "slug": "shen",
+   "name": "Shen",
+   "title": "the Eye of Twilight",
+   "roles": [
+    "Tank"
+   ],
+   "difficulty": 4,
+   "icon": "/images/esports/league-of-legends/champions/shen.webp"
+  },
+  {
+   "slug": "shyvana",
+   "name": "Shyvana",
+   "title": "the Half-Dragon",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "difficulty": 4,
+   "icon": "/images/esports/league-of-legends/champions/shyvana.webp"
+  },
+  {
+   "slug": "singed",
+   "name": "Singed",
+   "title": "the Mad Chemist",
+   "roles": [
+    "Tank",
+    "Mage"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/singed.webp"
+  },
+  {
+   "slug": "sion",
+   "name": "Sion",
+   "title": "The Undead Juggernaut",
+   "roles": [
+    "Tank",
+    "Fighter"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/sion.webp"
+  },
+  {
+   "slug": "sivir",
+   "name": "Sivir",
+   "title": "the Battle Mistress",
+   "roles": [
+    "Marksman"
+   ],
+   "difficulty": 4,
+   "icon": "/images/esports/league-of-legends/champions/sivir.webp"
+  },
+  {
+   "slug": "skarner",
+   "name": "Skarner",
+   "title": "the Primordial Sovereign",
+   "roles": [
+    "Tank",
+    "Fighter"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/skarner.webp"
+  },
+  {
+   "slug": "smolder",
+   "name": "Smolder",
+   "title": "the Fiery Fledgling",
+   "roles": [
+    "Marksman",
+    "Mage"
+   ],
+   "difficulty": 6,
+   "icon": "/images/esports/league-of-legends/champions/smolder.webp"
+  },
+  {
+   "slug": "sona",
+   "name": "Sona",
+   "title": "Maven of the Strings",
+   "roles": [
+    "Support",
+    "Mage"
+   ],
+   "difficulty": 4,
+   "icon": "/images/esports/league-of-legends/champions/sona.webp"
+  },
+  {
+   "slug": "soraka",
+   "name": "Soraka",
+   "title": "the Starchild",
+   "roles": [
+    "Support",
+    "Mage"
+   ],
+   "difficulty": 3,
+   "icon": "/images/esports/league-of-legends/champions/soraka.webp"
+  },
+  {
+   "slug": "swain",
+   "name": "Swain",
+   "title": "the Noxian Grand General",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "difficulty": 8,
+   "icon": "/images/esports/league-of-legends/champions/swain.webp"
+  },
+  {
+   "slug": "sylas",
+   "name": "Sylas",
+   "title": "the Unshackled",
+   "roles": [
+    "Mage",
+    "Assassin"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/sylas.webp"
+  },
+  {
+   "slug": "syndra",
+   "name": "Syndra",
+   "title": "the Dark Sovereign",
+   "roles": [
+    "Mage"
+   ],
+   "difficulty": 8,
+   "icon": "/images/esports/league-of-legends/champions/syndra.webp"
+  },
+  {
+   "slug": "tahm-kench",
+   "name": "Tahm Kench",
+   "title": "The River King",
+   "roles": [
+    "Tank",
+    "Support"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/tahm-kench.webp"
+  },
+  {
+   "slug": "taliyah",
+   "name": "Taliyah",
+   "title": "the Stoneweaver",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/taliyah.webp"
+  },
+  {
+   "slug": "talon",
+   "name": "Talon",
+   "title": "the Blade's Shadow",
+   "roles": [
+    "Assassin"
+   ],
+   "difficulty": 7,
+   "icon": "/images/esports/league-of-legends/champions/talon.webp"
+  },
+  {
+   "slug": "taric",
+   "name": "Taric",
+   "title": "the Shield of Valoran",
+   "roles": [
+    "Support",
+    "Tank"
+   ],
+   "difficulty": 3,
+   "icon": "/images/esports/league-of-legends/champions/taric.webp"
+  },
+  {
+   "slug": "teemo",
+   "name": "Teemo",
+   "title": "the Swift Scout",
+   "roles": [
+    "Marksman",
+    "Mage"
+   ],
+   "difficulty": 6,
+   "icon": "/images/esports/league-of-legends/champions/teemo.webp"
+  },
+  {
+   "slug": "thresh",
+   "name": "Thresh",
+   "title": "the Chain Warden",
+   "roles": [
+    "Support",
+    "Tank"
+   ],
+   "difficulty": 7,
+   "icon": "/images/esports/league-of-legends/champions/thresh.webp"
+  },
+  {
+   "slug": "tristana",
+   "name": "Tristana",
+   "title": "the Yordle Gunner",
+   "roles": [
+    "Marksman",
+    "Assassin"
+   ],
+   "difficulty": 4,
+   "icon": "/images/esports/league-of-legends/champions/tristana.webp"
+  },
+  {
+   "slug": "trundle",
+   "name": "Trundle",
+   "title": "the Troll King",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/trundle.webp"
+  },
+  {
+   "slug": "tryndamere",
+   "name": "Tryndamere",
+   "title": "the Barbarian King",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/tryndamere.webp"
+  },
+  {
+   "slug": "twisted-fate",
+   "name": "Twisted Fate",
+   "title": "the Card Master",
+   "roles": [
+    "Mage",
+    "Marksman"
+   ],
+   "difficulty": 9,
+   "icon": "/images/esports/league-of-legends/champions/twisted-fate.webp"
+  },
+  {
+   "slug": "twitch",
+   "name": "Twitch",
+   "title": "the Plague Rat",
+   "roles": [
+    "Marksman",
+    "Assassin"
+   ],
+   "difficulty": 6,
+   "icon": "/images/esports/league-of-legends/champions/twitch.webp"
+  },
+  {
+   "slug": "udyr",
+   "name": "Udyr",
+   "title": "the Spirit Walker",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "difficulty": 7,
+   "icon": "/images/esports/league-of-legends/champions/udyr.webp"
+  },
+  {
+   "slug": "urgot",
+   "name": "Urgot",
+   "title": "the Dreadnought",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "difficulty": 8,
+   "icon": "/images/esports/league-of-legends/champions/urgot.webp"
+  },
+  {
+   "slug": "varus",
+   "name": "Varus",
+   "title": "the Arrow of Retribution",
+   "roles": [
+    "Marksman",
+    "Mage"
+   ],
+   "difficulty": 2,
+   "icon": "/images/esports/league-of-legends/champions/varus.webp"
+  },
+  {
+   "slug": "vayne",
+   "name": "Vayne",
+   "title": "the Night Hunter",
+   "roles": [
+    "Marksman",
+    "Assassin"
+   ],
+   "difficulty": 8,
+   "icon": "/images/esports/league-of-legends/champions/vayne.webp"
+  },
+  {
+   "slug": "veigar",
+   "name": "Veigar",
+   "title": "the Tiny Master of Evil",
+   "roles": [
+    "Mage"
+   ],
+   "difficulty": 7,
+   "icon": "/images/esports/league-of-legends/champions/veigar.webp"
+  },
+  {
+   "slug": "velkoz",
+   "name": "Vel'Koz",
+   "title": "the Eye of the Void",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "difficulty": 8,
+   "icon": "/images/esports/league-of-legends/champions/velkoz.webp"
+  },
+  {
+   "slug": "vex",
+   "name": "Vex",
+   "title": "the Gloomist",
+   "roles": [
+    "Mage"
+   ],
+   "difficulty": 0,
+   "icon": "/images/esports/league-of-legends/champions/vex.webp"
+  },
+  {
+   "slug": "vi",
+   "name": "Vi",
+   "title": "the Piltover Enforcer",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "difficulty": 4,
+   "icon": "/images/esports/league-of-legends/champions/vi.webp"
+  },
+  {
+   "slug": "viego",
+   "name": "Viego",
+   "title": "The Ruined King",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/viego.webp"
+  },
+  {
+   "slug": "viktor",
+   "name": "Viktor",
+   "title": "the Herald of the Arcane",
+   "roles": [
+    "Mage"
+   ],
+   "difficulty": 9,
+   "icon": "/images/esports/league-of-legends/champions/viktor.webp"
+  },
+  {
+   "slug": "vladimir",
+   "name": "Vladimir",
+   "title": "the Crimson Reaper",
+   "roles": [
+    "Mage",
+    "Fighter"
+   ],
+   "difficulty": 7,
+   "icon": "/images/esports/league-of-legends/champions/vladimir.webp"
+  },
+  {
+   "slug": "volibear",
+   "name": "Volibear",
+   "title": "the Relentless Storm",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "difficulty": 3,
+   "icon": "/images/esports/league-of-legends/champions/volibear.webp"
+  },
+  {
+   "slug": "warwick",
+   "name": "Warwick",
+   "title": "the Uncaged Wrath of Zaun",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "difficulty": 3,
+   "icon": "/images/esports/league-of-legends/champions/warwick.webp"
+  },
+  {
+   "slug": "wukong",
+   "name": "Wukong",
+   "title": "the Monkey King",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "difficulty": 3,
+   "icon": "/images/esports/league-of-legends/champions/wukong.webp"
+  },
+  {
+   "slug": "xayah",
+   "name": "Xayah",
+   "title": "the Rebel",
+   "roles": [
+    "Marksman"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/xayah.webp"
+  },
+  {
+   "slug": "xerath",
+   "name": "Xerath",
+   "title": "the Magus Ascendant",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "difficulty": 8,
+   "icon": "/images/esports/league-of-legends/champions/xerath.webp"
+  },
+  {
+   "slug": "xin-zhao",
+   "name": "Xin Zhao",
+   "title": "the Seneschal of Demacia",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "difficulty": 2,
+   "icon": "/images/esports/league-of-legends/champions/xin-zhao.webp"
+  },
+  {
+   "slug": "yasuo",
+   "name": "Yasuo",
+   "title": "the Unforgiven",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "difficulty": 10,
+   "icon": "/images/esports/league-of-legends/champions/yasuo.webp"
+  },
+  {
+   "slug": "yone",
+   "name": "Yone",
+   "title": "the Unforgotten",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "difficulty": 8,
+   "icon": "/images/esports/league-of-legends/champions/yone.webp"
+  },
+  {
+   "slug": "yorick",
+   "name": "Yorick",
+   "title": "Shepherd of Souls",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "difficulty": 6,
+   "icon": "/images/esports/league-of-legends/champions/yorick.webp"
+  },
+  {
+   "slug": "yunara",
+   "name": "Yunara",
+   "title": "the Unbroken Faith",
+   "roles": [
+    "Marksman"
+   ],
+   "difficulty": 4,
+   "icon": "/images/esports/league-of-legends/champions/yunara.webp"
+  },
+  {
+   "slug": "yuumi",
+   "name": "Yuumi",
+   "title": "the Magical Cat",
+   "roles": [
+    "Support",
+    "Mage"
+   ],
+   "difficulty": 2,
+   "icon": "/images/esports/league-of-legends/champions/yuumi.webp"
+  },
+  {
+   "slug": "zaahen",
+   "name": "Zaahen",
+   "title": "The Unsundered",
+   "roles": [
+    "Fighter"
+   ],
+   "difficulty": 2,
+   "icon": "/images/esports/league-of-legends/champions/zaahen.webp"
+  },
+  {
+   "slug": "zac",
+   "name": "Zac",
+   "title": "the Secret Weapon",
+   "roles": [
+    "Tank",
+    "Fighter"
+   ],
+   "difficulty": 8,
+   "icon": "/images/esports/league-of-legends/champions/zac.webp"
+  },
+  {
+   "slug": "zed",
+   "name": "Zed",
+   "title": "the Master of Shadows",
+   "roles": [
+    "Assassin"
+   ],
+   "difficulty": 7,
+   "icon": "/images/esports/league-of-legends/champions/zed.webp"
+  },
+  {
+   "slug": "zeri",
+   "name": "Zeri",
+   "title": "The Spark of Zaun",
+   "roles": [
+    "Marksman"
+   ],
+   "difficulty": 6,
+   "icon": "/images/esports/league-of-legends/champions/zeri.webp"
+  },
+  {
+   "slug": "ziggs",
+   "name": "Ziggs",
+   "title": "the Hexplosives Expert",
+   "roles": [
+    "Mage"
+   ],
+   "difficulty": 4,
+   "icon": "/images/esports/league-of-legends/champions/ziggs.webp"
+  },
+  {
+   "slug": "zilean",
+   "name": "Zilean",
+   "title": "the Chronokeeper",
+   "roles": [
+    "Support",
+    "Mage"
+   ],
+   "difficulty": 6,
+   "icon": "/images/esports/league-of-legends/champions/zilean.webp"
+  },
+  {
+   "slug": "zoe",
+   "name": "Zoe",
+   "title": "the Aspect of Twilight",
+   "roles": [
+    "Mage"
+   ],
+   "difficulty": 5,
+   "icon": "/images/esports/league-of-legends/champions/zoe.webp"
+  },
+  {
+   "slug": "zyra",
+   "name": "Zyra",
+   "title": "Rise of the Thorns",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "difficulty": 7,
+   "icon": "/images/esports/league-of-legends/champions/zyra.webp"
+  }
+ ]
+}

@@ -1,6 +1,6 @@
 // valorant.ts: everything on the VALORANT hub (/esports/valorant). Edit by hand; every fact needs a source.
 // Press images live in public/images/esports/valorant (official Riot press kit via Gamespress, editorial use only).
-import type { GameHubData, Source } from '../lib/esports-hub';
+import { type GameHubData, type Source, LOGOS } from '../lib/esports-hub';
 
 const S = {
   site: { label: 'VALORANT: official site', url: 'https://playvalorant.com/en-us/' },
@@ -31,6 +31,11 @@ export const VALORANT: GameHubData = {
   tagline: 'Five agents, one bomb, thirteen rounds. Here\'s the pro scene, the new stuff and the words you\'ll hear.',
   description: 'VALORANT for beginners: what the game is, how the VCT pro scene works, the 2026 season results, the new agent Hush and what\'s coming in 2027.',
   badge: 'shooter',
+  logo: LOGOS.valorant,
+  tools: [
+    { href: '/esports/valorant/agents', label: 'Every Agent', text: 'All the Agents with their roles and abilities.' },
+    { href: '/esports/valorant/map-planner', label: 'Map planner', text: 'Pick a map, place Agents and draw your plan.' },
+  ],
   about: [
     'VALORANT is a free 5v5 tactical shooter made by Riot Games. Before the match you pick an Agent: a character with their own special abilities. After that it\'s sharp aim plus smart teamwork. No two Agents play alike, so your Agent choice really matters.',
     'One team attacks and tries to plant a bomb called the Spike. The other team defends and tries to stop them, or defuse it before it goes off. Knock out the whole other team and you win the round too. The first team to win 13 rounds wins the match, and the teams swap sides after 12 rounds.',
