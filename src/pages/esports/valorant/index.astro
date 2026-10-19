@@ -12,7 +12,7 @@ const sheetSources = N.sheets.map((s) => s.source);
 ---
 <GameHub game={VALORANT} image="/images/esports/valorant/hush-hero.webp" extraSources={[...N.hush.sources, ...sheetSources]} extraJump={[{ href: '#new', label: 'New in VALORANT' }]}>
   <figure slot="hero" class="vl-hero">
-    <img src="/images/esports/valorant/hush-hero.webp" width="1920" height="1080" alt="Hush, VALORANT's new Agent, mid-dash in front of a sandstone wall, with pink energy trailing behind her." fetchpriority="high" />
+    <img src="/images/esports/valorant/hush-hero.webp" width="1920" height="1080" alt="Hush, VALORANT's new Agent, mid-dash in front of a sandstone wall, with pink energy trailing behind her." fetchpriority="high" data-zoom />
     <figcaption>{CREDIT}</figcaption>
   </figure>
 
@@ -21,7 +21,7 @@ const sheetSources = N.sheets.map((s) => s.source);
 
     <article class="vl-hush">
       <figure class="vl-hush-art">
-        <img src="/images/esports/valorant/hush-key-art.webp" width="800" height="1000" alt="Hush key art: a woman with long lilac hair in a black jacket, a pistol and glowing objects floating around her." loading="lazy" />
+        <img src="/images/esports/valorant/hush-key-art.webp" width="800" height="1000" alt="Hush key art: a woman with long lilac hair in a black jacket, a pistol and glowing objects floating around her." loading="lazy" data-zoom />
         <figcaption>{CREDIT}</figcaption>
       </figure>
       <div>
@@ -46,7 +46,7 @@ const sheetSources = N.sheets.map((s) => s.source);
         <article class="gh-card vl-sheet">
           {s.image && (
             <figure>
-              <img src={s.image.src} width={s.image.w} height={s.image.h} alt={s.image.alt} loading="lazy" />
+              <img src={s.image.src} width={s.image.w} height={s.image.h} alt={s.image.alt} loading="lazy" data-zoom />
               <figcaption>{CREDIT}</figcaption>
             </figure>
           )}
@@ -74,10 +74,10 @@ const sheetSources = N.sheets.map((s) => s.source);
   .vl-hush-art img { width: 100%; height: auto; border-radius: 16px; background: #7d7d7d; }
   @media (max-width: 759px) { .vl-hush-art img { max-height: 340px; object-fit: cover; object-position: top; } }
   .vl-abilities { list-style: none; margin: 4px 0 8px; padding: 0; display: grid; gap: 8px; }
-  .vl-abilities li { display: grid; grid-template-columns: 58px 1fr; gap: 10px; align-items: start; }
+  .vl-abilities li { display: grid; grid-template-columns: 76px 1fr; gap: 10px; align-items: start; }
   .vl-abilities strong { display: block; }
   .vl-abilities span:not(.vl-key) { color: var(--muted); font-size: .92rem; }
-  .vl-key { display: grid; place-items: center; min-height: 30px; padding: 2px 6px; border-radius: 10px; background: #ff8fc7; color: #1b1a1f; border: 2px solid #1b1a1f; font-weight: 800; font-size: .72rem; text-transform: uppercase; }
+  .vl-key { display: grid; place-items: center; min-height: 30px; padding: 2px 4px; line-height: 1; text-align: center; white-space: nowrap; letter-spacing: .02em; border-radius: 10px; background: #ff8fc7; color: #1b1a1f; border: 2px solid #1b1a1f; font-weight: 800; font-size: .72rem; text-transform: uppercase; }
   .vl-video { margin-top: 18px; max-width: 820px; aspect-ratio: 16 / 9; border: 2px solid var(--line); border-radius: 20px; overflow: hidden; background: #000; }
   .vl-video iframe { width: 100%; height: 100%; border: 0; display: block; }
   .vl-sheets { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 14px; }

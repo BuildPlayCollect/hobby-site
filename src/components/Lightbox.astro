@@ -1,0 +1,66 @@
+---
+// Lightbox.astro: tap a photo to see it big, like most photo sites. One shared viewer for the whole site.
+// Which pictures enlarge: photos inside articles (.prose), any <img data-zoom>, and Unmatched card buttons (.umc-open).
+// Close with the × button, a tap on the dark background, or the Esc key.
+---
+<dialog class="lb" id="lightbox" aria-label="Photo close-up">
+  <button type="button" class="lb-close" aria-label="Close">×</button>
+  <img src="" alt="" />
+  <div class="lb-caption"></div>
+</dialog>
+
+<script>
+  const box = document.getElementById('lightbox') as HTMLDialogElement | null;
+  if (box) {
+    const big = box.querySelector('img')!;
+    const caption = box.querySelector('.lb-caption')!;
+    const ZOOM = '.prose img, img[data-zoom]';
+
+    function open(img: HTMLImageElement, extra?: Node | null, small = false) {
+      big.src = img.currentSrc || img.src;
+      big.alt = img.alt;
+      box!.classList.toggle('is-small', small);
+      // Show the photo's credit or caption underneath, so it travels with the picture.
+      const figcaption = img.closest('figure')?.querySelector('figcaption');
+      caption.replaceChildren(...[extra, figcaption].filter(Boolean).map((n) => n!.cloneNode(true)));
+      box!.showModal();
+    }
+
+    // Photos that aren't buttons or links yet get a keyboard-friendly "enlarge" role.
+    document.querySelectorAll<HTMLImageElement>(ZOOM).forEach((img) => {
+      if (img.closest('a, button')) return;
+      img.classList.add('lb-zoomable');
+      img.tabIndex = 0;
+      img.setAttribute('role', 'button');
+      img.setAttribute('aria-label', `Enlarge photo${img.alt ? ': ' + img.alt : ''}`);
+      img.addEventListener('click', () => open(img));
+      img.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(img); }
+      });
+    });
+
+    // Unmatched cards: tiny scans also show their card text, since the picture alone is hard to read.
+    document.querySelectorAll<HTMLButtonElement>('.umc-open').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        open(btn.querySelector('img')!, btn.parentElement?.querySelector('.umc-under'), btn.hasAttribute('data-small'));
+      });
+    });
+
+    box.querySelector('.lb-close')!.addEventListener('click', () => box.close());
+    // a tap outside the photo (on the dimmed background) closes it too
+    box.addEventListener('click', (e) => { if (e.target === box) box.close(); });
+  }
+</script>
+
+<style is:global>
+  .lb-zoomable { cursor: zoom-in; }
+  .lb-zoomable:focus-visible { outline: 3px solid var(--c2, #f3701e); outline-offset: 3px; }
+  .lb { padding: 14px; border: 2px solid var(--line); border-radius: 16px; background: var(--surface); color: var(--ink); max-width: 94vw; max-height: 94vh; overflow: auto; }
+  .lb::backdrop { background: rgba(10, 10, 14, .78); }
+  .lb img { display: block; max-width: min(1400px, calc(94vw - 32px)); max-height: calc(94vh - 90px); width: auto; height: auto; margin: 0 auto; border-radius: 12px; }
+  .lb.is-small img { width: min(260px, 70vw); }
+  .lb-caption { max-width: 70ch; margin: 10px auto 0; font-size: .85rem; line-height: 1.45; color: var(--muted); text-align: center; }
+  .lb-caption:empty { display: none; }
+  .lb-caption .umc-under { color: var(--ink); text-align: left; font-size: .9rem; }
+  .lb-close { position: absolute; top: 6px; right: 6px; width: 36px; height: 36px; border: 2px solid var(--line); border-radius: 50%; background: var(--surface); color: var(--ink); font-size: 1.3rem; line-height: 1; cursor: pointer; z-index: 1; }
+</style>
