@@ -53,6 +53,30 @@ export const LEAGUE: GameHubData = {
     { title: 'The Swiss Stage starts 23 October', text: 'The tournament moves to Allen, Texas. Karmine Corp\'s first opponent is Anyone\'s Legend from China.', source: S.final2 },
     { title: 'Who\'s there', text: 'Korea sent Gen.G, Hanwha Life Esports, T1 and Dplus KIA. China sent Anyone\'s Legend, Bilibili Gaming, Top Esports and Invictus Gaming. Europe has G2 Esports, Movistar KOI and Karmine Corp, North America has Team Liquid and LYON, Asia-Pacific has Team Secret Whales and CTBC Flying Oyster, and Brazil has LOS.', source: S.hub },
   ],
+  patches: [
+    { name: 'Patch 26.20', date: '2026-10-07', source: { label: 'League of Legends: Patch 26.20 notes', url: 'https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-20-notes' }, highlights: [
+      'The Worlds patch: Ambessa gets weaker, while Kennen, Kindred, Diana and Lucian get stronger.',
+      'Hextech Rocketbelt is now worse for running away and better for diving into fights.',
+      'Most item stack counters leave the scoreboard, and new HEARTSTEEL skins arrive for Sett, Ezreal, Kayn and more.',
+    ] },
+    { name: 'Patch 26.19', date: '2026-09-23', source: { label: 'League of Legends: Patch 26.19 notes', url: 'https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-19-notes' }, highlights: [
+      'Top laners get their free Teleport sooner, so they can help the rest of the map earlier.',
+      'Riot tuned likely Worlds picks such as Rumble, Ryze, Nocturne and Twisted Fate.',
+      'Team Voice for North America and Oceania is delayed with no new date yet.',
+    ] },
+    { name: 'Patch 26.18', date: '2026-09-10', source: { label: 'League of Legends: Patch 26.18 notes', url: 'https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-18-notes' }, highlights: [
+      'Caps joins the Hall of Legends, the first Western pro to get in, with Tristana skins he helped design.',
+      'Nautilus, Bard, Seraphine, Syndra and Zeri get weaker; Viego, Master Yi, Ekko and Kassadin get stronger.',
+      'ARAM Mayhem now offers augments that suit each champion better.',
+    ] },
+  ],
+  teams: [
+    { date: '2026-10-18', team: 'KT Rolster', unconfirmed: true, text: 'Raptor, Taeyoon and Kellin from BNK FEARX are expected to join KT for 2027. They can\'t sign until their contracts end on 16 November.', source: { label: 'Sheep Esports: Raptor, Kellin and Taeyoon expected to join KT Rolster for LCK 2027', url: 'https://www.sheepesports.com/en/articles/sources-raptor-kellin-and-taeyoon-expected-to-join-kt-rolster-for-lck-2027/en' } },
+    { date: '2026-10-10', team: 'Nongshim RedForce', unconfirmed: true, text: 'Former world champion Deft is reportedly joining NS for 2027 after his military service. Neither side has confirmed it.', source: { label: 'Sheep Esports: Deft set to join Nongshim RedForce for LCK 2027', url: 'https://www.sheepesports.com/en/articles/sources-deft-set-to-join-nongshim-redforce-for-lck-2027/en' } },
+    { date: '2026-10-08', team: 'KT Rolster', text: 'KT extended the contracts of mid laner Bdd and top laner PerfecT until 2028.', source: { label: 'Strafe: KT Rolster extend Bdd and PerfecT\'s contracts through 2028', url: 'https://www.strafe.com/news/read/kt-rolster-extend-bdd-and-perfec-t-s-contracts-through-2028/' } },
+    { date: '2026-10-07', team: 'Top Esports', text: 'Rookie top laner ZUIAN can\'t travel to Worlds after two failed visa interviews, so veteran 369 starts in his place.', source: { label: 'Dot Esports: TES ZUIAN to miss first Worlds after failing two visa interviews', url: 'https://dotesports.com/league-of-legends/news/tes-zuian-visa-issues-worlds-2026' } },
+    { date: '2026-09-28', team: 'Stend (LEC support)', text: 'Support player Stend, 25, announced he is retiring as a pro, and is open to a team management job later.', source: { label: 'Sheep Esports: Stend announces retirement as a player', url: 'https://www.sheepesports.com/en/articles/stend-announces-retirement-as-a-player/en' } },
+  ],
   terms: [
     { term: 'Champion', text: 'The character you control in a match.' },
     { term: 'Nexus', text: 'The heart of each base. Destroy the enemy\'s and you win.' },

@@ -4,7 +4,7 @@
 // (e.g. with a press photo), and the default slot adds extra sections after "What's happening now".
 import Base from '../../layouts/Base.astro';
 import SourceList from '../SourceList.astro';
-import { type GameHubData, type Source, fmtRange, eventStatus, LEGAL, RIOT_LEGAL_SOURCE } from '../../lib/esports-hub';
+import { type GameHubData, type Source, fmtDate, fmtRange, eventStatus, LEGAL, RIOT_LEGAL_SOURCE } from '../../lib/esports-hub';
 
 interface Props { game: GameHubData; extraSources?: Source[]; extraJump?: { href: string; label: string }[]; image?: string }
 const { game, extraSources = [], extraJump = [], image } = Astro.props;
@@ -13,6 +13,8 @@ const allSources = [
   ...game.now.map((n) => n.source),
   ...game.events.map((e) => e.source),
   ...(game.ph ?? []).map((p) => p.source),
+  ...(game.patches ?? []).map((p) => p.source),
+  ...(game.teams ?? []).map((t) => t.source),
   ...extraSources,
   ...game.sources,
   ...(game.legal === 'riot' ? [RIOT_LEGAL_SOURCE] : []),
@@ -39,7 +41,7 @@ const hasHero = Astro.slots.has('hero');
   )}
 
   <nav class="gh-jump" aria-label="On this page">
-    <a href="#about">What is it?</a><a href="#start">New? Start here</a><a href="#now">Happening now</a>{extraJump.map((j) => <a href={j.href}>{j.label}</a>)}<a href="#scene">The pro scene</a>{game.ph && <a href="#ph">Philippines</a>}
+    <a href="#about">What is it?</a><a href="#start">New? Start here</a><a href="#now">Happening now</a>{game.patches && <a href="#patches">Patch notes</a>}{game.teams && <a href="#teams">{game.teamsTitle ?? 'Team updates'}</a>}{extraJump.map((j) => <a href={j.href}>{j.label}</a>)}<a href="#scene">The pro scene</a>{game.ph && <a href="#ph">Philippines</a>}
   </nav>
 
   <section id="about" class="gh-section gh-about">
@@ -76,6 +78,44 @@ const hasHero = Astro.slots.has('hero');
       ))}
     </div>
   </section>
+
+  {game.patches && (
+    <section id="patches" class="gh-section">
+      <div class="section-head"><h2>Patch notes</h2></div>
+      <p class="gh-muted">The biggest changes in each update, in plain words. Tap a patch name for the full notes.</p>
+      <ol class="gh-patches">
+        {game.patches.map((p, i) => (
+          <li class="gh-card">
+            <div class="gh-patch-top">
+              <h3><a href={p.source.url} rel="noopener">{p.name}</a></h3>
+              {i === 0 && <span class="gh-status gh-status-next">Latest</span>}
+              <span class="gh-place">{fmtDate(p.date)}</span>
+            </div>
+            <ul>{p.highlights.map((h) => <li>{h}</li>)}</ul>
+          </li>
+        ))}
+      </ol>
+    </section>
+  )}
+
+  {game.teams && (
+    <section id="teams" class="gh-section">
+      <div class="section-head"><h2>{game.teamsTitle ?? 'Team updates'}</h2></div>
+      <p class="gh-muted">Who joined, who left and who's new. Pro teams change a lot between seasons.</p>
+      <ul class="gh-teams">
+        {game.teams.map((t) => (
+          <li>
+            <span class="gh-when">{fmtDate(t.date, { day: 'numeric', month: 'short' })}</span>
+            <div>
+              <strong>{t.team}</strong>{t.unconfirmed && <span class="gh-unconf">Unconfirmed</span>}
+              <p>{t.text}</p>
+              <p class="gh-src">Source: <a href={t.source.url} rel="noopener">{t.source.label}</a></p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
 
   <slot />
 
@@ -191,6 +231,18 @@ const hasHero = Astro.slots.has('hero');
   .gh-status-next { background: var(--mark); color: #1b1a1f; border-color: #1b1a1f; }
   .gh-status-done { color: var(--muted); border-color: var(--soft-line); }
 
+  .gh-patches { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 14px; }
+  .gh-patch-top { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin-bottom: 4px; }
+  .gh-patch-top h3 { margin: 0; }
+  .gh-patch-top h3 a { color: var(--ink); }
+  .gh-patches ul { margin: 4px 0 0; padding-left: 18px; display: grid; gap: 6px; font-size: .95rem; }
+  .gh-teams { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; border-top: 1px solid var(--soft-line); }
+  .gh-teams > li { display: grid; gap: 4px; padding: 12px 0; border-bottom: 1px solid var(--soft-line); }
+  @media (min-width: 700px) { .gh-teams > li { grid-template-columns: 90px 1fr; gap: 16px; } }
+  .gh-teams .gh-when { padding-top: 2px; }
+  .gh-teams strong { font-family: var(--display); font-size: 1.05rem; }
+  .gh-teams p { margin: 2px 0 0; }
+  .gh-unconf { margin-left: 8px; font-size: .68rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; padding: 2px 8px; border-radius: 999px; border: 2px dashed var(--muted); color: var(--muted); vertical-align: 2px; }
   .gh-legal { margin: 14px 0 0; color: var(--muted); font-size: .8rem; max-width: 80ch; }
   @media (max-width: 520px) { .gh-when { padding-top: 0; } }
 </style>

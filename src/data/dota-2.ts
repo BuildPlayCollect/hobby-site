@@ -58,7 +58,32 @@ export const DOTA2: GameHubData = {
   ph: [
     { title: 'An all-Filipino OG at TI 2026', text: 'OG went to The International with five Filipino players: Natsumi-, Yopaj, Raven, TIMS and Skem. They won the Southeast Asia qualifier, beating Grind Back 3–1 in the final.', source: S.ogPh },
     { title: 'How it went', text: 'OG were knocked out in the group stage on 15 August after a 0–2 loss to GamerLegion, finishing 14th–15th.', source: S.ogOut },
-    { title: 'What\'s next for OG', text: 'After TI, OG parted ways with Yopaj, Raven and TIMS. Captain Skem and carry Natsumi- stay, and the team looks set to stay in Southeast Asia.', source: S.ogSplit },
+    { title: 'What\'s next for OG', text: 'After TI, OG parted ways with Yopaj, Raven and TIMS. Captain Skem and carry Natsumi- stay, and on 23 September OG brought back two-time TI champion Topson, plus SSS and OneJey.', source: { label: 'esports.gg: OG reveals Topson\'s return and new roster', url: 'https://esports.gg/news/dota-2/og-dota-2-topson-returns-with-new-lineup/' } },
+  ],
+  patches: [
+    { name: 'Patch 7.41f', date: '2026-09-15', source: { label: 'esports.gg: Dota 2 patch 7.41f notes', url: 'https://esports.gg/news/dota-2/dota-2-patch-7-41f-patch-notes/' }, highlights: [
+      'Big late-game items like Octarine Core, Daedalus and Heart of Tarrasque cost more, so heroes power up a bit later.',
+      'Satanic and Mask of Madness heal you less when you hit enemies.',
+      'Bounty Hunter\'s Track gives less bonus gold, and Shadow Fiend gets less damage from his souls.',
+    ] },
+    { name: 'Patch 7.41e', date: '2026-07-30', source: { label: 'Steam: Dota 2 patch 7.41e', url: 'https://store.steampowered.com/news/app/570/view/678505520073540065' }, highlights: [
+      'Get rooted while using a Twin Gate and your trip through the gate is cancelled.',
+      'Two Divine Rapiers no longer stack their extra spell power.',
+      'Butterfly gives a little less agility but more raw damage, and Satanic\'s lifesteal button takes longer to come back.',
+    ] },
+    { name: 'Patch 7.41d', date: '2026-06-04', source: { label: 'Dota 2 Pro Tips: patch 7.41d', url: 'https://www.dota2protips.com/patches/7-41d' }, highlights: [
+      'The Dire fountain heals in a slightly bigger area, and teleporting home lands you closer to your Ancient.',
+      'Morphling starts with much more agility and much less strength.',
+      'Invoker\'s Ghost Walk now takes 40 seconds to come back instead of 32.',
+    ] },
+  ],
+  teams: [
+    { date: '2026-10-15', team: 'Team Liquid', text: 'Liquid signed TI 2025 champion Malr1ne as their new mid. The new lineup plays its first event at PARI Universe on 22 October.', source: { label: 'Dot Esports: Malr1ne joins Team Liquid as new midlaner', url: 'https://dotesports.com/dota-2/news/malr1ne-team-liquid-midlaner' } },
+    { date: '2026-10-12', team: 'Team Tidebound', text: 'The Chinese team is back after almost a year away, with coach xiao8 and veterans NothingToSay, Shiro, plAnet, y` and Yang.', source: { label: 'GosuGamers: Team Tidebound returns with new veteran roster under xiao8', url: 'https://www.gosugamers.net/dota2/news/79333-team-tidebound-returns-to-dota-2-with-new-veteran-roster-under-xiao8' } },
+    { date: '2026-10-12', team: 'PlayTime', text: 'The Filipino organisation, now playing in South America, finished its roster with support KJ, coach Astini and young carry bottega on loan. Filipino player Abed plays mid.', source: { label: 'GosuGamers: PlayTime complete Dota 2 roster with KJ and Astini', url: 'https://www.gosugamers.net/dota2/news/79346-playtime-complete-dota-2-roster-with-kj-and-astini-for-new-competitive-season' } },
+    { date: '2026-09-28', team: 'Team Liquid', text: 'Mid player Nisha left after four years, including the TI 2024 win, to take a break from pro play.', source: { label: 'GosuGamers: Team Liquid part ways with Nisha after four years', url: 'https://www.gosugamers.net/dota2/news/79265-team-liquid-part-ways-with-nisha-after-four-years' } },
+    { date: '2026-09-23', team: 'OG', text: 'Two-time TI champion Topson is back at OG. Filipino players Natsumi- and Skem stay, and SSS and OneJey join.', source: { label: 'esports.gg: OG reveals Topson\'s return and new roster', url: 'https://esports.gg/news/dota-2/og-dota-2-topson-returns-with-new-lineup/' } },
+    { date: '2026-09-09', team: 'OG', text: 'After finishing 14th–15th at TI 2026, OG let go of Filipino players Yopaj and Raven, plus TIMS, ending the all-Filipino lineup.', source: { label: 'GosuGamers: OG part ways with Yopaj, Raven and TIMS', url: 'https://www.gosugamers.net/dota2/news/79138-og-esports-part-ways-with-yopaj-raven-and-tims-ahead-of-the-2026-2027-competitive-season' } },
   ],
   terms: [
     { term: 'Hero', text: 'The character you control. There are more than a hundred to choose from.' },

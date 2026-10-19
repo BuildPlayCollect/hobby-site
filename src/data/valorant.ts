@@ -70,6 +70,31 @@ export const VALORANT: GameHubData = {
     { title: 'Team Secret in VCT Pacific', text: 'Philstar calls Team Secret a Philippine-based organization. Its July 2026 lineup included Filipino players Kelly "kellyS" Sedillo and Jhian "Zeus" Vega, and it beat KRX 2–0 for its first Stage 2 win.', source: S.secret },
     { title: 'A VCT Cup is coming to Manila', text: 'Manila will host VCT Cup 1 for the Pacific region, planned for 29 April – 23 May 2027. Cups are LAN events with live finals in front of fans. The venue hasn\'t been announced yet.', source: S.manila },
   ],
+  patches: [
+    { name: 'Patch 13.08', date: '2026-10-13', source: { label: 'VALORANT: Patch Notes 13.08', url: 'https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-13-08' }, highlights: [
+      'New Map Rating: every ranked map you play now gets a score and a letter grade, from C up to S.',
+      'Bind and Corrode are back in ranked and Deathmatch, while Ascent and Split take a break.',
+      'Corrode got reworked so defenders can rotate between sites faster, and planting on A works differently.',
+    ] },
+    { name: 'Patch 13.06', date: '2026-09-22', source: { label: 'VALORANT: Patch Notes 13.06', url: 'https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-13-06' }, highlights: [
+      'A new gun, the Warden: an automatic rifle with a 2x scope for 2,900 credits.',
+      'Gauntlet: Glitched, a limited 2v2 mode where you draft abilities borrowed from different Agents.',
+      'Agent Mastery lets you level up each Agent for rewards, and a new Performance Score picks the MVP.',
+    ] },
+    { name: 'Patch 13.05', date: '2026-09-01', source: { label: 'VALORANT: Patch Notes 13.05', url: 'https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-13-05' }, highlights: [
+      'Pick\'Ems opened for Champions Shanghai, so fans could guess the group winners.',
+      'Stream sniping and instalock tools now get you banned, and repeat offenders can be banned for good.',
+      'Sound sprays only play when you\'re close, and practice mode lets you pick 1, 5 or 10 bots.',
+    ] },
+  ],
+  teams: [
+    { date: '2026-10-18', team: 'M80', text: 'Veteran player NiSMO left M80 and is looking for a new team for 2027.', source: { label: 'VLR.gg: NiSMO enters unrestricted free agency', url: 'https://www.vlr.gg/776968/nismo-enters-unrestricted-free-agency' } },
+    { date: '2026-10-15', team: 'Team Liquid', text: 'After four seasons, in-game leader nAts is allowed to talk to other teams for 2027. He says he\'s still talking with Liquid too, so he hasn\'t left yet.', source: { label: 'VLR.gg: Team Liquid allows nAts to explore options after four seasons', url: 'https://www.vlr.gg/773068/team-liquid-allows-nats-to-explore-options-after-four-seasons' } },
+    { date: '2026-10-13', team: 'Shopify Rebellion Black', text: 'Controller player zander is leaving after one season and becomes a free agent.', source: { label: 'VLR.gg: zander set to leave Shopify Rebellion Black after one year', url: 'https://www.vlr.gg/772672/zander-set-to-leave-shopify-rebellion-black-after-one-year' } },
+    { date: '2026-10-13', team: 'Joblife', text: 'Joblife hired pakko as head coach for 2027, with a contract until 2028. The team had already let all its players go.', source: { label: 'VLR.gg: Joblife employs pakko as new head coach', url: 'https://www.vlr.gg/772659/joblife-employs-pakko-as-new-head-coach' } },
+    { date: '2026-10-08', team: 'BESTIA', text: 'BESTIA released its whole VALORANT roster and is leaving the game, so every player is now a free agent.', source: { label: 'VLR.gg: BESTIA parts ways with entire Valorant roster', url: 'https://www.vlr.gg/769371/bestia-parts-ways-with-entire-valorant-roster' } },
+    { date: '2026-10-08', team: 'GIANTX', text: 'GIANTX signed CyvOph and globeX for the Monsters Reloaded LAN, after neT and Jesse left.', source: { label: 'VLR.gg: GIANTX adds CyvOph and globeX ahead of Monsters Reloaded 2026', url: 'https://www.vlr.gg/769210/giantx-adds-cyvoph-and-globex-ahead-of-monsters-reloaded-2026' } },
+  ],
   terms: [
     { term: 'Agent', text: 'The character you play. Each one has their own set of abilities.', wiki: 'agent' },
     { term: 'Spike', text: 'The bomb. Attackers plant it, defenders defuse it. Once planted it ticks for 45 seconds.', wiki: 'spike' },
