@@ -7,6 +7,8 @@ author: Echo
 date: 2026-10-19
 featured: false
 draft: false
+cover: "/images/articles/news-roundup-2026-10-19/cover-beyblade-x-boosters.webp"
+coverAlt: "Hands holding up four boxed Beyblade X boosters"
 quick:
   - "Magic: The Gathering | Star Trek previews start October 20; the set releases November 13."
   - "Beyblade X BX-54 and CX-20 Customize Set C both release in Japan on November 21."

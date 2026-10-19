@@ -6,6 +6,8 @@ type: history
 author: Echo
 date: 2026-10-13
 draft: false
+cover: "/images/articles/history-of-beyblade/cover-beyblade-x-case.webp"
+coverAlt: "A player's case of Beyblade X tops in clear boxes at a local tournament"
 quick:
   - "Beyblade's ancestor is the beigoma, a Japanese top first made from a seashell filled with sand."
   - "The first Beyblades launched in Japan in 1999. The manga started that year, and the anime followed in 2001."
@@ -61,7 +63,8 @@ Hasbro started selling Burst in the US in January 2017. The anime was a marathon
 
 **Beyblade X** [launched in Japan on July 15, 2023](https://en.wikipedia.org/wiki/Beyblade_X). Its big idea is [**Xtreme Dash**](https://www.tokyoweekender.com/entertainment/beyblade-25th-anniversary/), which speeds tops up so they crash into each other more often, helped by the Xtreme Rail built into the stadium. Battles were also shortened to about a minute.
 
-📷 PHOTO: A Beyblade X top, or a battle in an Xtreme stadium showing the rail.
+![Two Beyblade X tops spinning in an Xtreme stadium, with the green Xtreme Line rail around the edge](/images/articles/history-of-beyblade/xtreme-stadium-battle.webp)
+*Photo: Echo*
 
 It worked. Beyblade X shipped [more than 28 million units worldwide by February 2025](https://kyodonewsprwire.jp/release/202503105477). The anime started in October 2023, and its [fourth season premiered on October 9, 2026](https://en.wikipedia.org/wiki/Beyblade_X).
 
@@ -81,7 +84,8 @@ The nostalgia runs deep, too. Rare Beyblade X releases include tops named after 
 
 The way people play has changed as much as the tops. What started as backyard battles on a bucket is now a sport with world championships.
 
-📷 PHOTO: A local tournament: the stadium, the crowd or a launch. Ask people before showing their faces.
+![Players gathered around a Beyblade X stadium at a local tournament](/images/articles/history-of-beyblade/local-tournament-stadium.webp)
+*Photo: Echo*
 
 - **More grown-ups.** Adult fans grew during the second and third generations, which Takara Tomy [credits to social media](https://www.tokyoweekender.com/entertainment/beyblade-25th-anniversary/). The company's goal is for Beyblade to become a sport that people of every age and culture can enjoy.
 - **World stages.** The [Beyblade X World Championship 2025](https://kyodonewsprwire.jp/release/202503105477) was held at Red Tokyo Tower on October 11 and 12, 2025. In 2026, there's even a [world championship on Roblox](https://www.takaratomy.co.jp/english/product_release/pdf/p260321_en.pdf) (May 15 to 25), and the Beyblade X GP Final heads to Bangkok on December 12 and 13. That's a short flight from Manila.
