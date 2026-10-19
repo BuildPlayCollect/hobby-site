@@ -1,0 +1,52 @@
+// esports-hub.ts: the shape of a game hub (VALORANT, League of Legends, TFT, Dota 2).
+// Each game keeps its facts in src/data/<game>.ts and the page draws them with <GameHub>.
+// Every fact needs a source link, so a reader (or Echo) can check it.
+
+export type Source = { label: string; url: string };
+
+// An event in the season. Dates are YYYY-MM-DD. `result` only once it's over.
+export type HubEvent = {
+  name: string;
+  from: string;
+  to: string;
+  place: string;
+  text?: string;
+  result?: string;
+  source: Source;
+};
+
+export type GameHubData = {
+  name: string;          // shown as the page title
+  tagline: string;       // one line under the title
+  description: string;   // for search engines and link previews
+  badge: 'shooter' | 'lanes' | 'hexes' | 'aegis'; // the little illustration (ours, not a game logo)
+  about: string[];       // "What is it?" in 2 or 3 short paragraphs
+  facts: { label: string; value: string }[];
+  scene: { intro: string[]; parts: { name: string; text: string }[] };
+  events: HubEvent[];    // the season, oldest first
+  now: { title: string; text: string; source: Source }[]; // "What's happening now"
+  ph?: { title: string; text: string; source: Source }[]; // Filipino teams and players, only when sourced
+  terms: { term: string; text: string; wiki?: string }[]; // "New to it? Start here"
+  sources: Source[];     // everything else the page used
+  legal: 'riot' | 'valve';
+};
+
+export const fmtDate = (d: string, opts: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short', year: 'numeric' }) =>
+  new Date(d + 'T00:00:00Z').toLocaleDateString('en-GB', { ...opts, timeZone: 'UTC' });
+
+export const fmtRange = (a: string, b: string) => {
+  if (a === b) return fmtDate(a);
+  const sameYear = a.slice(0, 4) === b.slice(0, 4);
+  return `${fmtDate(a, sameYear ? { day: 'numeric', month: 'short' } : undefined)} – ${fmtDate(b)}`;
+};
+
+// done / live / next, compared with the day the site was built.
+export const eventStatus = (e: HubEvent, today = new Date().toISOString().slice(0, 10)) =>
+  e.to < today ? 'done' : e.from <= today ? 'live' : 'next';
+
+// Riot's "Legal Jibber Jabber" notice (riotgames.com/en/legal), and Valve's trademark line.
+export const LEGAL = {
+  riot: 'Build Play Collect was created under Riot Games\' "Legal Jibber Jabber" policy using assets owned by Riot Games. Riot Games does not endorse or sponsor this project.',
+  valve: 'Dota 2 and Dota are trademarks of Valve Corporation. Build Play Collect is a fan site and isn\'t affiliated with or endorsed by Valve.',
+};
+export const RIOT_LEGAL_SOURCE: Source = { label: 'Riot Games: Legal Jibber Jabber', url: 'https://www.riotgames.com/en/legal' };
