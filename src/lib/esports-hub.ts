@@ -15,6 +15,12 @@ export type HubEvent = {
   source: Source;
 };
 
+// One game patch: the highlights are in our own words, the link goes to the full official notes.
+export type Patch = { name: string; date: string; highlights: string[]; source: Source };
+
+// A roster change or bit of team news. `unconfirmed` when only one unofficial source reports it.
+export type TeamUpdate = { date: string; team: string; text: string; source: Source; unconfirmed?: boolean };
+
 export type GameHubData = {
   name: string;          // shown as the page title
   tagline: string;       // one line under the title
@@ -26,6 +32,9 @@ export type GameHubData = {
   events: HubEvent[];    // the season, oldest first
   now: { title: string; text: string; source: Source }[]; // "What's happening now"
   ph?: { title: string; text: string; source: Source }[]; // Filipino teams and players, only when sourced
+  patches?: Patch[];     // newest first, from the official patch notes
+  teams?: TeamUpdate[];  // roster changes and team news, newest first
+  teamsTitle?: string;   // when 'Team updates' doesn't fit (TFT is mostly solo players)
   terms: { term: string; text: string; wiki?: string }[]; // "New to it? Start here"
   sources: Source[];     // everything else the page used
   legal: 'riot' | 'valve';

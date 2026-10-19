@@ -55,6 +55,30 @@ export const TFT: GameHubData = {
     { title: 'Pro Circuit cups are done', text: 'All three Enchanted Wilds cups have been played. Each cup winner qualifies straight for the Tactician\'s Crown, and so does the top Pro Points earner in each region.', source: S.circuit },
     { title: 'Next up: Regional Finals and the Crown', text: 'When we checked on 19 October 2026, Riot hadn\'t announced the date or place of the Enchanted Wilds Tactician\'s Crown yet. We\'ll add it here once it\'s official.', source: S.compete },
   ],
+  patches: [
+    { name: 'Patch 18.4', date: '2026-10-07', source: { label: 'TFT: Patch 18.4 notes', url: 'https://teamfighttactics.leagueoflegends.com/en-us/news/game-updates/teamfight-tactics-patch-18-4' }, highlights: [
+      'Power moves out of trait bonuses and into the champions themselves, and many weak cheap champions get stronger.',
+      'The start and end of every fight is one second shorter, so rounds move a little faster.',
+      'Some new free Wisps arrive, and risky Wisps stop showing up once you drop below 20 health.',
+    ] },
+    { name: 'Patch 18.3', date: '2026-09-23', source: { label: 'TFT: Patch 18.3 notes', url: 'https://teamfighttactics.leagueoflegends.com/en-us/news/game-updates/teamfight-tactics-patch-18-3' }, highlights: [
+      'A small patch of careful tweaks to champions and traits, with a boost for combat Augments.',
+      'Wolf Bros, the trait that levels up cheap champions, is meant to work properly again at 6.',
+      'The strong Major Polymorph Wisp was switched off on 28 September until the next patch.',
+    ] },
+    { name: 'Patch 18.2', date: '2026-09-10', source: { label: 'TFT: Patch 18.2 notes', url: 'https://teamfighttactics.leagueoflegends.com/en-us/news/game-updates/teamfight-tactics-patch-18-2' }, highlights: [
+      'Most combat Wisps got cheaper, many by 1 to 3 gold.',
+      'Levels 8 to 10 cost less XP, then a 14 September fix put the last two back to their old price.',
+      'Edge of Night now kicks in at 40% health instead of 60%.',
+    ] },
+  ],
+  teamsTitle: 'Pro scene updates',
+  teams: [
+    { date: '2026-10-04', team: 'FL Cambulee, Skipaeus and steppy', text: 'Each won their region\'s Blossom Cup, the third Pro Circuit stop, and a place at the Tactician\'s Crown.', source: { label: 'Compete TFT: Tactician\'s Crown qualification', url: 'https://competetft.com/en-PH/tournament/116918001686340951/qualification/overview' } },
+    { date: '2026-10-04', team: 'MIH Bensac, ACAD Dishsoap and FW Iron Bog', text: 'They finished top of the Pro Points table in their regions, which also sends them to the Tactician\'s Crown.', source: { label: 'Compete TFT: Tactician\'s Crown qualification', url: 'https://competetft.com/en-PH/tournament/116918001686340951/qualification/overview' } },
+    { date: '2026-09-20', team: 'FL Chunington, FL wigwugg, WithoutYou and YSG Hanxing', text: 'All four won Elderwood Cups and booked Tactician\'s Crown spots. Chunington beat GG9 and M8 jedusor in the Americas final.', source: { label: 'Compete TFT: Tactician\'s Crown qualification', url: 'https://competetft.com/en-PH/tournament/116918001686340951/qualification/overview' } },
+    { date: '2026-09-06', team: 'MIH ZyK0o, ACAD wasian and seoill', text: 'They won the Riftbeast Cup, the set\'s first Pro Circuit stop. ZyK0o came back from a slow start to win in EMEA.', source: { label: 'Zona MMORPG: ZyK0o gana la Riftbeast Cup', url: 'https://www.zonammorpg.com/2026/09/07/teamfight-tactics-zyk0o-gana-la-riftbeast-cup-y-se-asegura-una-plaza-en-la-tacticians-crown/' } },
+  ],
   terms: [
     { term: 'Auto-battler', text: 'A game where you build the team and the fights play out by themselves.' },
     { term: 'Set', text: 'A season of TFT with its own group of champions. A new one arrives every few months.' },
