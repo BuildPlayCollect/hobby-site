@@ -68,7 +68,7 @@ const jsonLd = {
 
       <div class="article-cover" style={`background-color:${hobby.color}`}>
         {article.data.cover
-          ? <img src={article.data.cover} alt={article.data.coverAlt ?? ''} />
+          ? <img src={article.data.cover} alt={article.data.coverAlt ?? ''} data-zoom />
           : <span>{hobby.name}</span>}
       </div>
       <div class="prose" id="article-start"><Content /></div>

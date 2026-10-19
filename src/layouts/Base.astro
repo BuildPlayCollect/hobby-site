@@ -12,6 +12,7 @@ import headlineFont from '@fontsource-variable/bricolage-grotesque/files/bricola
 // The whole look of the site (colours, fonts, outlines, shadows) lives in ONE theme file.
 // To try a different design, point this line at another file in src/styles/themes/.
 import '../styles/themes/blend.css';
+import Lightbox from '../components/Lightbox.astro';
 
 interface Props {
   title?: string;
@@ -183,6 +184,8 @@ const shareImage = new URL(image ?? '/share-preview-v2.png', Astro.site).href;
         <div class="footer-base"><span>&copy; {new Date().getFullYear()} {SITE_NAME}</span><span>History · Guides · News · Giveaways</span></div>
       </div>
     </footer>
+
+    <Lightbox />
 
     <script>
       (function () {
