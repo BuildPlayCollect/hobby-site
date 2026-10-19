@@ -6,6 +6,8 @@ type: history
 author: Echo
 date: 2026-10-08
 draft: true
+cover: "/images/articles/history-of-tamiya-mini-4wd/cover-mini-4wd-track.webp"
+coverAlt: "A multi-lane Mini 4WD track set up inside SM Store"
 ---
 
 *Sample article. Replace it with your own writing and check every date before publishing.*

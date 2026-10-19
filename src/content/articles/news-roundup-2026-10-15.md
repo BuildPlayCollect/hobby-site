@@ -7,6 +7,8 @@ author: Echo
 date: 2026-10-15
 featured: false
 draft: false
+cover: "/images/articles/news-roundup-2026-10-15/cover-card-display-wall.webp"
+coverAlt: "Wall-mounted display cases of trading cards at Eclipse Lab"
 quick:
   - "One Piece Card Game banned Dracule Mihawk (OP14-020) from October 12."
   - "The Beyblade X GP FINAL 2026 is in Bangkok on December 12–13."

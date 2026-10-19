@@ -6,6 +6,8 @@ type: guide
 author: Echo
 date: 2026-10-12
 draft: false
+cover: "/images/articles/what-is-a-hobby/cover-hobby-shop-shelf.webp"
+coverAlt: "Pokémon and One Piece card packs, figures and toys in a glass display case at Eclipse Lab"
 quick:
   - "A hobby is something you do just because you want to. No boss, no grades, no paycheck."
   - 'Around the year 1400, a "hobby" was a small horse. The pastime meaning came centuries later.'
@@ -39,7 +41,8 @@ Bonus: "hobby" is also the name of a small falcon. Hobbies really can take off.
 
 If you've ever said "just one more," it counts. Most hobbies fall into one of three camps, which is where this site gets its name:
 
-📷 PHOTO: Four quick shots: collecting (figures on a shelf), building (a half-built Mini 4WD), playing (cards mid-game), competing (a Beyblade launch).
+![Four hobby scenes: a figure display case and One Piece card packs at Eclipse Lab, two Beyblade X tops in a stadium, and a Mini 4WD track at SM Store](/images/articles/what-is-a-hobby/collect-play-race.webp)
+*Photo: Echo*
 
 - **Build:** putting something together with your own hands, like a [Tamiya](/tamiya) Mini 4WD, a custom [keyboard](/keyboards), or a model kit.
 - **Play:** battling, racing, competing. Card games at a [TCG](/tcg) night, ranked matches in [esports](/esports), spinning tops in a [Beyblade](/beyblade) stadium. (Mine was a metal basin from the kitchen. Official stadium? Never heard of her.)
@@ -77,7 +80,8 @@ Here's what mine gave me:
 4. **Give it a month.** Some hobbies click on day one. Others sneak up on you.
 5. **Don't compare your Shield Liger to someone else's Blade Liger.** Trust me.
 
-📷 PHOTO: Your hands mid-hobby: building, typing or shuffling cards.
+![Hands on an arcade stick, one on the joystick and one on the buttons](/images/articles/what-is-a-hobby/hands-arcade-stick.webp)
+*Photo: Echo*
 
 ## Your turn
 
