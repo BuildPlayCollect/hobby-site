@@ -11,7 +11,7 @@ export const HOBBIES = {
   keyboards: { name: 'Keyboards', color: '#c3a6ff', blurb: 'Mechanical keyboards, switches, keycaps and builds.' },
   tcg: { name: 'TCG', color: '#ffd23f', blurb: 'Trading card games: Pokemon, Magic, One Piece, Yu-Gi-Oh! and more.' },
   consoles: { name: 'Consoles', color: '#5fd3a8', blurb: 'Gaming consoles, old and new.' },
-  esports: { name: 'Esports', color: '#ff8fc7', blurb: 'Dota 2, League of Legends, TFT and the scenes around them.' },
+  esports: { name: 'Esports', color: '#ff8fc7', blurb: 'Pokémon Champions, VALORANT, League of Legends, TFT, Dota 2 and the scenes around them.' },
   boardgames: { name: 'Board games', color: '#b5e655', blurb: 'Tabletop games you play face to face, starting with Unmatched.' },
   // For articles about hobbies in general, not one hobby in particular.
   general: { name: 'General', color: '#ff9f43', blurb: 'Articles about hobbies in general: what they are, why we love them, and how to start one.' },

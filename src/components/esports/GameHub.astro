@@ -1,0 +1,196 @@
+---
+// GameHub.astro: one esports game hub (VALORANT, League of Legends, TFT, Dota 2).
+// The facts come from src/data/<game>.ts. Slots: "hero" replaces the illustrated banner
+// (e.g. with a press photo), and the default slot adds extra sections after "What's happening now".
+import Base from '../../layouts/Base.astro';
+import SourceList from '../SourceList.astro';
+import { type GameHubData, type Source, fmtRange, eventStatus, LEGAL, RIOT_LEGAL_SOURCE } from '../../lib/esports-hub';
+
+interface Props { game: GameHubData; extraSources?: Source[]; extraJump?: { href: string; label: string }[]; image?: string }
+const { game, extraSources = [], extraJump = [], image } = Astro.props;
+const STATUS = { done: 'Finished', live: 'On now', next: 'Coming up' } as const;
+const allSources = [
+  ...game.now.map((n) => n.source),
+  ...game.events.map((e) => e.source),
+  ...(game.ph ?? []).map((p) => p.source),
+  ...extraSources,
+  ...game.sources,
+  ...(game.legal === 'riot' ? [RIOT_LEGAL_SOURCE] : []),
+];
+const hasHero = Astro.slots.has('hero');
+---
+<Base title={game.name} description={game.description} image={image}>
+  <header class="page-head gh-head">
+    <p class="kicker"><a class="tag" href="/esports" style="--c:#ff8fc7">Esports</a></p>
+    <h1>{game.name}</h1>
+    <p>{game.tagline}</p>
+  </header>
+
+  {hasHero ? <slot name="hero" /> : (
+    <div class={`gh-banner gh-banner-${game.badge}`} aria-hidden="true">
+      <svg class="gh-badge" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+        {game.badge === 'lanes' && (<><rect x="12" y="12" width="96" height="96" rx="18" /><path d="M28 92V28h64" /><path d="M28 92h64V28" /><path d="M30 90L90 30" /><circle cx="28" cy="92" r="9" fill="currentColor" /><circle cx="92" cy="28" r="9" fill="currentColor" /></>)}
+        {game.badge === 'hexes' && (<><path d="M60 22l14 8v16l-14 8-14-8V30z" /><path d="M32 46l14 8v16l-14 8-14-8V54z" /><path d="M88 46l14 8v16l-14 8-14-8V54z" /><path d="M60 70l14 8v16l-14 8-14-8V78z" fill="currentColor" /></>)}
+        {game.badge === 'aegis' && (<><path d="M60 12l38 14v28c0 26-17 44-38 54C39 98 22 80 22 54V26z" /><path d="M60 34v48M40 52h40" /></>)}
+        {game.badge === 'shooter' && (<><circle cx="60" cy="60" r="38" /><circle cx="60" cy="60" r="6" fill="currentColor" /><path d="M60 10v24M60 86v24M10 60h24M86 60h24" /></>)}
+      </svg>
+      <span class="gh-banner-word">{game.name}</span>
+    </div>
+  )}
+
+  <nav class="gh-jump" aria-label="On this page">
+    <a href="#about">What is it?</a><a href="#start">New? Start here</a><a href="#now">Happening now</a>{extraJump.map((j) => <a href={j.href}>{j.label}</a>)}<a href="#scene">The pro scene</a>{game.ph && <a href="#ph">Philippines</a>}
+  </nav>
+
+  <section id="about" class="gh-section gh-about">
+    <div>
+      <h2>What is {game.name}?</h2>
+      {game.about.map((p) => <p class="gh-lead">{p}</p>)}
+      <dl class="gh-facts">
+        {game.facts.map((f) => <div><dt>{f.label}</dt><dd>{f.value}</dd></div>)}
+      </dl>
+    </div>
+    <aside id="start" class="gh-start" aria-labelledby="start-title">
+      <h2 id="start-title">New to it? Start here</h2>
+      <p class="gh-muted">A few words you'll hear in every match and on every stream.</p>
+      <dl class="gh-terms">
+        {game.terms.map((t) => (
+          <div>
+            <dt>{t.wiki ? <a href={`/wiki/${t.wiki}/`}>{t.term}</a> : t.term}</dt>
+            <dd>{t.text}</dd>
+          </div>
+        ))}
+      </dl>
+    </aside>
+  </section>
+
+  <section id="now" class="gh-section">
+    <div class="section-head"><h2>What's happening now</h2></div>
+    <div class="gh-cards">
+      {game.now.map((n) => (
+        <article class="gh-card">
+          <h3>{n.title}</h3>
+          <p>{n.text}</p>
+          <p class="gh-src">Source: <a href={n.source.url} rel="noopener">{n.source.label}</a></p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <slot />
+
+  <section id="scene" class="gh-section">
+    <div class="section-head"><h2>How the pro scene works</h2></div>
+    {game.scene.intro.map((p) => <p class="gh-lead">{p}</p>)}
+    <ol class="gh-parts">
+      {game.scene.parts.map((p) => <li><strong>{p.name}</strong><span>{p.text}</span></li>)}
+    </ol>
+
+    <h3 class="gh-sub">The {game.events.some((e) => e.from.startsWith('2027')) ? '2026 season and beyond' : '2026 season'}</h3>
+    <ol class="gh-timeline">
+      {game.events.map((e) => {
+        const st = eventStatus(e);
+        return (
+          <li class={`is-${st}`}>
+            <span class="gh-when">{fmtRange(e.from, e.to)}</span>
+            <div class="gh-ev">
+              <div class="gh-ev-top"><strong>{e.name}</strong><span class={`gh-status gh-status-${st}`}>{STATUS[st]}</span></div>
+              <span class="gh-place">{e.place}</span>
+              {e.text && <p>{e.text}</p>}
+              {e.result && <p class="gh-result">{e.result}</p>}
+              <p class="gh-src">Source: <a href={e.source.url} rel="noopener">{e.source.label}</a></p>
+            </div>
+          </li>
+        );
+      })}
+    </ol>
+  </section>
+
+  {game.ph && (
+    <section id="ph" class="gh-section">
+      <div class="section-head"><h2>The Philippines angle</h2></div>
+      <div class="gh-cards gh-ph">
+        {game.ph.map((p) => (
+          <article class="gh-card">
+            <h3>{p.title}</h3>
+            <p>{p.text}</p>
+            <p class="gh-src">Source: <a href={p.source.url} rel="noopener">{p.source.label}</a></p>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <SourceList sources={allSources} note="Dates and results were checked on 19 October 2026. Always check the organiser's page for the latest times." />
+  <p class="gh-legal">{LEGAL[game.legal]} {game.legal === 'riot' && 'No Riot Games logos are used on this page.'}</p>
+</Base>
+
+<style is:global>
+  .gh-head h1 { margin-bottom: 6px; }
+  .gh-banner { position: relative; display: flex; align-items: center; gap: clamp(14px, 4vw, 32px); padding: clamp(18px, 4vw, 30px); border: 2px solid var(--line); border-radius: 22px; background: #ff8fc7; color: #1b1a1f; box-shadow: var(--lift); overflow: hidden; }
+  .gh-banner::after { content: ""; position: absolute; right: -40px; bottom: -60px; width: 220px; height: 220px; border-radius: 50%; background: rgba(255, 255, 255, .25); }
+  .gh-banner-lanes { background: #6ea8fe; }
+  .gh-banner-hexes { background: #ffd23f; }
+  .gh-banner-aegis { background: #ff6b57; }
+  .gh-badge { flex: none; width: clamp(64px, 16vw, 112px); height: auto; padding: 10px; border-radius: 20px; background: rgba(255, 255, 255, .55); border: 2px solid #1b1a1f; }
+  .gh-banner-word { position: relative; z-index: 1; font-family: var(--display); font-weight: 800; font-size: clamp(1.6rem, 6vw, 3.2rem); line-height: 1; letter-spacing: -.03em; overflow-wrap: anywhere; }
+
+  .gh-jump { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 8px; }
+  .gh-jump a { padding: 6px 14px; border: 2px solid var(--line); border-radius: 999px; font-weight: 700; font-size: .85rem; color: var(--ink); background: var(--surface); }
+  .gh-jump a:hover { text-decoration: none; background: var(--mark); color: #1b1a1f; }
+
+  .gh-section { margin-top: 44px; }
+  .gh-section h2 { margin: 0 0 12px; }
+  .gh-lead { font-size: 1.05rem; max-width: 68ch; margin: 0 0 12px; }
+  .gh-muted { color: var(--muted); margin: 0 0 12px; font-size: .92rem; }
+  .gh-about { display: grid; gap: 24px; }
+  @media (min-width: 900px) { .gh-about { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); align-items: start; } }
+  .gh-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 18px 0 0; }
+  .gh-facts div { padding: 12px 14px; border-radius: 14px; background: var(--surface-2); }
+  .gh-facts dt { font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+  .gh-facts dd { margin: 2px 0 0; font-weight: 700; }
+
+  .gh-start { padding: 18px 20px; border: 2px solid var(--line); border-radius: 20px; background: var(--surface); box-shadow: var(--lift); scroll-margin-top: calc(var(--header-h) + 16px); }
+  .gh-start h2 { font-size: 1.4rem; }
+  .gh-terms { margin: 0; display: grid; gap: 0; }
+  .gh-terms div { padding: 10px 0; border-top: 1px solid var(--soft-line); }
+  .gh-terms dt { font-weight: 800; }
+  .gh-terms dt a { color: var(--wiki); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+  .gh-terms dd { margin: 2px 0 0; color: var(--muted); font-size: .92rem; }
+
+  .gh-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 14px; }
+  .gh-card { display: flex; flex-direction: column; padding: 16px 18px; border: 2px solid var(--line); border-radius: 18px; background: var(--surface); }
+  .gh-card h3 { margin: 0 0 6px; font-size: 1.12rem; line-height: 1.2; }
+  .gh-card p { margin: 0 0 8px; }
+  .gh-card .gh-src { margin-top: auto; }
+  .gh-ph .gh-card { border-color: var(--line); background: linear-gradient(var(--surface), var(--surface)) padding-box; box-shadow: inset 0 6px 0 #0038a8, var(--lift); }
+  .gh-src { color: var(--muted); font-size: .8rem; margin: 6px 0 0; overflow-wrap: anywhere; }
+  .gh-src a { color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
+
+  .gh-parts { list-style: none; counter-reset: part; margin: 16px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 10px; }
+  .gh-parts li { counter-increment: part; display: grid; gap: 2px; padding: 14px 16px 14px 54px; position: relative; border-radius: 16px; background: var(--surface-2); }
+  .gh-parts li::before { content: counter(part); position: absolute; left: 14px; top: 13px; width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; background: var(--ink); color: var(--bg); font-family: var(--display); font-weight: 800; font-size: .9rem; }
+  .gh-parts span { color: var(--muted); font-size: .92rem; }
+
+  .gh-sub { margin: 30px 0 12px; font-size: 1.2rem; }
+  .gh-timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .gh-timeline li { display: grid; gap: 6px; }
+  @media (min-width: 700px) { .gh-timeline li { grid-template-columns: 170px 1fr; gap: 16px; } }
+  .gh-when { font-weight: 800; font-size: .85rem; text-transform: uppercase; letter-spacing: .04em; padding-top: 14px; }
+  .gh-ev { padding: 12px 16px; border: 2px solid var(--line); border-radius: 16px; background: var(--surface); }
+  .gh-timeline .is-done .gh-ev { border-color: var(--soft-line); }
+  .gh-timeline .is-live .gh-ev { box-shadow: var(--lift); }
+  .gh-ev-top { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+  .gh-ev-top strong { font-family: var(--display); font-size: 1.1rem; line-height: 1.2; }
+  .gh-place { color: var(--muted); font-size: .88rem; }
+  .gh-ev p { margin: 6px 0 0; }
+  .gh-result { font-weight: 700; }
+  .gh-result::before { content: "Result: "; color: var(--muted); font-weight: 600; }
+  .gh-status { font-size: .7rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; padding: 2px 9px; border-radius: 999px; border: 2px solid var(--line); }
+  .gh-status-live { background: #5fd3a8; color: #1b1a1f; border-color: #1b1a1f; }
+  .gh-status-next { background: var(--mark); color: #1b1a1f; border-color: #1b1a1f; }
+  .gh-status-done { color: var(--muted); border-color: var(--soft-line); }
+
+  .gh-legal { margin: 14px 0 0; color: var(--muted); font-size: .8rem; max-width: 80ch; }
+  @media (max-width: 520px) { .gh-when { padding-top: 0; } }
+</style>
