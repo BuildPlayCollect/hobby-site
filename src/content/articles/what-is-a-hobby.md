@@ -54,7 +54,10 @@ Plenty of hobbies are all three at once. Ask anyone who builds a Mini 4WD, races
 
 Mine never really left. It just changed outfits.
 
-📷 PHOTO: Your old childhood toys next to what you collect now.
+![Echo's childhood toys: a Green Goblin figure riding his glider, and three small Yu-Gi-Oh! figures](/images/articles/what-is-a-hobby/childhood-toys.webp)
+*Photo: Echo*
+
+These are the survivors. The rest of my toys were given away to other kids, which I still slightly regret.
 
 The toys turned into a Game Boy Advance. My very first game was a Pokémon ROM hack from a game shop in the mall (little me had no idea what a ROM hack was, it just had Pokémon in it). Then came a Super Mario Bros. game and Pokémon Ruby.
 
