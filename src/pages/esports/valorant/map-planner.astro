@@ -1,0 +1,392 @@
+---
+// The VALORANT map planner (/esports/valorant/map-planner): pick a map, place Agents, draw lines and arrows,
+// then copy a link to share the plan. Everything happens in the reader's browser; nothing is sent to us.
+// Maps, callout names and Agent icons come from valorant-api.com (see scripts/esports-rosters.mjs).
+// Plans are saved in the browser (localStorage) per map, and a shared link carries the whole plan after the #.
+import RosterPage from '../../../components/esports/RosterPage.astro';
+import { VALORANT } from '../../../data/valorant';
+import MAPS from '../../../data/esports/valorant-maps.json';
+import AGENTS from '../../../data/esports/valorant-agents.json';
+import { fmtDate } from '../../../lib/esports-hub';
+
+// The page script reads these from data attributes (no inline scripts, for the security rules).
+const maps = MAPS.maps.map((m) => ({ slug: m.slug, name: m.name, sites: m.sites, map: m.map, callouts: m.callouts }));
+const agents = AGENTS.agents.map((a) => ({ slug: a.slug, name: a.name, role: a.role, token: a.token }));
+const first = maps.find((m) => m.slug === 'ascent') ?? maps[0];
+---
+<RosterPage game={VALORANT} hub="/esports/valorant" title="VALORANT map planner: draw your strat" heading="Map planner" wide
+  description="A free VALORANT strat planner: pick a map, place Agents for both teams, draw paths and arrows, and share the plan with a link."
+  sources={[{ label: 'valorant-api.com: maps and callouts (fan-run copy of the game files)', url: 'https://valorant-api.com/v1/maps' }, { label: 'valorant-api.com: Agents', url: 'https://valorant-api.com/v1/agents' }]}
+  note={`Maps and callout names last updated on ${fmtDate(MAPS.updated)}. These are the bomb maps in the game files; the ranked map pool changes each Act, so not every map here is in ranked right now.`}>
+  <p slot="intro">Plan a round with your team. Pick a map, tap an Agent and then the map to place them, and draw where everyone goes. Your plan saves in this browser, and <strong>Copy link</strong> lets you send it to friends.</p>
+
+  <div class="mp" data-mp data-maps={JSON.stringify(maps)} data-agents={JSON.stringify(agents)}>
+    <div class="mp-maps" role="radiogroup" aria-label="Map">
+      {maps.map((m) => <button type="button" class="mp-mapbtn" data-map={m.slug} aria-pressed={m.slug === first.slug ? 'true' : 'false'}>{m.name}</button>)}
+    </div>
+
+    <div class="mp-main">
+      <div class="mp-board-wrap">
+        <div class="mp-board" data-board>
+          <img data-map-img src={first.map} width="1024" height="1024" alt={`Overhead map of ${first.name}`} />
+          <svg data-svg viewBox="0 0 1000 1000" aria-label="Your plan. Agents and lines you add show up here.">
+            <defs>
+              <clipPath id="mp-clip" clipPathUnits="objectBoundingBox"><circle cx=".5" cy=".5" r=".5" /></clipPath>
+              {['#ff5a5f', '#2ee6c5', '#ffd23f', '#ffffff'].map((c, i) => (
+                <marker id={`mp-arrow-${i}`} viewBox="0 0 10 10" refX="7" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill={c} /></marker>
+              ))}
+            </defs>
+            <g data-labels class="mp-labels"></g>
+            <g data-lines></g>
+            <g data-tokens></g>
+          </svg>
+        </div>
+        <p class="mp-site" data-site>{first.name} · {first.sites}</p>
+      </div>
+
+      <div class="mp-side">
+        <fieldset class="mp-group">
+          <legend>Tool</legend>
+          <div class="mp-row">
+            <button type="button" class="mp-tool" data-tool="place" aria-pressed="true">Place</button>
+            <button type="button" class="mp-tool" data-tool="draw" aria-pressed="false">Draw</button>
+            <button type="button" class="mp-tool" data-tool="arrow" aria-pressed="false">Arrow</button>
+            <button type="button" class="mp-tool" data-tool="erase" aria-pressed="false">Erase</button>
+          </div>
+        </fieldset>
+
+        <fieldset class="mp-group">
+          <legend>Colour</legend>
+          <div class="mp-row">
+            <button type="button" class="mp-colour" data-colour="0" style="--sw:#ff5a5f" aria-pressed="true">Attack</button>
+            <button type="button" class="mp-colour" data-colour="1" style="--sw:#2ee6c5" aria-pressed="false">Defend</button>
+            <button type="button" class="mp-colour" data-colour="2" style="--sw:#ffd23f" aria-pressed="false">Yellow</button>
+            <button type="button" class="mp-colour" data-colour="3" style="--sw:#ffffff" aria-pressed="false">White</button>
+          </div>
+        </fieldset>
+
+        <fieldset class="mp-group">
+          <legend>Agent to place <span class="mp-picked" data-picked>Spike</span></legend>
+          <div class="mp-agents">
+            <button type="button" class="mp-agent mp-spike" data-agent="spike" aria-pressed="true" title="Spike"><span aria-hidden="true">◆</span><span class="sr-only">Spike</span></button>
+            {agents.map((a) => (
+              <button type="button" class="mp-agent" data-agent={a.slug} aria-pressed="false" title={a.name}>
+                <img src={a.token} width="48" height="48" alt={a.name} loading="lazy" />
+              </button>
+            ))}
+          </div>
+        </fieldset>
+
+      </div>
+
+      <div class="mp-foot">
+          <div class="mp-row mp-actions">
+            <button type="button" class="mp-btn" data-act="undo">Undo</button>
+            <button type="button" class="mp-btn" data-act="clear">Clear map</button>
+            <button type="button" class="mp-btn" data-act="labels" aria-pressed="true">Callouts</button>
+            <button type="button" class="mp-btn mp-btn-main" data-act="share">Copy link</button>
+          </div>
+          <p class="mp-msg" data-msg aria-live="polite"></p>
+      </div>
+    </div>
+
+    <details class="mp-help">
+      <summary>How to use it</summary>
+      <ul>
+        <li><strong>Place:</strong> pick an Agent (or the Spike) and a colour, then tap the map. Drag a placed Agent to move it.</li>
+        <li><strong>Draw:</strong> drag on the map to draw a path, like where a smoke lands or how you walk in.</li>
+        <li><strong>Arrow:</strong> drag from where you start to where you're going.</li>
+        <li><strong>Erase:</strong> tap an Agent or a line to remove it. <strong>Undo</strong> takes back your last change.</li>
+        <li>Each map keeps its own plan in this browser. <strong>Copy link</strong> puts the plan in the link, so whoever opens it sees exactly what you drew.</li>
+      </ul>
+    </details>
+  </div>
+</RosterPage>
+
+<script>
+  type MapInfo = { slug: string; name: string; sites: string; map: string; callouts: { name: string; x: number; y: number }[] };
+  type Agent = { slug: string; name: string; role: string; token: string };
+  // A plan: tokens are [agent slug or "spike", x, y, colour]; lines are [kind 0 = path / 1 = arrow, colour, x1, y1, x2, y2, ...].
+  // x and y go from 0 to 1000 across the map picture.
+  type Plan = { t: [string, number, number, number][]; l: number[][] };
+
+  const root = document.querySelector<HTMLElement>('[data-mp]');
+  if (root) {
+    const MAPS: MapInfo[] = JSON.parse(root.dataset.maps!);
+    const AGENTS: Agent[] = JSON.parse(root.dataset.agents!);
+    const COLOURS = ['#ff5a5f', '#2ee6c5', '#ffd23f', '#ffffff'];
+    const NS = 'http://www.w3.org/2000/svg';
+    const svg = root.querySelector<SVGSVGElement>('[data-svg]')!;
+    const img = root.querySelector<HTMLImageElement>('[data-map-img]')!;
+    const gLabels = root.querySelector<SVGGElement>('[data-labels]')!;
+    const gLines = root.querySelector<SVGGElement>('[data-lines]')!;
+    const gTokens = root.querySelector<SVGGElement>('[data-tokens]')!;
+    const msg = root.querySelector<HTMLElement>('[data-msg]')!;
+    const siteLine = root.querySelector<HTMLElement>('[data-site]')!;
+    const picked = root.querySelector<HTMLElement>('[data-picked]')!;
+
+    let map = MAPS.find((m) => m.slug === 'ascent') ?? MAPS[0];
+    let plan: Plan = { t: [], l: [] };
+    let undoStack: string[] = [];
+    let tool = 'place';
+    let colour = 0;
+    let agent = 'spike';
+
+    // Saving: one plan per map in this browser. Storage can be blocked (private windows), so every call is guarded.
+    const KEY = (slug: string) => `vplan:${slug}`;
+    const store = {
+      get(k: string) { try { return localStorage.getItem(k); } catch { return null; } },
+      set(k: string, v: string) { try { localStorage.setItem(k, v); } catch { /* not saved, still works */ } },
+    };
+    const valid = (p: any): p is Plan => p && Array.isArray(p.t) && Array.isArray(p.l);
+    const save = () => store.set(KEY(map.slug), JSON.stringify(plan));
+    const say = (text: string) => { msg.textContent = text; };
+
+    // Before each change, keep a copy so Undo can go back.
+    function change(fn: () => void) {
+      undoStack.push(JSON.stringify(plan));
+      if (undoStack.length > 60) undoStack.shift();
+      fn();
+      save();
+      draw();
+    }
+
+    function el<K extends keyof SVGElementTagNameMap>(tag: K, attrs: Record<string, string | number>) {
+      const e = document.createElementNS(NS, tag);
+      for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, String(v));
+      return e;
+    }
+    const pathD = (pts: number[]) => pts.reduce((d, v, i) => d + (i % 2 ? `,${v}` : `${i ? ' L' : 'M'}${v}`), '');
+
+    function drawLabels() {
+      gLabels.replaceChildren(...map.callouts.map((c) => {
+        const t = el('text', { x: Math.round(c.x * 1000), y: Math.round(c.y * 1000), 'text-anchor': 'middle', 'dominant-baseline': 'middle' });
+        t.textContent = c.name;
+        return t;
+      }));
+    }
+
+    function draw() {
+      gLines.replaceChildren(...plan.l.map((line, i) => {
+        const [kind, c, ...pts] = line;
+        const p = el('path', { d: pathD(pts), stroke: COLOURS[c] ?? '#fff', 'stroke-width': 7, fill: 'none', 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'data-line': i });
+        if (kind === 1) p.setAttribute('marker-end', `url(#mp-arrow-${c})`);
+        return p;
+      }));
+      gTokens.replaceChildren(...plan.t.map(([slug, x, y, c], i) => tokenEl(slug, x, y, c, i)));
+    }
+
+    function tokenEl(slug: string, x: number, y: number, c: number, i: number) {
+      const g = el('g', { class: 'mp-token', 'data-token': i, transform: `translate(${x} ${y})` });
+      g.append(el('circle', { r: 30, fill: '#1b1a1f', stroke: COLOURS[c] ?? '#fff', 'stroke-width': 6 }));
+      const a = AGENTS.find((x) => x.slug === slug);
+      if (a) {
+        g.append(el('image', { href: a.token, x: -26, y: -26, width: 52, height: 52, 'clip-path': 'url(#mp-clip)' }));
+        const title = el('title', {}); title.textContent = a.name; g.append(title);
+      } else {
+        g.append(el('path', { d: 'M0 -18L14 0L0 18L-14 0Z', fill: COLOURS[c] ?? '#fff' }));
+        const title = el('title', {}); title.textContent = 'Spike'; g.append(title);
+      }
+      return g;
+    }
+
+    function loadMap(slug: string, fromLink?: Plan) {
+      const next = MAPS.find((m) => m.slug === slug);
+      if (!next) return;
+      map = next;
+      img.src = map.map;
+      img.alt = `Overhead map of ${map.name}`;
+      siteLine.textContent = `${map.name} · ${map.sites}`;
+      root!.querySelectorAll<HTMLButtonElement>('[data-map]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.map === slug)));
+      let saved: any = null;
+      try { saved = JSON.parse(store.get(KEY(slug)) ?? 'null'); } catch { saved = null; }
+      plan = fromLink ?? (valid(saved) ? saved : { t: [], l: [] });
+      if (fromLink) save();
+      undoStack = [];
+      drawLabels();
+      draw();
+    }
+
+    // Board position from a pointer event, 0 to 1000 across and down.
+    function pos(e: PointerEvent): [number, number] {
+      const r = svg.getBoundingClientRect();
+      const x = Math.round(((e.clientX - r.left) / r.width) * 1000);
+      const y = Math.round(((e.clientY - r.top) / r.height) * 1000);
+      return [Math.max(0, Math.min(1000, x)), Math.max(0, Math.min(1000, y))];
+    }
+
+    // Pointer handling covers mouse, pen and touch in one go.
+    let dragging: { i: number; moved: boolean } | null = null;
+    let drawing: number[] | null = null;
+    let live: SVGPathElement | null = null;
+
+    svg.addEventListener('pointerdown', (e) => {
+      const target = e.target as Element;
+      const tokenG = target.closest('[data-token]');
+      const lineEl = target.closest('[data-line]');
+      const [x, y] = pos(e);
+      if (tool === 'erase') {
+        if (tokenG) change(() => plan.t.splice(Number(tokenG.getAttribute('data-token')), 1));
+        else if (lineEl) change(() => plan.l.splice(Number(lineEl.getAttribute('data-line')), 1));
+        return;
+      }
+      svg.setPointerCapture(e.pointerId);
+      if (tool === 'place' && tokenG) {
+        undoStack.push(JSON.stringify(plan));
+        dragging = { i: Number(tokenG.getAttribute('data-token')), moved: false };
+        return;
+      }
+      if (tool === 'place') {
+        change(() => plan.t.push([agent, x, y, colour]));
+        return;
+      }
+      drawing = [x, y];
+      live = el('path', { d: pathD(drawing), stroke: COLOURS[colour], 'stroke-width': 7, fill: 'none', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' });
+      if (tool === 'arrow') live.setAttribute('marker-end', `url(#mp-arrow-${colour})`);
+      gLines.append(live);
+    });
+
+    svg.addEventListener('pointermove', (e) => {
+      const [x, y] = pos(e);
+      if (dragging) {
+        const t = plan.t[dragging.i];
+        if (!t) return;
+        t[1] = x; t[2] = y;
+        dragging.moved = true;
+        gTokens.children[dragging.i]?.setAttribute('transform', `translate(${x} ${y})`);
+        return;
+      }
+      if (!drawing || !live) return;
+      if (tool === 'arrow') drawing = [drawing[0], drawing[1], x, y];
+      else {
+        const lx = drawing[drawing.length - 2], ly = drawing[drawing.length - 1];
+        if (Math.hypot(x - lx, y - ly) < 6) return;
+        drawing.push(x, y);
+      }
+      live.setAttribute('d', pathD(drawing));
+    });
+
+    const finish = () => {
+      if (dragging) {
+        if (!dragging.moved) undoStack.pop();
+        else save();
+        dragging = null;
+        draw();
+      }
+      if (drawing) {
+        const pts = drawing;
+        drawing = null;
+        live = null;
+        if (pts.length >= 4) change(() => plan.l.push([tool === 'arrow' ? 1 : 0, colour, ...pts]));
+        else draw();
+      }
+    };
+    svg.addEventListener('pointerup', finish);
+    svg.addEventListener('pointercancel', finish);
+
+    // Buttons
+    const press = (sel: string, on: Element) => root!.querySelectorAll(sel).forEach((b) => b.setAttribute('aria-pressed', String(b === on)));
+    root.querySelectorAll<HTMLButtonElement>('[data-map]').forEach((b) => b.addEventListener('click', () => { say(''); loadMap(b.dataset.map!); }));
+    root.querySelectorAll<HTMLButtonElement>('[data-tool]').forEach((b) => b.addEventListener('click', () => { tool = b.dataset.tool!; press('[data-tool]', b); svg.dataset.tool = tool; }));
+    root.querySelectorAll<HTMLButtonElement>('[data-colour]').forEach((b) => b.addEventListener('click', () => { colour = Number(b.dataset.colour); press('[data-colour]', b); }));
+    root.querySelectorAll<HTMLButtonElement>('[data-agent]').forEach((b) => b.addEventListener('click', () => {
+      agent = b.dataset.agent!;
+      press('[data-agent]', b);
+      picked.textContent = AGENTS.find((a) => a.slug === agent)?.name ?? 'Spike';
+      // Picking an Agent means you want to place it.
+      const placeBtn = root!.querySelector('[data-tool="place"]')!;
+      tool = 'place'; press('[data-tool]', placeBtn); svg.dataset.tool = tool;
+    }));
+
+    root.querySelector('[data-act="undo"]')!.addEventListener('click', () => {
+      const last = undoStack.pop();
+      if (!last) return say('Nothing to undo.');
+      plan = JSON.parse(last); save(); draw(); say('');
+    });
+    root.querySelector('[data-act="clear"]')!.addEventListener('click', () => {
+      if (!plan.t.length && !plan.l.length) return say('The map is already empty.');
+      change(() => { plan = { t: [], l: [] }; });
+      say('Map cleared. Undo brings it back.');
+    });
+    const labelsBtn = root.querySelector<HTMLButtonElement>('[data-act="labels"]')!;
+    labelsBtn.addEventListener('click', () => {
+      const on = labelsBtn.getAttribute('aria-pressed') !== 'true';
+      labelsBtn.setAttribute('aria-pressed', String(on));
+      gLabels.style.display = on ? '' : 'none';
+    });
+
+    // Sharing: the plan rides in the link after the #, so nothing is stored on a server.
+    const toB64 = (s: string) => btoa(String.fromCharCode(...new TextEncoder().encode(s))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    const fromB64 = (s: string) => new TextDecoder().decode(Uint8Array.from(atob(s.replace(/-/g, '+').replace(/_/g, '/')), (c) => c.charCodeAt(0)));
+    root.querySelector('[data-act="share"]')!.addEventListener('click', async () => {
+      const url = `${location.origin}${location.pathname}#${map.slug}.${toB64(JSON.stringify(plan))}`;
+      history.replaceState(null, '', url);
+      try { await navigator.clipboard.writeText(url); say('Link copied. Paste it to your team.'); }
+      catch { say('Copy the link from the address bar to share it.'); }
+    });
+
+    // Start: a shared link wins, then the last plan saved in this browser.
+    const [slug, data] = location.hash.slice(1).split('.');
+    let shared: Plan | undefined;
+    if (slug && data) {
+      try { const p = JSON.parse(fromB64(data)); if (valid(p)) shared = p; } catch { /* a broken link just opens an empty map */ }
+    }
+    loadMap(MAPS.some((m) => m.slug === slug) ? slug : map.slug, shared);
+    if (shared) say('Opened a shared plan. Changes you make save in this browser.');
+  }
+</script>
+
+<style>
+  .mp { display: grid; gap: 14px; }
+  .mp-maps { display: flex; flex-wrap: wrap; gap: 6px; }
+  .mp-mapbtn, .mp-tool, .mp-colour, .mp-btn { font: inherit; font-weight: 700; font-size: .85rem; padding: 6px 12px; border: 2px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); cursor: pointer; }
+  .mp-mapbtn[aria-pressed="true"], .mp-tool[aria-pressed="true"], .mp-btn[aria-pressed="true"] { background: #ff8fc7; color: #1b1a1f; }
+  .mp-colour { display: inline-flex; align-items: center; gap: 6px; }
+  .mp-colour::before { content: ""; width: 14px; height: 14px; border-radius: 50%; background: var(--sw); border: 2px solid #1b1a1f; }
+  .mp-colour[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+  .mp-btn-main { background: var(--mark); color: #1b1a1f; }
+  .mp button:focus-visible { outline: 3px solid var(--c2); outline-offset: 2px; }
+
+  /* Phones: controls above the map, so you pick and tap without scrolling. Wider screens: controls on the right. */
+  .mp-main { display: grid; gap: 12px; align-items: start; grid-template-areas: "side" "board" "foot"; }
+  .mp-board-wrap { grid-area: board; }
+  .mp-side { grid-area: side; }
+  .mp-foot { grid-area: foot; display: grid; gap: 8px; }
+  @media (min-width: 900px) {
+    .mp-main { gap: 16px; grid-template-columns: minmax(0, 1fr) 340px; grid-template-areas: "board side" "board foot"; grid-template-rows: auto 1fr; }
+  }
+  @media (max-width: 899px) {
+    .mp-side { gap: 8px; }
+    .mp-maps { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 6px; }
+    .mp-mapbtn { flex: none; }
+    .mp-group { padding: 6px 10px 8px; }
+    .mp-agents { grid-auto-flow: column; grid-template-columns: none; grid-auto-columns: 46px; overflow-x: auto; overflow-y: hidden; max-height: none; padding-bottom: 6px; }
+  }
+  .mp-board { position: relative; width: 100%; max-width: 760px; aspect-ratio: 1; margin: 0 auto; border: 2px solid var(--line); border-radius: 20px; background: #1b1a1f; overflow: hidden; box-shadow: var(--lift); }
+  .mp-board img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; user-select: none; }
+  .mp-board svg { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: crosshair; }
+  .mp-board svg[data-tool="erase"] { cursor: not-allowed; }
+  .mp-site { margin: 6px 0 0; text-align: center; color: var(--muted); font-size: .85rem; font-weight: 700; }
+  .mp-labels { pointer-events: none; }
+  .mp-labels :global(text) { font: 700 21px/1 var(--body, sans-serif); fill: #fff; stroke: #1b1a1f; stroke-width: 5px; paint-order: stroke; }
+  .mp :global(.mp-token) { cursor: grab; }
+  .mp :global([data-line]) { cursor: pointer; }
+
+  .mp-side { display: grid; gap: 12px; }
+  .mp-side, .mp-foot, .mp-maps { user-select: none; -webkit-user-select: none; }
+  .mp-group { min-width: 0; margin: 0; padding: 10px 12px 12px; border: 2px solid var(--line); border-radius: 16px; background: var(--surface); }
+  .mp-group legend { padding: 0 6px; font-weight: 800; font-size: .85rem; }
+  .mp-picked { margin-left: 6px; padding: 1px 8px; border-radius: 99px; background: var(--surface-2); font-weight: 700; color: var(--muted); }
+  .mp-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .mp-agents { display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 6px; max-height: 260px; overflow-y: auto; padding: 2px; }
+  .mp-agent { display: grid; place-items: center; aspect-ratio: 1; padding: 0; border: 2px solid var(--soft-line); border-radius: 12px; background: #1b1a1f; cursor: pointer; overflow: hidden; }
+  .mp-agent img { width: 100%; height: 100%; object-fit: cover; }
+  .mp-agent[aria-pressed="true"] { border-color: #ff8fc7; box-shadow: 0 0 0 3px #ff8fc7; }
+  .mp-spike { color: #ffd23f; font-size: 1.3rem; }
+  .mp-actions { padding-top: 2px; }
+  .mp-msg { margin: 0; min-height: 1.2em; color: var(--muted); font-size: .85rem; font-weight: 700; }
+  .mp-help { padding: 12px 16px; border: 2px solid var(--line); border-radius: 16px; background: var(--surface); }
+  .mp-help summary { font-weight: 800; cursor: pointer; }
+  .mp-help ul { margin: 8px 0 0; padding-left: 18px; display: grid; gap: 6px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+</style>

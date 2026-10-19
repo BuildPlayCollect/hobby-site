@@ -1,6 +1,6 @@
 // dota-2.ts: everything on the Dota 2 hub (/esports/dota-2).
 // Edit by hand; every fact needs a source. No press images yet: Echo can add official images later.
-import type { GameHubData, Source } from '../lib/esports-hub';
+import { type GameHubData, type Source, LOGOS } from '../lib/esports-hub';
 
 const S = {
   home: { label: 'Dota 2: official site', url: 'https://www.dota2.com/home' },
@@ -21,6 +21,10 @@ export const DOTA2: GameHubData = {
   tagline: 'Two teams, two Ancients, over a hundred heroes and one very grumpy boss called Roshan.',
   description: 'Dota 2 for beginners: what the game is, how the pro scene and The International work, the 2026 results, the Filipino OG lineup and what\'s coming next.',
   badge: 'aegis',
+  logo: LOGOS.dota,
+  tools: [
+    { href: '/esports/dota-2/heroes', label: 'Every hero', text: 'All the heroes by main attribute, with their roles and how tricky they are.' },
+  ],
   about: [
     'Dota 2 is a free team game made by Valve. It came out on Steam on 9 July 2013. Two teams of five players battle on one big map: the Radiant on one side and the Dire on the other.',
     'Each team has a huge building called the Ancient in the middle of its base. Destroy the other team\'s Ancient and you win. Easy, right? Well, the other team is trying to do exactly the same thing to you.',

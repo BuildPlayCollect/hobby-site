@@ -1,6 +1,6 @@
 // league-of-legends.ts: everything on the League of Legends hub (/esports/league-of-legends).
 // Edit by hand; every fact needs a source. No press images yet: Echo can add Riot press-kit images later.
-import type { GameHubData, Source } from '../lib/esports-hub';
+import { type GameHubData, type Source, LOGOS } from '../lib/esports-hub';
 
 const S = {
   howTo: { label: 'League of Legends: how to play', url: 'https://www.leagueoflegends.com/en-us/how-to-play/' },
@@ -18,6 +18,10 @@ export const LEAGUE: GameHubData = {
   tagline: 'Two teams, three lanes, one Nexus to smash. Worlds 2026 is on right now.',
   description: 'League of Legends for beginners: what the game is, how the LoL Esports season works, and everything about Worlds 2026, from the Play-Ins in Los Angeles to the final in Brooklyn.',
   badge: 'lanes',
+  logo: LOGOS.lol,
+  tools: [
+    { href: '/esports/league-of-legends/champions', label: 'Every champion', text: 'All the champions, by role, with how hard each one is to learn.' },
+  ],
   about: [
     'League of Legends (LoL for short) is a free team game from Riot Games. Two teams of five champions face off, and the goal is simple to say and hard to do: destroy the other team\'s Nexus, which sits at the heart of their base.',
     'The map has three lanes: Top, Mid and Bot. Each lane is guarded by turrets and an inhibitor, and little helpers called minions march down every lane from your Nexus. Between the lanes is the jungle, full of neutral monsters, including the big boss Baron Nashor.',

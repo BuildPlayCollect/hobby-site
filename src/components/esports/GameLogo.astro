@@ -1,0 +1,16 @@
+---
+// GameLogo.astro: a game's official logo on a small dark tile, for next to the game's name.
+// The logos are light colours on a see-through background, so the tile stays dark in light and night mode.
+import type { GameLogo } from '../../lib/esports-hub';
+
+interface Props { logo: GameLogo; size?: number; alt?: string }
+const { logo, size = 40, alt = '' } = Astro.props;
+---
+<span class="game-logo" style={`--gl:${size}px`}>
+  <img src={logo.src} width={logo.w} height={logo.h} alt={alt} loading="lazy" decoding="async" />
+</span>
+
+<style>
+  .game-logo { flex: none; display: inline-grid; place-items: center; height: var(--gl); min-width: var(--gl); padding: calc(var(--gl) * .14); box-sizing: border-box; border-radius: calc(var(--gl) * .28); background: #1b1a1f; border: 2px solid var(--line); vertical-align: middle; }
+  .game-logo img { display: block; height: calc(var(--gl) * .72 - 4px); width: auto; max-width: calc(var(--gl) * 2.6); object-fit: contain; }
+</style>

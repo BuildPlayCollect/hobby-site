@@ -1,0 +1,1894 @@
+{
+ "updated": "2026-10-19",
+ "source": "https://www.dota2.com/heroes",
+ "heroes": [
+  {
+   "slug": "abaddon",
+   "name": "Abaddon",
+   "attr": "Universal",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Support",
+    "Durable",
+    "Carry"
+   ],
+   "text": "Shields his allies or himself from attacks",
+   "icon": "/images/esports/dota-2/heroes/abaddon.webp"
+  },
+  {
+   "slug": "alchemist",
+   "name": "Alchemist",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Carry",
+    "Durable",
+    "Support",
+    "Nuker",
+    "Disabler",
+    "Initiator"
+   ],
+   "text": "Earns extra gold from unit kills and bounty runes",
+   "icon": "/images/esports/dota-2/heroes/alchemist.webp"
+  },
+  {
+   "slug": "ancient-apparition",
+   "name": "Ancient Apparition",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Support",
+    "Nuker",
+    "Disabler"
+   ],
+   "text": "Launches a powerful icy blast from anywhere on the map",
+   "icon": "/images/esports/dota-2/heroes/ancient-apparition.webp"
+  },
+  {
+   "slug": "anti-mage",
+   "name": "Anti-Mage",
+   "attr": "Agility",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Carry",
+    "Escape",
+    "Nuker"
+   ],
+   "text": "Slashes his foes with mana-draining attacks",
+   "icon": "/images/esports/dota-2/heroes/anti-mage.webp"
+  },
+  {
+   "slug": "arc-warden",
+   "name": "Arc Warden",
+   "attr": "Universal",
+   "attack": "Ranged",
+   "complexity": 3,
+   "roles": [
+    "Carry",
+    "Escape",
+    "Nuker"
+   ],
+   "text": "Creates a copy of himself to split push",
+   "icon": "/images/esports/dota-2/heroes/arc-warden.webp"
+  },
+  {
+   "slug": "axe",
+   "name": "Axe",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Durable",
+    "Initiator",
+    "Disabler",
+    "Carry"
+   ],
+   "text": "Taunts and forces enemies to attack him",
+   "icon": "/images/esports/dota-2/heroes/axe.webp"
+  },
+  {
+   "slug": "bane",
+   "name": "Bane",
+   "attr": "Universal",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Disabler",
+    "Support",
+    "Nuker",
+    "Durable"
+   ],
+   "text": "Puts his enemies to sleep, incapacitating them",
+   "icon": "/images/esports/dota-2/heroes/bane.webp"
+  },
+  {
+   "slug": "batrider",
+   "name": "Batrider",
+   "attr": "Universal",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Initiator",
+    "Disabler",
+    "Escape"
+   ],
+   "text": "Can lasso an enemy away from his team",
+   "icon": "/images/esports/dota-2/heroes/batrider.webp"
+  },
+  {
+   "slug": "beastmaster",
+   "name": "Beastmaster",
+   "attr": "Universal",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Disabler",
+    "Durable",
+    "Initiator",
+    "Nuker"
+   ],
+   "text": "Summons beasts to aid his hunt",
+   "icon": "/images/esports/dota-2/heroes/beastmaster.webp"
+  },
+  {
+   "slug": "bloodseeker",
+   "name": "Bloodseeker",
+   "attr": "Agility",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Carry",
+    "Nuker",
+    "Disabler",
+    "Initiator"
+   ],
+   "text": "Chases down low health enemies with increased speed",
+   "icon": "/images/esports/dota-2/heroes/bloodseeker.webp"
+  },
+  {
+   "slug": "bounty-hunter",
+   "name": "Bounty Hunter",
+   "attr": "Agility",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Escape",
+    "Nuker"
+   ],
+   "text": "Loots and collects bounties off of his enemies",
+   "icon": "/images/esports/dota-2/heroes/bounty-hunter.webp"
+  },
+  {
+   "slug": "brewmaster",
+   "name": "Brewmaster",
+   "attr": "Universal",
+   "attack": "Melee",
+   "complexity": 3,
+   "roles": [
+    "Initiator",
+    "Disabler",
+    "Durable",
+    "Carry",
+    "Nuker"
+   ],
+   "text": "Splits into four elemental spirits with unique abilities",
+   "icon": "/images/esports/dota-2/heroes/brewmaster.webp"
+  },
+  {
+   "slug": "bristleback",
+   "name": "Bristleback",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Durable",
+    "Carry",
+    "Nuker",
+    "Initiator"
+   ],
+   "text": "Takes reduced damage when facing away from enemies",
+   "icon": "/images/esports/dota-2/heroes/bristleback.webp"
+  },
+  {
+   "slug": "broodmother",
+   "name": "Broodmother",
+   "attr": "Agility",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Escape",
+    "Pusher",
+    "Carry",
+    "Nuker"
+   ],
+   "text": "Hunts with her army of spiderlings",
+   "icon": "/images/esports/dota-2/heroes/broodmother.webp"
+  },
+  {
+   "slug": "centaur-warrunner",
+   "name": "Centaur Warrunner",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Durable",
+    "Initiator",
+    "Nuker",
+    "Disabler",
+    "Escape"
+   ],
+   "text": "Reflects damage back to his attackers",
+   "icon": "/images/esports/dota-2/heroes/centaur-warrunner.webp"
+  },
+  {
+   "slug": "chaos-knight",
+   "name": "Chaos Knight",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Carry",
+    "Disabler",
+    "Durable",
+    "Pusher",
+    "Initiator"
+   ],
+   "text": "Has strong but random damage output",
+   "icon": "/images/esports/dota-2/heroes/chaos-knight.webp"
+  },
+  {
+   "slug": "chen",
+   "name": "Chen",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 3,
+   "roles": [
+    "Support",
+    "Pusher"
+   ],
+   "text": "Converts creeps to his cause, building an army",
+   "icon": "/images/esports/dota-2/heroes/chen.webp"
+  },
+  {
+   "slug": "clinkz",
+   "name": "Clinkz",
+   "attr": "Agility",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Escape",
+    "Carry",
+    "Pusher"
+   ],
+   "text": "Stalks invisibly to ambush lone enemies",
+   "icon": "/images/esports/dota-2/heroes/clinkz.webp"
+  },
+  {
+   "slug": "clockwerk",
+   "name": "Clockwerk",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Initiator",
+    "Disabler",
+    "Nuker",
+    "Durable"
+   ],
+   "text": "Launches himself into enemies with his hookshot",
+   "icon": "/images/esports/dota-2/heroes/clockwerk.webp"
+  },
+  {
+   "slug": "crystal-maiden",
+   "name": "Crystal Maiden",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 1,
+   "roles": [
+    "Support",
+    "Nuker",
+    "Disabler"
+   ],
+   "text": "Unleashes a high damage blizzard upon her foes",
+   "icon": "/images/esports/dota-2/heroes/crystal-maiden.webp"
+  },
+  {
+   "slug": "dark-seer",
+   "name": "Dark Seer",
+   "attr": "Intelligence",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Disabler",
+    "Escape",
+    "Initiator"
+   ],
+   "text": "Pulls and manipulates his enemies' positions",
+   "icon": "/images/esports/dota-2/heroes/dark-seer.webp"
+  },
+  {
+   "slug": "dark-willow",
+   "name": "Dark Willow",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Support",
+    "Nuker",
+    "Escape",
+    "Disabler"
+   ],
+   "text": "Has an arsenal of disables at her disposal",
+   "icon": "/images/esports/dota-2/heroes/dark-willow.webp"
+  },
+  {
+   "slug": "dawnbreaker",
+   "name": "Dawnbreaker",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Durable",
+    "Carry"
+   ],
+   "text": "Leaps to aid her allies, wherever they are on the map",
+   "icon": "/images/esports/dota-2/heroes/dawnbreaker.webp"
+  },
+  {
+   "slug": "dazzle",
+   "name": "Dazzle",
+   "attr": "Universal",
+   "attack": "Ranged",
+   "complexity": 1,
+   "roles": [
+    "Support",
+    "Nuker",
+    "Disabler"
+   ],
+   "text": "Powerful healer who can briefly prevent death",
+   "icon": "/images/esports/dota-2/heroes/dazzle.webp"
+  },
+  {
+   "slug": "death-prophet",
+   "name": "Death Prophet",
+   "attr": "Universal",
+   "attack": "Ranged",
+   "complexity": 1,
+   "roles": [
+    "Pusher",
+    "Carry",
+    "Nuker",
+    "Disabler"
+   ],
+   "text": "Summons an army of ghosts to attack",
+   "icon": "/images/esports/dota-2/heroes/death-prophet.webp"
+  },
+  {
+   "slug": "disruptor",
+   "name": "Disruptor",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Support",
+    "Disabler",
+    "Nuker",
+    "Initiator"
+   ],
+   "text": "Traps and silences foes in his static storm",
+   "icon": "/images/esports/dota-2/heroes/disruptor.webp"
+  },
+  {
+   "slug": "doom",
+   "name": "Doom",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Disabler",
+    "Durable",
+    "Initiator",
+    "Carry",
+    "Nuker"
+   ],
+   "text": "Can prevent a single enemy from casting spells or healing in any way",
+   "icon": "/images/esports/dota-2/heroes/doom.webp"
+  },
+  {
+   "slug": "dragon-knight",
+   "name": "Dragon Knight",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Pusher",
+    "Carry",
+    "Disabler",
+    "Durable",
+    "Nuker",
+    "Initiator"
+   ],
+   "text": "Transforms into a formidable ranged dragon",
+   "icon": "/images/esports/dota-2/heroes/dragon-knight.webp"
+  },
+  {
+   "slug": "drow-ranger",
+   "name": "Drow Ranger",
+   "attr": "Agility",
+   "attack": "Ranged",
+   "complexity": 1,
+   "roles": [
+    "Carry",
+    "Disabler",
+    "Pusher"
+   ],
+   "text": "Slows with her frost-tipped arrows",
+   "icon": "/images/esports/dota-2/heroes/drow-ranger.webp"
+  },
+  {
+   "slug": "earth-spirit",
+   "name": "Earth Spirit",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 3,
+   "roles": [
+    "Nuker",
+    "Escape",
+    "Disabler",
+    "Durable",
+    "Initiator"
+   ],
+   "text": "Disables and repositions his enemies",
+   "icon": "/images/esports/dota-2/heroes/earth-spirit.webp"
+  },
+  {
+   "slug": "earthshaker",
+   "name": "Earthshaker",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Initiator",
+    "Disabler",
+    "Support",
+    "Nuker"
+   ],
+   "text": "Disrupts enemy team with his chain stuns",
+   "icon": "/images/esports/dota-2/heroes/earthshaker.webp"
+  },
+  {
+   "slug": "elder-titan",
+   "name": "Elder Titan",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Initiator",
+    "Nuker",
+    "Disabler",
+    "Durable"
+   ],
+   "text": "Damages and disables with his astral spirit",
+   "icon": "/images/esports/dota-2/heroes/elder-titan.webp"
+  },
+  {
+   "slug": "ember-spirit",
+   "name": "Ember Spirit",
+   "attr": "Agility",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Escape",
+    "Carry",
+    "Nuker",
+    "Disabler",
+    "Initiator"
+   ],
+   "text": "Rapidly strikes and chains his foes",
+   "icon": "/images/esports/dota-2/heroes/ember-spirit.webp"
+  },
+  {
+   "slug": "enchantress",
+   "name": "Enchantress",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Support",
+    "Pusher",
+    "Disabler",
+    "Durable"
+   ],
+   "text": "Enchants neutral creeps to do her bidding",
+   "icon": "/images/esports/dota-2/heroes/enchantress.webp"
+  },
+  {
+   "slug": "enigma",
+   "name": "Enigma",
+   "attr": "Universal",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Disabler",
+    "Pusher",
+    "Initiator"
+   ],
+   "text": "Traps and damages enemies in a black hole",
+   "icon": "/images/esports/dota-2/heroes/enigma.webp"
+  },
+  {
+   "slug": "faceless-void",
+   "name": "Faceless Void",
+   "attr": "Agility",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Initiator",
+    "Carry",
+    "Disabler",
+    "Durable",
+    "Escape"
+   ],
+   "text": "Can freeze his enemies in time",
+   "icon": "/images/esports/dota-2/heroes/faceless-void.webp"
+  },
+  {
+   "slug": "grimstroke",
+   "name": "Grimstroke",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Support",
+    "Nuker",
+    "Disabler",
+    "Escape"
+   ],
+   "text": "Disables enemies with a swipe of his brush",
+   "icon": "/images/esports/dota-2/heroes/grimstroke.webp"
+  },
+  {
+   "slug": "gyrocopter",
+   "name": "Gyrocopter",
+   "attr": "Agility",
+   "attack": "Ranged",
+   "complexity": 1,
+   "roles": [
+    "Carry",
+    "Nuker",
+    "Disabler"
+   ],
+   "text": "Barrages with his cannon and homing missiles",
+   "icon": "/images/esports/dota-2/heroes/gyrocopter.webp"
+  },
+  {
+   "slug": "hoodwink",
+   "name": "Hoodwink",
+   "attr": "Agility",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Support",
+    "Nuker",
+    "Escape",
+    "Disabler"
+   ],
+   "text": "Shackles her enemies to trees",
+   "icon": "/images/esports/dota-2/heroes/hoodwink.webp"
+  },
+  {
+   "slug": "huskar",
+   "name": "Huskar",
+   "attr": "Strength",
+   "attack": "Ranged",
+   "complexity": 1,
+   "roles": [
+    "Carry",
+    "Durable",
+    "Initiator"
+   ],
+   "text": "Sacrifices his health to deal more damage",
+   "icon": "/images/esports/dota-2/heroes/huskar.webp"
+  },
+  {
+   "slug": "invoker",
+   "name": "Invoker",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 3,
+   "roles": [
+    "Nuker",
+    "Disabler",
+    "Carry",
+    "Escape",
+    "Pusher"
+   ],
+   "text": "Weaves magic with an array of spell combos",
+   "icon": "/images/esports/dota-2/heroes/invoker.webp"
+  },
+  {
+   "slug": "io",
+   "name": "Io",
+   "attr": "Universal",
+   "attack": "Ranged",
+   "complexity": 3,
+   "roles": [
+    "Support",
+    "Escape",
+    "Nuker"
+   ],
+   "text": "Links to its allies to buff them",
+   "icon": "/images/esports/dota-2/heroes/io.webp"
+  },
+  {
+   "slug": "jakiro",
+   "name": "Jakiro",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 1,
+   "roles": [
+    "Nuker",
+    "Pusher",
+    "Support",
+    "Disabler"
+   ],
+   "text": "Freezes and burns enemies with magic",
+   "icon": "/images/esports/dota-2/heroes/jakiro.webp"
+  },
+  {
+   "slug": "juggernaut",
+   "name": "Juggernaut",
+   "attr": "Agility",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Carry",
+    "Escape",
+    "Pusher"
+   ],
+   "text": "Slices through his enemies with precise strikes",
+   "icon": "/images/esports/dota-2/heroes/juggernaut.webp"
+  },
+  {
+   "slug": "keeper-of-the-light",
+   "name": "Keeper of the Light",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Support",
+    "Nuker",
+    "Disabler"
+   ],
+   "text": "Provides instant mana to allies",
+   "icon": "/images/esports/dota-2/heroes/keeper-of-the-light.webp"
+  },
+  {
+   "slug": "kez",
+   "name": "Kez",
+   "attr": "Agility",
+   "attack": "Melee",
+   "complexity": 3,
+   "roles": [
+    "Carry",
+    "Escape",
+    "Disabler"
+   ],
+   "text": "Flexible melee master with two sets of weapons and abilities",
+   "icon": "/images/esports/dota-2/heroes/kez.webp"
+  },
+  {
+   "slug": "kunkka",
+   "name": "Kunkka",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Carry",
+    "Disabler",
+    "Initiator",
+    "Support",
+    "Nuker",
+    "Durable"
+   ],
+   "text": "Disrupts enemy positioning and disables them",
+   "icon": "/images/esports/dota-2/heroes/kunkka.webp"
+  },
+  {
+   "slug": "largo",
+   "name": "Largo",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Support",
+    "Durable",
+    "Disabler"
+   ],
+   "text": "Strums music to empower allies and can dispel with a lick",
+   "icon": "/images/esports/dota-2/heroes/largo.webp"
+  },
+  {
+   "slug": "legion-commander",
+   "name": "Legion Commander",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Disabler",
+    "Carry",
+    "Nuker",
+    "Durable",
+    "Initiator"
+   ],
+   "text": "Increases power with each duel victory",
+   "icon": "/images/esports/dota-2/heroes/legion-commander.webp"
+  },
+  {
+   "slug": "leshrac",
+   "name": "Leshrac",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 1,
+   "roles": [
+    "Nuker",
+    "Pusher",
+    "Carry",
+    "Support",
+    "Disabler"
+   ],
+   "text": "Can deal heavy damage in an aura around himself",
+   "icon": "/images/esports/dota-2/heroes/leshrac.webp"
+  },
+  {
+   "slug": "lich",
+   "name": "Lich",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 1,
+   "roles": [
+    "Support",
+    "Nuker"
+   ],
+   "text": "Unleashes a powerful attack that bounces between enemies",
+   "icon": "/images/esports/dota-2/heroes/lich.webp"
+  },
+  {
+   "slug": "lifestealer",
+   "name": "Lifestealer",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Carry",
+    "Durable",
+    "Disabler",
+    "Escape"
+   ],
+   "text": "Infests other units for mobility and strength",
+   "icon": "/images/esports/dota-2/heroes/lifestealer.webp"
+  },
+  {
+   "slug": "lina",
+   "name": "Lina",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 1,
+   "roles": [
+    "Nuker",
+    "Carry",
+    "Support",
+    "Disabler"
+   ],
+   "text": "Increases attack and speed with every spell",
+   "icon": "/images/esports/dota-2/heroes/lina.webp"
+  },
+  {
+   "slug": "lion",
+   "name": "Lion",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 1,
+   "roles": [
+    "Nuker",
+    "Disabler",
+    "Support",
+    "Initiator"
+   ],
+   "text": "Steals enemy mana to fuel his own abilities",
+   "icon": "/images/esports/dota-2/heroes/lion.webp"
+  },
+  {
+   "slug": "lone-druid",
+   "name": "Lone Druid",
+   "attr": "Agility",
+   "attack": "Ranged",
+   "complexity": 3,
+   "roles": [
+    "Pusher",
+    "Carry",
+    "Durable"
+   ],
+   "text": "Commands a powerful spirit bear in battle",
+   "icon": "/images/esports/dota-2/heroes/lone-druid.webp"
+  },
+  {
+   "slug": "luna",
+   "name": "Luna",
+   "attr": "Agility",
+   "attack": "Ranged",
+   "complexity": 1,
+   "roles": [
+    "Carry",
+    "Nuker",
+    "Pusher"
+   ],
+   "text": "Tears into her enemies with bouncing attacks",
+   "icon": "/images/esports/dota-2/heroes/luna.webp"
+  },
+  {
+   "slug": "lycan",
+   "name": "Lycan",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Pusher",
+    "Carry",
+    "Durable",
+    "Escape"
+   ],
+   "text": "Shapeshifts into a ferocious beast",
+   "icon": "/images/esports/dota-2/heroes/lycan.webp"
+  },
+  {
+   "slug": "magnus",
+   "name": "Magnus",
+   "attr": "Universal",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Initiator",
+    "Disabler",
+    "Nuker",
+    "Escape"
+   ],
+   "text": "Charges in to reposition his enemies",
+   "icon": "/images/esports/dota-2/heroes/magnus.webp"
+  },
+  {
+   "slug": "marci",
+   "name": "Marci",
+   "attr": "Universal",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Initiator",
+    "Carry",
+    "Support",
+    "Disabler",
+    "Escape"
+   ],
+   "text": "Dashes around pummeling enemies with rapid attacks",
+   "icon": "/images/esports/dota-2/heroes/marci.webp"
+  },
+  {
+   "slug": "mars",
+   "name": "Mars",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Durable",
+    "Disabler",
+    "Initiator",
+    "Carry"
+   ],
+   "text": "Traps his foes in an inescapable arena",
+   "icon": "/images/esports/dota-2/heroes/mars.webp"
+  },
+  {
+   "slug": "medusa",
+   "name": "Medusa",
+   "attr": "Agility",
+   "attack": "Ranged",
+   "complexity": 1,
+   "roles": [
+    "Carry",
+    "Disabler",
+    "Durable"
+   ],
+   "text": "Immobilizes her enemies with her stone gaze",
+   "icon": "/images/esports/dota-2/heroes/medusa.webp"
+  },
+  {
+   "slug": "meepo",
+   "name": "Meepo",
+   "attr": "Agility",
+   "attack": "Melee",
+   "complexity": 3,
+   "roles": [
+    "Carry",
+    "Nuker",
+    "Escape",
+    "Disabler",
+    "Pusher",
+    "Initiator"
+   ],
+   "text": "Five are stronger than one",
+   "icon": "/images/esports/dota-2/heroes/meepo.webp"
+  },
+  {
+   "slug": "mirana",
+   "name": "Mirana",
+   "attr": "Agility",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Escape",
+    "Carry",
+    "Support",
+    "Nuker",
+    "Disabler"
+   ],
+   "text": "Stuns enemies with precise arrows from afar",
+   "icon": "/images/esports/dota-2/heroes/mirana.webp"
+  },
+  {
+   "slug": "monkey-king",
+   "name": "Monkey King",
+   "attr": "Agility",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Carry",
+    "Escape",
+    "Disabler",
+    "Initiator"
+   ],
+   "text": "Springs from the cover of the tree tops",
+   "icon": "/images/esports/dota-2/heroes/monkey-king.webp"
+  },
+  {
+   "slug": "morphling",
+   "name": "Morphling",
+   "attr": "Agility",
+   "attack": "Ranged",
+   "complexity": 3,
+   "roles": [
+    "Carry",
+    "Escape",
+    "Durable",
+    "Nuker",
+    "Disabler"
+   ],
+   "text": "Rides the waves to flank enemies",
+   "icon": "/images/esports/dota-2/heroes/morphling.webp"
+  },
+  {
+   "slug": "muerta",
+   "name": "Muerta",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 1,
+   "roles": [
+    "Carry",
+    "Nuker",
+    "Disabler"
+   ],
+   "text": "Blasts fearsome trickshots and unleashes ethereal ruin",
+   "icon": "/images/esports/dota-2/heroes/muerta.webp"
+  },
+  {
+   "slug": "naga-siren",
+   "name": "Naga Siren",
+   "attr": "Agility",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Carry",
+    "Disabler",
+    "Pusher",
+    "Support",
+    "Escape",
+    "Initiator"
+   ],
+   "text": "Able to capitivate and disable enemies with her song",
+   "icon": "/images/esports/dota-2/heroes/naga-siren.webp"
+  },
+  {
+   "slug": "natures-prophet",
+   "name": "Nature's Prophet",
+   "attr": "Universal",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Pusher",
+    "Carry",
+    "Nuker",
+    "Escape"
+   ],
+   "text": "Able to teleport to any location on the map at will",
+   "icon": "/images/esports/dota-2/heroes/natures-prophet.webp"
+  },
+  {
+   "slug": "necrophos",
+   "name": "Necrophos",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 1,
+   "roles": [
+    "Nuker",
+    "Carry",
+    "Disabler",
+    "Durable"
+   ],
+   "text": "Damages enemies and heals allies simultaneously",
+   "icon": "/images/esports/dota-2/heroes/necrophos.webp"
+  },
+  {
+   "slug": "night-stalker",
+   "name": "Night Stalker",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Disabler",
+    "Durable",
+    "Initiator",
+    "Carry",
+    "Nuker"
+   ],
+   "text": "Enpowered by the shadows of nightfall",
+   "icon": "/images/esports/dota-2/heroes/night-stalker.webp"
+  },
+  {
+   "slug": "nyx-assassin",
+   "name": "Nyx Assassin",
+   "attr": "Universal",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Nuker",
+    "Disabler",
+    "Initiator",
+    "Escape"
+   ],
+   "text": "Reflects enemy damage and stuns",
+   "icon": "/images/esports/dota-2/heroes/nyx-assassin.webp"
+  },
+  {
+   "slug": "ogre-magi",
+   "name": "Ogre Magi",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Support",
+    "Nuker",
+    "Disabler",
+    "Durable",
+    "Initiator"
+   ],
+   "text": "Uses a touch of luck to amplify his skills",
+   "icon": "/images/esports/dota-2/heroes/ogre-magi.webp"
+  },
+  {
+   "slug": "omniknight",
+   "name": "Omniknight",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Support",
+    "Nuker",
+    "Durable"
+   ],
+   "text": "Tanky frontliner who protects and heals his allies",
+   "icon": "/images/esports/dota-2/heroes/omniknight.webp"
+  },
+  {
+   "slug": "oracle",
+   "name": "Oracle",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 3,
+   "roles": [
+    "Support",
+    "Nuker",
+    "Disabler",
+    "Escape"
+   ],
+   "text": "Alters the fates of heroes with his buffs and nukes",
+   "icon": "/images/esports/dota-2/heroes/oracle.webp"
+  },
+  {
+   "slug": "outworld-destroyer",
+   "name": "Outworld Destroyer",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Carry",
+    "Nuker",
+    "Disabler"
+   ],
+   "text": "Can imprison a hero, making them invulnerable",
+   "icon": "/images/esports/dota-2/heroes/outworld-destroyer.webp"
+  },
+  {
+   "slug": "pangolier",
+   "name": "Pangolier",
+   "attr": "Universal",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Carry",
+    "Nuker",
+    "Escape",
+    "Initiator",
+    "Disabler",
+    "Durable"
+   ],
+   "text": "Dashes and rolls in to disrupt enemy movements",
+   "icon": "/images/esports/dota-2/heroes/pangolier.webp"
+  },
+  {
+   "slug": "phantom-assassin",
+   "name": "Phantom Assassin",
+   "attr": "Agility",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Carry",
+    "Escape"
+   ],
+   "text": "Blinks onto her foes with critical strikes",
+   "icon": "/images/esports/dota-2/heroes/phantom-assassin.webp"
+  },
+  {
+   "slug": "phantom-lancer",
+   "name": "Phantom Lancer",
+   "attr": "Agility",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Carry",
+    "Escape",
+    "Nuker",
+    "Pusher"
+   ],
+   "text": "Creates illusions of himself to trick or attack foes",
+   "icon": "/images/esports/dota-2/heroes/phantom-lancer.webp"
+  },
+  {
+   "slug": "phoenix",
+   "name": "Phoenix",
+   "attr": "Strength",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Nuker",
+    "Support",
+    "Escape",
+    "Initiator",
+    "Disabler"
+   ],
+   "text": "Heals and damages at the sacrifice of its own health",
+   "icon": "/images/esports/dota-2/heroes/phoenix.webp"
+  },
+  {
+   "slug": "primal-beast",
+   "name": "Primal Beast",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Durable",
+    "Initiator",
+    "Disabler"
+   ],
+   "text": "Stomps over everything and smashes enemies into messy bits",
+   "icon": "/images/esports/dota-2/heroes/primal-beast.webp"
+  },
+  {
+   "slug": "puck",
+   "name": "Puck",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Disabler",
+    "Escape",
+    "Initiator",
+    "Nuker"
+   ],
+   "text": "Orbs to enemies and silences them",
+   "icon": "/images/esports/dota-2/heroes/puck.webp"
+  },
+  {
+   "slug": "pudge",
+   "name": "Pudge",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Disabler",
+    "Durable",
+    "Initiator",
+    "Nuker"
+   ],
+   "text": "Hooks and pulls enemies towards him",
+   "icon": "/images/esports/dota-2/heroes/pudge.webp"
+  },
+  {
+   "slug": "pugna",
+   "name": "Pugna",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Nuker",
+    "Pusher"
+   ],
+   "text": "Drains enemy life to heal himself",
+   "icon": "/images/esports/dota-2/heroes/pugna.webp"
+  },
+  {
+   "slug": "queen-of-pain",
+   "name": "Queen of Pain",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Nuker",
+    "Escape",
+    "Carry"
+   ],
+   "text": "Blinks in to deal massive magical damage",
+   "icon": "/images/esports/dota-2/heroes/queen-of-pain.webp"
+  },
+  {
+   "slug": "razor",
+   "name": "Razor",
+   "attr": "Agility",
+   "attack": "Ranged",
+   "complexity": 1,
+   "roles": [
+    "Carry",
+    "Durable",
+    "Nuker",
+    "Pusher"
+   ],
+   "text": "Steals enemy damage to add to his own",
+   "icon": "/images/esports/dota-2/heroes/razor.webp"
+  },
+  {
+   "slug": "riki",
+   "name": "Riki",
+   "attr": "Agility",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Carry",
+    "Escape",
+    "Disabler"
+   ],
+   "text": "Remains permanently invisible until the moment to strike",
+   "icon": "/images/esports/dota-2/heroes/riki.webp"
+  },
+  {
+   "slug": "ringmaster",
+   "name": "Ringmaster",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Support",
+    "Nuker",
+    "Escape",
+    "Disabler"
+   ],
+   "text": "Directs the battle with fear and mesmerism",
+   "icon": "/images/esports/dota-2/heroes/ringmaster.webp"
+  },
+  {
+   "slug": "rubick",
+   "name": "Rubick",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 3,
+   "roles": [
+    "Support",
+    "Nuker",
+    "Disabler"
+   ],
+   "text": "Steals the spells of his enemies to use against them",
+   "icon": "/images/esports/dota-2/heroes/rubick.webp"
+  },
+  {
+   "slug": "sand-king",
+   "name": "Sand King",
+   "attr": "Universal",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Initiator",
+    "Nuker",
+    "Disabler",
+    "Escape",
+    "Support"
+   ],
+   "text": "Burrows to stun and slow enemies",
+   "icon": "/images/esports/dota-2/heroes/sand-king.webp"
+  },
+  {
+   "slug": "shadow-demon",
+   "name": "Shadow Demon",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Support",
+    "Disabler",
+    "Nuker",
+    "Initiator"
+   ],
+   "text": "Stacks exponential poison damage against his foes",
+   "icon": "/images/esports/dota-2/heroes/shadow-demon.webp"
+  },
+  {
+   "slug": "shadow-fiend",
+   "name": "Shadow Fiend",
+   "attr": "Agility",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Nuker",
+    "Carry"
+   ],
+   "text": "Unleashes the souls of fallen enemies for damage",
+   "icon": "/images/esports/dota-2/heroes/shadow-fiend.webp"
+  },
+  {
+   "slug": "shadow-shaman",
+   "name": "Shadow Shaman",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 1,
+   "roles": [
+    "Disabler",
+    "Pusher",
+    "Support",
+    "Nuker",
+    "Initiator"
+   ],
+   "text": "Summons powerful serpent wards to deal damage",
+   "icon": "/images/esports/dota-2/heroes/shadow-shaman.webp"
+  },
+  {
+   "slug": "silencer",
+   "name": "Silencer",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Disabler",
+    "Initiator",
+    "Carry",
+    "Support",
+    "Nuker"
+   ],
+   "text": "Can silence all enemies on the map",
+   "icon": "/images/esports/dota-2/heroes/silencer.webp"
+  },
+  {
+   "slug": "skywrath-mage",
+   "name": "Skywrath Mage",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 1,
+   "roles": [
+    "Nuker",
+    "Support",
+    "Disabler"
+   ],
+   "text": "Casts high damage magical spells on a single target",
+   "icon": "/images/esports/dota-2/heroes/skywrath-mage.webp"
+  },
+  {
+   "slug": "slardar",
+   "name": "Slardar",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Carry",
+    "Durable",
+    "Initiator",
+    "Disabler",
+    "Escape"
+   ],
+   "text": "Chases down his enemies to weaken and bash them",
+   "icon": "/images/esports/dota-2/heroes/slardar.webp"
+  },
+  {
+   "slug": "slark",
+   "name": "Slark",
+   "attr": "Agility",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Escape",
+    "Carry",
+    "Nuker",
+    "Disabler"
+   ],
+   "text": "Slips in and out of skirmishes",
+   "icon": "/images/esports/dota-2/heroes/slark.webp"
+  },
+  {
+   "slug": "snapfire",
+   "name": "Snapfire",
+   "attr": "Universal",
+   "attack": "Ranged",
+   "complexity": 1,
+   "roles": [
+    "Nuker",
+    "Support",
+    "Disabler",
+    "Escape"
+   ],
+   "text": "Mows down her enemies with heavy artillery and trusty lizard",
+   "icon": "/images/esports/dota-2/heroes/snapfire.webp"
+  },
+  {
+   "slug": "sniper",
+   "name": "Sniper",
+   "attr": "Agility",
+   "attack": "Ranged",
+   "complexity": 1,
+   "roles": [
+    "Carry",
+    "Nuker"
+   ],
+   "text": "Picks off his enemies from afar",
+   "icon": "/images/esports/dota-2/heroes/sniper.webp"
+  },
+  {
+   "slug": "spectre",
+   "name": "Spectre",
+   "attr": "Agility",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Carry",
+    "Durable",
+    "Escape"
+   ],
+   "text": "Haunts her enemies and teleports to her target",
+   "icon": "/images/esports/dota-2/heroes/spectre.webp"
+  },
+  {
+   "slug": "spirit-breaker",
+   "name": "Spirit Breaker",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Disabler",
+    "Durable",
+    "Initiator",
+    "Carry",
+    "Escape"
+   ],
+   "text": "Charges down enemies from anywhere on the map",
+   "icon": "/images/esports/dota-2/heroes/spirit-breaker.webp"
+  },
+  {
+   "slug": "storm-spirit",
+   "name": "Storm Spirit",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Escape",
+    "Carry",
+    "Nuker",
+    "Disabler",
+    "Initiator"
+   ],
+   "text": "Zips across the map to engage in fights",
+   "icon": "/images/esports/dota-2/heroes/storm-spirit.webp"
+  },
+  {
+   "slug": "sven",
+   "name": "Sven",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Carry",
+    "Disabler",
+    "Durable",
+    "Initiator",
+    "Nuker"
+   ],
+   "text": "Cleaves down enemies with his incredible strength",
+   "icon": "/images/esports/dota-2/heroes/sven.webp"
+  },
+  {
+   "slug": "techies",
+   "name": "Techies",
+   "attr": "Universal",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Nuker",
+    "Disabler"
+   ],
+   "text": "Surprises enemies with invisible landmines and explosive attacks",
+   "icon": "/images/esports/dota-2/heroes/techies.webp"
+  },
+  {
+   "slug": "templar-assassin",
+   "name": "Templar Assassin",
+   "attr": "Agility",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Carry",
+    "Escape"
+   ],
+   "text": "Slows down enemies with traps",
+   "icon": "/images/esports/dota-2/heroes/templar-assassin.webp"
+  },
+  {
+   "slug": "terrorblade",
+   "name": "Terrorblade",
+   "attr": "Agility",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Carry",
+    "Pusher",
+    "Nuker"
+   ],
+   "text": "Transforms into a powerful ranged demon",
+   "icon": "/images/esports/dota-2/heroes/terrorblade.webp"
+  },
+  {
+   "slug": "tidehunter",
+   "name": "Tidehunter",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Durable",
+    "Initiator",
+    "Disabler",
+    "Carry",
+    "Nuker"
+   ],
+   "text": "Durable hero who shrugs off enemy damage",
+   "icon": "/images/esports/dota-2/heroes/tidehunter.webp"
+  },
+  {
+   "slug": "timbersaw",
+   "name": "Timbersaw",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Nuker",
+    "Durable",
+    "Escape"
+   ],
+   "text": "Chops through the forest to face his foes",
+   "icon": "/images/esports/dota-2/heroes/timbersaw.webp"
+  },
+  {
+   "slug": "tinker",
+   "name": "Tinker",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Nuker",
+    "Pusher",
+    "Carry"
+   ],
+   "text": "Demolishes his enemies with swarms of machines",
+   "icon": "/images/esports/dota-2/heroes/tinker.webp"
+  },
+  {
+   "slug": "tiny",
+   "name": "Tiny",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Carry",
+    "Nuker",
+    "Durable",
+    "Pusher",
+    "Initiator",
+    "Disabler"
+   ],
+   "text": "Grows in size and strength as battle ensues",
+   "icon": "/images/esports/dota-2/heroes/tiny.webp"
+  },
+  {
+   "slug": "treant-protector",
+   "name": "Treant Protector",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Support",
+    "Initiator",
+    "Disabler",
+    "Durable",
+    "Escape"
+   ],
+   "text": "Calls upon the forest to root his foes",
+   "icon": "/images/esports/dota-2/heroes/treant-protector.webp"
+  },
+  {
+   "slug": "troll-warlord",
+   "name": "Troll Warlord",
+   "attr": "Agility",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Carry",
+    "Pusher",
+    "Disabler",
+    "Durable"
+   ],
+   "text": "Swaps between ranged and melee attacks at will",
+   "icon": "/images/esports/dota-2/heroes/troll-warlord.webp"
+  },
+  {
+   "slug": "tusk",
+   "name": "Tusk",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Disabler",
+    "Initiator",
+    "Nuker"
+   ],
+   "text": "Snowballs into his enemies to stun",
+   "icon": "/images/esports/dota-2/heroes/tusk.webp"
+  },
+  {
+   "slug": "underlord",
+   "name": "Underlord",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Escape",
+    "Support",
+    "Nuker",
+    "Disabler",
+    "Durable"
+   ],
+   "text": "Teleports his team in and out of battle",
+   "icon": "/images/esports/dota-2/heroes/underlord.webp"
+  },
+  {
+   "slug": "undying",
+   "name": "Undying",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Support",
+    "Durable",
+    "Nuker",
+    "Disabler"
+   ],
+   "text": "Summons hordes of zombies to attack his foes",
+   "icon": "/images/esports/dota-2/heroes/undying.webp"
+  },
+  {
+   "slug": "ursa",
+   "name": "Ursa",
+   "attr": "Agility",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Carry",
+    "Disabler",
+    "Durable"
+   ],
+   "text": "Deals more damage with every hit to the same foe",
+   "icon": "/images/esports/dota-2/heroes/ursa.webp"
+  },
+  {
+   "slug": "vengeful-spirit",
+   "name": "Vengeful Spirit",
+   "attr": "Agility",
+   "attack": "Ranged",
+   "complexity": 1,
+   "roles": [
+    "Support",
+    "Disabler",
+    "Initiator",
+    "Nuker",
+    "Escape"
+   ],
+   "text": "Can swap herself with any nearby hero",
+   "icon": "/images/esports/dota-2/heroes/vengeful-spirit.webp"
+  },
+  {
+   "slug": "venomancer",
+   "name": "Venomancer",
+   "attr": "Universal",
+   "attack": "Ranged",
+   "complexity": 1,
+   "roles": [
+    "Support",
+    "Nuker",
+    "Disabler",
+    "Pusher",
+    "Initiator"
+   ],
+   "text": "Deals damage over time with venomous attacks",
+   "icon": "/images/esports/dota-2/heroes/venomancer.webp"
+  },
+  {
+   "slug": "viper",
+   "name": "Viper",
+   "attr": "Agility",
+   "attack": "Ranged",
+   "complexity": 1,
+   "roles": [
+    "Durable",
+    "Carry",
+    "Disabler",
+    "Initiator"
+   ],
+   "text": "Poisonous toxins chip away armor and slow enemies",
+   "icon": "/images/esports/dota-2/heroes/viper.webp"
+  },
+  {
+   "slug": "visage",
+   "name": "Visage",
+   "attr": "Universal",
+   "attack": "Ranged",
+   "complexity": 3,
+   "roles": [
+    "Nuker",
+    "Support",
+    "Disabler",
+    "Durable",
+    "Pusher"
+   ],
+   "text": "Scouts and attacks with his familiars",
+   "icon": "/images/esports/dota-2/heroes/visage.webp"
+  },
+  {
+   "slug": "void-spirit",
+   "name": "Void Spirit",
+   "attr": "Universal",
+   "attack": "Melee",
+   "complexity": 2,
+   "roles": [
+    "Escape",
+    "Carry",
+    "Nuker",
+    "Disabler"
+   ],
+   "text": "Steps in and out of the mortal plane to strike his foes",
+   "icon": "/images/esports/dota-2/heroes/void-spirit.webp"
+  },
+  {
+   "slug": "warlock",
+   "name": "Warlock",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 1,
+   "roles": [
+    "Initiator",
+    "Support",
+    "Disabler"
+   ],
+   "text": "Summons powerful demons to fight at his side",
+   "icon": "/images/esports/dota-2/heroes/warlock.webp"
+  },
+  {
+   "slug": "weaver",
+   "name": "Weaver",
+   "attr": "Agility",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Escape",
+    "Carry"
+   ],
+   "text": "Rewinds time to reverse damage and position",
+   "icon": "/images/esports/dota-2/heroes/weaver.webp"
+  },
+  {
+   "slug": "windranger",
+   "name": "Windranger",
+   "attr": "Universal",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Carry",
+    "Support",
+    "Nuker",
+    "Disabler",
+    "Escape"
+   ],
+   "text": "Fires swift flurry of arrows at a single target",
+   "icon": "/images/esports/dota-2/heroes/windranger.webp"
+  },
+  {
+   "slug": "winter-wyvern",
+   "name": "Winter Wyvern",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 2,
+   "roles": [
+    "Support",
+    "Disabler",
+    "Nuker"
+   ],
+   "text": "Able to force her enemies to attack their own ally",
+   "icon": "/images/esports/dota-2/heroes/winter-wyvern.webp"
+  },
+  {
+   "slug": "witch-doctor",
+   "name": "Witch Doctor",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 1,
+   "roles": [
+    "Support",
+    "Nuker",
+    "Disabler"
+   ],
+   "text": "Channels a high damage death ward",
+   "icon": "/images/esports/dota-2/heroes/witch-doctor.webp"
+  },
+  {
+   "slug": "wraith-king",
+   "name": "Wraith King",
+   "attr": "Strength",
+   "attack": "Melee",
+   "complexity": 1,
+   "roles": [
+    "Durable",
+    "Carry",
+    "Disabler",
+    "Support",
+    "Initiator"
+   ],
+   "text": "Can reincarnate instantly upon death",
+   "icon": "/images/esports/dota-2/heroes/wraith-king.webp"
+  },
+  {
+   "slug": "zeus",
+   "name": "Zeus",
+   "attr": "Intelligence",
+   "attack": "Ranged",
+   "complexity": 1,
+   "roles": [
+    "Nuker",
+    "Carry"
+   ],
+   "text": "Strikes enemies near and far with lightning",
+   "icon": "/images/esports/dota-2/heroes/zeus.webp"
+  }
+ ]
+}

@@ -4,6 +4,7 @@
 // (e.g. with a press photo), and the default slot adds extra sections after "What's happening now".
 import Base from '../../layouts/Base.astro';
 import SourceList from '../SourceList.astro';
+import GameLogo from './GameLogo.astro';
 import { type GameHubData, type Source, fmtDate, fmtRange, eventStatus, LEGAL, RIOT_LEGAL_SOURCE } from '../../lib/esports-hub';
 
 interface Props { game: GameHubData; extraSources?: Source[]; extraJump?: { href: string; label: string }[]; image?: string }
@@ -17,6 +18,7 @@ const allSources = [
   ...(game.teams ?? []).map((t) => t.source),
   ...extraSources,
   ...game.sources,
+  game.logo.source,
   ...(game.legal === 'riot' ? [RIOT_LEGAL_SOURCE] : []),
 ];
 const hasHero = Astro.slots.has('hero');
@@ -24,7 +26,7 @@ const hasHero = Astro.slots.has('hero');
 <Base title={game.name} description={game.description} image={image}>
   <header class="page-head gh-head">
     <p class="kicker"><a class="tag" href="/esports" style="--c:#ff8fc7">Esports</a></p>
-    <h1>{game.name}</h1>
+    <h1 class="gh-title"><GameLogo logo={game.logo} size={56} alt={`${game.name} logo`} /><span>{game.name}</span></h1>
     <p>{game.tagline}</p>
   </header>
 
@@ -43,6 +45,17 @@ const hasHero = Astro.slots.has('hero');
   <nav class="gh-jump" aria-label="On this page">
     <a href="#about">What is it?</a><a href="#start">New? Start here</a><a href="#now">Happening now</a>{game.patches && <a href="#patches">Patch notes</a>}{game.teams && <a href="#teams">{game.teamsTitle ?? 'Team updates'}</a>}{extraJump.map((j) => <a href={j.href}>{j.label}</a>)}<a href="#scene">The pro scene</a>{game.ph && <a href="#ph">Philippines</a>}
   </nav>
+
+  {game.tools && (
+    <div class="gh-tools">
+      {game.tools.map((t) => (
+        <a class="gh-tool" href={t.href}>
+          <strong>{t.label} →</strong>
+          <span>{t.text}</span>
+        </a>
+      ))}
+    </div>
+  )}
 
   <section id="about" class="gh-section gh-about">
     <div>
@@ -162,11 +175,18 @@ const hasHero = Astro.slots.has('hero');
   )}
 
   <SourceList sources={allSources} note="Dates and results were checked on 19 October 2026. Always check the organiser's page for the latest times." />
-  <p class="gh-legal">{LEGAL[game.legal]} {game.legal === 'riot' && 'No Riot Games logos are used on this page.'}</p>
+  <p class="gh-legal">{LEGAL[game.legal]} {game.logo.credit}.</p>
 </Base>
 
 <style is:global>
   .gh-head h1 { margin-bottom: 6px; }
+  .gh-title { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+
+  .gh-tools { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 10px; margin: 16px 0 0; }
+  .gh-tool { display: grid; gap: 2px; padding: 14px 16px; border: 2px solid var(--line); border-radius: 16px; background: var(--mark); color: #1b1a1f; transition: transform .15s, box-shadow .15s; }
+  .gh-tool:hover { text-decoration: none; transform: translateY(-2px); box-shadow: var(--lift); }
+  .gh-tool strong { font-family: var(--display); font-size: 1.1rem; }
+  .gh-tool span { font-size: .88rem; }
   .gh-banner { position: relative; display: flex; align-items: center; gap: clamp(14px, 4vw, 32px); padding: clamp(18px, 4vw, 30px); border: 2px solid var(--line); border-radius: 22px; background: #ff8fc7; color: #1b1a1f; box-shadow: var(--lift); overflow: hidden; }
   .gh-banner::after { content: ""; position: absolute; right: -40px; bottom: -60px; width: 220px; height: 220px; border-radius: 50%; background: rgba(255, 255, 255, .25); }
   .gh-banner-lanes { background: #6ea8fe; }

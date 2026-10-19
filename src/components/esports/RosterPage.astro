@@ -1,0 +1,32 @@
+---
+// RosterPage.astro: the frame around an esports roster or tool page (every Agent, the map planner...).
+// It adds the game's logo and name, a link back to the game's hub, the sources and the legal line.
+import Base from '../../layouts/Base.astro';
+import SourceList from '../SourceList.astro';
+import GameLogo from './GameLogo.astro';
+import { type GameHubData, type Source, LEGAL, RIOT_LEGAL_SOURCE } from '../../lib/esports-hub';
+
+interface Props { game: GameHubData; hub: string; title: string; heading: string; description: string; sources: Source[]; note?: string; wide?: boolean }
+const { game, hub, title, heading, description, sources, note, wide } = Astro.props;
+---
+<Base title={title} description={description}>
+  <header class="page-head rp-head">
+    <p class="kicker"><a class="tag" href="/esports" style="--c:#ff8fc7">Esports</a> <a class="tag tag-plain" href={hub}>{game.name}</a></p>
+    <h1 class="rp-title"><GameLogo logo={game.logo} size={48} alt={`${game.name} logo`} /><span>{heading}</span></h1>
+    <slot name="intro" />
+  </header>
+
+  <div class={wide ? 'rp-body rp-wide' : 'rp-body'}><slot /></div>
+
+  <p class="rp-back"><a href={hub}>← Back to the {game.name} hub</a></p>
+  <SourceList sources={[...sources, game.logo.source, ...(game.legal === 'riot' ? [RIOT_LEGAL_SOURCE] : [])]} note={note} />
+  <p class="rp-legal">{LEGAL[game.legal]} {game.logo.credit}.</p>
+</Base>
+
+<style>
+  .kicker .tag + .tag { margin-left: 6px; }
+  .rp-title { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+  .rp-head :global(p:not(.kicker)) { max-width: 70ch; }
+  .rp-back { margin: 26px 0 0; font-weight: 700; }
+  .rp-legal { margin: 14px 0 0; color: var(--muted); font-size: .8rem; max-width: 80ch; }
+</style>

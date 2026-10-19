@@ -1,0 +1,46 @@
+---
+// Every Dota 2 hero (/esports/dota-2/heroes), from Valve's own dota2.com hero feed.
+// Run `npm run esports:data` to refresh it when Valve adds a hero.
+import RosterPage from '../../../components/esports/RosterPage.astro';
+import Roster, { type RosterItem } from '../../../components/esports/Roster.astro';
+import { DOTA2 } from '../../../data/dota-2';
+import DATA from '../../../data/esports/dota-heroes.json';
+import { fmtDate } from '../../../lib/esports-hub';
+
+// The four main attributes, in the game's order and colours.
+const ATTR = [
+  { value: 'Strength', tone: '#ff6b57', text: 'tough, lots of health' },
+  { value: 'Agility', tone: '#5fd38a', text: 'fast hits, usually the late-game carry' },
+  { value: 'Intelligence', tone: '#4fa3ff', text: 'spells and mana' },
+  { value: 'Universal', tone: '#c77dff', text: 'a bit of all three' },
+];
+// Valve's complexity rating (1 to 3 diamonds on dota2.com).
+const LEVEL = ['', 'Easy', 'Medium', 'Hard'];
+const items: RosterItem[] = DATA.heroes.map((h) => ({
+  name: h.name,
+  icon: h.icon,
+  sub: `${h.attr} · ${h.attack}`,
+  chips: [LEVEL[h.complexity]],
+  filter: [h.attr, LEVEL[h.complexity]],
+  tone: ATTR.find((a) => a.value === h.attr)?.tone,
+  detail: { lines: [`${h.text}.`, `Roles: ${h.roles.join(', ')}.`, `Complexity: ${LEVEL[h.complexity]} (${h.complexity} of 3).`] },
+}));
+const easy = DATA.heroes.filter((h) => h.complexity === 1).length;
+---
+<RosterPage game={DOTA2} hub="/esports/dota-2" title="Every Dota 2 hero, by attribute" heading="Every hero"
+  description={`All ${DATA.heroes.length} Dota 2 heroes with their main attribute, roles and how tricky each one is.`}
+  sources={[{ label: 'Dota 2: official heroes page', url: 'https://www.dota2.com/heroes' }]}
+  note={`From Valve's hero list on dota2.com, last updated on ${fmtDate(DATA.updated)}. Roles are listed strongest first, the way Valve rates them.`}>
+  <p slot="intro">Dota 2 has {DATA.heroes.length} heroes, and every one is free to play. Each hero leans on one main attribute. Just starting? Tap <strong>Easy</strong> for the {easy} heroes Valve marks as simplest, then tap a hero to see what they're good at.</p>
+
+  <ul class="dt-attrs">
+    {ATTR.map((a) => <li style={`--tone:${a.tone}`}><strong>{a.value}</strong> {a.text}</li>)}
+  </ul>
+
+  <Roster items={items} noun="heroes" find="Find a hero" filterLabel="Attribute or complexity" filters={[...ATTR, { value: 'Easy', tone: '#c8f0dc' }]} shape="wide" w={160} h={90} />
+</RosterPage>
+
+<style>
+  .dt-attrs { list-style: none; margin: 0 0 16px; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); gap: 8px; }
+  .dt-attrs li { padding: 10px 14px; border-radius: 14px; background: var(--surface-2); box-shadow: inset 5px 0 0 var(--tone); font-size: .92rem; }
+</style>
