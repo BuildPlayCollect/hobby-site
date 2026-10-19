@@ -5,7 +5,7 @@ scope: official
 organizer: "Wizards of the Coast"
 sourceUrl: "https://media.wizards.com/ContentResources/WPN/MTG_MTR_2026_Feb27_EN.pdf"
 version: "Effective February 27, 2026"
-lastChecked: 2026-10-15
+lastChecked: 2026-10-19
 summary: "The basics of the official Magic Tournament Rules: deck construction, formats, match structure, round time, sleeves, conduct and penalties."
 ---
 

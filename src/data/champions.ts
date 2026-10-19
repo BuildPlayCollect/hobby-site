@@ -43,7 +43,6 @@ export const REGULATION_SOURCES: Source[] = [
 
 // Upcoming big events (Regionals, Internationals, Worlds). Remove rows once they're over.
 export const EVENTS = [
-  { name: 'Nice Regional', place: 'Nice, France', from: '2026-10-17', to: '2026-10-18', reg: 'M-C' },
   { name: 'Thailand Premier Ball League', place: 'Bangkok, Thailand', from: '2026-10-24', to: '2026-10-24', reg: 'M-C' },
   { name: 'Puebla Regional', place: 'Puebla, Mexico', from: '2026-10-24', to: '2026-10-25', reg: 'M-C' },
   { name: 'Gdańsk Regional', place: 'Gdańsk, Poland', from: '2026-10-31', to: '2026-11-01', reg: 'M-C' },
@@ -56,7 +55,15 @@ export const EVENTS = [
   { name: 'Hong Kong Premier Ball League', place: 'Wan Chai, Hong Kong', from: '2026-12-05', to: '2026-12-05', reg: 'TBA' },
   { name: 'Singapore Premier Ball League', place: 'Singapore', from: '2026-12-12', to: '2026-12-12', reg: 'TBA' },
   { name: 'Philippines Premier Ball League', place: 'Pasay, Philippines', from: '2027-01-16', to: '2027-01-16', reg: 'TBA' },
+  { name: 'Atlanta Regional', place: 'Atlanta, USA', from: '2027-01-16', to: '2027-01-17', reg: 'TBA' },
+  { name: 'Sydney Regional', place: 'Sydney, Australia', from: '2027-01-16', to: '2027-01-17', reg: 'TBA' },
+  { name: 'Mérida Regional', place: 'Mérida, Mexico', from: '2027-01-23', to: '2027-01-24', reg: 'TBA' },
+  { name: 'Birmingham Regional', place: 'Birmingham, UK', from: '2027-01-30', to: '2027-01-31', reg: 'TBA' },
+  { name: 'Auckland Special Championship', place: 'Auckland, New Zealand', from: '2027-01-30', to: '2027-01-31', reg: 'TBA' },
+  { name: 'Seattle Regional', place: 'Seattle, USA', from: '2027-02-06', to: '2027-02-07', reg: 'TBA' },
   { name: 'Europe International (EUIC)', place: 'London, UK', from: '2027-02-19', to: '2027-02-21', reg: 'TBA' },
+  { name: 'San Antonio Regional', place: 'San Antonio, USA', from: '2027-02-27', to: '2027-02-28', reg: 'TBA' },
+  { name: 'Santiago Regional', place: 'Santiago, Chile', from: '2027-02-27', to: '2027-02-28', reg: 'TBA' },
   { name: 'North America International (NAIC)', place: 'Chicago, USA', from: '2027-06-18', to: '2027-06-20', reg: 'TBA' },
   { name: 'World Championships', place: 'Singapore', from: '2027-08-13', to: '2027-08-15', reg: 'TBA' },
 ];
@@ -66,6 +73,20 @@ export const EVENT_SOURCES: Source[] = [
 
 // Recent big results with the top 8 teams (Pokémon as Smogon/Showdown names, so icons and type colours work).
 export const RESULTS = [
+  {
+    name: 'Nice Regional', place: 'Nice, France', date: '2026-10-18', reg: 'M-C', players: '862 Masters',
+    source: { label: 'Limitless VGC: Nice Regional standings', url: 'https://limitlessvgc.com/tournaments/446' },
+    top: [
+      { p: 'Louis Fontvieille', c: 'FRA', team: ['Raichu-Mega-X', 'Golisopod-Mega', 'Pelipper', 'Basculegion-F', 'Sneasler', 'Archaludon'] },
+      { p: 'Eduardo Cunha', c: 'PRT', team: ['Gengar-Mega', 'Garchomp-Mega-Z', 'Primarina', 'Incineroar', 'Vivillon', 'Rillaboom'] },
+      { p: 'Simone Sanvito', c: 'ITA', team: ['Tyranitar-Mega', 'Staraptor-Mega', 'Gholdengo', 'Milotic', 'Sinistcha', 'Excadrill'] },
+      { p: 'Francesco Pio Pero', c: 'ITA', team: ['Golisopod-Mega', 'Raichu-Mega-X', 'Basculegion-F', 'Sneasler', 'Pelipper', 'Archaludon'] },
+      { p: 'Ko Tsukide', c: 'GBR', team: ['Charizard-Mega-Y', 'Basculegion', 'Kingambit', 'Sneasler', 'Whimsicott', 'Garchomp'] },
+      { p: 'Riccardo Stellini', c: 'ITA', team: ['Camerupt-Mega', 'Raichu-Mega-Y', 'Incineroar', 'Farigiraf', 'Sylveon', 'Rillaboom'] },
+      { p: 'Giovanni Piscitelli', c: 'ITA', team: ['Charizard-Mega-Y', 'Basculegion', 'Kingambit', 'Sneasler', 'Whimsicott', 'Garchomp'] },
+      { p: 'Giuseppe Musicco', c: 'ITA', team: ['Dragonite-Mega', 'Floette-Mega', 'Gholdengo', 'Incineroar', 'Sneasler', 'Rillaboom'] },
+    ],
+  },
   {
     name: 'Louisville Regional', place: 'Louisville, USA', date: '2026-10-11', reg: 'M-C', players: '1,013 Masters',
     source: { label: 'Victory Road: 2027 Louisville Regional', url: 'https://victoryroad.pro/2027-louisville/' },
