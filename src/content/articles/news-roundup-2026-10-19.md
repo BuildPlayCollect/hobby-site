@@ -12,6 +12,7 @@ quick:
   - "Beyblade X BX-54 and CX-20 Customize Set C both release in Japan on November 21."
   - "MINI4WD WORLD CHALLENGE 2026 races November 22 at Twin Messe Shizuoka."
   - "Karmine Corp swept MVK 3-0 to take the last Worlds Swiss Stage spot."
+  - "Louis Fontvieille won the Pokémon VGC Nice Regional out of 862 Masters players."
 ---
 
 Only four days since the last roundup, and the hobby world still managed to cram in a starship, two lottery drops and a 3-0 sweep. Let's go.
@@ -19,6 +20,8 @@ Only four days since the last roundup, and the hobby world still managed to cram
 ## Beyblade
 
 Two new Japan releases landed on Takara Tomy's own shop, and both come by lottery. The [BX-54 Booster ジークスペリオン 0-70LP costs ¥1,600 and releases November 21](https://takaratomymall.jp/shop/g/g4904810080763/). Same day, the [CX-20 Customize Set C brings 4 blades, 3 ratchets and 6 bits for ¥6,600](https://takaratomymall.jp/shop/g/g4904810077596/). Lottery entries closed October 18, and winners hear back on October 26. Fingers crossed, bladers.
+
+Takara Tomy also posted a pile of news on October 15. The [BEYBLADE X GP 2027 JAPAN CHAMPIONSHIP is confirmed](https://beyblade.takaratomy.co.jp/news/), with the X-TREME CUP G1 2026-27 as a qualifier. Two shiny limited Beys, Valkyrie Bolt S4-70V Gunmetal Ver. and Scorpio Spear 0-70Z Metal Coat: Magenta, join the Rare Bey Get Battle prizes. App players, heads up: the BEYBLADE X app is changing its Shoot Gym specs and ending Cloud Matches.
 
 **Unconfirmed:** [ToyPeople reports](https://www.toy-people.com/en/?p=115351) that four new Beys were shown at BEYBLADE X GP 2026 TOKYO, led by a BahamutBlitz BK1-50I Metal Coat: Black made for the GP Final in Bangkok. We couldn't find an official page for it yet.
 
@@ -44,7 +47,7 @@ Pokémon players get a busy week too: [Mega Evolution—Delta Reign prereleases 
 
 Worlds has its last main-stage team. [Karmine Corp beat MVK 3-0 in the Play-In final](https://dotesports.com/league-of-legends/news/karmine-corp-beat-mvk-worlds-2026-play-ins), after [coming back to beat Cloud9 3-2 on day one](https://www.strafe.com/news/read/worlds-2026-play-in-day-1-recap-kc-takes-down-cloud9-mvk-dominates-furia/). The Swiss Stage starts October 23 in Allen, Texas, where 16 teams fight for 8 knockout spots.
 
-Pokémon VGC's 2027 calendar keeps growing: [Seattle and San Antonio Regionals were announced](https://victoryroad.pro/2027-season-calendar/), for February 6–7 and February 27–28. The Nice Regional wrapped up this weekend, and we'll add its results once the full standings are posted.
+Pokémon VGC's 2027 calendar keeps growing: [Seattle and San Antonio Regionals were announced](https://victoryroad.pro/2027-season-calendar/), for February 6–7 and February 27–28. Over in Nice, [Louis Fontvieille of France won the Regional](https://limitlessvgc.com/tournaments/446) out of 862 Masters players, with a Mega Raichu X and Mega Golisopod rain team. Eduardo Cunha took second.
 
 See you Thursday. Bring popcorn for the Swiss Stage.
 
@@ -54,17 +57,19 @@ See you Thursday. Bring popcorn for the Swiss Stage.
 
 1. Takara Tomy Mall: [BX-54 Booster ジークスペリオン 0-70LP](https://takaratomymall.jp/shop/g/g4904810080763/)
 2. Takara Tomy Mall: [CX-20 Customize Set C](https://takaratomymall.jp/shop/g/g4904810077596/)
-3. ToyPeople: [Four BEYBLADE X Beys Debut at GP 2026 Tokyo](https://www.toy-people.com/en/?p=115351) (October 12, 2026)
-4. Tamiya: [MINI4WD WORLD CHALLENGE 2026](https://www.tamiya.com/japan/event/japan/event/m4worlds2026) (October 15, 2026)
-5. Geekhack: [[GB] Code:002 TKL](https://geekhack.org/index.php?topic=127224.0) (October 17, 2026)
-6. Wizards of the Coast: [Where to Find Star Trek Previews](https://magic.wizards.com/en/news/announcements/where-to-find-star-trek-previews) (October 16, 2026)
-7. Wizards of the Coast: [Star Trek Product Delays in Select Regions](https://magic.wizards.com/en/news/announcements/star-trek-product-delays-in-select-regions) (October 16, 2026)
-8. The Pokémon Company International: [Mega Evolution—Delta Reign media alert](https://pokemon.gamespress.com/MEDIA-ALERT-New-Pokemon-Trading-Card-Game-Mega-EvolutionDelta-Reign-Ex) (August 20, 2026)
-9. Bandai: [BOOSTER PACK THE DOMINANCE OF GOD [OP-18]](https://en.onepiece-cardgame.com/products/op18.html)
-10. Xbox Wire: [Next Week on Xbox, October 19 to 23](https://news.xbox.com/en-us/2026/10/16/next-week-on-xbox-new-games-for-october-19-to-23/) (October 16, 2026)
-11. Nintendo AU: [Upcoming Games, October 2026](https://www.nintendo.com/au/news-and-articles/upcoming-games-october-2026/) (October 2, 2026)
-12. PlayStation Blog: [Peak climbs its way onto PS5 October 22](https://blog.playstation.com/2026/10/15/peak-climbs-its-way-onto-ps5-october-22/) (October 15, 2026)
-13. PlayStation Blog: [Gran Turismo 7 Spec IV and the DualSense Gran Turismo Limited Edition](https://blog.playstation.com/2026/10/14/gran-turismo-7s-spec-iv-part-1-launches-today-and-a-first-look-at-dualsense-wireless-controller-gran-turismo-limited-edition/) (October 14, 2026)
-14. Dot Esports: [Karmine Corp beat MVK to win the Worlds 2026 Play-In](https://dotesports.com/league-of-legends/news/karmine-corp-beat-mvk-worlds-2026-play-ins) (October 18, 2026)
-15. Strafe: [Worlds 2026 Play-In Day 1 Recap](https://www.strafe.com/news/read/worlds-2026-play-in-day-1-recap-kc-takes-down-cloud9-mvk-dominates-furia/) (October 16, 2026)
-16. Victory Road: [2027 season calendar](https://victoryroad.pro/2027-season-calendar/) (October 15, 2026)
+3. Takara Tomy: [BEYBLADE X news](https://beyblade.takaratomy.co.jp/news/) (October 15, 2026; read from Echo's screenshot)
+4. ToyPeople: [Four BEYBLADE X Beys Debut at GP 2026 Tokyo](https://www.toy-people.com/en/?p=115351) (October 12, 2026)
+5. Tamiya: [MINI4WD WORLD CHALLENGE 2026](https://www.tamiya.com/japan/event/japan/event/m4worlds2026) (October 15, 2026)
+6. Geekhack: [[GB] Code:002 TKL](https://geekhack.org/index.php?topic=127224.0) (October 17, 2026)
+7. Wizards of the Coast: [Where to Find Star Trek Previews](https://magic.wizards.com/en/news/announcements/where-to-find-star-trek-previews) (October 16, 2026)
+8. Wizards of the Coast: [Star Trek Product Delays in Select Regions](https://magic.wizards.com/en/news/announcements/star-trek-product-delays-in-select-regions) (October 16, 2026)
+9. The Pokémon Company International: [Mega Evolution—Delta Reign media alert](https://pokemon.gamespress.com/MEDIA-ALERT-New-Pokemon-Trading-Card-Game-Mega-EvolutionDelta-Reign-Ex) (August 20, 2026)
+10. Bandai: [BOOSTER PACK THE DOMINANCE OF GOD [OP-18]](https://en.onepiece-cardgame.com/products/op18.html)
+11. Xbox Wire: [Next Week on Xbox, October 19 to 23](https://news.xbox.com/en-us/2026/10/16/next-week-on-xbox-new-games-for-october-19-to-23/) (October 16, 2026)
+12. Nintendo AU: [Upcoming Games, October 2026](https://www.nintendo.com/au/news-and-articles/upcoming-games-october-2026/) (October 2, 2026)
+13. PlayStation Blog: [Peak climbs its way onto PS5 October 22](https://blog.playstation.com/2026/10/15/peak-climbs-its-way-onto-ps5-october-22/) (October 15, 2026)
+14. PlayStation Blog: [Gran Turismo 7 Spec IV and the DualSense Gran Turismo Limited Edition](https://blog.playstation.com/2026/10/14/gran-turismo-7s-spec-iv-part-1-launches-today-and-a-first-look-at-dualsense-wireless-controller-gran-turismo-limited-edition/) (October 14, 2026)
+15. Dot Esports: [Karmine Corp beat MVK to win the Worlds 2026 Play-In](https://dotesports.com/league-of-legends/news/karmine-corp-beat-mvk-worlds-2026-play-ins) (October 18, 2026)
+16. Strafe: [Worlds 2026 Play-In Day 1 Recap](https://www.strafe.com/news/read/worlds-2026-play-in-day-1-recap-kc-takes-down-cloud9-mvk-dominates-furia/) (October 16, 2026)
+17. Victory Road: [2027 season calendar](https://victoryroad.pro/2027-season-calendar/) (October 15, 2026)
+18. Limitless VGC: [Regional Nice standings](https://limitlessvgc.com/tournaments/446), and the official Play! Pokémon final standings broadcast graphic (October 18, 2026)
