@@ -3732,7 +3732,7 @@ export const UM_RULES: { topic: string; text: string; sources: string[] }[] = [
   },
   {
     "topic": "Boost",
-    "text": "While you maneuver, you can throw away one card to add its BOOST number to your move. You ignore what that card normally does. Some cards let you boost other things too, like attacks. Even cards a knocked-out fighter can't play anymore can still be thrown away for a boost.",
+    "text": "While you maneuver, you can throw away one card to add its BOOST number to your move. You ignore what that card normally does. Some cards let you boost other things too, like attacks. Even cards a knocked-out fighter can't play anymore can still be thrown away for a boost. Example: your hero has a move of 2. You maneuver, draw your card, then throw away a card with a boost of 3. Now you can move up to 5 spaces on this maneuver.",
     "sources": [
       "https://restorationgames.com/wp-content/uploads/2023/05/UM-M-BaB-Rulebook.pdf",
       "https://restorationgames.com/wp-content/uploads/2019/07/UM-RobinHoodvBigfoot_Rules-two-page.pdf"
