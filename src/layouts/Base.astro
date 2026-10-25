@@ -38,6 +38,12 @@ const shareImage = new URL(image ?? '/share-preview-v2.png', Astro.site).href;
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <!-- Tab icon, and "Add to Home Screen" on phones: the manifest gives the shortcut its name, icon and colour. -->
+    <link rel="icon" href="/favicon-48.png" type="image/png" sizes="48x48" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#4b607f" />
+    <meta name="apple-mobile-web-app-title" content="BPC" />
     <link rel="preload" href={interFont} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={headlineFont} as="font" type="font/woff2" crossorigin />
     <meta property="og:site_name" content={SITE_NAME} />
@@ -253,7 +259,7 @@ const shareImage = new URL(image ?? '/share-preview-v2.png', Astro.site).href;
         var index = null, active = -1;
         function openSearch() {
           overlay.classList.add('open'); input.value = ''; render([]); input.focus();
-          if (!index) fetch('/search.json').then(function (r) { return r.json(); }).then(function (d) { index = d; });
+          if (!index) fetch('/search.json').then(function (r) { return r.json(); }).then(function (d) { index = d; search(); });
         }
         function closeSearch() { overlay.classList.remove('open'); }
         function render(items) {
@@ -264,15 +270,25 @@ const shareImage = new URL(image ?? '/share-preview-v2.png', Astro.site).href;
           }).join('');
         }
         function escapeHtml(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
-        input.addEventListener('input', function () {
-          var q = input.value.trim().toLowerCase();
+        // Accents are ignored, so "pokemon" finds "Pokémon" and "flabebe" finds "Flabébé".
+        function fold(s) { return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+        // Best matches first: a title that starts with what you typed, then a title that contains it, then the rest.
+        function search() {
+          var q = fold(input.value.trim());
           if (!q || !index) return render([]);
           var words = q.split(/\s+/);
-          render(index.filter(function (it) {
-            var hay = (it.title + ' ' + it.summary + ' ' + it.hobby + ' ' + it.kind).toLowerCase();
-            return words.every(function (w) { return hay.indexOf(w) !== -1; });
-          }));
-        });
+          var hits = [];
+          index.forEach(function (it, i) {
+            var title = fold(it.title);
+            var hay = title + ' ' + fold(it.summary + ' ' + it.hobby + ' ' + it.kind);
+            if (!words.every(function (w) { return hay.indexOf(w) !== -1; })) return;
+            var score = title.indexOf(q) === 0 ? 0 : title.indexOf(q) !== -1 ? 1 : words.every(function (w) { return title.indexOf(w) !== -1; }) ? 2 : 3;
+            hits.push({ it: it, score: score, i: i });
+          });
+          hits.sort(function (a, b) { return a.score - b.score || a.i - b.i; });
+          render(hits.map(function (h) { return h.it; }));
+        }
+        input.addEventListener('input', search);
         input.addEventListener('keydown', function (e) {
           var links = list.querySelectorAll('a');
           if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
