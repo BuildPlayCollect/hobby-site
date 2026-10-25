@@ -99,6 +99,12 @@ const { items, filterLabel, filters, shape = 'square', noun, find, w, h } = Astr
     form.addEventListener('submit', (e) => e.preventDefault());
     form.addEventListener('input', apply);
     form.addEventListener('change', apply);
+    // Arriving from site search (/esports/valorant/agents/?q=Jett) fills the box.
+    const q = new URLSearchParams(location.search).get('q');
+    if (q) {
+      form.querySelector<HTMLInputElement>('input[name="q"]')!.value = q;
+      apply();
+    }
   }
 </script>
 
