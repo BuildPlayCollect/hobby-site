@@ -5,7 +5,7 @@ scope: official
 organizer: "The Pokémon Company International"
 sourceUrl: "https://mcdn.pokemon.com/pokemon-prod/raw/upload/v1/live/static-assets/content-assets/cms2/pdf/play-pokemon/rules/play-pokemon-tcg-tournament-handbook-en.pdf"
 version: "Last revision: May 21, 2026"
-lastChecked: 2026-10-22
+lastChecked: 2026-10-26
 summary: "How official Play! Pokémon TCG tournaments handle decks, formats, sleeves, round time and penalties, based on the Play! Pokémon TCG Tournament Handbook and Tournament Rules Handbook."
 ---
 
@@ -58,4 +58,4 @@ The Tournament Rules Handbook lists these penalties. The separate Play! Pokémon
 - [Play! Pokémon Tournament Rules Handbook (PDF)](https://mcdn.pokemon.com/pokemon-prod/raw/upload/v1/live/static-assets/content-assets/cms2/pdf/play-pokemon/rules/play-pokemon-tournament-rules-handbook-en.pdf)
 - [Play! Pokémon Rules & Resources](https://www.pokemon.com/us/play-pokemon/about/tournaments-rules-and-resources)
 
-**What changed (October 22, 2026):** No changes. The handbook still says "Last revision: May 21, 2026".
+**What changed (October 26, 2026):** No changes. The handbook still says "Last revision: May 21, 2026".
