@@ -5,7 +5,7 @@ scope: official
 organizer: "Bandai"
 sourceUrl: "https://en.onepiece-cardgame.com/pdf/tournament_rules_manual.pdf"
 version: "Last Updated: October 17, 2025"
-lastChecked: 2026-10-22
+lastChecked: 2026-10-26
 summary: "The basics of the Bandai Organized Play One Piece Card Game Tournament Rules Manual: deck building, formats, match structure, time limits, sleeves, conduct and penalties."
 ---
 
@@ -61,4 +61,4 @@ The manual lists penalties from lowest to highest severity, and Head Judges cann
 
 - [Bandai Organized Play One Piece Card Game Tournament Rules Manual (PDF)](https://en.onepiece-cardgame.com/pdf/tournament_rules_manual.pdf)
 
-**What changed (October 22, 2026):** No changes. The manual still says "Last Updated: October 17, 2025".
+**What changed (October 26, 2026):** No changes to this manual, which still says "Last Updated: October 17, 2025". Heads-up for Asia players: Bandai's separate [BANDAI CARD GAMES Floor Rules for Asia](https://www.carddass.com/bcg/en/pdf/floor-rule-forasia.pdf) were updated to Ver. 2.2.0 on October 23, 2026. Bandai didn't publish a list of what changed.
