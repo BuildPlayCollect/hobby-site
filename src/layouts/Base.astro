@@ -23,6 +23,8 @@ interface Props {
   jsonLd?: Record<string, unknown>;
 }
 const { title, description = SITE_TAGLINE, image, type = 'website', jsonLd } = Astro.props;
+// The newsletter page already is the sign-up form, so it skips the strip above the footer.
+const showNewsletter = !Astro.url.pathname.startsWith('/newsletter');
 const fullTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
 // The one official address for this page, so Google doesn't count www/workers.dev copies as duplicates.
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
@@ -157,7 +159,7 @@ const shareImage = new URL(image ?? '/share-preview-v2.png', Astro.site).href;
     <main class="wrap">
       <slot />
     </main>
-    <div class="wrap"><Newsletter compact /></div>
+    {showNewsletter && <div class="wrap"><Newsletter compact /></div>}
 
     <footer class="site-footer">
       <div class="wrap footer-grid">
