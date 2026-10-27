@@ -1,6 +1,7 @@
 ---
 // One page per Unmatched fighter (/boardgames/unmatched/medusa ...): stats, what makes them special,
 // where they sit on the tier list, and a play guide with card combos when a trustworthy one exists.
+import Disclaimer from '../../../components/unmatched/Disclaimer.astro';
 import Base from '../../../layouts/Base.astro';
 import Badge from '../../../components/unmatched/Badge.astro';
 import SourceList from '../../../components/SourceList.astro';
@@ -131,6 +132,8 @@ const sources = [...new Set([f.url, ...(g?.sources ?? [])]), ...(deck.length ? [
   )}
 
   <div class="f-section"><SourceList sources={sources} /></div>
+
+  <Disclaimer />
 
   <p class="f-back"><a class="pill-btn" href="/boardgames/unmatched#fighters">← All fighters</a></p>
 </Base>
