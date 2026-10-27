@@ -46,6 +46,7 @@ const TIMES = [15, 30, 60];
       <!-- The words. Click (or tap) here to focus; the hidden box below catches your typing. -->
       <div class="tt-words-wrap" data-focus>
         <div class="tt-words" data-words aria-hidden="true"></div>
+        <span class="tt-caret" data-caret aria-hidden="true"></span>
         <p class="tt-hint" data-hint>Click here and start typing</p>
       </div>
       <input class="tt-input" data-input type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Type the words shown" />
@@ -146,35 +147,66 @@ const TIMES = [15, 30, 60];
       const l = lists[list]; return l[Math.floor(Math.random() * l.length)];
     });
 
-    // Draw every word as letters, coloured by what was typed.
-    const render = () => {
-      wordsEl.innerHTML = '';
-      words.forEach((w, wi) => {
-        const t = typed[wi] ?? '';
-        const word = document.createElement('span');
-        word.className = 'tt-word';
-        if (wi === index) word.classList.add('is-current');
-        if (wi < index && t !== w) word.classList.add('is-wrong');
-        const len = Math.max(w.length, t.length);
-        for (let i = 0; i < len; i++) {
-          const ch = document.createElement('span');
-          ch.textContent = w[i] ?? t[i];
-          if (i < t.length) ch.className = i >= w.length ? 'extra' : t[i] === w[i] ? 'ok' : 'bad';
-          if (wi === index && i === t.length) ch.classList.add('caret');
-          word.appendChild(ch);
-        }
-        if (wi === index && t.length >= len) word.classList.add('caret-end');
-        wordsEl.appendChild(word);
-      });
-      // Keep the current word on the top line or the line below it, so the text scrolls as you go.
-      const cur = wordsEl.children[index] as HTMLElement | undefined;
-      const first = wordsEl.children[0] as HTMLElement | undefined;
-      if (cur && first) {
-        const lineH = cur.offsetHeight + 10;
-        const lines = Math.max(0, Math.round((cur.offsetTop - first.offsetTop) / lineH) - 1);
-        wordsEl.style.transform = `translateY(${-lines * lineH}px)`;
+    // The words are drawn once per test; each key only redraws the word it changed. The caret is
+    // one separate bar that glides to the next letter, and the lines slide up as you go.
+    const caret = $('[data-caret]');
+    let wordEls: HTMLElement[] = [];
+    let shift = 0;          // how far the lines have slid up, in px
+    let idle = 0;           // timer that starts the caret blinking again when you pause
+
+    const drawWord = (wi: number) => {
+      const w = words[wi], t = typed[wi] ?? '', el = wordEls[wi];
+      if (!el) return;
+      el.classList.toggle('is-current', wi === index);
+      el.classList.toggle('is-wrong', wi < index && t !== w);
+      const len = Math.max(w.length, t.length);
+      while (el.children.length > len) el.lastChild!.remove();
+      while (el.children.length < len) el.appendChild(document.createElement('span'));
+      for (let i = 0; i < len; i++) {
+        const ch = el.children[i] as HTMLElement;
+        ch.textContent = w[i] ?? t[i];
+        ch.className = i < t.length ? (i >= w.length ? 'extra' : t[i] === w[i] ? 'ok' : 'bad') : '';
       }
     };
+    const addWords = (from: number) => {
+      for (let wi = from; wi < words.length; wi++) {
+        const el = document.createElement('span');
+        el.className = 'tt-word';
+        wordEls[wi] = el;
+        wordsEl.appendChild(el);
+        drawWord(wi);
+      }
+    };
+    // Move the caret (and slide the lines) to where the next letter goes.
+    const placeCaret = (instant = false) => {
+      const el = wordEls[index], first = wordEls[0];
+      if (!el || !first) return;
+      // Keep the current word on the top line or the line below it.
+      const lineH = el.offsetHeight + 10;
+      shift = Math.max(0, Math.round((el.offsetTop - first.offsetTop) / lineH) - 1) * lineH;
+      const t = typed[index] ?? '';
+      const letters = el.children;
+      const at = letters[Math.min(t.length, letters.length - 1)] as HTMLElement;
+      const x = at.offsetLeft + (t.length >= letters.length ? at.offsetWidth : 0);
+      const y = at.offsetTop + (at.offsetHeight - caret.offsetHeight) / 2 - shift;
+      if (instant) root.classList.add('tt-snap');
+      wordsEl.style.transform = `translateY(${-shift}px)`;
+      caret.style.transform = `translate(${x}px, ${y}px)`;
+      if (instant) { void caret.offsetWidth; root.classList.remove('tt-snap'); }
+    };
+    // The caret stays solid while you type and blinks when you stop, like most typing tests.
+    const typing = () => {
+      root.classList.add('is-typing');
+      clearTimeout(idle);
+      idle = window.setTimeout(() => root.classList.remove('is-typing'), 600);
+    };
+    const render = () => {
+      wordsEl.innerHTML = '';
+      wordEls = [];
+      addWords(0);
+      placeCaret(true);
+    };
+    addEventListener('resize', () => placeCaret(true));
 
     const correctChars = () => {
       // Count letters in words typed exactly right, plus their spaces, plus correct letters so far.
@@ -236,6 +268,8 @@ const TIMES = [15, 30, 60];
       input.value = '';
       if (!value) return;
       if (!started) { started = Date.now(); timer = window.setInterval(tick, 200); }
+      const from = index;
+      const before = words.length;
       for (const ch of value) {
         if (ch === ' ') {
           if ((typed[index] ?? '') === '') continue;          // ignore double spaces
@@ -250,7 +284,10 @@ const TIMES = [15, 30, 60];
           if (t.length < words[index].length + 8) typed[index] = t + ch;
         }
       }
-      render();
+      if (words.length > before) addWords(before);
+      for (let wi = from; wi <= index; wi++) drawWord(wi);
+      placeCaret();
+      typing();
     });
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Tab') { e.preventDefault(); reset(); return; }
@@ -260,10 +297,12 @@ const TIMES = [15, 30, 60];
         if (e.ctrlKey || e.altKey) typed[index] = '';
         else if (t) typed[index] = t.slice(0, -1);
         else if (index > 0 && typed[index - 1] !== words[index - 1]) index--; // go back to fix a wrong word
-        render();
+        drawWord(index); drawWord(index + 1);
+        placeCaret();
+        typing();
       }
     });
-    input.addEventListener('focus', () => root.classList.add('is-focused'));
+    input.addEventListener('focus', () => { root.classList.add('is-focused'); placeCaret(true); });
     input.addEventListener('blur', () => root.classList.remove('is-focused'));
     $('[data-focus]').addEventListener('click', () => { if (!locked) input.focus(); });
     root.querySelectorAll<HTMLElement>('[data-restart]').forEach((b) => b.addEventListener('click', reset));
@@ -366,3 +405,19 @@ const TIMES = [15, 30, 60];
     input.blur();
   }
 </script>
+
+<style>
+  /* The caret: one bar that slides from letter to letter. */
+  .tt-caret { position: absolute; top: 0; left: 0; width: 2.5px; height: 1.15em; border-radius: 2px; background: var(--ink); opacity: 0; pointer-events: none; transition: transform .1s ease-out; }
+  .tt.is-focused .tt-caret { opacity: 1; animation: tt-blink 1s ease-in-out infinite; }
+  .tt.is-typing .tt-caret { animation: none; }
+  @keyframes tt-blink { 0%, 40% { opacity: 1; } 50%, 90% { opacity: 0; } 100% { opacity: 1; } }
+  /* Lines slide up smoothly, and letters fade into their colour. */
+  .tt-words { transition: transform .2s ease-out; }
+  .tt-words :global(.tt-word span) { transition: color .08s; }
+  .tt-snap .tt-caret, .tt-snap .tt-words { transition: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .tt-caret, .tt-words, .tt-words :global(.tt-word span) { transition: none; }
+    .tt.is-focused .tt-caret { animation: none; }
+  }
+</style>
