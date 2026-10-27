@@ -473,10 +473,6 @@ a.tile:hover { text-decoration: none; background: var(--surface-2); }
 .tt-word.is-current, .tt-word:has(.ok) { opacity: 1; }
 .tt-word .bad { color: #e0503d; }
 .tt-word .extra { color: #b8402f; opacity: .8; }
-.tt-word .caret, .tt-word.caret-end::after { box-shadow: -2.5px 0 0 var(--ink); }
-.tt-word.caret-end::after { content: ""; display: inline-block; width: 0; height: 1.1em; vertical-align: -.15em; }
-.tt.is-focused .tt-word .caret, .tt.is-focused .tt-word.caret-end::after { animation: caret 1s step-end infinite; }
-@keyframes caret { 50% { box-shadow: none; } }
 .tt-input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
 .tt-result { padding: 26px 0 28px; }
 .tt-rank-label { margin: 0; font-family: var(--mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
