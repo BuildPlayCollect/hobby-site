@@ -1,6 +1,7 @@
 ---
 // The Unmatched hub (/boardgames/unmatched): learn to play, the rules, a tier list and every fighter.
 // All facts live in src/data/unmatched.ts, each with its source.
+import Disclaimer from '../../../components/unmatched/Disclaimer.astro';
 import Base from '../../../layouts/Base.astro';
 import Badge from '../../../components/unmatched/Badge.astro';
 import { UM_SETS, UM_FIGHTERS, UM_TIER_SOURCE, UM_RULES, UM_RULEBOOKS, UM_TIPS, UM_STARTER_SETS, UM_UPCOMING } from '../../../data/unmatched';
@@ -155,6 +156,7 @@ const guides = UM_FIGHTERS.filter((f) => f.guide).length;
     <p class="um-source">Dates can move, so check the publisher before you buy.</p>
   </section>
   {logo && <p class="um-source">Logo: {logo.credit}.</p>}
+  <Disclaimer />
 </Base>
 
 <style>
