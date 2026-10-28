@@ -23,12 +23,10 @@ const headlines = [featured, stories[0], ...Object.keys(HOBBIES).map((key) => st
   .slice(0, 6) as typeof stories;
 // Everything else that's new goes in "Fresh off the press", newest first, at most 6.
 const latest = stories.filter((a) => !headlines.includes(a)).slice(0, 6);
+// Until there are 10 stories, both rows would look thin, so they show as one "Latest stories" row instead.
+const oneRow = stories.length < 10;
+const allLatest = [...headlines, ...latest].slice(0, 6);
 const rulebooks = (await getCollection('rules')).length;
-
-// "Try one now" opens a random article that has a 60-second version (any live article if none do yet).
-// The link points at the newest headline first, so it still works if scripts are off.
-const withQuick = articles.filter((a) => a.data.quick?.length);
-const tryUrls = (withQuick.length ? withQuick : articles).map((a) => `/articles/${a.id}/`);
 
 // Short, plain words for each hobby on the picker.
 const nick: Record<string, string> = {
@@ -36,7 +34,10 @@ const nick: Record<string, string> = {
   consoles: 'Game machines', esports: 'Pro gaming', boardgames: 'Table battles', general: 'Hobbies in general',
 };
 const picks = headlines.slice(0, 3);
-// "New here?" steps for first-time visitors.
+// "New here?" steps. Only shown on someone's first two visits (see the script at the bottom).
+// "Try one now" opens a random article that has a 60-second version (any live article if none do yet).
+const withQuick = articles.filter((a) => a.data.quick?.length);
+const tryUrls = (withQuick.length ? withQuick : articles).map((a) => `/articles/${a.id}/`);
 const steps = [
   { title: 'Pick a hobby', text: 'Open Hobbies in the menu: every hobby has its own page of stories, guides and history.', href: '/quiz', link: 'Not sure? Take the quiz' },
   { title: 'Read the 60-second version', text: 'Every article opens with a short summary, so you get the gist first.', href: headlines[0] ? `/articles/${headlines[0].id}/` : '/guides', link: 'Try one now', random: true },
@@ -73,32 +74,40 @@ const steps = [
   <!-- News roundup: the latest Mon/Thu roundup. -->
   <NewsRoundup roundups={roundups} />
 
-  <!-- Top stories: up to three, then a short list of what else is new. -->
-  {picks.length > 0 && (
+  <!-- Stories. With fewer than 10, one "Latest stories" row; after that, Top stories + Fresh off the press. -->
+  {oneRow && allLatest.length > 0 && (
+    <>
+      <div class="section-head"><h2>Latest <span class="hl">stories</span></h2><a class="more" href="/guides">All guides →</a></div>
+      <div class="grid">{allLatest.map((a) => <ArticleCard article={a} />)}</div>
+    </>
+  )}
+  {!oneRow && picks.length > 0 && (
     <>
       <div class="section-head"><h2>Top <span class="hl">stories</span></h2><a class="more" href="/guides">All guides →</a></div>
       <div class="grid">{picks.map((a) => <ArticleCard article={a} />)}</div>
     </>
   )}
-  {latest.length > 0 && (
+  {!oneRow && latest.length > 0 && (
     <>
       <div class="section-head"><h2>Fresh off the press</h2></div>
       <div class="grid">{latest.slice(0, 3).map((a) => <ArticleCard article={a} />)}</div>
     </>
   )}
 
-  <!-- New here? Three short steps for first-time visitors. -->
-  <div class="section-head"><h2>New <span class="hl">here?</span></h2></div>
-  <ol class="start">
-    {steps.map((s, i) => (
-      <li>
-        <span class="start-num" aria-hidden="true">{i + 1}</span>
-        <h3>{s.title}</h3>
-        <p>{s.text}</p>
-        <a href={s.href} data-random={s.random ? JSON.stringify(tryUrls) : undefined}>{s.link} →</a>
-      </li>
-    ))}
-  </ol>
+  <!-- New here? Three short steps, hidden unless this is one of the reader's first two visits. -->
+  <div data-new-here hidden>
+    <div class="section-head"><h2>New <span class="hl">here?</span></h2></div>
+    <ol class="start">
+      {steps.map((s, i) => (
+        <li>
+          <span class="start-num" aria-hidden="true">{i + 1}</span>
+          <h3>{s.title}</h3>
+          <p>{s.text}</p>
+          <a href={s.href} data-random={s.random ? JSON.stringify(tryUrls) : undefined}>{s.link} →</a>
+        </li>
+      ))}
+    </ol>
+  </div>
 
   <!-- Fresh from the wiki: the newest added or updated words. -->
   <WikiUpdates limit={4} />
@@ -122,7 +131,21 @@ const steps = [
 </Base>
 
 <script>
-  // "Try one now"-style random link (kept for any data-random links).
+  // Count visits in this browser only: one visit per browser session (closing the tab and coming back later
+  // counts as a new visit). "New here?" shows on visits 1 and 2. Nothing is sent anywhere.
+  let visits = 1;
+  try {
+    visits = Number(localStorage.getItem('bpc-visits')) || 0;
+    if (!sessionStorage.getItem('bpc-visit-counted')) {
+      visits += 1;
+      localStorage.setItem('bpc-visits', String(visits));
+      sessionStorage.setItem('bpc-visit-counted', '1');
+    }
+  } catch {}
+  const newHere = document.querySelector<HTMLElement>('[data-new-here]');
+  if (newHere && visits <= 2) newHere.hidden = false;
+
+  // "Try one now" opens a random article.
   document.querySelectorAll<HTMLAnchorElement>('a[data-random]').forEach((a) => {
     const urls: string[] = JSON.parse(a.dataset.random || '[]');
     const pick = () => { if (urls.length) a.href = urls[Math.floor(Math.random() * urls.length)]; };

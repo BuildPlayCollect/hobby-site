@@ -1,6 +1,7 @@
 ---
 // Base.astro: the frame around every page (header, menu, search, footer).
 // Each page puts its own content where <slot /> is.
+import { getCollection } from 'astro:content';
 import { SITE_NAME, SITE_TAGLINE, HOBBIES, TYPE_SLUGS } from '../data/site';
 import AdSlot from '../components/AdSlot.astro';
 import Newsletter from '../components/Newsletter.astro';
@@ -25,6 +26,8 @@ interface Props {
 const { title, description = SITE_TAGLINE, image, type = 'website', jsonLd } = Astro.props;
 // The newsletter page already is the sign-up form, so it skips the strip above the footer.
 const showNewsletter = !Astro.url.pathname.startsWith('/newsletter');
+// Giveaways only shows in the menu once a giveaway article is live, so the link never opens an empty page.
+const hasGiveaways = (await getCollection('articles', ({ data }) => !data.draft && data.type === 'giveaway')).length > 0;
 const fullTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
 // The one official address for this page, so Google doesn't count www/workers.dev copies as duplicates.
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
@@ -107,7 +110,7 @@ const shareImage = new URL(image ?? '/share-preview-v2.png', Astro.site).href;
           <a class="nav-link" href={`/${TYPE_SLUGS['new-release']}`}>New Releases</a>
           <a class="nav-link" href="/wiki">Wiki</a>
           <a class="nav-link" href="/rules">Rules</a>
-          <a class="nav-link" href={`/${TYPE_SLUGS.giveaway}`}>Giveaways</a>
+          {hasGiveaways && <a class="nav-link" href={`/${TYPE_SLUGS.giveaway}`}>Giveaways</a>}
         </nav>
 
         <div class="header-actions">
@@ -189,7 +192,7 @@ const shareImage = new URL(image ?? '/share-preview-v2.png', Astro.site).href;
       <div class="wrap">
         <p class="footer-word" aria-hidden="true">Build Play Collect</p>
         <p class="footer-note">{SITE_NAME} is an independent fan site. We're not affiliated with or endorsed by the brands, publishers, game makers or leagues we write about (yet!). Names, logos, game art and card images belong to their owners and are shown to help fans learn. If you own something here and want it credited differently or taken down, <a href="/contact">tell us</a> and we'll sort it out quickly.</p>
-        <div class="footer-base"><span>&copy; {new Date().getFullYear()} {SITE_NAME}</span><span>History · Guides · News · Giveaways</span></div>
+        <div class="footer-base"><span>&copy; {new Date().getFullYear()} {SITE_NAME}</span><span>History · Guides · News{hasGiveaways && ' · Giveaways'}</span></div>
       </div>
     </footer>
 
