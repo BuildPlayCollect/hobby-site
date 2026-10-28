@@ -16,8 +16,13 @@ const lists = {
   items: [...g.items].map((i) => i.name).sort(byName),
   abilities: [...g.abilities].map((a) => a.name).sort(byName),
 };
-const natures = [...g.natures].map((n) => n.name).sort(byName);
 const STATS = [['hp', 'HP'], ['atk', 'Atk'], ['def', 'Def'], ['spa', 'SpA'], ['spd', 'SpD'], ['spe', 'Spe']];
+const LABEL: Record<string, string> = Object.fromEntries(STATS);
+// Each nature raises one stat by 10% and lowers another by 10%; five natures change nothing.
+const natures = [...g.natures].sort((a, b) => byName(a.name, b.name)).map((n) => ({
+  name: n.name,
+  text: n.plus === n.minus ? `${n.name} (no change)` : `${n.name} (+${LABEL[n.plus!]} −${LABEL[n.minus!]})`,
+}));
 ---
 <Base title="Pokémon Champions team builder" description="Build a Pokémon Champions team of six and see the most and least used items, natures, stat points and moves for every Pokémon, from real battles.">
   <header class="page-head">
@@ -50,7 +55,7 @@ const STATS = [['hp', 'HP'], ['atk', 'Atk'], ['def', 'Def'], ['spa', 'SpA'], ['s
               <label>Pokémon<input name="mon" list="tb-species" autocomplete="off" placeholder="Type a name" /></label>
               <label>Item<input name="item" list="tb-items" autocomplete="off" /></label>
               <label>Ability<input name="ability" list="tb-abilities" autocomplete="off" /></label>
-              <label>Nature<select name="nature">{natures.map((n) => <option selected={n === 'Hardy'}>{n}</option>)}</select></label>
+              <label>Nature<select name="nature">{natures.map((n) => <option value={n.name} selected={n.name === 'Hardy'}>{n.text}</option>)}</select></label>
             </div>
             <div class="tb-tips" data-tips="items"></div>
             <div class="tb-tips" data-tips="abilities"></div>
@@ -59,13 +64,14 @@ const STATS = [['hp', 'HP'], ['atk', 'Atk'], ['def', 'Def'], ['spa', 'SpA'], ['s
             <h3 class="tb-h">Stat points <small data-total></small></h3>
             <div class="tb-stats">
               {STATS.map(([id, label]) => (
-                <label class="tb-stat">
-                  <span>{label}</span>
+                <label class="tb-stat" data-stat-box={id}>
+                  <span>{label}<i class="tb-fx" data-fx={id}></i></span>
                   <input name={`sp-${id}`} type="number" min="0" max="32" value="0" inputmode="numeric" />
                   <output data-stat={id}></output>
                 </label>
               ))}
             </div>
+            <p class="tb-note">Your nature raises the stat marked ▲ by 10% and lowers the one marked ▼ by 10%.</p>
             <div class="tb-tips" data-tips="spreads"></div>
 
             <h3 class="tb-h">Moves</h3>
@@ -101,7 +107,7 @@ const STATS = [['hp', 'HP'], ['atk', 'Atk'], ['def', 'Def'], ['spa', 'SpA'], ['s
   import { enhanceDatalists } from '../../../scripts/combobox';
   import type { StatID } from '@smogon/calc';
 
-  type Share = { name: string; pct: number };
+  type Share = { name: string; pct: number; note?: string };
   type Mon = { usage: number; abilities: Share[]; items: Share[]; moves: Share[]; natures: Share[]; spreads: { nature: string; sp: number[]; pct: number }[]; teammates: Share[] };
   type Data = { month: string; battles: number; mons: Record<string, Mon> } | null;
 
@@ -121,6 +127,11 @@ const STATS = [['hp', 'HP'], ['atk', 'Atk'], ['def', 'Def'], ['spa', 'SpA'], ['s
   const field = (slot: HTMLElement, name: string) => slot.querySelector<HTMLInputElement>(`[name="${name}"]`)!;
   const speciesOf = (name: string) => gen.species.get(toID(name));
   const sprite = (name: string) => (SPRITES[name] ? `/sprites/pokemon/${SPRITES[name]}.webp` : '');
+  // "+Atk −SpA" for a nature, or "" for one that changes nothing.
+  const natureNote = (name: string) => {
+    const n = gen.natures.get(toID(name));
+    return !n || n.plus === n.minus ? '' : `+${LABEL[n.plus!]} −${LABEL[n.minus!]}`;
+  };
   const monData = (name: string) => (data && speciesOf(name) ? data.mons[speciesOf(name)!.name] : undefined);
 
   // A row of tappable suggestions: the most used up front, the least used at the end.
@@ -147,6 +158,11 @@ const STATS = [['hp', 'HP'], ['atk', 'Atk'], ['def', 'Def'], ['spa', 'SpA'], ['s
         b.className = 'tb-chip';
         if (onPick) { (b as HTMLButtonElement).type = 'button'; b.addEventListener('click', () => onPick(s)); }
         b.textContent = `${s.name} `;
+        if (s.note) {
+          const note = document.createElement('small');
+          note.textContent = `${s.note} `;
+          b.append(note);
+        }
         const pct = document.createElement('b');
         pct.textContent = `${s.pct}%`;
         b.append(pct);
@@ -180,6 +196,18 @@ const STATS = [['hp', 'HP'], ['atk', 'Atk'], ['def', 'Def'], ['spa', 'SpA'], ['s
     const tot = slot.querySelector('[data-total]')!;
     tot.textContent = `${total} / ${MAX_TOTAL} used`;
     tot.classList.toggle('is-over', total > MAX_TOTAL);
+    // Mark the stats the nature raises (▲) and lowers (▼).
+    const nat = gen.natures.get(toID(slot.querySelector<HTMLSelectElement>('[name="nature"]')!.value));
+    for (const st of STATS) {
+      const up = !!nat && nat.plus !== nat.minus && nat.plus === st;
+      const down = !!nat && nat.plus !== nat.minus && nat.minus === st;
+      const box = slot.querySelector<HTMLElement>(`[data-stat-box="${st}"]`)!;
+      box.classList.toggle('is-up', up);
+      box.classList.toggle('is-down', down);
+      const fx = slot.querySelector<HTMLElement>(`[data-fx="${st}"]`)!;
+      fx.textContent = up ? ' ▲' : down ? ' ▼' : '';
+      fx.title = up ? 'Raised 10% by nature' : down ? 'Lowered 10% by nature' : '';
+    }
     if (s) {
       const p = new Pokemon(gen, s.name, { nature: slot.querySelector<HTMLSelectElement>('[name="nature"]')!.value, evs });
       for (const st of STATS) slot.querySelector(`[data-stat="${st}"]`)!.textContent = String(p.stats[st]);
@@ -192,7 +220,7 @@ const STATS = [['hp', 'HP'], ['atk', 'Atk'], ['def', 'Def'], ['spa', 'SpA'], ['s
     const set = (n: string, v: string) => { field(slot, n).value = v; update(); };
     tips(box('items'), 'Held items', d?.items ?? [], (x) => set('item', x.name));
     tips(box('abilities'), 'Abilities', d?.abilities ?? [], (x) => set('ability', x.name), 3);
-    tips(box('natures'), 'Natures', d?.natures ?? [], (x) => { slot.querySelector<HTMLSelectElement>('[name="nature"]')!.value = x.name; update(); });
+    tips(box('natures'), 'Natures', (d?.natures ?? []).map((x) => ({ ...x, note: natureNote(x.name) })), (x) => { slot.querySelector<HTMLSelectElement>('[name="nature"]')!.value = x.name; update(); });
     tips(box('spreads'), 'Popular stat point spreads', (d?.spreads ?? []).map((sp) => ({ name: `${sp.nature} ${sp.sp.map((v, j) => (v ? `${v} ${LABEL[STATS[j]]}` : '')).filter(Boolean).join(' / ')}`, pct: sp.pct })), (x) => {
       const sp = d!.spreads.find((y) => x.name.startsWith(y.nature) && y.pct === x.pct)!;
       slot.querySelector<HTMLSelectElement>('[name="nature"]')!.value = sp.nature;
@@ -357,6 +385,14 @@ const STATS = [['hp', 'HP'], ['atk', 'Atk'], ['def', 'Def'], ['spa', 'SpA'], ['s
   .tb-stats { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
   .tb .tb-stat { grid-template-columns: 1fr; text-align: center; }
   .tb-stat input { text-align: center; padding: 6px 4px; }
+  .tb-fx { font-style: normal; }
+  .tb .tb-stat.is-up span, .tb .tb-stat.is-up output { color: #1b7f3b; }
+  .tb .tb-stat.is-down span, .tb .tb-stat.is-down output { color: #b3261e; }
+  .tb .tb-stat.is-up input { border-color: #1b7f3b; }
+  .tb .tb-stat.is-down input { border-color: #b3261e; }
+  :root[data-theme="dark"] .tb .tb-stat.is-up span, :root[data-theme="dark"] .tb .tb-stat.is-up output { color: #7ee2a0; }
+  :root[data-theme="dark"] .tb .tb-stat.is-down span, :root[data-theme="dark"] .tb .tb-stat.is-down output { color: #ff8a80; }
+  :global(.tb-chip small) { color: var(--muted); font-weight: 700; font-size: .75rem; }
   .tb-stat output { font-weight: 800; color: var(--ink); font-size: .95rem; text-transform: none; }
   .tb-tips:empty { display: none; }
   :global(.tb-tips-title) { margin: 0 0 4px; font-size: .75rem; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }

@@ -13,8 +13,13 @@ const lists = {
   moves: [...g.moves].filter((m) => m.category !== 'Status' && m.name !== '(No Move)').map((m) => m.name).sort(byName),
   items: [...g.items].map((i) => i.name).sort(byName),
   abilities: [...g.abilities].map((a) => a.name).sort(byName),
-  natures: [...g.natures].map((n) => n.name).sort(byName),
 };
+// Each nature raises one stat by 10% and lowers another by 10%; five natures change nothing.
+const STAT_LABEL: Record<string, string> = { hp: 'HP', atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe' };
+const natures = [...g.natures].sort((a, b) => byName(a.name, b.name)).map((n) => ({
+  name: n.name,
+  text: n.plus === n.minus ? `${n.name} (no change)` : `${n.name} (+${STAT_LABEL[n.plus!]} −${STAT_LABEL[n.minus!]})`,
+}));
 const STATS = [['hp', 'HP'], ['atk', 'Atk'], ['def', 'Def'], ['spa', 'SpA'], ['spd', 'SpD'], ['spe', 'Spe']];
 const SIDES = [
   { key: 'a', title: 'Attacker', mon: 'Rillaboom', item: 'Miracle Seed', nature: 'Adamant', sp: { atk: 32, hp: 2, spe: 32 }, moves: ['Wood Hammer', 'Grassy Glide', 'High Horsepower', 'U-turn'] },
@@ -45,7 +50,7 @@ const SIDES = [
             <label>Ability<input name="ability" list="calc-abilities" autocomplete="off" /></label>
           </div>
           <div class="calc-row">
-            <label>Nature<select name="nature">{lists.natures.map((n) => <option selected={n === s.nature}>{n}</option>)}</select></label>
+            <label>Nature<select name="nature">{natures.map((n) => <option value={n.name} selected={n.name === s.nature}>{n.text}</option>)}</select></label>
             <label>Status<select name="status"><option value="">Healthy</option><option value="brn">Burned</option><option value="par">Paralysed</option><option value="psn">Poisoned</option></select></label>
           </div>
           <div class="calc-stats">
