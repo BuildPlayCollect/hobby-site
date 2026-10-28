@@ -18,8 +18,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Broken links make lychee finish with an error code; that's expected, the next step reports them.
       - name: Check links
         id: lychee
+        continue-on-error: true
         uses: lycheeverse/lychee-action@v2.0.2
         with:
           args: --config lychee.toml 'src/**/*.md' 'src/**/*.ts' 'src/**/*.astro' 'src/**/*.json'
@@ -28,10 +30,13 @@ jobs:
 
       # One issue, kept up to date: opened (or updated) when links are broken, closed when they're all fine.
       - name: Update the "Broken links" issue
+        if: always()
         env:
           GH_TOKEN: ${{ github.token }}
           BROKEN: ${{ steps.lychee.outputs.exit_code }}
         run: |
+          # No report means lychee itself failed (for example a settings mistake), so stop and show red.
+          if [ ! -s lychee/out.md ]; then echo "lychee did not write a report"; exit 1; fi
           gh label create broken-links --color d73a4a --description "Found by the weekly link check" 2>/dev/null || true
           num=$(gh issue list --label broken-links --state open --json number --jq '.[0].number')
           if [ "$BROKEN" != "0" ]; then

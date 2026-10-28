@@ -20,4 +20,3 @@ exclude = [
   '\$',
 ]
 exclude_all_private = true
-exclude_mail = true
