@@ -18,5 +18,12 @@ exclude = [
   'example\.com',
   # Addresses built in code, like https://${PAGE}, aren't real links until the page is built.
   '\$',
+  # A base address the code adds file names to, not a page.
+  '^https://raw\.githubusercontent\.com/smogon/pokemon-showdown/master/$',
+  # Sites that block or time out on GitHub's checker but open fine for people (checked by hand).
+  # Only add a site here after opening its flagged link and seeing it work. Date each one.
+  '^https?://(www\.)?digitec\.ch/',        # 2026-10-28: timeout for the checker, page loads
+  '^https?://takaratomymall\.jp/',          # 2026-10-28: timeout for the checker, pages load
+  '^https?://(www\.)?gmk\.net/',           # 2026-10-28: 404 for the checker, page loads
 ]
 exclude_all_private = true
