@@ -69,7 +69,7 @@ The number row disappears too. Even numbers live on a layer. It has a [steep lea
 
 ## The fun shapes
 
-**Alice.** Named after the [TGR Alice by designer Yuk Tsi](https://mail.deskthority.net/wiki/Alice_layout), it splits the keys down the middle and angles each half inward, all on one board. Your wrists sit a little more naturally, and it looks great.
+**Alice.** Named after the [TGR Alice by designer Yuk Tsi](https://deskthority.net/wiki/Alice_layout), it splits the keys down the middle and angles each half inward, all on one board. Your wrists sit a little more naturally, and it looks great.
 
 Alice isn't one fixed size either. You'll find Alice boards [from 40% all the way up to full size](https://kbd.news/Keyboard-Form-Factors-Explained-A-Complete-Guide-to-Keyboard-Sizes-115.html).
 

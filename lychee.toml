@@ -1,0 +1,23 @@
+# lychee.toml: settings for the weekly link check (.github/workflows/link-check.yml).
+# Only real dead ends count as broken: missing pages (404, 410), dead websites and timeouts.
+# Many shops and forums answer robots with 403 or 429 even though the page works for people,
+# so those count as fine to avoid false alarms.
+accept = ["100..=103", "200..=299", "403", "429"]
+max_redirects = 10
+timeout = 30
+max_retries = 3
+retry_wait_time = 5
+max_concurrency = 8
+user_agent = "Mozilla/5.0 (compatible; BuildPlayCollect link check; +https://buildplaycollect.com/contact)"
+
+# Our own site, local addresses, placeholders and example addresses aren't outside links.
+exclude = [
+  '^https?://(www\.)?buildplaycollect\.com',
+  '^https?://localhost',
+  '^https?://127\.0\.0\.1',
+  'example\.com',
+  # Addresses built in code, like https://${PAGE}, aren't real links until the page is built.
+  '\$',
+]
+exclude_all_private = true
+exclude_mail = true
