@@ -34,6 +34,15 @@ const nick: Record<string, string> = {
   consoles: 'Game machines', esports: 'Pro gaming', boardgames: 'Table battles', general: 'Hobbies in general',
 };
 const picks = headlines.slice(0, 3);
+// "New here?" steps. Only shown on someone's first two visits (see the script at the bottom).
+// "Try one now" opens a random article that has a 60-second version (any live article if none do yet).
+const withQuick = articles.filter((a) => a.data.quick?.length);
+const tryUrls = (withQuick.length ? withQuick : articles).map((a) => `/articles/${a.id}/`);
+const steps = [
+  { title: 'Pick a hobby', text: 'Open Hobbies in the menu: every hobby has its own page of stories, guides and history.', href: '/quiz', link: 'Not sure? Take the quiz' },
+  { title: 'Read the 60-second version', text: 'Every article opens with a short summary, so you get the gist first.', href: headlines[0] ? `/articles/${headlines[0].id}/` : '/guides', link: 'Try one now', random: true },
+  { title: 'Look up any word', text: 'Hobby words link to our dictionary. Hover for a quick meaning, click to dig in.', href: '/wiki', link: 'Open the dictionary' },
+];
 ---
 <Base>
   <!-- Welcome: a short hello, then one question with one big button per hobby (bigger screens). -->
@@ -85,6 +94,21 @@ const picks = headlines.slice(0, 3);
     </>
   )}
 
+  <!-- New here? Three short steps, hidden unless this is one of the reader's first two visits. -->
+  <div data-new-here hidden>
+    <div class="section-head"><h2>New <span class="hl">here?</span></h2></div>
+    <ol class="start">
+      {steps.map((s, i) => (
+        <li>
+          <span class="start-num" aria-hidden="true">{i + 1}</span>
+          <h3>{s.title}</h3>
+          <p>{s.text}</p>
+          <a href={s.href} data-random={s.random ? JSON.stringify(tryUrls) : undefined}>{s.link} →</a>
+        </li>
+      ))}
+    </ol>
+  </div>
+
   <!-- Fresh from the wiki: the newest added or updated words. -->
   <WikiUpdates limit={4} />
 
@@ -105,3 +129,27 @@ const picks = headlines.slice(0, 3);
     </a>
   </div>
 </Base>
+
+<script>
+  // Count visits in this browser only: one visit per browser session (closing the tab and coming back later
+  // counts as a new visit). "New here?" shows on visits 1 and 2. Nothing is sent anywhere.
+  let visits = 1;
+  try {
+    visits = Number(localStorage.getItem('bpc-visits')) || 0;
+    if (!sessionStorage.getItem('bpc-visit-counted')) {
+      visits += 1;
+      localStorage.setItem('bpc-visits', String(visits));
+      sessionStorage.setItem('bpc-visit-counted', '1');
+    }
+  } catch {}
+  const newHere = document.querySelector<HTMLElement>('[data-new-here]');
+  if (newHere && visits <= 2) newHere.hidden = false;
+
+  // "Try one now" opens a random article.
+  document.querySelectorAll<HTMLAnchorElement>('a[data-random]').forEach((a) => {
+    const urls: string[] = JSON.parse(a.dataset.random || '[]');
+    const pick = () => { if (urls.length) a.href = urls[Math.floor(Math.random() * urls.length)]; };
+    a.addEventListener('pointerdown', pick);
+    a.addEventListener('keydown', (e) => { if (e.key === 'Enter') pick(); });
+  });
+</script>
