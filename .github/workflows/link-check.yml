@@ -1,0 +1,42 @@
+# link-check.yml: once a week, GitHub checks every outside link in the site's articles, wiki, rules
+# and data files, and keeps one "Broken links" issue up to date with any it couldn't open.
+# The Monday/Thursday update reads that issue and fixes the links (see resources/link-checks.md).
+name: Weekly link check
+
+on:
+  schedule:
+    - cron: '0 18 * * 6'   # Saturdays 18:00 UTC = Sunday 2:00am in Manila
+  workflow_dispatch:        # lets you run it by hand from the Actions tab
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check links
+        id: lychee
+        uses: lycheeverse/lychee-action@v2.0.2
+        with:
+          args: --config lychee.toml 'src/**/*.md' 'src/**/*.ts' 'src/**/*.astro' 'src/**/*.json'
+          output: ./lychee/out.md
+          fail: false
+
+      # One issue, kept up to date: opened (or updated) when links are broken, closed when they're all fine.
+      - name: Update the "Broken links" issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BROKEN: ${{ steps.lychee.outputs.exit_code }}
+        run: |
+          gh label create broken-links --color d73a4a --description "Found by the weekly link check" 2>/dev/null || true
+          num=$(gh issue list --label broken-links --state open --json number --jq '.[0].number')
+          if [ "$BROKEN" != "0" ]; then
+            if [ -n "$num" ]; then gh issue edit "$num" --body-file lychee/out.md
+            else gh issue create --title "Broken links" --label broken-links --body-file lychee/out.md; fi
+          elif [ -n "$num" ]; then
+            gh issue close "$num" --comment "All links work again as of $(date -u +%Y-%m-%d)."
+          fi

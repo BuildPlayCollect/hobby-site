@@ -35,7 +35,7 @@ Heights in millimetres vary wildly between shop guides, so we're sticking to "ta
 
 **SA.** Signature Plastics' tall, sculpted profile with round, dished tops. It was [first made for keyboards before 1980](https://deskthority.net/wiki/Signature_Plastics_SA_family) and still screams retro. It's the [tallest of the common profiles](https://keebsforall.com/blogs/mechanical-keyboards-101/keycap-profiles-materials-buying-guide), so expect a learning curve and maybe a wrist rest.
 
-**MT3.** Tall and deeply dished, [designed by Matt3o and sold through Massdrop in 2017](https://mail.deskthority.net/wiki/MT3_Profile), inspired by IBM's old beam spring keyboards. Your fingertips sink right in.
+**MT3.** Tall and deeply dished, [designed by Matt3o and sold through Massdrop in 2017](https://deskthority.net/wiki/MT3_Profile), inspired by IBM's old beam spring keyboards. Your fingertips sink right in.
 
 **DSA.** Signature Plastics' low, uniform profile with round tops. It's [7.39 mm tall, the same as an OEM home row](https://deskthority.net/wiki/Signature_Plastics_DSA_family).
 
