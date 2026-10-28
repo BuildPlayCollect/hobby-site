@@ -7,6 +7,8 @@ import Base from '../../../layouts/Base.astro';
 import { Generations } from '@smogon/calc';
 import SPRITES from '../../../data/pokemon-sprites.json';
 import { USAGE_FORMATS } from '../../../data/champions';
+import { championsMoves } from '../../../data/champions-moves';
+import { TYPE_COLOURS } from '../../../lib/pokemon';
 
 const g = Generations.get(0);
 const byName = (a: string, b: string) => a.localeCompare(b);
@@ -16,6 +18,9 @@ const lists = {
   items: [...g.items].map((i) => i.name).sort(byName),
   abilities: [...g.abilities].map((a) => a.name).sort(byName),
 };
+const MOVES = championsMoves();
+// The small hint in the move pick list, e.g. "Fire · Special".
+const moveHint = (name: string) => (MOVES[name] ? `${MOVES[name].type} · ${MOVES[name].cat}` : undefined);
 const STATS = [['hp', 'HP'], ['atk', 'Atk'], ['def', 'Def'], ['spa', 'SpA'], ['spd', 'SpD'], ['spe', 'Spe']];
 const LABEL: Record<string, string> = Object.fromEntries(STATS);
 // Each nature raises one stat by 10% and lowers another by 10%; five natures change nothing.
@@ -31,8 +36,8 @@ const natures = [...g.natures].sort((a, b) => byName(a.name, b.name)).map((n) =>
     <p>Pick six Pokémon. For each one you'll see what strong players choose most (and least), so you always have a starting point. Tap any suggestion to use it.</p>
   </header>
 
-  <div class="tb" data-tb data-sprites={JSON.stringify(SPRITES)} data-ratings={USAGE_FORMATS.rating}>
-    {Object.entries(lists).map(([k, v]) => <datalist id={`tb-${k}`}>{v.map((x) => <option value={x} />)}</datalist>)}
+  <div class="tb" data-tb data-sprites={JSON.stringify(SPRITES)} data-ratings={USAGE_FORMATS.rating} data-type-colours={JSON.stringify(TYPE_COLOURS)}>
+    {Object.entries(lists).map(([k, v]) => <datalist id={`tb-${k}`}>{v.map((x) => (k === 'moves' ? <option value={x} label={moveHint(x)} title={MOVES[x]?.desc} data-type={MOVES[x]?.type} data-cat={MOVES[x]?.cat} data-power={MOVES[x]?.power} data-acc={MOVES[x]?.acc ?? undefined} /> : <option value={x} />))}</datalist>)}
 
     <div class="tb-bar">
       <div class="pc-tabs" role="tablist" aria-label="Battle format">
@@ -76,7 +81,15 @@ const natures = [...g.natures].sort((a, b) => byName(a.name, b.name)).map((n) =>
 
             <h3 class="tb-h">Moves</h3>
             <div class="tb-grid">
-              {[0, 1, 2, 3].map((m) => <label>Move {m + 1}<input name={`move${m}`} list="tb-moves" autocomplete="off" /></label>)}
+              {[0, 1, 2, 3].map((m) => (
+                <div class="tb-move">
+                  <label>Move {m + 1}<input name={`move${m}`} list="tb-moves" autocomplete="off" /></label>
+                  <div class="tb-move-info" data-move-info={m} hidden>
+                    <p class="tb-move-meta"><span class="tb-type" data-move-type></span> <span data-move-cat></span></p>
+                    <p class="tb-move-desc" data-move-desc></p>
+                  </div>
+                </div>
+              ))}
             </div>
             <div class="tb-tips" data-tips="moves"></div>
             <div class="tb-tips" data-tips="teammates"></div>
@@ -98,7 +111,7 @@ const natures = [...g.natures].sort((a, b) => byName(a.name, b.name)).map((n) =>
     </section>
   </div>
 
-  <p class="tb-note">Usage numbers come from <a href="https://www.smogon.com/stats/">Smogon's monthly stats</a> of Pokémon Showdown battles by players rated {USAGE_FORMATS.rating}+, not the in-game ladder. Stats are worked out with <a href="https://github.com/smogon/damage-calc">@smogon/calc</a>. Pokémon icons from PokeAPI. Pokémon is a trademark of Nintendo, Creatures and GAME FREAK; this fan page isn't connected to them.</p>
+  <p class="tb-note">Usage numbers come from <a href="https://www.smogon.com/stats/">Smogon's monthly stats</a> of Pokémon Showdown battles by players rated {USAGE_FORMATS.rating}+, not the in-game ladder. Stats are worked out with <a href="https://github.com/smogon/damage-calc">@smogon/calc</a>. Move descriptions come from <a href="https://github.com/smogon/pokemon-showdown">Pokémon Showdown</a>, with Champions' changes to moves like Moonblast and Iron Head written in. Pokémon icons from PokeAPI. Pokémon is a trademark of Nintendo, Creatures and GAME FREAK; this fan page isn't connected to them.</p>
   <p><a href="/esports/pokemon-champions">← Back to the Pokémon Champions hub</a></p>
 </Base>
 
@@ -107,7 +120,8 @@ const natures = [...g.natures].sort((a, b) => byName(a.name, b.name)).map((n) =>
   import { enhanceDatalists } from '../../../scripts/combobox';
   import type { StatID } from '@smogon/calc';
 
-  type Share = { name: string; pct: number; note?: string };
+  type Share = { name: string; pct: number; note?: string; colour?: string; title?: string };
+  type MoveInfo = { type: string; cat: string; power: number; acc: number | null; desc: string };
   type Mon = { usage: number; abilities: Share[]; items: Share[]; moves: Share[]; natures: Share[]; spreads: { nature: string; sp: number[]; pct: number }[]; teammates: Share[] };
   type Data = { month: string; battles: number; mons: Record<string, Mon> } | null;
 
@@ -115,6 +129,13 @@ const natures = [...g.natures].sort((a, b) => byName(a.name, b.name)).map((n) =>
   const gen = Generations.get(0);
   const root = document.querySelector<HTMLElement>('[data-tb]')!;
   const SPRITES: Record<string, number> = JSON.parse(root.dataset.sprites || '{}');
+  // Move facts ride on the move pick list's options (see the datalist above), so they're only in the page once.
+  const MOVES: Record<string, MoveInfo> = Object.fromEntries([...root.querySelectorAll<HTMLOptionElement>('#tb-moves option[data-type]')].map((o) => [o.value, {
+    type: o.dataset.type!, cat: o.dataset.cat!, power: Number(o.dataset.power) || 0, acc: o.dataset.acc ? Number(o.dataset.acc) : null, desc: o.title,
+  }]));
+  const TYPE_COLOURS: Record<string, string> = JSON.parse(root.dataset.typeColours || '{}');
+  const MOVE_IDS = new Map(Object.keys(MOVES).map((n) => [toID(n), n]));
+  const moveOf = (name: string): MoveInfo | undefined => MOVES[name] ?? MOVES[MOVE_IDS.get(toID(name)) ?? ''];
   const STATS: StatID[] = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
   const LABEL: Record<string, string> = { hp: 'HP', atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe' };
   const MAX_TOTAL = 66; // every spread in the usage stats adds up to 66 stat points
@@ -157,7 +178,14 @@ const natures = [...g.natures].sort((a, b) => byName(a.name, b.name)).map((n) =>
         const b = document.createElement(onPick ? 'button' : 'span');
         b.className = 'tb-chip';
         if (onPick) { (b as HTMLButtonElement).type = 'button'; b.addEventListener('click', () => onPick(s)); }
-        b.textContent = `${s.name} `;
+        if (s.colour) {
+          const dot = document.createElement('i');
+          dot.className = 'tb-dot';
+          dot.style.setProperty('--tc', s.colour);
+          b.append(dot);
+        }
+        if (s.title) b.title = s.title;
+        b.append(`${s.name} `);
         if (s.note) {
           const note = document.createElement('small');
           note.textContent = `${s.note} `;
@@ -227,7 +255,26 @@ const natures = [...g.natures].sort((a, b) => byName(a.name, b.name)).map((n) =>
       STATS.forEach((st, j) => { field(slot, `sp-${st}`).value = String(sp.sp[j]); });
       update();
     }, 4);
-    tips(box('moves'), 'Moves (tap to fill the next empty move)', d?.moves ?? [], (x) => {
+    // Each move's type, category, power and accuracy, with its description on hover (always shown on phones).
+    for (const m of [0, 1, 2, 3]) {
+      const info = slot.querySelector<HTMLElement>(`[data-move-info="${m}"]`)!;
+      const mv = moveOf(field(slot, `move${m}`).value.trim());
+      info.hidden = !mv;
+      if (!mv) continue;
+      const type = info.querySelector<HTMLElement>('[data-move-type]')!;
+      type.textContent = mv.type;
+      type.style.setProperty('--tc', TYPE_COLOURS[mv.type] ?? '#ddd');
+      const bits = [mv.cat];
+      if (mv.power) bits.push(`${mv.power} power`);
+      bits.push(mv.acc ? `${mv.acc}% accuracy` : 'never misses');
+      info.querySelector('[data-move-cat]')!.textContent = bits.join(' · ');
+      info.querySelector('[data-move-desc]')!.textContent = mv.desc;
+    }
+    const moveTips = (d?.moves ?? []).map((x) => {
+      const mv = moveOf(x.name);
+      return mv ? { ...x, colour: TYPE_COLOURS[mv.type], title: `${mv.type} · ${mv.cat}. ${mv.desc}` } : x;
+    });
+    tips(box('moves'), 'Moves (tap to fill the next empty move)', moveTips, (x) => {
       const empty = [0, 1, 2, 3].map((m) => field(slot, `move${m}`)).find((f) => !f.value.trim());
       if (empty) { empty.value = x.name; update(); }
     }, 8);
@@ -392,6 +439,25 @@ const natures = [...g.natures].sort((a, b) => byName(a.name, b.name)).map((n) =>
   .tb .tb-stat.is-down input { border-color: #b3261e; }
   :root[data-theme="dark"] .tb .tb-stat.is-up span, :root[data-theme="dark"] .tb .tb-stat.is-up output { color: #7ee2a0; }
   :root[data-theme="dark"] .tb .tb-stat.is-down span, :root[data-theme="dark"] .tb .tb-stat.is-down output { color: #ff8a80; }
+  .tb-move { position: relative; display: grid; gap: 4px; min-width: 0; }
+  .tb-move-info[hidden] { display: none; }
+  .tb-move-info p { margin: 0; }
+  .tb-move-meta { font-size: .78rem; font-weight: 700; color: var(--muted); }
+  .tb-type { display: inline-block; padding: 1px 8px; border-radius: 999px; background: var(--tc); color: #1d1d1d; font-weight: 800; }
+  .tb-move-desc { font-size: .8rem; color: var(--ink); line-height: 1.35; }
+  /* With a mouse, the description pops up when you hover or tab to the move. On phones it just shows. */
+  @media (hover: hover) {
+    .tb-move-desc {
+      position: absolute; z-index: 20; left: 0; right: 0; top: calc(100% + 4px);
+      padding: 8px 10px; border: 2px solid var(--line); border-radius: 10px; background: var(--surface); box-shadow: 0 6px 18px rgb(0 0 0 / .15);
+      opacity: 0; visibility: hidden; transform: translateY(-4px); transition: opacity .15s, transform .15s, visibility .15s;
+      pointer-events: none;
+    }
+    .tb-move:hover .tb-move-desc { opacity: 1; visibility: visible; transform: none; }
+    .tb-move:has(.cb-pop:not([hidden])) .tb-move-desc { opacity: 0; visibility: hidden; }
+  }
+  @media (prefers-reduced-motion: reduce) { .tb-move-desc { transition: none; } }
+  :global(.tb-dot) { display: inline-block; width: 9px; height: 9px; margin-right: 6px; border-radius: 50%; background: var(--tc); vertical-align: 1px; }
   :global(.tb-chip small) { color: var(--muted); font-weight: 700; font-size: .75rem; }
   .tb-stat output { font-weight: 800; color: var(--ink); font-size: .95rem; text-transform: none; }
   .tb-tips:empty { display: none; }

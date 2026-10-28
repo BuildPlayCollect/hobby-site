@@ -1,6 +1,7 @@
 // Swaps the browser's own <datalist> dropdown (dark and grey on many computers) for a pick list
 // that matches the site theme. Without JavaScript the plain datalist still works.
 // Picking a name fires the same 'input' and 'change' events typing would, so page code needn't change.
+// An <option>'s label shows as a small hint after the name, and its title shows when you hover it.
 import '../styles/combobox.css';
 
 const MAX = 60; // enough to scroll through, small enough to stay quick on phones
@@ -12,12 +13,13 @@ export function enhanceDatalists(root: ParentNode = document) {
     const list = document.getElementById(input.getAttribute('list')!) as HTMLDataListElement | null;
     if (!list) return;
     const options = [...list.options].map((o) => o.value);
+    const extra = new Map([...list.options].filter((o) => o.hasAttribute('label') || o.title).map((o) => [o.value, { hint: o.getAttribute('label') ?? '', title: o.title }]));
     input.removeAttribute('list');
-    attach(input, options);
+    attach(input, options, extra);
   });
 }
 
-function attach(input: HTMLInputElement, options: string[]) {
+function attach(input: HTMLInputElement, options: string[], extra: Map<string, { hint: string; title: string }>) {
   const id = `cb-${++uid}`;
   const wrap = document.createElement('span');
   wrap.className = 'cb';
@@ -77,6 +79,14 @@ function attach(input: HTMLInputElement, options: string[]) {
         b.textContent = name.slice(at, at + q.length);
         li.append(name.slice(0, at), b, name.slice(at + q.length));
       } else li.textContent = name;
+      const x = extra.get(name);
+      if (x?.hint) {
+        const small = document.createElement('small');
+        small.className = 'cb-hint';
+        small.textContent = x.hint;
+        li.append(small);
+      }
+      if (x?.title) li.title = x.title;
       return li;
     }));
     pop.hidden = false;

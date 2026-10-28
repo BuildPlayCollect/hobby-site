@@ -5,6 +5,7 @@
 import Base from '../../../layouts/Base.astro';
 import { Generations } from '@smogon/calc';
 import SPRITES from '../../../data/pokemon-sprites.json';
+import { championsMoves } from '../../../data/champions-moves';
 
 const g = Generations.get(0); // "generation 0" is Pokémon Champions in @smogon/calc
 const byName = (a: string, b: string) => a.localeCompare(b);
@@ -14,6 +15,7 @@ const lists = {
   items: [...g.items].map((i) => i.name).sort(byName),
   abilities: [...g.abilities].map((a) => a.name).sort(byName),
 };
+const MOVES = championsMoves();
 // Each nature raises one stat by 10% and lowers another by 10%; five natures change nothing.
 const STAT_LABEL: Record<string, string> = { hp: 'HP', atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe' };
 const natures = [...g.natures].sort((a, b) => byName(a.name, b.name)).map((n) => ({
@@ -34,7 +36,7 @@ const SIDES = [
   </header>
 
   <form class="calc" data-calc data-sprites={JSON.stringify(SPRITES)}>
-    {Object.entries(lists).map(([k, v]) => <datalist id={`calc-${k}`}>{v.map((x) => <option value={x} />)}</datalist>)}
+    {Object.entries(lists).map(([k, v]) => <datalist id={`calc-${k}`}>{v.map((x) => (k === 'moves' && MOVES[x] ? <option value={x} label={`${MOVES[x].type} · ${MOVES[x].cat}`} title={MOVES[x].desc} /> : <option value={x} />))}</datalist>)}
 
     <div class="calc-sides">
       {SIDES.map((s) => (
