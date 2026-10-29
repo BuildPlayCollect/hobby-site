@@ -25,5 +25,6 @@ exclude = [
   '^https?://(www\.)?digitec\.ch/',        # 2026-10-28: timeout for the checker, page loads
   '^https?://takaratomymall\.jp/',          # 2026-10-28: timeout for the checker, pages load
   '^https?://(www\.)?gmk\.net/',           # 2026-10-28: 404 for the checker, page loads
+  '^https?://metavgc\.com/',               # 2026-10-29: 500 for the checker twice, page loads
 ]
 exclude_all_private = true
