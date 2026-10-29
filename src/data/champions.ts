@@ -62,15 +62,42 @@ export const EVENTS = [
   { name: 'Europe International (EUIC)', place: 'London, UK', from: '2027-02-19', to: '2027-02-21', reg: 'TBA' },
   { name: 'San Antonio Regional', place: 'San Antonio, USA', from: '2027-02-27', to: '2027-02-28', reg: 'TBA' },
   { name: 'Santiago Regional', place: 'Santiago, Chile', from: '2027-02-27', to: '2027-02-28', reg: 'TBA' },
+  { name: 'Rio de Janeiro Regional', place: 'Rio de Janeiro, Brazil', from: '2027-03-06', to: '2027-03-07', reg: 'TBA' },
+  { name: 'Toronto Regional', place: 'Toronto, Canada', from: '2027-04-03', to: '2027-04-04', reg: 'TBA' },
+  { name: 'Lisbon Special Championship', place: 'Lisbon, Portugal', from: '2027-04-10', to: '2027-04-11', reg: 'TBA' },
+  { name: 'Monterrey Regional', place: 'Monterrey, Mexico', from: '2027-04-10', to: '2027-04-11', reg: 'TBA' },
+  { name: 'Milwaukee Regional', place: 'Milwaukee, USA', from: '2027-04-17', to: '2027-04-18', reg: 'TBA' },
+  { name: 'Lima Special Championship', place: 'Lima, Peru', from: '2027-04-24', to: '2027-04-25', reg: 'TBA' },
+  { name: 'Prague Regional', place: 'Prague, Czechia', from: '2027-05-08', to: '2027-05-09', reg: 'TBA' },
+  { name: 'Porto Alegre Regional', place: 'Porto Alegre, Brazil', from: '2027-05-08', to: '2027-05-09', reg: 'TBA' },
+  { name: 'Utrecht Regional', place: 'Utrecht, Netherlands', from: '2027-05-22', to: '2027-05-23', reg: 'TBA' },
+  { name: 'San Diego Regional', place: 'San Diego, USA', from: '2027-05-29', to: '2027-05-30', reg: 'TBA' },
+  { name: 'Melbourne Regional', place: 'Melbourne, Australia', from: '2027-05-29', to: '2027-05-30', reg: 'TBA' },
+  { name: 'Bologna Special Championship', place: 'Bologna, Italy', from: '2027-06-05', to: '2027-06-06', reg: 'TBA' },
   { name: 'North America International (NAIC)', place: 'Chicago, USA', from: '2027-06-18', to: '2027-06-20', reg: 'TBA' },
   { name: 'World Championships', place: 'Singapore', from: '2027-08-13', to: '2027-08-15', reg: 'TBA' },
 ];
 export const EVENT_SOURCES: Source[] = [
   { label: 'Victory Road: 2027 season calendar', url: 'https://victoryroad.pro/2027-season-calendar/' },
+  { label: 'Serebii: 2027 Regional and Special Championships', url: 'https://serebii.net/playpokemon/2027/regional.shtml' },
 ];
 
 // Recent big results with the top 8 teams (Pokémon as Smogon/Showdown names, so icons and type colours work).
 export const RESULTS = [
+  {
+    name: 'Puebla Regional', place: 'Puebla, Mexico', date: '2026-10-25', reg: 'M-C', players: '333 Masters',
+    source: { label: 'Victory Road: 2027 Puebla Regional', url: 'https://victoryroad.pro/2027-puebla/' },
+    top: [
+      { p: 'Kyle Livinghouse', c: 'USA', team: ['Charizard-Mega-Y', 'Froslass-Mega', 'Sneasler', 'Kingambit', 'Whimsicott', 'Garchomp'] },
+      { p: 'Renzo Navarro', c: 'PER', team: ['Raichu-Mega-Y', 'Staraptor-Mega', 'Arcanine-Hisui', 'Gholdengo', 'Primarina', 'Rillaboom'] },
+      { p: 'Arthur Mosca', c: 'FRA', team: ['Staraptor-Mega', 'Tyranitar-Mega', 'Excadrill', 'Gholdengo', 'Milotic', 'Sinistcha'] },
+      { p: 'Zach Holowiak', c: 'USA', team: ['Raichu-Mega-Y', 'Blaziken-Mega', 'Sneasler', 'Kingambit', 'Primarina', 'Rillaboom'] },
+      { p: 'David Rodríguez', c: 'CRI', team: ['Charizard-Mega-Y', 'Garchomp', 'Sneasler', 'Kingambit', 'Whimsicott', 'Basculegion'] },
+      { p: 'Otoniel Longorio', c: 'MEX', team: ['Charizard-Mega-Y', 'Aerodactyl-Mega', 'Farigiraf', 'Kingambit', 'Sylveon', 'Garchomp'] },
+      { p: 'Chase Matteo', c: 'USA', team: ['Charizard-Mega-Y', 'Garchomp', 'Grimmsnarl', 'Archaludon', 'Pelipper', 'Venusaur'] },
+      { p: 'Luis Pérez', c: 'MEX', team: ['Charizard-Mega-Y', 'Garchomp-Mega-Z', 'Incineroar', 'Farigiraf', 'Sylveon', 'Venusaur'] },
+    ],
+  },
   {
     name: 'Nice Regional', place: 'Nice, France', date: '2026-10-18', reg: 'M-C', players: '862 Masters',
     source: { label: 'Limitless VGC: Nice Regional standings', url: 'https://limitlessvgc.com/tournaments/446' },
