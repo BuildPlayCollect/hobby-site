@@ -2,6 +2,7 @@
 // that matches the site theme. Without JavaScript the plain datalist still works.
 // Picking a name fires the same 'input' and 'change' events typing would, so page code needn't change.
 // An <option>'s label shows as a small hint after the name, and its title shows when you hover it.
+// The list is read each time it opens, so a page can swap a datalist's options (e.g. one Pokémon's moves).
 import '../styles/combobox.css';
 
 const MAX = 60; // enough to scroll through, small enough to stay quick on phones
@@ -12,14 +13,12 @@ export function enhanceDatalists(root: ParentNode = document) {
   root.querySelectorAll<HTMLInputElement>('input[list]').forEach((input) => {
     const list = document.getElementById(input.getAttribute('list')!) as HTMLDataListElement | null;
     if (!list) return;
-    const options = [...list.options].map((o) => o.value);
-    const extra = new Map([...list.options].filter((o) => o.hasAttribute('label') || o.title).map((o) => [o.value, { hint: o.getAttribute('label') ?? '', title: o.title }]));
     input.removeAttribute('list');
-    attach(input, options, extra);
+    attach(input, list);
   });
 }
 
-function attach(input: HTMLInputElement, options: string[], extra: Map<string, { hint: string; title: string }>) {
+function attach(input: HTMLInputElement, list: HTMLDataListElement) {
   const id = `cb-${++uid}`;
   const wrap = document.createElement('span');
   wrap.className = 'cb';
@@ -59,6 +58,7 @@ function attach(input: HTMLInputElement, options: string[], extra: Map<string, {
 
   // showAll: on focus or click, a box that already holds a pick lists every name, so you can swap it.
   const render = (showAll = false) => {
+    const options = [...list.options].map((o) => o.value);
     let q = input.value.trim().toLowerCase();
     if (showAll && options.some((o) => o.toLowerCase() === q)) q = '';
     // Names that start with what you typed come first, then names that contain it anywhere.
@@ -79,14 +79,15 @@ function attach(input: HTMLInputElement, options: string[], extra: Map<string, {
         b.textContent = name.slice(at, at + q.length);
         li.append(name.slice(0, at), b, name.slice(at + q.length));
       } else li.textContent = name;
-      const x = extra.get(name);
-      if (x?.hint) {
+      const o = list.options[options.indexOf(name)];
+      const hint = o?.getAttribute('label');
+      if (hint) {
         const small = document.createElement('small');
         small.className = 'cb-hint';
-        small.textContent = x.hint;
+        small.textContent = hint;
         li.append(small);
       }
-      if (x?.title) li.title = x.title;
+      if (o?.title) li.title = o.title;
       return li;
     }));
     pop.hidden = false;

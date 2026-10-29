@@ -109,7 +109,8 @@ const SIDES = [
   <p class="calc-note">
     The maths comes from <a href="https://github.com/smogon/damage-calc">@smogon/calc</a>, the open-source engine behind the{' '}
     <a href="https://calc.pokemonshowdown.com/champions.html?mode=champions">Pokémon Showdown damage calculator</a>. Want every option
-    (Tera, field effects, full sets)? Use the Showdown calculator. Pokémon icons from PokeAPI.
+    (Tera, field effects, full sets)? Use the Showdown calculator. Pokémon icons from PokeAPI. The moves each Pokémon can learn come from
+    <a href="https://github.com/smogon/pokemon-showdown">Pokémon Showdown</a>'s Champions data.
     Pokémon is a trademark of Nintendo, Creatures and GAME FREAK; this fan page isn't connected to them.
   </p>
   <p><a href="/esports/pokemon-champions">← Back to the Pokémon Champions hub</a></p>
@@ -140,25 +141,55 @@ const SIDES = [
     .then((r) => (r.ok ? r.json() : null)).catch(() => null));
   const isAttack = (name: string) => exists('moves', name) && new Move(gen, name).category !== 'Status';
 
-  // The attacker's most used damaging moves: fill the four boxes (fill = true, for a newly picked Pokémon)
-  // and show the top eight as chips to tap in.
+  // The attacking moves each Pokémon can learn in Champions, strongest first (made at build time).
+  let learnsets: Promise<Record<string, string[]>> | undefined;
+  const loadLearnsets = () => (learnsets ??= fetch('/esports/pokemon-champions/learnsets.json')
+    .then((r) => (r.ok ? r.json() : {})).catch(() => ({})));
+  const moveList = document.getElementById('calc-moves') as HTMLDataListElement;
+  const ALL_MOVES = [...moveList.options].map((o) => o.cloneNode(true) as HTMLOptionElement);
+
+  // Four moves for a Pokémon with no usage numbers: the strongest, one per type where it can.
+  function pickFour(strong: string[]) {
+    const picked: string[] = [];
+    const types = new Set<string>();
+    for (const name of strong) {
+      const t = new Move(gen, name).type;
+      if (picked.length < 4 && !types.has(t)) { picked.push(name); types.add(t); }
+    }
+    for (const name of strong) if (picked.length < 4 && !picked.includes(name)) picked.push(name);
+    return picked;
+  }
+
+  // The attacker's moves: its most used attacking moves when there are usage numbers, otherwise the
+  // strongest ones it can learn. fill = true (a newly picked Pokémon) puts four in the boxes; the top
+  // eight show as chips to tap in, and the move pick list only offers moves it can learn.
   async function moveTips(fill: boolean) {
     const a = side('a');
     const box = a.querySelector<HTMLElement>('[data-move-tips]')!;
     const s = gen.species.get(toID(val(a, 'mon')));
-    const data = s ? await loadUsage(val(form, 'format').toLowerCase()) : null;
+    const [data, sets] = s ? await Promise.all([loadUsage(val(form, 'format').toLowerCase()), loadLearnsets()]) : [null, {}];
     if (s?.name !== gen.species.get(toID(val(a, 'mon')))?.name) return; // the Pokémon changed while loading
-    const top = (data?.mons[s?.name ?? '']?.moves ?? []).filter((m) => isAttack(m.name)).slice(0, 8);
-    box.replaceChildren();
-    if (!top.length) {
-      if (s && data) box.textContent = 'Not enough battles for move suggestions yet.';
-      return;
-    }
+    const usedMoves = (data?.mons[s?.name ?? '']?.moves ?? []).map((m) => m.name);
+    const learnable = s ? (sets as Record<string, string[]>)[s.name] : undefined;
+    // Moves seen in real battles are legal even if Showdown's list doesn't show them (e.g. from an earlier evolution).
+    const canLearn = (name: string) => !learnable || learnable.includes(name) || usedMoves.includes(name);
+    moveList.replaceChildren(...ALL_MOVES.filter((o) => canLearn(o.value)).map((o) => o.cloneNode(true)));
+
+    const used = (data?.mons[s?.name ?? '']?.moves ?? []).filter((m) => isAttack(m.name) && canLearn(m.name)).slice(0, 8);
+    const strong = (learnable ?? []).filter(isAttack);
+    const top = used.length ? used : strong.slice(0, 8).map((name) => ({ name, pct: 0 }));
     const fields = [0, 1, 2, 3].map((i) => a.querySelector<HTMLInputElement>(`[name="move${i}"]`)!);
-    if (fill) { fields.forEach((f, i) => { f.value = top[i]?.name ?? ''; }); run(); }
+    if (fill && s) {
+      const four = used.length ? used.map((m) => m.name).slice(0, 4) : pickFour(strong);
+      for (const name of strong) if (four.length < 4 && !four.includes(name)) four.push(name); // top up a short usage list
+      fields.forEach((f, i) => { f.value = four[i] ?? ''; });
+      run();
+    }
+    box.replaceChildren();
+    if (!top.length) return;
     const h = document.createElement('p');
     h.className = 'calc-tips-title';
-    h.textContent = 'Most used moves (tap to swap in)';
+    h.textContent = used.length ? 'Most used moves (tap to swap in)' : 'Strongest moves it can learn (tap to swap in)';
     const row = document.createElement('div');
     row.className = 'calc-chips';
     for (const m of top) {
@@ -166,9 +197,11 @@ const SIDES = [
       b.type = 'button';
       b.className = 'calc-chip';
       b.textContent = `${m.name} `;
-      const pct = document.createElement('b');
-      pct.textContent = `${m.pct}%`;
-      b.append(pct);
+      if (used.length) {
+        const pct = document.createElement('b');
+        pct.textContent = `${m.pct}%`;
+        b.append(pct);
+      }
       b.addEventListener('click', () => {
         if (fields.some((f) => f.value.trim().toLowerCase() === m.name.toLowerCase())) return;
         // Fill the first empty box, or replace the last one.
@@ -179,11 +212,15 @@ const SIDES = [
     }
     const src = document.createElement('p');
     src.className = 'calc-tips-src';
-    src.append('From ');
-    const link = document.createElement('a');
-    link.href = 'https://www.smogon.com/stats/';
-    link.textContent = `Smogon's ${data!.month} stats`;
-    src.append(link, ` (${val(form, 'format')}). Status moves like Protect are left out.`);
+    if (used.length) {
+      src.append('From ');
+      const link = document.createElement('a');
+      link.href = 'https://www.smogon.com/stats/';
+      link.textContent = `Smogon's ${data!.month} stats`;
+      src.append(link, ` (${val(form, 'format')}). Status moves like Protect are left out.`);
+    } else {
+      src.append(`Not enough battles for usage numbers yet, so these are its hardest-hitting moves. Type any move it can learn in the boxes above.`);
+    }
     box.append(h, row, src);
   }
 
