@@ -75,6 +75,7 @@ const SIDES = [
               {[0, 1, 2, 3].map((i) => (
                 <label>Move {i + 1}<input name={`move${i}`} list="calc-moves" value={s.moves[i] ?? ''} autocomplete="off" /></label>
               ))}
+              <div class="calc-tips" data-move-tips></div>
               <label class="calc-check"><input type="checkbox" name="crit" /> Critical hit</label>
               <label class="calc-check"><input type="checkbox" name="helping" /> Helping Hand</label>
             </div>
@@ -131,6 +132,60 @@ const SIDES = [
   // Icons from PokeAPI, saved in public/sprites/pokemon/ (see src/lib/pokemon.ts).
   const SPRITES: Record<string, number> = JSON.parse(form.dataset.sprites || '{}');
   const sprite = (name: string) => (SPRITES[name] ? `/sprites/pokemon/${SPRITES[name]}.webp` : '');
+
+  // Most used moves, from the same Smogon usage numbers as the team builder (made at build time).
+  type Usage = { month: string; mons: Record<string, { moves: { name: string; pct: number }[] }> } | null;
+  const usage: Record<string, Promise<Usage>> = {};
+  const loadUsage = (format: string) => (usage[format] ??= fetch(`/esports/pokemon-champions/builder-data/${format}.json`)
+    .then((r) => (r.ok ? r.json() : null)).catch(() => null));
+  const isAttack = (name: string) => exists('moves', name) && new Move(gen, name).category !== 'Status';
+
+  // The attacker's most used damaging moves: fill the four boxes (fill = true, for a newly picked Pokémon)
+  // and show the top eight as chips to tap in.
+  async function moveTips(fill: boolean) {
+    const a = side('a');
+    const box = a.querySelector<HTMLElement>('[data-move-tips]')!;
+    const s = gen.species.get(toID(val(a, 'mon')));
+    const data = s ? await loadUsage(val(form, 'format').toLowerCase()) : null;
+    if (s?.name !== gen.species.get(toID(val(a, 'mon')))?.name) return; // the Pokémon changed while loading
+    const top = (data?.mons[s?.name ?? '']?.moves ?? []).filter((m) => isAttack(m.name)).slice(0, 8);
+    box.replaceChildren();
+    if (!top.length) {
+      if (s && data) box.textContent = 'Not enough battles for move suggestions yet.';
+      return;
+    }
+    const fields = [0, 1, 2, 3].map((i) => a.querySelector<HTMLInputElement>(`[name="move${i}"]`)!);
+    if (fill) { fields.forEach((f, i) => { f.value = top[i]?.name ?? ''; }); run(); }
+    const h = document.createElement('p');
+    h.className = 'calc-tips-title';
+    h.textContent = 'Most used moves (tap to swap in)';
+    const row = document.createElement('div');
+    row.className = 'calc-chips';
+    for (const m of top) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'calc-chip';
+      b.textContent = `${m.name} `;
+      const pct = document.createElement('b');
+      pct.textContent = `${m.pct}%`;
+      b.append(pct);
+      b.addEventListener('click', () => {
+        if (fields.some((f) => f.value.trim().toLowerCase() === m.name.toLowerCase())) return;
+        // Fill the first empty box, or replace the last one.
+        (fields.find((f) => !f.value.trim()) ?? fields[3]).value = m.name;
+        run();
+      });
+      row.append(b);
+    }
+    const src = document.createElement('p');
+    src.className = 'calc-tips-src';
+    src.append('From ');
+    const link = document.createElement('a');
+    link.href = 'https://www.smogon.com/stats/';
+    link.textContent = `Smogon's ${data!.month} stats`;
+    src.append(link, ` (${val(form, 'format')}). Status moves like Protect are left out.`);
+    box.append(h, row, src);
+  }
 
   // When a Pokémon is picked, show its icon and types, and fill in its usual ability.
   function pickMon(el: HTMLElement, fillAbility: boolean) {
@@ -237,18 +292,21 @@ const SIDES = [
     pickMon(side('a'), false);
     pickMon(side('d'), false);
     run();
+    moveTips(true); // the attacker is a different Pokémon now, so give it its own moves
   });
 
   for (const key of ['a', 'd']) {
     const el = side(key);
-    el.querySelector('[name="mon"]')!.addEventListener('change', () => { pickMon(el, true); run(); });
+    el.querySelector('[name="mon"]')!.addEventListener('change', () => { pickMon(el, true); run(); if (key === 'a') moveTips(true); });
     el.querySelector<HTMLImageElement>('[data-icon]')!.addEventListener('load', (e) => { (e.target as HTMLElement).hidden = false; });
     pickMon(el, false);
   }
   form.addEventListener('submit', (e) => e.preventDefault());
   form.addEventListener('input', run);
   form.addEventListener('change', run);
+  form.querySelector('[name="format"]')!.addEventListener('change', () => moveTips(false));
   run();
+  moveTips(false);
 </script>
 
 <style>
@@ -272,6 +330,14 @@ const SIDES = [
   .calc-stats output { font-weight: 800; text-align: right; font-variant-numeric: tabular-nums; }
   .calc .calc-stats input, .calc .calc-stats select { padding: 5px 8px; }
   .calc-moves { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .calc-tips { grid-column: 1 / -1; font-size: .85rem; color: var(--muted); }
+  .calc-tips:empty { display: none; }
+  :global(.calc-tips-title) { margin: 0 0 6px; font-size: .75rem; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
+  :global(.calc-chips) { display: flex; flex-wrap: wrap; gap: 6px; }
+  :global(.calc-chip) { font: inherit; font-size: .82rem; font-weight: 600; padding: 4px 10px; border-radius: 999px; border: 2px solid var(--soft-line); background: var(--bg); color: var(--ink); cursor: pointer; }
+  :global(.calc-chip:hover) { border-color: var(--c1); }
+  :global(.calc-chip b) { color: var(--muted); font-weight: 800; }
+  :global(.calc-tips-src) { margin: 6px 0 0; font-size: .78rem; }
   .calc .calc-check { display: flex; align-items: center; gap: 8px; text-transform: none; letter-spacing: 0; font-size: .9rem; color: var(--ink); font-weight: 700; cursor: pointer; }
   .calc-check input { width: 18px; height: 18px; accent-color: var(--c1); }
   .calc-field { display: grid; grid-template-columns: repeat(3, 1fr) auto; gap: 12px; align-items: end; }
