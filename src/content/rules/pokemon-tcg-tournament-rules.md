@@ -4,12 +4,12 @@ hobby: tcg
 scope: official
 organizer: "The Pokémon Company International"
 sourceUrl: "https://mcdn.pokemon.com/pokemon-prod/raw/upload/v1/live/static-assets/content-assets/cms2/pdf/play-pokemon/rules/play-pokemon-tcg-tournament-handbook-en.pdf"
-version: "Last revision: May 21, 2026"
-lastChecked: 2026-10-26
+version: "TCG Tournament Handbook last revision: September 1, 2026"
+lastChecked: 2026-10-29
 summary: "How official Play! Pokémon TCG tournaments handle decks, formats, sleeves, round time and penalties, based on the Play! Pokémon TCG Tournament Handbook and Tournament Rules Handbook."
 ---
 
-Thinking about entering your first Pokémon TCG tournament? Official events run under Play! Pokémon, and the rules are spread across two documents. The **Tournament Rules Handbook** covers every Play! Pokémon game, and the **TCG Tournament Handbook** adds the rules specific to the card game. This page sums up the basics from both. Both documents show a last revision date of May 21, 2026.
+Thinking about entering your first Pokémon TCG tournament? Official events run under Play! Pokémon, and the rules are spread across two documents. The **Tournament Rules Handbook** covers every Play! Pokémon game, and the **TCG Tournament Handbook** adds the rules specific to the card game. This page sums up the basics from both. The TCG Tournament Handbook was last revised on September 1, 2026.
 
 ## Deck rules
 
@@ -22,7 +22,7 @@ Thinking about entering your first Pokémon TCG tournament? Official events run 
 
 ## Formats
 
-- **Constructed formats:** Standard, Expanded and Unlimited. Standard and Expanded legality is set by regulation marks and set lists in the handbook. Unlimited decks may contain cards from any Pokémon TCG expansion.
+- **Constructed formats:** Standard, Expanded and Unlimited. Standard and Expanded legality is set by regulation marks and set lists in the handbook. Right now Standard allows cards with the H, I and J regulation marks. Unlimited decks may contain cards from any Pokémon TCG expansion.
 - **Newly released cards** become legal on the second Friday after that product's US market release date.
 - **Limited formats:** Sealed, Booster Draft and Build & Battle Draft. In Sealed, players have 30 minutes to build their decks.
 - **Age divisions:** Play! Pokémon, where applicable, splits players into three age divisions: Junior, Senior and Masters. The birth years for each division change every season, so check the current handbook.
@@ -38,7 +38,8 @@ Thinking about entering your first Pokémon TCG tournament? Official events run 
 ## Sleeves and conduct
 
 - Each sleeve must hold a single card in its entirety, and all sleeves in a deck must be the same color or design, condition, size and texture.
-- Sleeve edges must be a single solid color, and sleeves must not be so reflective that they reveal card faces.
+- Sleeves must be either a single solid color or an officially licensed Pokémon design. Their edges must be a single solid color, so a licensed design whose art runs to the edge isn't allowed.
+- Sleeves must not be so reflective that they reveal card faces.
 - The handbook strongly recommends sleeves with an opaque back.
 - Players are expected to follow the direction of tournament staff, be respectful and courteous to all, avoid inappropriate language and inflammatory topics, and be free from the influence of mind-altering substances, including alcohol.
 
@@ -59,3 +60,5 @@ The Tournament Rules Handbook lists these penalties. The separate Play! Pokémon
 - [Play! Pokémon Rules & Resources](https://www.pokemon.com/us/play-pokemon/about/tournaments-rules-and-resources)
 
 **What changed (October 26, 2026):** No changes. The handbook still says "Last revision: May 21, 2026".
+
+**What changed (October 29, 2026):** The TCG Tournament Handbook now shows "Last revision: September 1, 2026" (it said May 21, 2026 before). We added its sleeve rule for officially licensed Pokémon designs and the regulation marks currently legal in Standard (H, I and J). Everything else on this page that comes from the TCG Tournament Handbook still matches it. Round times, penalties and conduct come from the separate Tournament Rules Handbook, which we haven't re-checked yet.
