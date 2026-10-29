@@ -31,6 +31,10 @@ function attach(input: HTMLInputElement, list: HTMLDataListElement) {
   pop.hidden = true;
   wrap.append(pop);
   input.classList.add('cb-input');
+  // Names like "Abomasnow" aren't dictionary words, so no red squiggles or autocorrect.
+  input.spellcheck = false;
+  input.setAttribute('autocorrect', 'off');
+  input.setAttribute('autocapitalize', 'off');
   input.setAttribute('role', 'combobox');
   input.setAttribute('aria-autocomplete', 'list');
   input.setAttribute('aria-controls', id);
