@@ -47,12 +47,15 @@ All the keys of a full-size board, packed tighter with the gaps squeezed out. Yo
 
 Take a full-size board and chop off the number pad. That's it. Your mouse moves closer to your keyboard, which is why gamers love it, and everything else stays exactly where you expect it.
 
-![The right end of a red TKL keyboard: arrow keys in their own little block, next to a cluster of navigation keys and Print Screen](/images/articles/keyboard-layouts/tkl-nav-cluster.webp)
+![A red TKL keyboard with black and cream keycaps on a round wooden tray: function row on top, arrows and navigation keys in their own block on the right, and no number pad](/images/articles/keyboard-layouts/red-tkl.webp)
 *No number pad, but the arrows and navigation keys keep their own spots. Photo: Echo*
 
 ## 75%
 
 The function row stays, but the navigation keys (Home, End, Page Up and friends) get squeezed into a single column on the right. It feels compact without losing much. One thing to know: [75% layouts vary between brands](https://kbd.news/Keyboard-Form-Factors-Explained-A-Complete-Guide-to-Keyboard-Sizes-115.html), so the right column can differ from board to board.
+
+![A blue and cream 75% keyboard on a striped cloth: the function row on top and a single column of navigation keys down the right side](/images/articles/keyboard-layouts/blue-cream-75-percent.webp)
+*Photo: Echo*
 
 ## Wait, what's a layer?
 
@@ -62,7 +65,7 @@ Small boards don't delete keys, they hide them. Hold the **Fn** key and other ke
 
 Now the function row goes too, but you keep your arrow keys and a few nav keys. F1 to F12 move onto a **layer**: hold the Fn key and the number row becomes your function row. It sounds fiddly and becomes second nature in about a week.
 
-![A teal 65% keyboard up close: red arrow keys tucked under Shift, with Page Up and Page Down in a column on the right](/images/articles/keyboard-layouts/65-percent-arrows.webp)
+![A grey 65% keyboard on a stone floor with spare keycaps around it: no function row, with the arrow keys and a column of extra keys on the right](/images/articles/keyboard-layouts/grey-65-percent.webp)
 *A 65%: no function row, but the arrows and Page Up/Down are still there. Photo: Echo*
 
 ## 60%
