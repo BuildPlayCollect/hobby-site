@@ -244,10 +244,6 @@ a.tile:hover { text-decoration: none; background: var(--surface-2); }
 .carousel-dots button.on { width: 40px; background: var(--ink); }
 .carousel-btn { width: 38px; height: 38px; border: var(--rule); border-radius: 50%; background: none; color: var(--ink); line-height: 0; cursor: pointer; display: grid; place-items: center; padding: 0; }
 .carousel-btn svg { display: block; }
-/* The play triangle looks centred when it sits a hair right of the true middle. */
-.carousel-pause .icon-play { display: none; transform: translateX(1px); }
-.carousel-pause[aria-pressed="true"] .icon-play { display: block; }
-.carousel-pause[aria-pressed="true"] .icon-pause { display: none; }
 .carousel-btn:hover { background: var(--ink); color: var(--bg); }
 .carousel.single .carousel-controls { display: none; }
 @media (max-width: 759px) { .carousel-btn { display: none; } }
@@ -1066,17 +1062,10 @@ body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-even
 .hero-slide-text em { font-style: normal; font-weight: 800; font-size: .95rem; }
 .hero-slide:hover .hero-slide-text em, .hero-slide:focus-visible .hero-slide-text em { text-decoration: underline; }
 .hero-slide-credit { position: absolute; top: 12px; right: 16px; font-size: .72rem; padding: 2px 8px; border-radius: 999px; background: rgb(0 0 0 / .45); color: #fff; }
-/* Gliding slider: no snapping, and slides are narrower so the next hobby is always peeking in. */
-.carousel.gliding .carousel-track { scroll-snap-type: none; scroll-behavior: auto; }
-.carousel-hero.gliding .carousel-track > * { width: min(86%, 720px); }
-.carousel.gliding .carousel-dots { display: none; }
-.carousel.gliding .carousel-controls { justify-content: flex-end; }
-.carousel-pause { margin-right: auto; display: grid; }
 /* Phones: a shorter, photo-first slide. The name sits on a soft dark fade at the bottom instead of a white box,
-   so more of the picture shows, and the slide is wide enough that only a sliver of the next one peeks in. */
+   so more of the picture shows. */
 @media (max-width: 600px) {
   .hero-slide { min-height: 0; aspect-ratio: 4 / 3; border-radius: 22px; }
-  .carousel-hero.gliding .carousel-track > * { width: 88%; }
   .carousel-hero .carousel-track { gap: 12px; }
   .hero-slide-icon svg { width: 96px; height: 96px; }
   .hero-slide.has-image::after { content: ""; position: absolute; inset: 45% 0 0; background: linear-gradient(transparent, rgb(0 0 0 / .72)); }
