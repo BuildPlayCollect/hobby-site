@@ -149,10 +149,10 @@ const shareImage = new URL(image ?? '/share-preview-v2.png', Astro.site).href;
       </div>
     </header>
 
-    <div class="search-overlay" role="dialog" aria-modal="true" aria-label="Search">
+    <div class="search-overlay" role="dialog" aria-modal="false" aria-label="Search">
       <div class="search-box">
         <label class="sr-only" for="search-input">Search articles and wiki</label>
-        <input id="search-input" type="search" placeholder="Search" autocomplete="off" />
+        <input id="search-input" type="search" placeholder="Search" autocomplete="off" spellcheck="false" autocorrect="off" autocapitalize="off" />
         <ul class="search-results"></ul>
         <p class="search-hint">Try "Bit", "switch" or "Tamiya".<span class="search-hint-keys"> Press Esc to close.</span></p>
       </div>
@@ -305,7 +305,11 @@ const shareImage = new URL(image ?? '/share-preview-v2.png', Astro.site).href;
           }
         });
         document.querySelectorAll('.search-open, [data-open-search]').forEach(function (b) { b.addEventListener('click', openSearch); });
-        overlay.addEventListener('click', function (e) { if (e.target === overlay) closeSearch(); });
+        // The search is a panel over the page, so a click anywhere outside the box closes it.
+        document.addEventListener('click', function (e) {
+          if (!overlay.classList.contains('open') || e.target.closest('.search-box, .search-open, [data-open-search]')) return;
+          closeSearch();
+        });
         document.addEventListener('keydown', function (e) {
           var typing = /INPUT|TEXTAREA/.test(document.activeElement.tagName);
           if (e.key === '/' && !typing) { e.preventDefault(); openSearch(); }
