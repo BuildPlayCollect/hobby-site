@@ -6,6 +6,8 @@ type: guide
 author: Echo
 date: 2026-10-15
 draft: false
+cover: "/images/articles/keyboard-sound-profiles/cover-board-and-coffee.webp"
+coverAlt: "A dark blue compact mechanical keyboard on a stone table next to an iced coffee"
 quick:
   - "Thock is deep, clack is bright, creamy is smooth. Marbly and poppy mean different things to different people."
   - "Sound comes from the whole stack: case, plate, mount, switches, keycaps, foam and lube."

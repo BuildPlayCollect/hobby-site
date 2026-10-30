@@ -30,11 +30,6 @@ const oneRow = stories.length < 10;
 const allLatest = [...headlines, ...latest].slice(0, 6);
 const rulebooks = (await getCollection('rules')).length;
 
-// Short, plain words for each hobby on the picker.
-const nick: Record<string, string> = {
-  beyblade: 'Spinning tops', tamiya: 'Tiny fast cars', keyboards: 'Clacky boards', tcg: 'Card battles',
-  consoles: 'Game machines', esports: 'Pro gaming', boardgames: 'Table battles', general: 'Hobbies in general',
-};
 const picks = headlines.slice(0, 3);
 // "New here?" steps. Only shown on someone's first two visits (see the script at the bottom).
 // "Try one now" opens a random article that has a 60-second version (any live article if none do yet).
@@ -52,13 +47,12 @@ const steps = [
     {HOME_SLIDES.map((sl, i) => (
       <a class={`hero-slide${sl.image ? ' has-image' : ''}`} href={`/${sl.hobby}`} style={`--c:${HOBBIES[sl.hobby].color}`}>
         {sl.image ? (
-          <img src={sl.image} alt="" loading={i === 0 ? 'eager' : 'lazy'} />
+          <img src={sl.image} alt={sl.alt ?? ''} loading={i === 0 ? 'eager' : 'lazy'} />
         ) : (
           <span class="hero-slide-icon" aria-hidden="true"><HobbyIcon hobby={sl.hobby} size={140} /></span>
         )}
         <span class="hero-slide-text">
           <strong>{sl.name}</strong>
-          <span>{sl.tagline}</span>
           <em>Explore {sl.name} →</em>
         </span>
         {sl.credit && <small class="hero-slide-credit">{sl.credit}</small>}
@@ -92,7 +86,6 @@ const steps = [
           <a href={`/${key}`} style={`--c:${h.color}`}>
             <span class="picker-icon"><HobbyIcon hobby={key as HobbyKey} size={38} /></span>
             <strong>{h.name}</strong>
-            <small>{nick[key]}</small>
           </a>
         </li>
       ))}
