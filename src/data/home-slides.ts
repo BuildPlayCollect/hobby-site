@@ -13,6 +13,6 @@ export const HOME_SLIDES: Slide[] = [
   { hobby: 'keyboards', name: 'Mechanical Keyboards', image: '/images/home/keyboards.webp', alt: 'A purple and cream mechanical keyboard with a few loose keycaps around it' },
   { hobby: 'tcg', name: 'Trading Card Games', image: '/images/home/tcg.webp', alt: 'Pokémon card packs and toys in a shop display case' },
   { hobby: 'consoles', name: 'Consoles', image: '/images/home/consoles.webp', alt: 'Ten Nintendo handhelds laid out on a red carpet, from a Game Boy and Game Boy Advance SP to 3DS consoles and a Switch', credit: 'Photo: PantheraLeo1359531, CC BY 4.0' },
-  { hobby: 'esports', name: 'Esports' },
+  { hobby: 'esports', name: 'Esports', image: '/images/home/esports.webp', alt: 'A packed arena lit in purple and green for The International 2018 Dota 2 championship, with the stage and giant screens in the middle', credit: 'Photo: Dota 2 The International, CC BY 2.0' },
   { hobby: 'boardgames', name: 'Board Games', image: '/images/home/boardgames.webp', alt: 'A game of Unmatched in progress on a café table: the board, fighter figures, cards and a drink' },
 ];
