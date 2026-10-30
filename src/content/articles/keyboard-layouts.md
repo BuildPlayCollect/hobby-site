@@ -54,6 +54,9 @@ Take a full-size board and chop off the number pad. That's it. Your mouse moves 
 
 The function row stays, but the navigation keys (Home, End, Page Up and friends) get squeezed into a single column on the right. It feels compact without losing much. One thing to know: [75% layouts vary between brands](https://kbd.news/Keyboard-Form-Factors-Explained-A-Complete-Guide-to-Keyboard-Sizes-115.html), so the right column can differ from board to board.
 
+![A blue and cream 75% keyboard on a striped cloth: the function row on top and a single column of navigation keys down the right side](/images/articles/keyboard-layouts/blue-cream-75-percent.webp)
+*Photo: Echo*
+
 ## Wait, what's a layer?
 
 Small boards don't delete keys, they hide them. Hold the **Fn** key and other keys change job: the number row becomes F1 to F12, or I-J-K-L becomes your arrow keys. Each "hold this to change everything" mode is a layer. That's the trade: a little memory work for a lot of desk space.

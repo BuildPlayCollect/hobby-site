@@ -827,7 +827,7 @@ a.tile:hover { background: var(--surface); transform: translate(-2px, -2px); box
 .welcome-ask { margin: 40px 0 16px; font-weight: 800; font-size: 1.05rem; }
 /* The hobby picker: one big friendly button per hobby */
 .picker { list-style: none; margin: 0 auto; padding: 0; display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); max-width: 1080px; }
-.picker a { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 22px 12px 18px; border: var(--edge); border-color: #1b1a1f; border-radius: 22px; background: var(--c); color: #1b1a1f; box-shadow: var(--lift); text-align: center; transition: transform .18s cubic-bezier(.3, 1.5, .5, 1), box-shadow .15s; }
+.picker a { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 10px; padding: 22px 12px 18px; border: var(--edge); border-color: #1b1a1f; border-radius: 22px; background: var(--c); color: #1b1a1f; box-shadow: var(--lift); text-align: center; transition: transform .18s cubic-bezier(.3, 1.5, .5, 1), box-shadow .15s; }
 :root[data-theme="dark"] .picker a { box-shadow: 4px 4px 0 #000; }
 .picker a:hover, .picker a:focus-visible { text-decoration: none; transform: translate(-2px, -4px) rotate(-1.5deg); box-shadow: 7px 8px 0 #1b1a1f; }
 .picker li:nth-child(even) a:hover { transform: translate(-2px, -4px) rotate(1.5deg); }
@@ -880,7 +880,7 @@ a.tile:hover { background: var(--surface); transform: translate(-2px, -2px); box
 @media (min-width: 640px) { .picker { grid-template-columns: repeat(4, 1fr); } }
 @media (min-width: 1040px) { .picker { grid-template-columns: repeat(8, 1fr); } .picker strong { font-size: 1.08rem; } }
 .picker a { height: 100%; box-sizing: border-box; }
-.welcome-ask { margin: 40px 0 20px; }
+.welcome > p.welcome-ask { margin: 40px auto 28px; }
 :is(.quiz-head, .tt-head, .lead, .page-head, .wiki-hero, .article) p.kicker { font-family: var(--sans); font-weight: 800; }
 .quick-more { font-family: var(--sans); font-weight: 800; text-transform: none; letter-spacing: 0; font-size: .85rem; }
 /* Phones: compact picker buttons (icon beside the name) so the page isn't one long wall of tiles */
