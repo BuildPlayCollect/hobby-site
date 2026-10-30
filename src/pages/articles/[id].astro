@@ -71,6 +71,7 @@ const jsonLd = {
           ? <img src={article.data.cover} alt={article.data.coverAlt ?? ''} data-zoom />
           : <span>{hobby.name}</span>}
       </div>
+      {article.data.cover && article.data.coverCredit && <p class="cover-credit">{article.data.coverCredit}</p>}
       <div class="prose" id="article-start"><Content /></div>
       <AdSlot position="in-article" />
     </article>
