@@ -242,7 +242,12 @@ a.tile:hover { text-decoration: none; background: var(--surface-2); }
 .carousel-dots { display: flex; gap: 6px; margin-right: auto; }
 .carousel-dots button { width: 18px; height: 3px; padding: 0; border: 0; background: var(--soft-line); cursor: pointer; transition: width .2s, background .2s; }
 .carousel-dots button.on { width: 40px; background: var(--ink); }
-.carousel-btn { width: 38px; height: 38px; border: var(--rule); border-radius: 50%; background: none; color: var(--ink); font-size: 1.3rem; line-height: 1; cursor: pointer; display: grid; place-items: center; padding-bottom: 3px; }
+.carousel-btn { width: 38px; height: 38px; border: var(--rule); border-radius: 50%; background: none; color: var(--ink); line-height: 0; cursor: pointer; display: grid; place-items: center; padding: 0; }
+.carousel-btn svg { display: block; }
+/* The play triangle looks centred when it sits a hair right of the true middle. */
+.carousel-pause .icon-play { display: none; transform: translateX(1px); }
+.carousel-pause[aria-pressed="true"] .icon-play { display: block; }
+.carousel-pause[aria-pressed="true"] .icon-pause { display: none; }
 .carousel-btn:hover { background: var(--ink); color: var(--bg); }
 .carousel.single .carousel-controls { display: none; }
 @media (max-width: 759px) { .carousel-btn { display: none; } }
@@ -1066,7 +1071,7 @@ body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-even
 .carousel-hero.gliding .carousel-track > * { width: min(86%, 720px); }
 .carousel.gliding .carousel-dots { display: none; }
 .carousel.gliding .carousel-controls { justify-content: flex-end; }
-.carousel-pause { font-size: .8rem; margin-right: auto; display: grid; }
+.carousel-pause { margin-right: auto; display: grid; }
 /* Phones: a shorter, photo-first slide. The name sits on a soft dark fade at the bottom instead of a white box,
    so more of the picture shows, and the slide is wide enough that only a sliver of the next one peeks in. */
 @media (max-width: 600px) {
