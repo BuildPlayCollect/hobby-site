@@ -6,6 +6,8 @@ type: guide
 author: Echo
 date: 2026-10-15
 draft: false
+cover: "/images/articles/keyboard-layouts/cover-blue-cream-board.webp"
+coverAlt: "A blue and cream mechanical keyboard on a striped cloth, with loose keycaps beside it"
 quick:
   - "Layouts are named by size: full size, 96%, TKL (80%), 75%, 65%, 60% and 40%."
   - "Each step smaller drops something: the number pad, then the navigation keys, then the function row."

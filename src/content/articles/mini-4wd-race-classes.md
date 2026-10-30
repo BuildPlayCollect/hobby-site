@@ -6,6 +6,8 @@ type: guide
 author: Echo
 date: 2026-10-19
 draft: false
+cover: "/images/articles/mini-4wd-race-classes/cover-three-cars.webp"
+coverAlt: "Three modified Mini 4WD cars, white, clear red and black, lined up on a towel"
 quick:
   - "Every Mini 4WD race uses a class: a rulebook that says what you're allowed to change on your car."
   - "Box Stock is the strictest: the kit, built straight from the box. It's a shop and organiser class, not a Tamiya one, so always read that race's rules."
@@ -18,7 +20,8 @@ You built your first Mini 4WD. It's fast, it's shiny, and you're ready to race. 
 
 Don't worry. A class is just a rulebook that says **how much you're allowed to change your car**. Some classes say "barely anything". Others say "go wild, just keep it Tamiya". Here's each one, from strictest to wildest.
 
-📷 PHOTO: A row of Mini 4WD cars at a track, from a plain kit build to a heavily modified Open car.
+![A row of colourful Mini 4WD cars lined up on a black table beside a race track](/images/articles/mini-4wd-race-classes/cars-lined-up-at-track.webp)
+*Photo: Echo*
 
 ## First, the rules every car follows
 
@@ -84,7 +87,8 @@ At Tamiya's Japan Cup, the "Open Class" is actually [an age group](https://www.t
 
 Open is where the fastest cars live, and also the fastest-emptying wallets. You've been warned.
 
-📷 PHOTO: An Open Class car up close: cut chassis, carbon plates, mass dampers.
+![A heavily modified Mini 4WD up close, with extra rollers, plates and red stabiliser poles](/images/articles/mini-4wd-race-classes/modified-car-close-up.webp)
+*Photo: Echo*
 
 ## What about the other Philippine classes?
 
