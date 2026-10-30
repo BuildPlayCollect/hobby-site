@@ -1,0 +1,25 @@
+---
+// credits.astro: who took the photos we use under a free licence.
+// The home slider shows no credit tags, so credits for its photos live here (CC BY needs the author,
+// the licence and a link). Photos inside articles are credited right under each photo instead.
+import Base from '../layouts/Base.astro';
+import { HOME_SLIDES } from '../data/home-slides';
+const credited = HOME_SLIDES.filter((s) => s.credit);
+---
+<Base title="Image credits" description="Who took the photos on Build Play Collect that aren't ours, and the licences that let us use them.">
+  <div class="prose page-prose">
+    <h1>Image credits</h1>
+    <p>Most photos on this site are Echo's own. A few are by other photographers who shared them under a free licence. Here's who took them, and the licence that lets us use them. Photos inside articles are credited right under each photo.</p>
+    <h2>Home page slider</h2>
+    <ul>
+      {credited.map((s) => (
+        <li>
+          <strong>{s.name}:</strong> {s.credit}
+          {s.source && <> (<a href={s.source}>source</a>)</>}
+          {s.licenseUrl && <>, licence <a href={s.licenseUrl} rel="license">{s.license}</a></>}. Cropped and resized by us.
+        </li>
+      ))}
+    </ul>
+    <p>If one of these is your photo and you'd like it credited differently, <a href="/contact">tell us</a>.</p>
+  </div>
+</Base>

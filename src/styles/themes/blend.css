@@ -1061,15 +1061,15 @@ body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-even
 .hero-slide-text span { font-size: clamp(.98rem, 2vw, 1.1rem); }
 .hero-slide-text em { font-style: normal; font-weight: 800; font-size: .95rem; }
 .hero-slide:hover .hero-slide-text em, .hero-slide:focus-visible .hero-slide-text em { text-decoration: underline; }
-.hero-slide-credit { position: absolute; top: 12px; right: 16px; font-size: .72rem; padding: 2px 8px; border-radius: 999px; background: rgb(0 0 0 / .45); color: #fff; }
-/* Phones: a shorter, photo-first slide. The name sits on a soft dark fade at the bottom instead of a white box,
-   so more of the picture shows. */
+/* Photo slides: no white box. The name sits on a soft dark fade at the bottom, so the whole picture shows. */
+.hero-slide.has-image::after { content: ""; position: absolute; inset: 40% 0 0; background: linear-gradient(transparent, rgb(0 0 0 / .7)); }
+.hero-slide.has-image .hero-slide-text { z-index: 1; margin: 0; padding: 24px 28px; max-width: none; border-radius: 0; background: none; color: #fff; text-shadow: 0 1px 6px rgb(0 0 0 / .35); }
+/* Phones: a shorter slide. */
 @media (max-width: 600px) {
   .hero-slide { min-height: 0; aspect-ratio: 4 / 3; border-radius: 22px; }
   .carousel-hero .carousel-track { gap: 12px; }
   .hero-slide-icon svg { width: 96px; height: 96px; }
-  .hero-slide.has-image::after { content: ""; position: absolute; inset: 45% 0 0; background: linear-gradient(transparent, rgb(0 0 0 / .72)); }
-  .hero-slide.has-image .hero-slide-text { z-index: 1; margin: 0; padding: 16px 18px; max-width: none; border-radius: 0; background: none; color: #fff; }
+  .hero-slide.has-image .hero-slide-text { padding: 16px 18px; }
   .hero-slide:not(.has-image) .hero-slide-text { margin: 12px; padding: 12px 16px; }
   .hero-slide-text strong { font-size: 1.6rem; }
   .hero-slide-text em { font-size: .88rem; }
