@@ -48,7 +48,7 @@ const steps = [
 ---
 <Base>
   <!-- Header slider: one slide per hobby (pictures and names in src/data/home-slides.ts). -->
-  <Carousel label="Hobbies on Build Play Collect" autoplay variant="hero">
+  <Carousel label="Hobbies on Build Play Collect" autoplay glide variant="hero">
     {HOME_SLIDES.map((sl, i) => (
       <a class={`hero-slide${sl.image ? ' has-image' : ''}`} href={`/${sl.hobby}`} style={`--c:${HOBBIES[sl.hobby].color}`}>
         {sl.image ? (

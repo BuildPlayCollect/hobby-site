@@ -1061,6 +1061,12 @@ body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-even
 .hero-slide-text em { font-style: normal; font-weight: 800; font-size: .95rem; }
 .hero-slide:hover .hero-slide-text em, .hero-slide:focus-visible .hero-slide-text em { text-decoration: underline; }
 .hero-slide-credit { position: absolute; top: 12px; right: 16px; font-size: .72rem; padding: 2px 8px; border-radius: 999px; background: rgb(0 0 0 / .45); color: #fff; }
+/* Gliding slider: no snapping, and slides are narrower so the next hobby is always peeking in. */
+.carousel.gliding .carousel-track { scroll-snap-type: none; scroll-behavior: auto; }
+.carousel-hero.gliding .carousel-track > * { width: min(86%, 720px); }
+.carousel.gliding .carousel-dots { display: none; }
+.carousel.gliding .carousel-controls { justify-content: flex-end; }
+.carousel-pause { font-size: .8rem; margin-right: auto; display: grid; }
 @media (max-width: 600px) { .hero-slide-icon svg { width: 96px; height: 96px; } .hero-slide-text { margin: 12px; padding: 14px 16px; } }
 
 /* Search opens as a panel under the header, so the page stays in view behind it. */

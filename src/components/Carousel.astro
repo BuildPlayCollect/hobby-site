@@ -3,19 +3,23 @@
 // Swipe on phones, use the ‹ › buttons on desktop.
 // With autoplay, it moves to the next slide every few seconds,
 // and stops while the reader hovers, touches or tabs into it.
+// With glide, it never stops on a slide: it drifts slowly and loops forever,
+// with a pause button, and still stops while the reader hovers, touches or tabs into it.
 interface Props {
   label: string;
   autoplay?: boolean;
+  glide?: boolean;
   variant?: 'hero' | 'rail';
 }
-const { label, autoplay = false, variant = 'rail' } = Astro.props;
+const { label, autoplay = false, glide = false, variant = 'rail' } = Astro.props;
 ---
-<div class={`carousel carousel-${variant}`} role="region" aria-roledescription="carousel" aria-label={label} data-autoplay={autoplay ? '' : undefined}>
+<div class={`carousel carousel-${variant}`} role="region" aria-roledescription="carousel" aria-label={label} data-autoplay={autoplay ? '' : undefined} data-glide={glide ? '' : undefined}>
   <div class="carousel-track" tabindex="0">
     <slot />
   </div>
   <div class="carousel-controls">
     <div class="carousel-dots" aria-hidden="true"></div>
+    {glide && <button class="carousel-btn carousel-pause" type="button" aria-label="Pause slider" aria-pressed="false">❚❚</button>}
     <button class="carousel-btn prev" type="button" aria-label="Previous">‹</button>
     <button class="carousel-btn next" type="button" aria-label="Next">›</button>
   </div>
@@ -63,8 +67,60 @@ const { label, autoplay = false, variant = 'rail' } = Astro.props;
     carousel.querySelector('.prev')!.addEventListener('click', () => go(current() - 1));
     carousel.querySelector('.next')!.addEventListener('click', () => go(atEnd() ? 0 : current() + 1));
 
+    // Glide: copies of the slides go on the end, so when the row has drifted one full set along
+    // it can jump back to the start without the reader seeing a gap.
+    if (carousel.hasAttribute('data-glide') && !reduceMotion) {
+      carousel.classList.add('gliding');
+      slides.forEach((s) => {
+        const copy = s.cloneNode(true) as HTMLElement;
+        copy.setAttribute('aria-hidden', 'true');
+        copy.setAttribute('inert', '');
+        track.appendChild(copy);
+      });
+      const loop = () => (track.children[slides.length] as HTMLElement).offsetLeft - slides[0].offsetLeft;
+      const speed = 40; // pixels per second: slow enough to read
+      let pos = 0, last = 0, hover = false, stopped = false, holdUntil = 0;
+      const pauseBtn = carousel.querySelector<HTMLButtonElement>('.carousel-pause')!;
+      pauseBtn.addEventListener('click', () => {
+        stopped = !stopped;
+        pauseBtn.setAttribute('aria-pressed', String(stopped));
+        pauseBtn.setAttribute('aria-label', stopped ? 'Play slider' : 'Pause slider');
+        pauseBtn.textContent = stopped ? '▶' : '❚❚';
+      });
+      carousel.addEventListener('mouseenter', () => { hover = true; });
+      carousel.addEventListener('mouseleave', () => { hover = false; });
+      carousel.addEventListener('focusin', (e) => { if (e.target !== pauseBtn) hover = true; });
+      carousel.addEventListener('focusout', () => { hover = false; });
+      // After a swipe, wait a moment before drifting again from wherever the reader left it.
+      track.addEventListener('touchstart', () => { holdUntil = Infinity; }, { passive: true });
+      track.addEventListener('touchend', () => { holdUntil = performance.now() + 3000; }, { passive: true });
+      // The arrows jump one slide, then the drift carries on from there.
+      const step = (dir: number) => {
+        const w = slides[1].offsetLeft - slides[0].offsetLeft;
+        let to = track.scrollLeft + dir * w;
+        if (to < 0) { track.scrollLeft += loop(); to += loop(); }
+        holdUntil = performance.now() + 1500;
+        track.scrollTo({ left: to, behavior: 'smooth' });
+      };
+      carousel.querySelector('.prev')!.addEventListener('click', (e) => { e.stopImmediatePropagation(); step(-1); }, { capture: true });
+      carousel.querySelector('.next')!.addEventListener('click', (e) => { e.stopImmediatePropagation(); step(1); }, { capture: true });
+      const tick = (t: number) => {
+        const dt = last ? Math.min(t - last, 100) / 1000 : 0;
+        last = t;
+        if (hover || stopped || document.hidden || t < holdUntil) {
+          pos = track.scrollLeft;
+        } else {
+          pos += speed * dt;
+          if (pos >= loop()) pos -= loop();
+          track.scrollLeft = pos;
+        }
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }
+
     // Autoplay: next slide every 6 seconds, paused while the reader is using it.
-    if (carousel.hasAttribute('data-autoplay') && !reduceMotion) {
+    if (carousel.hasAttribute('data-autoplay') && !carousel.classList.contains('gliding') && !reduceMotion) {
       let paused = false;
       const pause = () => { paused = true; };
       const resume = () => { paused = false; };
