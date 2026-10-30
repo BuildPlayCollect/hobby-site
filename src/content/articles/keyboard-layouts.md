@@ -8,6 +8,7 @@ date: 2026-10-15
 draft: false
 cover: "/images/articles/keyboard-layouts/cover-blue-cream-board.webp"
 coverAlt: "A blue and cream mechanical keyboard on a striped cloth, with loose keycaps beside it"
+coverCredit: "Photo: Remnant (Marc Rafael)"
 quick:
   - "Layouts are named by size: full size, 96%, TKL (80%), 75%, 65%, 60% and 40%."
   - "Each step smaller drops something: the number pad, then the navigation keys, then the function row."
@@ -48,14 +49,14 @@ All the keys of a full-size board, packed tighter with the gaps squeezed out. Yo
 Take a full-size board and chop off the number pad. That's it. Your mouse moves closer to your keyboard, which is why gamers love it, and everything else stays exactly where you expect it.
 
 ![A red TKL keyboard with black and cream keycaps on a round wooden tray: function row on top, arrows and navigation keys in their own block on the right, and no number pad](/images/articles/keyboard-layouts/red-tkl.webp)
-*No number pad, but the arrows and navigation keys keep their own spots. Photo: Echo*
+*No number pad, but the arrows and navigation keys keep their own spots. Photo: Remnant (Marc Rafael)*
 
 ## 75%
 
 The function row stays, but the navigation keys (Home, End, Page Up and friends) get squeezed into a single column on the right. It feels compact without losing much. One thing to know: [75% layouts vary between brands](https://kbd.news/Keyboard-Form-Factors-Explained-A-Complete-Guide-to-Keyboard-Sizes-115.html), so the right column can differ from board to board.
 
 ![A blue and cream 75% keyboard on a striped cloth: the function row on top and a single column of navigation keys down the right side](/images/articles/keyboard-layouts/blue-cream-75-percent.webp)
-*Photo: Echo*
+*Photo: Remnant (Marc Rafael)*
 
 ## Wait, what's a layer?
 
@@ -66,19 +67,19 @@ Small boards don't delete keys, they hide them. Hold the **Fn** key and other ke
 Now the function row goes too, but you keep your arrow keys and a few nav keys. F1 to F12 move onto a **layer**: hold the Fn key and the number row becomes your function row. It sounds fiddly and becomes second nature in about a week.
 
 ![A grey 65% keyboard on a stone floor with spare keycaps around it: no function row, with the arrow keys and a column of extra keys on the right](/images/articles/keyboard-layouts/grey-65-percent.webp)
-*A 65%: no function row, but the arrows and Page Up/Down are still there. Photo: Echo*
+*A 65%: no function row, but the arrows and Page Up/Down are still there. Photo: Remnant (Marc Rafael)*
 
 ## 60%
 
 No arrows, no nav keys, no function row. Everything lives on layers. It's [great for travel and small desks](https://kbd.news/Keyboard-Form-Factors-Explained-A-Complete-Guide-to-Keyboard-Sizes-115.html), and it's a favorite for custom builds.
 
 ![A purple 60% keyboard with white and cream keycaps on a stone table, a few spare keycaps scattered around it](/images/articles/keyboard-layouts/purple-60-percent.webp)
-*A 60%: just the letters, numbers and mods. Photo: Echo*
+*A 60%: just the letters, numbers and mods. Photo: Remnant (Marc Rafael)*
 
 A famous cousin is the **HHKB**, short for Happy Hacking Keyboard. It was first released by PFU in Japan [in December 1996](https://en.wikipedia.org/wiki/Happy_Hacking_Keyboard), has 60 keys, and puts Control where Caps Lock usually sits, which is very handy if you use a lot of keyboard shortcuts. Since the HHKB Professional in 2003, it has used [Topre capacitive switches](https://en.wikipedia.org/wiki/Happy_Hacking_Keyboard) instead of regular mechanical ones.
 
 ![A dark keyboard in the HHKB layout seen from above, with the two blank gaps on either side of the bottom row](/images/articles/keyboard-layouts/hhkb-layout.webp)
-*The HHKB layout: see the empty gaps at both ends of the bottom row? Photo: Echo*
+*The HHKB layout: see the empty gaps at both ends of the bottom row? Photo: Remnant (Marc Rafael)*
 
 ## 40%
 

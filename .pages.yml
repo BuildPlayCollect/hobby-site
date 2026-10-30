@@ -105,6 +105,10 @@ content:
         label: Cover image description
         description: Describe the photo for readers using screen readers, e.g. "Three Beyblade X tops in a stadium".
         type: string
+      - name: coverCredit
+        label: Cover photo credit
+        description: Who took the cover photo, e.g. "Photo: Remnant (Marc Rafael)". Leave empty for your own photos.
+        type: string
       - name: body
         label: Article
         type: rich-text
