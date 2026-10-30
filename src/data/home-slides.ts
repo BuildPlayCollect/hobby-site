@@ -13,5 +13,5 @@ export const HOME_SLIDES: Slide[] = [
   { hobby: 'tcg', name: 'Trading Card Games', image: '/images/home/tcg.webp', alt: 'Pokémon card packs and toys in a shop display case' },
   { hobby: 'consoles', name: 'Consoles', image: '/images/home/consoles.webp', alt: 'Hands on an arcade stick with red and yellow buttons' },
   { hobby: 'esports', name: 'Esports' },
-  { hobby: 'boardgames', name: 'Board Games' },
+  { hobby: 'boardgames', name: 'Board Games', image: '/images/home/boardgames.webp', alt: 'A game of Unmatched in progress on a café table: the board, fighter figures, cards and a drink' },
 ];
