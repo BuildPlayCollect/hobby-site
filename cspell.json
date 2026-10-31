@@ -1,0 +1,8 @@
+{
+  "version": "0.2",
+  "language": "en,en-GB",
+  "dictionaryDefinitions": [{ "name": "hobby-words", "path": "./hobby-words.txt", "addWords": true }],
+  "dictionaries": ["hobby-words"],
+  "ignorePaths": ["node_modules", "dist"],
+  "ignoreRegExpList": ["/\\]\\([^)]*\\)/g", "/<[^>]+>/g", "/https?:\\/\\/\\S+/g", "/^(cover|image):.*$/gm"]
+}
