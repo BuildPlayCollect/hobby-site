@@ -23,16 +23,16 @@ Nobody sat me down and said "congratulations, you have a hobby." It just happene
 
 ## So, what is a hobby?
 
-Merriam-Webster defines a hobby as "a pursuit outside one's regular occupation engaged in especially for relaxation."
+[Merriam-Webster defines a hobby](https://www.merriam-webster.com/dictionary/hobby) as "a pursuit outside one's regular occupation engaged in especially for relaxation."
 
 In plain words: a hobby is the thing you do because you *want* to. No boss, no grades, no paycheck. Just you, the thing you love, and the promise of "five more minutes" that has never once been five minutes.
 
 ## Fun fact: the word started as a horse
 
-Around the year 1400, a "hobby" was a small, active horse. By the 1550s, a "hobbyhorse" was a pretend horse used in morris dancing, and by the 1580s it was a child's toy horse. In the 1670s, people started using "hobbyhorse" to mean a favorite pastime, and by 1816 plain old "hobby" meant it too.
+[Around the year 1400, a "hobby" was a small, active horse](https://www.etymonline.com/word/hobby). By the 1550s, a "hobbyhorse" was a pretend horse used in morris dancing, and by the 1580s it was a child's toy horse. In the 1670s, people started using "hobbyhorse" to mean a favorite pastime, and by 1816 plain old "hobby" meant it too.
 
 ![A painting of two children in old-fashioned clothes, one riding a spotted rocking horse in a living room](/images/articles/what-is-a-hobby/hobby-horse-peckham.webp)
-*Image: "The Hobby Horse" by Robert Peckham, National Gallery of Art, Washington (open access)*
+*Image: ["The Hobby Horse" by Robert Peckham](https://www.nga.gov/artworks/43454-hobby-horse), National Gallery of Art, Washington (open access)*
 
 So technically, every hobby is riding a toy horse very seriously. Honestly, that explains a lot about grown adults lubing keyboard switches at 2am.
 
@@ -95,4 +95,10 @@ Then come back. Pick a corner to explore: [Beyblade](/beyblade), [Tamiya](/tamiy
 
 ---
 
-*Sources: the definition of "hobby" is from [Merriam-Webster](https://www.merriam-webster.com/dictionary/hobby), and the word's history is from the [Online Etymology Dictionary](https://www.etymonline.com/word/hobby). The hobby horse painting is from the [National Gallery of Art](https://www.nga.gov/artworks/43454-hobby-horse), whose [open access images](https://www.nga.gov/open-access-images.html) are free for any use. Last checked October 19, 2026.*
+## Sources
+
+*Every fact above links to where it came from. Last checked October 19, 2026.*
+
+1. Merriam-Webster: [hobby](https://www.merriam-webster.com/dictionary/hobby) (definition)
+2. Online Etymology Dictionary: [hobby](https://www.etymonline.com/word/hobby) (the word's history)
+3. National Gallery of Art: [The Hobby Horse by Robert Peckham](https://www.nga.gov/artworks/43454-hobby-horse), from its [open access images](https://www.nga.gov/open-access-images.html), free for any use

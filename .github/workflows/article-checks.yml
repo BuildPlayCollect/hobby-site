@@ -1,0 +1,74 @@
+# article-checks.yml: whenever an article changes, GitHub reads it for mechanical slips.
+# Runs on every pull request that touches an article, and on Pages CMS saves to main.
+# Red ❌ = a problem to fix before merging (missing sources, no links, writer's notes, broken links).
+# Spelling and length only give heads-ups (yellow notes), they never turn the check red.
+# What each check means: scripts/check-articles.mjs. Results: the "Summary" page of the run.
+name: Article checks
+
+on:
+  pull_request:
+    paths: ['src/content/articles/**']
+  push:
+    branches: [main]
+    paths: ['src/content/articles/**']
+  workflow_dispatch:        # run it by hand from the Actions tab (checks every article)
+
+permissions:
+  contents: read
+
+jobs:
+  articles:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Only the articles this change added or edited (all of them when run by hand).
+      - name: Find changed articles
+        id: changed
+        env:
+          BASE: ${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || github.event.before }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || ! git cat-file -e "$BASE^{commit}" 2>/dev/null; then
+            files=$(ls src/content/articles/*.md)
+          else
+            files=$(git diff --name-only --diff-filter=AM "$BASE"...HEAD -- 'src/content/articles/*.md')
+          fi
+          echo "Articles to check:"; echo "$files"
+          echo "files=$(echo $files)" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-node@v4
+        if: steps.changed.outputs.files != ''
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        if: steps.changed.outputs.files != ''
+        run: npm ci --ignore-scripts
+
+      - name: Sources, links in the text, leftovers, length
+        if: steps.changed.outputs.files != ''
+        run: node scripts/check-articles.mjs ${{ steps.changed.outputs.files }}
+
+      # Unknown words show as yellow notes on the line. A real name that gets flagged goes in hobby-words.txt.
+      - name: Spelling
+        if: always() && steps.changed.outputs.files != ''
+        run: |
+          npx --yes cspell@9.2.1 --no-progress --no-summary --show-suggestions ${{ steps.changed.outputs.files }} > spelling.txt || true
+          sed -E 's/^([^:]+):([0-9]+):([0-9]+) - (.*)$/::warning file=\1,line=\2,col=\3::Spelling: \4/' spelling.txt
+          {
+            echo "## Spelling"
+            if [ -s spelling.txt ]; then echo '```'; cat spelling.txt; echo '```'; echo "Spelled right? Add the word to hobby-words.txt."
+            else echo "No unknown words."; fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # Every outside link in the changed articles must open. Same rules as the weekly link check (lychee.toml).
+      - name: Broken links
+        if: always() && steps.changed.outputs.files != ''
+        uses: lycheeverse/lychee-action@v2.0.2
+        with:
+          args: --config lychee.toml ${{ steps.changed.outputs.files }}
+          fail: true
+          jobSummary: true

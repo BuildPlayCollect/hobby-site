@@ -128,6 +128,15 @@ Only use photos you took or have permission for (see the image rules in the proj
 
 Every article has a **Draft** switch in Pages CMS. While it's on, the article stays off the site: no page, no cards, no search result. New articles start as drafts, so you can save half-finished work safely. When the article is written and every fact is checked, switch Draft off and save; it goes live on the next deploy. The 7 starter sample articles are kept as drafts for reference.
 
+## Article checks (catching slips before you merge)
+Every pull request that changes an article runs **Article checks** on GitHub (`.github/workflows/article-checks.yml`). Pages CMS saves to main run it too.
+- **Red ❌ means fix it first:** no Sources list, no outside links in the text (so no fact can be traced), a leftover TODO or "[citation needed]", a picture with no description, or a link that doesn't open.
+- **Yellow notes are heads-ups:** spelling, length outside 500 to 1,200 words, a title or description too long for Google.
+- See the notes on the PR's "Files changed" tab (next to the line), or open the check and click **Summary**.
+- A real name flagged as a spelling mistake (a brand, a part, a player)? Add it to `hobby-words.txt`.
+- Run it yourself with `npm run check:articles`. Drafts are skipped.
+- It can't tell whether a fact is *true*. That still needs a person reading the source.
+
 ## Google and SEO
 
 Every page tells search engines its title, description, official address (canonical) and share picture; articles also tell Google they're articles, who wrote them and when (all in `src/layouts/Base.astro` and `src/pages/articles/[id].astro`). `public/robots.txt` lets search engines read everything and points them to the sitemap. The default share picture is `public/share-preview-v2.png` (give it a new name whenever it changes, because Facebook keeps old pictures by name); an article with a cover image uses its cover instead. The full checklist for articles and the one-time Google Search Console steps are in the project's `resources/seo-guide.md`.
