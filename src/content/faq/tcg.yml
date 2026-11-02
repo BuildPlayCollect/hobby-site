@@ -1,0 +1,55 @@
+# Beginner questions for the TCG page. Edit in Pages CMS ("Hobby FAQs") or here.
+hobby: tcg
+lastChecked: 2026-11-02
+questions:
+  - question: How many cards go in a deck?
+    answer: >-
+      It depends on the game. A Pokémon TCG deck has [exactly 60 cards](https://mcdn.pokemon.com/pokemon-prod/raw/upload/v1/live/static-assets/content-assets/cms2/pdf/play-pokemon/rules/play-pokemon-tcg-tournament-handbook-en.pdf).
+      Magic Constructed decks need [at least 60, with no more than four of any card](https://media.wizards.com/ContentResources/WPN/MTG_MTR_2026_Feb27_EN.pdf)
+      except basic lands. One Piece uses a [Leader, a 50-card deck and 10 DON!! cards](https://en.onepiece-cardgame.com/pdf/tournament_rules_manual.pdf).
+    sources:
+      - name: "Play! Pokémon: TCG Tournament Handbook"
+        url: https://mcdn.pokemon.com/pokemon-prod/raw/upload/v1/live/static-assets/content-assets/cms2/pdf/play-pokemon/rules/play-pokemon-tcg-tournament-handbook-en.pdf
+      - name: "Wizards of the Coast: Magic Tournament Rules"
+        url: https://media.wizards.com/ContentResources/WPN/MTG_MTR_2026_Feb27_EN.pdf
+      - name: "Bandai: One Piece Card Game Tournament Rules Manual"
+        url: https://en.onepiece-cardgame.com/pdf/tournament_rules_manual.pdf
+  - question: Should I buy packs or singles?
+    answer: >-
+      Packs are for the thrill of the pull. [Singles](/wiki/singles/) are single cards bought on their own, so if you need one
+      specific card for your deck, you get exactly that card instead of hoping a pack has it. Lots of players do both.
+    sources: []
+  - question: Do I need card sleeves?
+    answer: >-
+      Not for playing at home. At events, the rules get picky: in Magic, if you use sleeves
+      [they must all be identical](https://media.wizards.com/ContentResources/WPN/MTG_MTR_2026_Feb27_EN.pdf), and Pokémon wants
+      [one card per sleeve, all the same colour or design](https://mcdn.pokemon.com/pokemon-prod/raw/upload/v1/live/static-assets/content-assets/cms2/pdf/play-pokemon/rules/play-pokemon-tcg-tournament-handbook-en.pdf).
+      Our [tournament rules pages](/rules/) have each game's details.
+    sources:
+      - name: "Wizards of the Coast: Magic Tournament Rules"
+        url: https://media.wizards.com/ContentResources/WPN/MTG_MTR_2026_Feb27_EN.pdf
+      - name: "Play! Pokémon: TCG Tournament Handbook"
+        url: https://mcdn.pokemon.com/pokemon-prod/raw/upload/v1/live/static-assets/content-assets/cms2/pdf/play-pokemon/rules/play-pokemon-tcg-tournament-handbook-en.pdf
+  - question: What is a prerelease?
+    answer: >-
+      A store event held just before a new set comes out. You open fresh packs, build a deck on the spot and play people doing the same,
+      so nobody has a head start. Magic's [Star Trek prerelease guide](https://magic.wizards.com/en/news/feature/star-trek-prerelease-guide)
+      shows how one works. It's one of the friendliest ways to try a card game.
+    sources:
+      - name: "Wizards of the Coast: Star Trek prerelease guide"
+        url: https://magic.wizards.com/en/news/feature/star-trek-prerelease-guide
+  - question: What is Commander?
+    answer: >-
+      A [Magic format](https://magic.wizards.com/en/formats/commander) for a table of friends: a 100-card deck led by one legendary card,
+      only one copy of each card (except basic lands), and everyone starts at 40 life. Ready-made Commander decks are an easy way in.
+    sources:
+      - name: "Wizards of the Coast: Commander format"
+        url: https://magic.wizards.com/en/formats/commander
+  - question: What is errata?
+    answer: >-
+      An official correction to a card that was printed wrong. Your card stays the same, but you play by the corrected text.
+      For example, Bandai posted [errata for a One Piece card](https://en.onepiece-cardgame.com/news/notice_eb05.html) whose name
+      was misprinted. Our [errata wiki page](/wiki/errata/) has more.
+    sources:
+      - name: "Bandai: Errata for EB-05"
+        url: https://en.onepiece-cardgame.com/news/notice_eb05.html

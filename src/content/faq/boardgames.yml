@@ -1,0 +1,49 @@
+# Beginner questions for the Board games page. Edit in Pages CMS ("Hobby FAQs") or here.
+hobby: boardgames
+lastChecked: 2026-11-02
+questions:
+  - question: What is Unmatched?
+    answer: >-
+      A fighting board game from Restoration Games. Each player picks a hero with their own deck of cards, and sometimes a sidekick.
+      [Knock out the other hero and you win](https://restorationgames.com/wp-content/uploads/2023/05/UM-M-BaB-Rulebook.pdf).
+      Start with our [Unmatched hub](/boardgames/unmatched/).
+    sources:
+      - name: "Restoration Games: Unmatched rulebook"
+        url: https://restorationgames.com/wp-content/uploads/2023/05/UM-M-BaB-Rulebook.pdf
+  - question: Which Unmatched box should I buy first?
+    answer: >-
+      Zatu calls [Battle of Legends, Volume One](https://zatu.com/blogs/features/which-unmatched-game-should-i-buy) the best starter, especially
+      for families. Want a tiny box that adds no extra rules? [Robin Hood vs. Bigfoot](https://www.tabletopbattles.com/boardhammer-unmatched-review) is a classic.
+    sources:
+      - name: "Zatu: Which Unmatched game should I buy?"
+        url: https://zatu.com/blogs/features/which-unmatched-game-should-i-buy
+      - name: "Tabletop Battles: Unmatched review"
+        url: https://www.tabletopbattles.com/boardhammer-unmatched-review
+  - question: How many people can play?
+    answer: >-
+      Usually two, one hero each. The [rulebook](https://restorationgames.com/wp-content/uploads/2023/05/UM-M-BaB-Rulebook.pdf) also covers
+      3 or 4 players in a free-for-all, or 2 vs 2 in teams.
+    sources:
+      - name: "Restoration Games: Unmatched rulebook"
+        url: https://restorationgames.com/wp-content/uploads/2023/05/UM-M-BaB-Rulebook.pdf
+  - question: What do you do on your turn?
+    answer: >-
+      [Exactly two actions](https://restorationgames.com/wp-content/uploads/2023/05/UM-M-BaB-Rulebook.pdf), and you can't skip one: Maneuver
+      (draw a card and move), Scheme (play a special card) or Attack. You can pick the same action twice.
+    sources:
+      - name: "Restoration Games: Unmatched rulebook"
+        url: https://restorationgames.com/wp-content/uploads/2023/05/UM-M-BaB-Rulebook.pdf
+  - question: What happens when I run out of cards?
+    answer: >-
+      You don't reshuffle. Every time you'd draw from an empty deck,
+      [each of your fighters takes 2 damage](https://restorationgames.com/wp-content/uploads/2023/05/UM-M-BaB-Rulebook.pdf) instead. Ouch.
+    sources:
+      - name: "Restoration Games: Unmatched rulebook"
+        url: https://restorationgames.com/wp-content/uploads/2023/05/UM-M-BaB-Rulebook.pdf
+  - question: Who's the best fighter?
+    answer: >-
+      Our [tier list](/boardgames/unmatched/#tiers) ranks fighters by win rate across tens of thousands of online games from the
+      [Unmatched Fighter Chooser](https://unmatched.machaka.net/tiers). But tiers show what wins most, not what's most fun, and any fighter can win in the right hands.
+    sources:
+      - name: "Unmatched Fighter Chooser: tier list"
+        url: https://unmatched.machaka.net/tiers

@@ -1,0 +1,48 @@
+# Beginner questions for the Consoles page. Edit in Pages CMS ("Hobby FAQs") or here.
+hobby: consoles
+lastChecked: 2026-11-02
+questions:
+  - question: Can Switch 2 play my old Switch games?
+    answer: >-
+      Yes, [Nintendo says Switch 2 can play Switch games](https://www.nintendo.com/au/support/articles/can-i-play-nintendo-switch-games-on-nintendo-switch-2),
+      but some may not work or may not be fully compatible. Nintendo keeps a
+      [compatibility list](https://www.nintendo.com/au/hardware/nintendo-switch-2/compatible-games/), so check your favourites there first.
+    sources:
+      - name: "Nintendo: Can I play Nintendo Switch games on Nintendo Switch 2?"
+        url: https://www.nintendo.com/au/support/articles/can-i-play-nintendo-switch-games-on-nintendo-switch-2
+  - question: What is a game-key card?
+    answer: >-
+      A Switch 2 card that holds a key to the game, not the whole game. You need internet to
+      [download the game the first time](https://www.nintendo.com/au/support/articles/nintendo-switch-2-game-key-card-overview),
+      and the card has to stay in the console when you play, just like a normal game card.
+    sources:
+      - name: "Nintendo: Nintendo Switch 2 Game-Key Card Overview"
+        url: https://www.nintendo.com/au/support/articles/nintendo-switch-2-game-key-card-overview
+  - question: Do I have to pay to play online on PS5?
+    answer: >-
+      For most games, yes. PlayStation says you need
+      [a PlayStation Plus subscription](https://www.playstation.com/en-hr/support/subscriptions/playstation-plus-support/) to play most
+      PS4 and PS5 games online, but some don't need it, so check the game's PlayStation Store page.
+    sources:
+      - name: "PlayStation: PlayStation Plus support"
+        url: https://www.playstation.com/en-hr/support/subscriptions/playstation-plus-support/
+  - question: What is upscaling?
+    answer: >-
+      The console draws the game at a lower resolution, then sharpens it up so it looks crisp but runs faster. PlayStation's AI upscaler
+      is called PSSR, and Sony [added a faster option called QSSR to PS5](https://blog.playstation.com/2026/10/01/ai-upscaling-is-coming-to-ps5/)
+      in October 2026. More in our [upscaling wiki page](/wiki/upscaling/).
+    sources:
+      - name: "PlayStation Blog: AI upscaling is coming to PS5"
+        url: https://blog.playstation.com/2026/10/01/ai-upscaling-is-coming-to-ps5/
+  - question: What is crossplay?
+    answer: >-
+      Crossplay lets friends on different consoles or PCs play together. It depends on the game, so check before you buy:
+      [Peak on PS5](https://blog.playstation.com/2026/10/15/peak-climbs-its-way-onto-ps5-october-22/), for example, has crossplay for up to four friends.
+    sources:
+      - name: "PlayStation Blog: Peak climbs its way onto PS5"
+        url: https://blog.playstation.com/2026/10/15/peak-climbs-its-way-onto-ps5-october-22/
+  - question: Where can I see what's new each week?
+    answer: >-
+      Our news roundup comes out every Monday and Thursday, with new games and console news linked to the official announcements.
+      Find them all under [New Releases](/new-releases/).
+    sources: []

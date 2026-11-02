@@ -105,4 +105,20 @@ const unmatchedArt = defineCollection({
   }),
 });
 
-export const collections = { articles, wiki, rules, bxParts, partPhotos, unmatchedArt };
+// Hobby FAQs: one file per hobby (src/content/faq/beyblade.yml ...), edited in Pages CMS.
+// Each question has a short answer (links allowed) and the sources its facts came from.
+const faq = defineCollection({
+  loader: glob({ pattern: '*.yml', base: './src/content/faq' }),
+  schema: z.object({
+    hobby: z.enum(Object.keys(HOBBIES) as [string, ...string[]]),
+    // The day someone last re-checked these answers against their sources.
+    lastChecked: z.coerce.date().optional(),
+    questions: z.array(z.object({
+      question: z.string(),
+      answer: z.string(),
+      sources: z.array(z.object({ name: z.string(), url: z.string().url() })).default([]),
+    })).default([]),
+  }),
+});
+
+export const collections = { articles, wiki, rules, bxParts, partPhotos, unmatchedArt, faq };

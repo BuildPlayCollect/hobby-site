@@ -1,0 +1,65 @@
+# Beginner questions for the Beyblade page. Edit in Pages CMS ("Hobby FAQs") or here.
+# answer: short, in our voice. Links look like [words](https://...). **word** makes it bold.
+# sources: where the facts came from (shown in the "Sources" list under the questions).
+hobby: beyblade
+lastChecked: 2026-11-02
+questions:
+  - question: What is Beyblade X?
+    answer: >-
+      It's the fourth generation of Beyblade, and it [launched in Japan on July 15, 2023](https://en.wikipedia.org/wiki/Beyblade_X).
+      Its big trick is the **Xtreme Dash**: a gear on the tip catches a rail in the stadium and rockets the top forward,
+      so tops crash into each other a lot more. Our [history of Beyblade](/articles/history-of-beyblade/) covers all four generations.
+    sources:
+      - name: "Wikipedia: Beyblade X"
+        url: https://en.wikipedia.org/wiki/Beyblade_X
+  - question: What do I need to start battling?
+    answer: >-
+      Three things: a Bey, a launcher and a stadium. Takara Tomy's [Start Dash Guide](https://www.takaratomyasia.com/documents/beybladex/1705650582_Beyblade%20X_Start%20Dash%20Guide.pdf)
+      shows how it works: put the Bey on the launcher, hold it above the stadium and pull. Bonus tip: a friend with a stadium counts.
+    sources:
+      - name: "Takara Tomy Asia: Beyblade X Start Dash Guide"
+        url: https://www.takaratomyasia.com/documents/beybladex/1705650582_Beyblade%20X_Start%20Dash%20Guide.pdf
+  - question: What are the parts of a Beyblade X?
+    answer: >-
+      Three layers. The **Blade** on top does the hitting, the **Ratchet** in the middle shapes how the Bey moves and collides,
+      and the **Bit** at the tip decides its movement, dash and burst resistance, as the [official Start Dash Guide](https://www.takaratomyasia.com/documents/beybladex/1705650582_Beyblade%20X_Start%20Dash%20Guide.pdf) puts it.
+      Every part is in our [Beyblade X parts list](/beyblade/parts/).
+    sources:
+      - name: "Takara Tomy Asia: Beyblade X Start Dash Guide"
+        url: https://www.takaratomyasia.com/documents/beybladex/1705650582_Beyblade%20X_Start%20Dash%20Guide.pdf
+  - question: What does a Ratchet name like 3-60 mean?
+    answer: >-
+      The first number is how many prongs (blades) the Ratchet has, and the second is its height. In the
+      [Start Dash Guide](https://www.takaratomyasia.com/documents/beybladex/1705650582_Beyblade%20X_Start%20Dash%20Guide.pdf), the 3-60 has three blades
+      and sits the Bey low, while 3-80 and 4-80 sit it higher.
+    sources:
+      - name: "Takara Tomy Asia: Beyblade X Start Dash Guide"
+        url: https://www.takaratomyasia.com/documents/beybladex/1705650582_Beyblade%20X_Start%20Dash%20Guide.pdf
+  - question: How do you win a battle?
+    answer: >-
+      Under the [official rules](https://www.probladers.it/beyblade-x-rules-v12.pdf), the first player to **4 points** wins.
+      Knock the other Bey into the Xtreme Zone for 3 points, into an Over Zone or break it apart (a Burst) for 2,
+      or keep spinning after it stops for 1. Our [official rules page](/rules/beyblade-x-official-rules/) has the full list.
+    sources:
+      - name: "Takara Tomy: Beyblade X Regulations (Asia ver.), 12th edition, via ProBladers"
+        url: https://www.probladers.it/beyblade-x-rules-v12.pdf
+  - question: What's the difference between Takara Tomy and Hasbro Beyblades?
+    answer: >-
+      Takara Tomy makes Beyblade X in Japan, and Hasbro sells it in many other countries. Hasbro says the tops are
+      [identical in weight, feel and performance](https://www.licenseglobal.com/entertainment/hasbro-extends-partnership-with-takara-tomy-adk-emotions-ny-for-beyblade-x),
+      so they can battle each other and even swap parts. The biggest difference is the names: Takara Tomy's Dran Sword is
+      [Hasbro's Sword Dran](https://www.buyandship.com.my/blog/us-japan-beyblade-x-comparison-guide-2562721/), and some parts get new names altogether
+      (our [parts list](/beyblade/parts/) shows both). Some tournaments only allow one version, so check the rules first.
+    sources:
+      - name: "License Global: Hasbro extends partnership with Takara Tomy for Beyblade X (October 27, 2023)"
+        url: https://www.licenseglobal.com/entertainment/hasbro-extends-partnership-with-takara-tomy-adk-emotions-ny-for-beyblade-x
+      - name: "Buyandship: US vs Japanese Beyblade X, what's the difference? (August 5, 2026)"
+        url: https://www.buyandship.com.my/blog/us-japan-beyblade-x-comparison-guide-2562721/
+  - question: Which rules do tournaments use?
+    answer: >-
+      It depends on who runs it. Many community events use the [World Beyblade Organization's rules](https://worldbeyblade.org/Thread-Beyblade-X-Rules),
+      and official events use Takara Tomy's. We sum up both in plain words on our [rules pages](/rules/), but always check the
+      rules for the event you're entering.
+    sources:
+      - name: "World Beyblade Organization: Beyblade X Rules"
+        url: https://worldbeyblade.org/Thread-Beyblade-X-Rules

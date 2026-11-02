@@ -1,0 +1,54 @@
+# Beginner questions for the Keyboards page. Edit in Pages CMS ("Hobby FAQs") or here.
+hobby: keyboards
+lastChecked: 2026-11-02
+questions:
+  - question: What size should my first keyboard be?
+    answer: >-
+      For most first-timers, a **75%** or **65%** is the sweet spot: small enough to free up desk space, with the arrow keys still there.
+      A 65% has about 66 to 68 keys. Our guide to [keyboard layouts](/articles/keyboard-layouts/) compares every size, based on
+      [kbd.news's guide to keyboard sizes](https://kbd.news/Keyboard-Form-Factors-Explained-A-Complete-Guide-to-Keyboard-Sizes-115.html).
+    sources:
+      - name: "kbd.news: Keyboard Form Factors Explained"
+        url: https://kbd.news/Keyboard-Form-Factors-Explained-A-Complete-Guide-to-Keyboard-Sizes-115.html
+  - question: Linear, tactile or clicky?
+    answer: >-
+      **Linear** switches are [smooth all the way down and fairly quiet](https://switchandclick.com/linear-vs-tactile-vs-clicky-switches),
+      **tactile** ones have a small bump you can feel, and **clicky** ones add a loud click to the bump. There's no wrong answer,
+      just the one your fingers like.
+    sources:
+      - name: "Switch and Click: Linear vs Tactile vs Clicky Switches"
+        url: https://switchandclick.com/linear-vs-tactile-vs-clicky-switches
+  - question: What does hot-swap mean?
+    answer: >-
+      A [hot-swap](/wiki/hot-swap/) keyboard lets you pull the switches out and push new ones in. That's why
+      [many people start with one](https://keebsforall.com/blogs/mechanical-keyboards-101/mechanical-keyboard-switch-types-explained):
+      you can try different switches until you find your favourite.
+    sources:
+      - name: "KeebsForAll: Mechanical Keyboard Switch Types Explained"
+        url: https://keebsforall.com/blogs/mechanical-keyboards-101/mechanical-keyboard-switch-types-explained
+  - question: What are keycap profiles?
+    answer: >-
+      A profile is a keycap's shape. Cherry is the [most common profile](https://epomaker.com/blogs/guides/keycaps-profiles-overview-what-are-they-and-how-to-choose),
+      SA is the [tallest of the common ones](https://keebsforall.com/blogs/mechanical-keyboards-101/keycap-profiles-materials-buying-guide),
+      and flat ones like DSA are the same on every row. See our guide to [keycap profiles](/articles/keycap-profiles/).
+    sources:
+      - name: "Epomaker: Keycaps Profiles Overview"
+        url: https://epomaker.com/blogs/guides/keycaps-profiles-overview-what-are-they-and-how-to-choose
+      - name: "KeebsForAll: Keycap Profiles and Materials Buying Guide"
+        url: https://keebsforall.com/blogs/mechanical-keyboards-101/keycap-profiles-materials-buying-guide
+  - question: What do "thocky" and "clacky" mean?
+    answer: >-
+      They're [community slang, not technical terms](https://www.slashgear.com/1889435/creamy-keyboard-explained/). Thock is a deep sound,
+      clack is a bright one, and creamy is smooth. Our guide to [keyboard sound profiles](/articles/keyboard-sound-profiles/) explains
+      what changes the sound, from the case to the keycaps.
+    sources:
+      - name: "SlashGear: What Exactly Is A Creamy Keyboard?"
+        url: https://www.slashgear.com/1889435/creamy-keyboard-explained/
+  - question: What is a group buy?
+    answer: >-
+      A [group buy](/wiki/group-buy/) is a pre-order: fans pay up front so a keyboard or keycap set can be made in one batch, then wait
+      for it to be produced. For example, the [SWG Nightshift keycaps](https://geekhack.org/index.php?topic=127279.0) ran as a
+      group buy on Geekhack in November 2026. Patience is part of the hobby.
+    sources:
+      - name: "Geekhack: [GB] SWG Nightshift"
+        url: https://geekhack.org/index.php?topic=127279.0

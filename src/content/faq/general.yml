@@ -1,0 +1,41 @@
+# Beginner questions for the General page. Edit in Pages CMS ("Hobby FAQs") or here.
+hobby: general
+lastChecked: 2026-11-02
+questions:
+  - question: What counts as a hobby?
+    answer: >-
+      [Merriam-Webster](https://www.merriam-webster.com/dictionary/hobby) calls it something you do outside your regular job, mostly to relax.
+      Collecting, building, racing, playing: if it makes your free time better, it counts. Our article [What Is a Hobby?](/articles/what-is-a-hobby/) digs in.
+    sources:
+      - name: "Merriam-Webster: hobby"
+        url: https://www.merriam-webster.com/dictionary/hobby
+  - question: Where does the word "hobby" come from?
+    answer: >-
+      From a horse! Around 1400 a "hobby" was a [small, active horse](https://www.etymonline.com/word/hobby). It later meant a toy hobbyhorse,
+      and by 1816 "hobby" meant a favourite pastime.
+    sources:
+      - name: "Online Etymology Dictionary: hobby"
+        url: https://www.etymonline.com/word/hobby
+  - question: How do I pick my first hobby?
+    answer: >-
+      Try our [hobby quiz](/quiz/): five quick questions, and it points you to the hobby that fits you best. Then read that hobby's
+      beginner questions on its page. No pressure, you can always pick more than one.
+    sources: []
+  - question: Is there a cheap way to start?
+    answer: >-
+      Usually, yes. [Box Stock Mini 4WD races](https://www.lilshobbycenter.com.ph/blogs/regulations/box-stock-competition-rules-2026) use the kit straight from the box,
+      [VALORANT](https://playvalorant.com/en-us/) is free to play, and buying [singles](/wiki/singles/) means paying only for the cards you need.
+    sources:
+      - name: "Lil's Hobby Center: Box Stock Competition Regulations 2026"
+        url: https://www.lilshobbycenter.com.ph/blogs/regulations/box-stock-competition-rules-2026
+      - name: "Riot Games: VALORANT"
+        url: https://playvalorant.com/en-us/
+  - question: How do you check your facts?
+    answer: >-
+      Every fact links to where it came from, and each article ends with a Sources list. Our [editorial standards](/standards/) explain how we
+      check things and how we fix mistakes, with a correction note so nothing gets quietly erased.
+    sources: []
+  - question: Can I suggest a topic or send a correction?
+    answer: >-
+      Please do! Tips, corrections and ideas go to [hello@buildplaycollect.com](mailto:hello@buildplaycollect.com), or use our [contact page](/contact/).
+    sources: []

@@ -148,3 +148,12 @@ The VALORANT, League of Legends, TFT and Dota 2 hubs each have a page with every
 To update them after a patch adds a new champion, agent or map, run `npm run esports:data`. It reads each game's own data feed (Riot's Data Dragon for League and TFT, valorant-api.com for VALORANT, dota2.com for Dota 2), downloads only the new pictures, and rewrites the lists. When a new TFT set starts, it finds the new set by itself.
 
 The game logos (next to each game's name) are Riot's press-kit logos and Valve's logo from dota2.com, in `public/images/esports/logos/`. Riot's rules say to use them unedited and to keep Riot's notice on the page, which the hubs do.
+
+## Hobby FAQs (beginner questions)
+
+Every hobby page ends with "beginner questions" that fold open when tapped. They live in one file per hobby, in `src/content/faq/` (for example `tamiya.yml`). The easy way to edit them is Pages CMS, under **Hobby FAQs**.
+
+- **Answers:** 2 or 3 short sentences in our voice. Write a link as `[words](https://...)` and bold as `**words**`. Nothing else is turned into formatting, so the page can't break.
+- **Sources:** add one for every fact, the same as in an article. They're gathered into the Sources box under the questions, and each site is shown only once.
+- **Answers last checked:** set it to today whenever you re-check the answers. The date shows in the Sources box.
+- **Behind the scenes:** `src/components/HobbyFaq.astro` draws the section, and `src/lib/faq-text.ts` turns the links and bold into HTML. The hobby page also tells Google what the questions are (FAQPage data). Google mostly stopped showing FAQ drop-downs in search results in 2023, so the real win is answering the questions beginners actually search for.

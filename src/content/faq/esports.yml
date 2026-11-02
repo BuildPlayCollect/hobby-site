@@ -1,0 +1,50 @@
+# Beginner questions for the Esports page. Edit in Pages CMS ("Hobby FAQs") or here.
+hobby: esports
+lastChecked: 2026-11-02
+questions:
+  - question: What is VALORANT?
+    answer: >-
+      A [free 5v5 shooter from Riot Games](https://playvalorant.com/en-us/). You pick an Agent with special abilities, one team tries to plant
+      a bomb called the Spike, and the other tries to stop it. First team to win **13 rounds** takes the match.
+      Start with our [VALORANT hub](/esports/valorant/).
+    sources:
+      - name: "Riot Games: VALORANT"
+        url: https://playvalorant.com/en-us/
+  - question: How do you win a game of League of Legends?
+    answer: >-
+      Two teams of five battle across three lanes, and you win by [destroying the other team's Nexus](https://www.leagueoflegends.com/en-us/how-to-play/),
+      the heart of their base. Easy to say, hard to do. Our [League of Legends hub](/esports/league-of-legends/) explains the rest.
+    sources:
+      - name: "Riot Games: How to play League of Legends"
+        url: https://www.leagueoflegends.com/en-us/how-to-play/
+  - question: What is Dota 2?
+    answer: >-
+      A [free team game from Valve](https://store.steampowered.com/app/570/Dota_2/) where two teams of five try to destroy the other side's
+      Ancient. Every hero is included at no cost. See our [Dota 2 hub](/esports/dota-2/) for the basics and the big tournaments.
+    sources:
+      - name: "Steam: Dota 2"
+        url: https://store.steampowered.com/app/570/Dota_2/
+  - question: What is Pokémon Champions VGC?
+    answer: >-
+      Competitive Pokémon battles in Doubles: two Pokémon on each side at once. You bring six and
+      [pick four to use each battle](https://victoryroad.pro/champions-regulations/). Our
+      [learn-to-play guide](/esports/pokemon-champions/learn/) walks you through your first turn.
+    sources:
+      - name: "Victory Road: Pokémon Champions regulations"
+        url: https://victoryroad.pro/champions-regulations/
+  - question: Do I need to pay to start?
+    answer: >-
+      Not for these three: [VALORANT](https://playvalorant.com/en-us/), [League of Legends](https://www.leagueoflegends.com/en-us/how-to-play/)
+      and [Dota 2](https://store.steampowered.com/app/570/Dota_2/) are all free to play. You just need a computer that can run them.
+    sources:
+      - name: "Riot Games: VALORANT"
+        url: https://playvalorant.com/en-us/
+      - name: "Riot Games: How to play League of Legends"
+        url: https://www.leagueoflegends.com/en-us/how-to-play/
+      - name: "Steam: Dota 2"
+        url: https://store.steampowered.com/app/570/Dota_2/
+  - question: What does "the meta" mean?
+    answer: >-
+      The strategies and picks that top players think are strongest right now. It changes with every balance patch, which is why we list
+      the latest patch notes on our [game hubs](/esports/). Our [meta wiki page](/wiki/meta/) has more.
+    sources: []

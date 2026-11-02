@@ -485,3 +485,74 @@ content:
         label: Permission note (not shown on the site)
         description: Where the permission is saved, e.g. "Press kit Dropbox link, 2026-10-18" or "Email from Restoration Games, 2026-10-20".
         type: text
+
+  # Hobby FAQs: the "beginner questions" on each hobby page (one file per hobby).
+  - name: faq
+    label: Hobby FAQs
+    type: collection
+    path: src/content/faq
+    format: yaml
+    filename: "{fields.hobby}.yml"
+    view:
+      fields: [hobby, lastChecked]
+      primary: hobby
+    fields:
+      - name: hobby
+        label: Hobby
+        description: Which hobby page these questions appear on.
+        type: select
+        required: true
+        options:
+          values:
+            - name: beyblade
+              label: Beyblade
+            - name: tamiya
+              label: Tamiya
+            - name: keyboards
+              label: Keyboards
+            - name: tcg
+              label: TCG
+            - name: consoles
+              label: Consoles
+            - name: esports
+              label: Esports
+            - name: boardgames
+              label: Board games
+            - name: general
+              label: General
+      - name: lastChecked
+        label: Answers last checked
+        description: Change this to today whenever you re-check the answers against their sources.
+        type: date
+        options:
+          format: yyyy-MM-dd
+      - name: questions
+        label: Questions
+        description: Keep it to about 6 to 8 beginner questions. Drag to reorder.
+        type: object
+        list: true
+        fields:
+          - name: question
+            label: Question
+            type: string
+            required: true
+          - name: answer
+            label: Answer
+            description: '2 or 3 short sentences in our voice. Links look like [words](https://...), and **words** makes them bold.'
+            type: text
+            required: true
+          - name: sources
+            label: Sources
+            description: Where each fact came from. Leave empty only if the answer just points to our own pages.
+            type: object
+            list: true
+            fields:
+              - name: name
+                label: Source name
+                description: 'Who and what, e.g. "Tamiya: Mini 4WD Official Race Regulations".'
+                type: string
+                required: true
+              - name: url
+                label: Link
+                type: string
+                required: true
