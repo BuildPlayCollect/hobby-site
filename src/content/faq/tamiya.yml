@@ -1,0 +1,48 @@
+# Beginner questions for the Tamiya page. Edit in Pages CMS ("Hobby FAQs") or here.
+hobby: tamiya
+lastChecked: 2026-11-02
+questions:
+  - question: What is a Mini 4WD?
+    answer: >-
+      A small Tamiya kit car with a motor, two AA batteries and four-wheel drive. There's no remote and no steering:
+      the walls of the track do the steering for you. The skill is in the setup, which is why
+      [Tamiya's race rules](https://tamiya.com/english/mini4wd/regulation.htm) spend so long on what you can and can't change.
+    sources:
+      - name: "Tamiya: Mini 4WD Official Race Regulations"
+        url: https://tamiya.com/english/mini4wd/regulation.htm
+  - question: Which race class should I start with?
+    answer: >-
+      Box Stock, where you race the kit straight from the box, is the cheapest way in. It's a shop class, not a Tamiya one,
+      so the details change: in the Philippines, see [Lil's Hobby Center's Box Stock rules](https://www.lilshobbycenter.com.ph/blogs/regulations/box-stock-competition-rules-2026).
+      Our guide to [Mini 4WD race classes](/articles/mini-4wd-race-classes/) walks through every class.
+    sources:
+      - name: "Lil's Hobby Center: Box Stock Competition Regulations 2026"
+        url: https://www.lilshobbycenter.com.ph/blogs/regulations/box-stock-competition-rules-2026
+  - question: Can I add upgrade parts?
+    answer: >-
+      In Tamiya's own [Stock Class](https://tamiya.com/english/mini4wd/regulation_stockclass.html), yes: you can bolt on upgrade parts,
+      but you can't cut the chassis. Other classes allow more or less, so check the race's rules before you start modding.
+    sources:
+      - name: "Tamiya: Mini 4WD Stock Class Regulations"
+        url: https://tamiya.com/english/mini4wd/regulation_stockclass.html
+  - question: Which batteries can I use?
+    answer: >-
+      At races under [Tamiya's official rules](https://tamiya.com/english/mini4wd/regulation.htm), only Tamiya-branded AA batteries are allowed,
+      and a battery with a damaged label is turned away for safety. Some events have their own battery rules, so check before race day.
+    sources:
+      - name: "Tamiya: Mini 4WD Official Race Regulations"
+        url: https://tamiya.com/english/mini4wd/regulation.htm
+  - question: How big can my car be?
+    answer: >-
+      [Tamiya's rules](https://tamiya.com/english/mini4wd/regulation.htm) allow up to **105 mm wide** and **165 mm long**, and the car must weigh
+      at least **90 g** with its batteries and motor. Our [official rules summary](/rules/mini-4wd-official-rules/) has the rest.
+    sources:
+      - name: "Tamiya: Mini 4WD Official Race Regulations"
+        url: https://tamiya.com/english/mini4wd/regulation.htm
+  - question: Where can I buy Mini 4WD kits in the Philippines?
+    answer: >-
+      Lil's Hobby Center calls itself the [exclusive Tamiya distributor of Mini 4WD cars](https://www.lilshobbycenter.com.ph/collections/mini-4wd)
+      in the Philippines, and it also runs races. Local hobby shops stock kits too, so ask at the one nearest you.
+    sources:
+      - name: "Lil's Hobby Center: Mini 4WD"
+        url: https://www.lilshobbycenter.com.ph/collections/mini-4wd
