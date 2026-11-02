@@ -84,6 +84,20 @@ export const EVENT_SOURCES: Source[] = [
 // Recent big results with the top 8 teams (Pokémon as Smogon/Showdown names, so icons and type colours work).
 export const RESULTS = [
   {
+    name: 'Gdańsk Regional', place: 'Gdańsk, Poland', date: '2026-11-01', reg: 'M-C', players: '756 Masters',
+    source: { label: 'metaVGC: 2027 Gdańsk Regional teams', url: 'https://metavgc.com/teams/featured/regional-gdansk' },
+    top: [
+      { p: 'Javier Varela', c: 'ESP', team: ['Tyranitar-Mega', 'Staraptor-Mega', 'Gholdengo', 'Milotic', 'Sinistcha', 'Excadrill'] },
+      { p: 'Jude Lee', c: 'SGP', team: ['Garchomp-Mega', 'Floette-Mega', 'Sneasler', 'Incineroar', 'Rillaboom', 'Kingambit'] },
+      { p: 'Michael Kelsch', c: 'DEU', team: ['Salamence-Mega', 'Charizard-Mega-Y', 'Kingambit', 'Sneasler', 'Basculegion', 'Whimsicott'] },
+      { p: 'Ko Tsukide', c: 'GBR', team: ['Charizard-Mega-Y', 'Sneasler', 'Kingambit', 'Garchomp', 'Basculegion', 'Whimsicott'] },
+      { p: 'Liam Chatterjee', c: 'DEU', team: ['Floette-Mega', 'Charizard-Mega-Y', 'Indeedee', 'Glimmora', 'Garchomp', 'Whimsicott'] },
+      { p: 'Nikola Zirdum', c: 'LUX', team: ['Floette-Mega', 'Salamence-Mega', 'Rillaboom', 'Basculegion', 'Kingambit', 'Sneasler'] },
+      { p: 'Dennis Komen', c: 'DEU', team: ['Charizard-Mega-Y', 'Salamence-Mega', 'Basculegion', 'Kingambit', 'Whimsicott', 'Sneasler'] },
+      { p: 'Alex Soto', c: 'ESP', team: ['Floette-Mega', 'Delphox-Mega', 'Sinistcha', 'Kingambit', 'Incineroar', 'Sneasler'] },
+    ],
+  },
+  {
     name: 'Puebla Regional', place: 'Puebla, Mexico', date: '2026-10-25', reg: 'M-C', players: '333 Masters',
     source: { label: 'Victory Road: 2027 Puebla Regional', url: 'https://victoryroad.pro/2027-puebla/' },
     top: [
@@ -137,20 +151,6 @@ export const RESULTS = [
       { p: 'Juan Manuel Odriozola', c: 'ESP', team: ['Charizard-Mega-Y', 'Venusaur', 'Incineroar', 'Toxapex', 'Sylveon', 'Garchomp'] },
       { p: 'Valentijn Visser', c: 'NLD', team: ['Glimmora-Mega', 'Froslass-Mega', 'Incineroar', 'Basculegion', 'Volcarona', 'Rillaboom'] },
       { p: 'Giuseppe Musicco', c: 'ITA', team: ['Dragonite-Mega', 'Floette-Mega', 'Incineroar', 'Gholdengo', 'Sneasler', 'Rillaboom'] },
-    ],
-  },
-  {
-    name: 'Baltimore Regional', place: 'Baltimore, USA', date: '2026-09-20', reg: 'M-C', players: '1,081 Masters',
-    source: { label: 'Victory Road: 2027 Baltimore Regional', url: 'https://victoryroad.pro/2027-baltimore/' },
-    top: [
-      { p: 'Joseph Ugarte', c: 'USA', team: ['Salamence-Mega', 'Tyranitar-Mega', 'Excadrill', 'Corviknight', 'Sneasler', 'Indeedee'] },
-      { p: 'Aditya Subramanian', c: 'IND', team: ['Charizard-Mega-Y', 'Golisopod-Mega', 'Farigiraf', 'Archaludon', 'Politoed', 'Grimmsnarl'] },
-      { p: 'Brady Smith', c: 'USA', team: ['Gengar-Mega', 'Vivillon-High Plains', 'Incineroar', 'Archaludon', 'Politoed', 'Rillaboom'] },
-      { p: 'Blaik Thompson', c: 'USA', team: ['Salamence-Mega', 'Metagross-Mega', 'Arcanine-Hisui', 'Milotic', 'Sneasler', 'Indeedee'] },
-      { p: 'Lorenzo Arce', c: 'USA', team: ['Raichu-Mega-Y', 'Staraptor-Mega', 'Ceruledge', 'Gholdengo', 'Milotic', 'Rillaboom'] },
-      { p: 'Esa Ishaque', c: 'CAN', team: ['Raichu-Mega-Y', 'Froslass-Mega', 'Arcanine-Hisui', 'Kingambit', 'Sneasler', 'Rillaboom'] },
-      { p: 'Conner Pietrusinski', c: 'USA', team: ['Raichu-Mega-Y', 'Staraptor-Mega', 'Arcanine-Hisui', 'Gholdengo', 'Sylveon', 'Rillaboom'] },
-      { p: 'Cole Basham', c: 'USA', team: ['Delphox-Mega', 'Floette-Mega', 'Incineroar', 'Kingambit', 'Sneasler', 'Rillaboom'] },
     ],
   },
 ];
