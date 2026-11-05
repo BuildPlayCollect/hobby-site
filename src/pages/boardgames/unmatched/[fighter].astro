@@ -139,7 +139,7 @@ const sources = [...new Set([f.url, ...(g?.sources ?? [])]), ...(deck.length ? [
   {deck.length > 0 && (
     <section class="f-section f-deck" id="cards">
       <h2>Cards in {name}'s deck</h2>
-      <p>{deck.length} different cards, {deckSize} copies in all as the card database lists them{deckSize < 20 ? ' (the database only has part of this deck so far)' : ''}. The number on a card's corner is how many copies there are. Tap a card to see it bigger, or tap a card name in the combos above to jump to it.</p>
+      <p>{deck.length} different cards, {deckSize} copies in all as the card database lists them{deckSize < 20 ? ' (the database only has part of this deck so far)' : ''}. The number on a card's corner is how many copies there are. Tap a card here, or a card in the combos above, to see it bigger.</p>
       <ul class="f-cards">{deck.map((card) => <CardTile card={card} fighter={name} />)}</ul>
       <p class="f-source">Card list, card text and card pictures from <a href={UM_CARDS_SOURCE.url}>{UM_CARDS_SOURCE.name}</a>, a fan-made Unmatched site. Card images: Restoration Games (and the brands they license), via {UM_CARDS_SOURCE.name}. If a card picture is small, we print its text underneath.</p>
     </section>
