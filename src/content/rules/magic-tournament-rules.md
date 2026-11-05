@@ -5,7 +5,7 @@ scope: official
 organizer: "Wizards of the Coast"
 sourceUrl: "https://media.wizards.com/ContentResources/WPN/MTG_MTR_2026_Feb27_EN.pdf"
 version: "Effective February 27, 2026"
-lastChecked: 2026-10-29
+lastChecked: 2026-11-05
 summary: "The basics of the official Magic Tournament Rules: deck construction, formats, match structure, round time, sleeves, conduct and penalties."
 ---
 
@@ -49,5 +49,7 @@ The MTR does not list penalty levels itself. For example, when the Head Judge be
 ## Read the full rules
 
 - [Magic: The Gathering Tournament Rules, effective February 27, 2026 (PDF)](https://media.wizards.com/ContentResources/WPN/MTG_MTR_2026_Feb27_EN.pdf)
+
+**What changed (November 5, 2026):** No changes. The Magic Tournament Rules are still the February 27, 2026 edition.
 
 **What changed (October 29, 2026):** No changes. The Magic Tournament Rules are still the February 27, 2026 edition.

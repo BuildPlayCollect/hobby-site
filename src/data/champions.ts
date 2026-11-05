@@ -84,8 +84,8 @@ export const EVENT_SOURCES: Source[] = [
 // Recent big results with the top 8 teams (Pokémon as Smogon/Showdown names, so icons and type colours work).
 export const RESULTS = [
   {
-    name: 'Gdańsk Regional', place: 'Gdańsk, Poland', date: '2026-11-01', reg: 'M-C', players: '756 Masters',
-    source: { label: 'metaVGC: 2027 Gdańsk Regional teams', url: 'https://metavgc.com/teams/featured/regional-gdansk' },
+    name: 'Gdańsk Regional', place: 'Gdańsk, Poland', date: '2026-11-01', reg: 'M-C', players: '758 Masters',
+    source: { label: 'Victory Road: 2027 Gdańsk Regional', url: 'https://victoryroad.pro/2027-gdansk/' },
     top: [
       { p: 'Javier Varela', c: 'ESP', team: ['Tyranitar-Mega', 'Staraptor-Mega', 'Gholdengo', 'Milotic', 'Sinistcha', 'Excadrill'] },
       { p: 'Jude Lee', c: 'SGP', team: ['Garchomp-Mega', 'Floette-Mega', 'Sneasler', 'Incineroar', 'Rillaboom', 'Kingambit'] },
