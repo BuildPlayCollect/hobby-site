@@ -1,6 +1,7 @@
 ---
 // Lightbox.astro: tap a photo to see it big, like most photo sites. One shared viewer for the whole site.
-// Which pictures enlarge: photos inside articles (.prose), any <img data-zoom>, Unmatched card buttons (.umc-open),
+// Which pictures enlarge: photos inside articles (.prose), any <img data-zoom>, Unmatched card buttons (.umc-open)
+// and the combo chips that point at them (a.umc-chip),
 // and esports roster buttons ([data-lb-open]) that show an Agent or hero with its details underneath.
 // Close with the × button, a tap on the dark background, or the Esc key.
 ---
@@ -46,6 +47,18 @@
     document.querySelectorAll<HTMLButtonElement>('.umc-open').forEach((btn) => {
       btn.addEventListener('click', () => {
         open(btn.querySelector('img')!, btn.parentElement?.querySelector('.umc-under'), btn.hasAttribute('data-small'));
+      });
+    });
+
+    // Unmatched combo chips ("See Sai"): open that card's close-up right here instead of jumping down to the deck.
+    // Without a card picture (or without JavaScript) the link still jumps to the card in the deck list.
+    document.querySelectorAll<HTMLAnchorElement>('a.umc-chip').forEach((chip) => {
+      chip.addEventListener('click', (e) => {
+        const id = decodeURIComponent(chip.hash.slice(1));
+        const btn = id ? document.getElementById(id)?.querySelector<HTMLButtonElement>('.umc-open') : null;
+        if (!btn) return;
+        e.preventDefault();
+        btn.click();
       });
     });
 
