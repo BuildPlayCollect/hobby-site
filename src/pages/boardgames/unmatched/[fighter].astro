@@ -30,9 +30,16 @@ const allArt = await getUnmatchedArt();
 const art = allArt.get(f.id);
 const logo = allArt.get('logo');
 const g = f.guide;
-const deck = deckOf(f.id)?.cards ?? [];
+const deckData = deckOf(f.id);
+const deck = deckData?.cards ?? [];
+const extras = deckData?.extras ?? {};
+const extraList = [
+  extras.character && { src: extras.character, alt: `${name}'s character card: health, move, attack type, special ability and sidekick`, label: 'Character card' },
+  extras.mini && { src: extras.mini, alt: `${name}'s miniature`, label: 'The mini' },
+  extras.back && { src: extras.back, alt: `The back of ${name}'s cards`, label: 'Card back' },
+].filter(Boolean) as { src: string; alt: string; label: string }[];
 const deckSize = deck.reduce((n, c) => n + c.qty, 0);
-const sources = [...new Set([f.url, ...(g?.sources ?? [])]), ...(deck.length ? [{ url: UM_CARDS_SOURCE.url, label: `Card list, text and pictures (checked ${UM_CARDS_SOURCE.fetched})` }] : [])];
+const sources = [...new Set([f.url, ...(g?.sources ?? [])]), ...(deck.length ? [{ url: UM_CARDS_SOURCE.url, label: `Card list, text and pictures, character card, mini and card back (checked ${UM_CARDS_SOURCE.fetched})` }] : [])];
 ---
 <Base title={`${name} in Unmatched: stats, tips and combos`} description={`How to play ${name} in Unmatched: ${f.health ?? '?'} health, ${f.attack ?? 'unconfirmed'} attacks, ${f.tier ? `tier ${f.tier.tier} with a ${f.tier.win}% average win rate` : 'not ranked yet'}. ${f.ability}`}>
   <header class="page-head fh" style={`--c:${lineColor(set.line)}`}>
@@ -50,6 +57,13 @@ const sources = [...new Set([f.url, ...(g?.sources ?? [])]), ...(deck.length ? [
     <figure class="f-art">
       <img src={art.image} alt={art.alt} data-zoom />
       <figcaption>{art.credit}</figcaption>
+    </figure>
+  )}
+
+  {extraList.length > 0 && (
+    <figure class="f-extras">
+      <ul>{extraList.map((x) => <li><img src={x.src} alt={x.alt} loading="lazy" decoding="async" data-zoom /><span>{x.label}</span></li>)}</ul>
+      <figcaption>Art: Restoration Games (and the brands they license), via <a href={UM_CARDS_SOURCE.url}>{UM_CARDS_SOURCE.name}</a>. The mini is the Club's 3D view of the figure. Tap to see bigger.</figcaption>
     </figure>
   )}
 
@@ -127,7 +141,7 @@ const sources = [...new Set([f.url, ...(g?.sources ?? [])]), ...(deck.length ? [
       <h2>Cards in {name}'s deck</h2>
       <p>{deck.length} different cards, {deckSize} copies in all as the card database lists them{deckSize < 20 ? ' (the database only has part of this deck so far)' : ''}. The number on a card's corner is how many copies there are. Tap a card to see it bigger, or tap a card name in the combos above to jump to it.</p>
       <ul class="f-cards">{deck.map((card) => <CardTile card={card} fighter={name} />)}</ul>
-      <p class="f-source">Card list, card text and card pictures from <a href={UM_CARDS_SOURCE.url}>unmatched.cards</a>, a fan-made card database. Card images: Restoration Games (and the brands they license), via unmatched.cards. Some cards only have a small scan there, so we print their text underneath.</p>
+      <p class="f-source">Card list, card text and card pictures from <a href={UM_CARDS_SOURCE.url}>{UM_CARDS_SOURCE.name}</a>, a fan-made Unmatched site. Card images: Restoration Games (and the brands they license), via {UM_CARDS_SOURCE.name}. If a card picture is small, we print its text underneath.</p>
     </section>
   )}
 
@@ -144,6 +158,12 @@ const sources = [...new Set([f.url, ...(g?.sources ?? [])]), ...(deck.length ? [
   .f-art { margin: 6px 0 22px; max-width: 760px; }
   .f-art img { display: block; width: auto; max-width: 100%; height: auto; max-height: 520px; object-fit: contain; border: 2px solid var(--line); border-radius: 16px; background: var(--surface-2); }
   .f-art figcaption { color: var(--muted); font-size: .8rem; margin-top: 6px; }
+  .f-extras { margin: 0 0 22px; }
+  .f-extras ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end; }
+  .f-extras li { display: grid; gap: 4px; justify-items: center; }
+  .f-extras img { display: block; height: 220px; width: auto; max-width: 100%; border-radius: 12px; cursor: zoom-in; }
+  .f-extras span { font-size: .8rem; font-weight: 700; color: var(--muted); }
+  .f-extras figcaption { color: var(--muted); font-size: .8rem; margin-top: 8px; }
   .fh-row { display: flex; align-items: center; gap: 18px; }
   .fh-row h1 { margin: 0 0 4px; }
   .fh-row p { margin: 0; }
@@ -185,5 +205,7 @@ const sources = [...new Set([f.url, ...(g?.sources ?? [])]), ...(deck.length ? [
     .fh-row { gap: 12px; }
     .fh-row :global(.um-badge) { width: 64px; height: 64px; }
     .f-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 10px; }
+    .f-extras ul { gap: 10px; }
+    .f-extras img { height: 150px; }
   }
 </style>
