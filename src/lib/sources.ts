@@ -24,6 +24,7 @@ const SITE_NAMES: Record<string, string> = {
   'restorationgames.com': 'Restoration Games',
   'unmatched.machaka.net': 'Unmatched stats (machaka)',
   'unmatched.cards': 'unmatched.cards (fan card database)',
+  'the-unmatched.club': 'The Unmatched Club (fan site)',
   'opinionatedgamers.com': 'The Opinionated Gamers',
   'gamingtrend.com': 'GamingTrend',
   'spacebiff.com': 'Space-Biff!',

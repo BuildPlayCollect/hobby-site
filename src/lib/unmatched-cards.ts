@@ -1,14 +1,15 @@
-// Every card in each Unmatched deck (src/data/unmatched-cards.json, built from the unmatched.cards fan database by
-// research/unmatched/build-cards.py), plus a helper that finds which real cards a combo line names.
+// Every card in each Unmatched deck (src/data/unmatched-cards.json, built from The Unmatched Club fan site by
+// research/unmatched/unmatched-club/build-club.py), plus each fighter's character card, mini and card back,
+// and a helper that finds which real cards a combo line names.
 import data from '../data/unmatched-cards.json' with { type: 'json' };
 
 export type UmCard = {
   slug: string; title: string; type: 'attack' | 'defense' | 'versatile' | 'scheme'; value: number | null; boost: number | null;
   qty: number; who: string; text: { basic?: string; immediate?: string; during?: string; after?: string }; img?: string; small?: boolean;
 };
-export type UmDeck = { deck: string; cards: UmCard[] };
+export type UmDeck = { deck: string; cards: UmCard[]; extras?: { character?: string; mini?: string; back?: string } };
 
-export const UM_CARDS_SOURCE = { name: 'unmatched.cards', url: data.source, fetched: data.fetched };
+export const UM_CARDS_SOURCE = { name: data.sourceName, url: data.source, fetched: data.fetched };
 const decks = data.decks as Record<string, UmDeck>;
 export const deckOf = (fighterId: string): UmDeck | undefined => decks[fighterId];
 
