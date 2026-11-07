@@ -3544,7 +3544,7 @@ export const UM_FIGHTERS: UmFighter[] = [
     "attack": "melee",
     "sidekick": null,
     "ability": null,
-    "notes": "Source page shows '-' for health, move and ability; stats NOT verified. Do not assume they match the 2019 Bruce Lee.",
+    "notes": "The Unmatched Club doesn't list his health, move or ability yet. Restoration Games' design diary says his deck plays the same as the 2019 solo Bruce Lee, with reformatted cards and revised wording.",
     "url": "https://www.the-unmatched.club/heroes/bruce-lee-2",
     "tier": null,
     "guide": null

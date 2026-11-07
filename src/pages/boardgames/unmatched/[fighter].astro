@@ -9,7 +9,7 @@ import { UM_FIGHTERS, UM_TIER_SOURCE, type UmFighter } from '../../../data/unmat
 import { setOf, displayName, fighterUrl, fewGames, lineColor } from '../../../lib/unmatched';
 import { getUnmatchedArt } from '../../../lib/unmatched-art';
 import CardTile from '../../../components/unmatched/CardTile.astro';
-import { deckOf, cardsInCombo, UM_CARDS_SOURCE } from '../../../lib/unmatched-cards';
+import { deckOf, cardsInCombo, UM_CARDS_SOURCE, SAME_DECK_AS } from '../../../lib/unmatched-cards';
 
 export function getStaticPaths() {
   return UM_FIGHTERS.map((f) => ({ params: { fighter: f.id }, props: { f } }));
@@ -31,6 +31,7 @@ const art = allArt.get(f.id);
 const logo = allArt.get('logo');
 const g = f.guide;
 const deckData = deckOf(f.id);
+const sameDeck = SAME_DECK_AS[f.id];
 const deck = deckData?.cards ?? [];
 const extras = deckData?.extras ?? {};
 const extraList = [
@@ -39,7 +40,7 @@ const extraList = [
   extras.back && { src: extras.back, alt: `The back of ${name}'s cards`, label: 'Card back' },
 ].filter(Boolean) as { src: string; alt: string; label: string }[];
 const deckSize = deck.reduce((n, c) => n + c.qty, 0);
-const sources = [...new Set([f.url, ...(g?.sources ?? [])]), ...(deck.length ? [{ url: UM_CARDS_SOURCE.url, label: `Card list, text and pictures, character card, mini and card back (checked ${UM_CARDS_SOURCE.fetched})` }] : [])];
+const sources = [...new Set([f.url, ...(g?.sources ?? []), ...(sameDeck ? [sameDeck.source] : [])]), ...(deck.length ? [{ url: UM_CARDS_SOURCE.url, label: `Card list, text and pictures, character card, mini and card back (checked ${UM_CARDS_SOURCE.fetched})` }] : [])];
 ---
 <Base title={`${name} in Unmatched: stats, tips and combos`} description={`How to play ${name} in Unmatched: ${f.health ?? '?'} health, ${f.attack ?? 'unconfirmed'} attacks, ${f.tier ? `tier ${f.tier.tier} with a ${f.tier.win}% average win rate` : 'not ranked yet'}. ${f.ability}`}>
   <header class="page-head fh" style={`--c:${lineColor(set.line)}`}>
@@ -140,6 +141,7 @@ const sources = [...new Set([f.url, ...(g?.sources ?? [])]), ...(deck.length ? [
     <section class="f-section f-deck" id="cards">
       <h2>Cards in {name}'s deck</h2>
       <p>{deck.length} different cards, {deckSize} copies in all as the card database lists them{deckSize < 20 ? ' (the database only has part of this deck so far)' : ''}. The number on a card's corner is how many copies there are. Tap a card here, or a card in the combos above, to see it bigger.</p>
+      {sameDeck && <p class="f-deck-note">{sameDeck.note} (<a href={sameDeck.source}>Restoration Games design diary</a>)</p>}
       <ul class="f-cards">{deck.map((card) => <CardTile card={card} fighter={name} />)}</ul>
       <p class="f-source">Card list, card text and card pictures from <a href={UM_CARDS_SOURCE.url}>{UM_CARDS_SOURCE.name}</a>, a fan-made Unmatched site. Card images: Restoration Games (and the brands they license), via {UM_CARDS_SOURCE.name}. If a card picture is small, we print its text underneath.</p>
     </section>
