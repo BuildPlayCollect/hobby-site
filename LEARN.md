@@ -157,3 +157,9 @@ Every hobby page ends with "beginner questions" that fold open when tapped. They
 - **Sources:** add one for every fact, the same as in an article. They're gathered into the Sources box under the questions, and each site is shown only once.
 - **Answers last checked:** set it to today whenever you re-check the answers. The date shows in the Sources box.
 - **Behind the scenes:** `src/components/HobbyFaq.astro` draws the section, and `src/lib/faq-text.ts` turns the links and bold into HTML. The hobby page also tells Google what the questions are (FAQPage data). Google mostly stopped showing FAQ drop-downs in search results in 2023, so the real win is answering the questions beginners actually search for.
+
+## Unmatched matchups (good and tough)
+
+Every fighter page has a "Good and tough matchups" box. The numbers live in `src/data/unmatched-matchups.json` (one entry per fighter: total games, then up to 3 good and 3 tough opponents with wins, losses, games and win %). `src/lib/unmatched-matchups.ts` turns those ids into real fighters for the page and holds the source name and "checked" date.
+
+They come from each fighter's page on Tabletop League (tabletopleague.com/games/unmatched/stats/characters). Rules: only pairs with 20+ real games, good = 55%+ wins, tough = 45% or less. To refresh, re-read those pages, update the JSON and change the `checked` date in the lib file.

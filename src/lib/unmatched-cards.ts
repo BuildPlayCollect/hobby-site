@@ -11,7 +11,17 @@ export type UmDeck = { deck: string; cards: UmCard[]; extras?: { character?: str
 
 export const UM_CARDS_SOURCE = { name: data.sourceName, url: data.source, fetched: data.fetched };
 const decks = data.decks as Record<string, UmDeck>;
-export const deckOf = (fighterId: string): UmDeck | undefined => decks[fighterId];
+// Fighters whose own deck isn't in the card database yet but play the same deck as another release.
+// Restoration Games' design diary says the Lee vs Ali (2025) Bruce Lee deck kept the same gameplay as before, with
+// reformatted cards and revised wording, so his page shows the 2019 solo deck's cards with a note saying so.
+export const SAME_DECK_AS: Record<string, { from: string; note: string; source: string }> = {
+  'bruce-lee-2': {
+    from: 'bruce-lee',
+    note: "These are the card pictures from the 2019 solo Bruce Lee deck. Restoration Games says his Lee vs Ali deck plays the same way, but the cards were reformatted and the wording revised, so your copies will look a little different.",
+    source: 'https://restorationgames.com/design-diary-lee-vs-ali/',
+  },
+};
+export const deckOf = (fighterId: string): UmDeck | undefined => decks[fighterId] ?? decks[SAME_DECK_AS[fighterId]?.from ?? ''];
 
 const norm = (s: string) => s.toLowerCase().replace(/[‘’]/g, "'").replace(/[^a-z0-9'+]+/g, ' ').trim();
 
