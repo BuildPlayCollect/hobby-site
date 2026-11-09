@@ -1,6 +1,6 @@
 ---
 // One page per Unmatched fighter (/boardgames/unmatched/medusa ...): stats, what makes them special,
-// where they sit on the tier list, and a play guide with card combos when a trustworthy one exists.
+// where they sit on the tier list, their good and tough matchups, and a play guide with card combos when a trustworthy one exists.
 import Disclaimer from '../../../components/unmatched/Disclaimer.astro';
 import Base from '../../../layouts/Base.astro';
 import Badge from '../../../components/unmatched/Badge.astro';
@@ -10,6 +10,7 @@ import { setOf, displayName, fighterUrl, fewGames, lineColor } from '../../../li
 import { getUnmatchedArt } from '../../../lib/unmatched-art';
 import CardTile from '../../../components/unmatched/CardTile.astro';
 import { deckOf, cardsInCombo, UM_CARDS_SOURCE } from '../../../lib/unmatched-cards';
+import { matchupsOf, UM_MATCHUP_SOURCE, type UmMatchup } from '../../../lib/unmatched-matchups';
 
 export function getStaticPaths() {
   return UM_FIGHTERS.map((f) => ({ params: { fighter: f.id }, props: { f } }));
@@ -39,7 +40,14 @@ const extraList = [
   extras.back && { src: extras.back, alt: `The back of ${name}'s cards`, label: 'Card back' },
 ].filter(Boolean) as { src: string; alt: string; label: string }[];
 const deckSize = deck.reduce((n, c) => n + c.qty, 0);
-const sources = [...new Set([f.url, ...(g?.sources ?? [])]), ...(deck.length ? [{ url: UM_CARDS_SOURCE.url, label: `Card list, text and pictures, character card, mini and card back (checked ${UM_CARDS_SOURCE.fetched})` }] : [])];
+const mu = matchupsOf(f.id);
+const muLists: { key: 'good' | 'tough'; title: string; blurb: string; rows: UmMatchup[] }[] = mu
+  ? [
+      { key: 'good', title: 'Good matchups', blurb: `${name} wins these most often`, rows: mu.good },
+      { key: 'tough', title: 'Tough matchups', blurb: `These beat ${name} most often`, rows: mu.tough },
+    ]
+  : [];
+const sources = [...new Set([f.url, ...(g?.sources ?? [])]), ...(mu ? [{ url: UM_MATCHUP_SOURCE.url, label: `Matchup win rates (checked ${UM_MATCHUP_SOURCE.checked})` }] : []), ...(deck.length ? [{ url: UM_CARDS_SOURCE.url, label: `Card list, text and pictures, character card, mini and card back (checked ${UM_CARDS_SOURCE.fetched})` }] : [])];
 ---
 <Base title={`${name} in Unmatched: stats, tips and combos`} description={`How to play ${name} in Unmatched: ${f.health ?? '?'} health, ${f.attack ?? 'unconfirmed'} attacks, ${f.tier ? `tier ${f.tier.tier} with a ${f.tier.win}% average win rate` : 'not ranked yet'}. ${f.ability}`}>
   <header class="page-head fh" style={`--c:${lineColor(set.line)}`}>
@@ -90,6 +98,45 @@ const sources = [...new Set([f.url, ...(g?.sources ?? [])]), ...(deck.length ? [
       </div>
     ) : <p>Not ranked yet: there aren't enough recorded games.</p>}
     <p class="f-source">From <a href={UM_TIER_SOURCE.url}>{UM_TIER_SOURCE.name}</a> ({UM_TIER_SOURCE.games.toLocaleString('en-GB')} games, {UM_TIER_SOURCE.from}). <a href="/boardgames/unmatched#tiers">See the full tier list</a>.</p>
+  </section>
+
+  <section class="f-section" id="matchups">
+    <h2>Good and tough matchups</h2>
+    {mu && mu.good.length + mu.tough.length === 0 ? (
+      <p class="f-empty">Not enough games yet. {name} has only {mu.plays.toLocaleString('en-GB')} games logged on <a href={UM_MATCHUP_SOURCE.url}>{UM_MATCHUP_SOURCE.name}</a>, and no single opponent has played them {UM_MATCHUP_SOURCE.minGames} times, so any pick would be a guess.</p>
+    ) : mu ? (
+      <>
+        <p>Who {name} likes to see across the table, and who to dread, going by real games. The percentage is how often {name} won.</p>
+        <div class="mu">
+          {muLists.map((list) => (
+            <div class={`mu-col mu-${list.key}`}>
+              <h3>{list.title}</h3>
+              <p class="mu-blurb">{list.blurb}</p>
+              {list.rows.length > 0 ? (
+                <ul>
+                  {list.rows.map((m) => (
+                    <li>
+                      <a href={fighterUrl(m.fighter)}>
+                        <Badge fighter={m.fighter} size={36} />
+                        <span class="mu-name">{displayName(m.fighter)}</span>
+                        <span class="mu-pct">{Math.round(m.p)}%</span>
+                      </a>
+                      <span class="mu-bar" aria-hidden="true"><i style={`width:${m.p}%`}></i></span>
+                      <span class="mu-games">{m.w} wins, {m.l} losses in {m.g} games</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p class="mu-none">{list.key === 'good' ? `No clear good matchup yet: ${name} doesn't win 55% or more against any common opponent.` : `No clear tough matchup yet: no common opponent beats ${name} 55% of the time or more.`}</p>
+              )}
+            </div>
+          ))}
+        </div>
+        <p class="f-source">From games logged on <a href={UM_MATCHUP_SOURCE.url}>{UM_MATCHUP_SOURCE.name}</a> (checked {UM_MATCHUP_SOURCE.checked}). We only count {name}'s 10 most-played opponents, and only pairs with {UM_MATCHUP_SOURCE.minGames} or more games. "Good" means {name} won at least 55%, "tough" means 45% or less. These are players of every skill level, so a good player can still win a tough matchup.</p>
+      </>
+    ) : (
+      <p class="f-empty">{f.id === 'bruce-lee-2' ? 'Our matchup source lists only one Bruce Lee, and it doesn\'t say which version, so we\'re not guessing for the 2025 one. Check the original Bruce Lee\'s page for a rough idea.' : `We don't have matchup numbers for ${name} yet.`}</p>
+    )}
   </section>
 
   <section class="f-section">
@@ -199,6 +246,22 @@ const sources = [...new Set([f.url, ...(g?.sources ?? [])]), ...(deck.length ? [
   .f-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 18px 14px; margin: 14px 0 0; padding: 8px 6px 0 0; }
   .f-empty { padding: 16px; border: 2px dashed var(--soft-line); border-radius: 14px; color: var(--muted); }
   .f-back { margin-top: 32px; }
+  .mu { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px; }
+  .mu-col { padding: 12px 14px; border: 2px solid var(--line); border-radius: 16px; background: var(--surface); border-top: 6px solid var(--mc); }
+  .mu-good { --mc: #2f9e5b; } .mu-tough { --mc: #e5484d; }
+  .mu-col h3 { margin: 0; font-size: 1.05rem; }
+  .mu-blurb { margin: 0 0 8px; color: var(--muted); font-size: .82rem; }
+  .mu-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .mu-col li { display: grid; gap: 4px; }
+  .mu-col li a { display: flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; font-weight: 700; border-radius: 10px; transition: transform .15s; }
+  .mu-col li a:hover { transform: translateY(-1px); }
+  .mu-col li a:hover .mu-name { text-decoration: underline; }
+  .mu-name { flex: 1; min-width: 0; }
+  .mu-pct { font-family: var(--display); font-weight: 800; font-size: 1.2rem; color: var(--mc); }
+  .mu-bar { display: block; height: 6px; border-radius: 6px; background: var(--surface-2); overflow: hidden; }
+  .mu-bar i { display: block; height: 100%; background: var(--mc); border-radius: 6px; }
+  .mu-games { color: var(--muted); font-size: .78rem; }
+  .mu-none { color: var(--muted); font-size: .88rem; margin: 0; }
   @media (max-width: 640px) {
     .fs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .fs-wide { grid-column: 1 / -1; }
@@ -207,5 +270,6 @@ const sources = [...new Set([f.url, ...(g?.sources ?? [])]), ...(deck.length ? [
     .f-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 10px; }
     .f-extras ul { gap: 10px; }
     .f-extras img { height: 150px; }
+    .mu { grid-template-columns: 1fr; }
   }
 </style>
