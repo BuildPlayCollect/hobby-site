@@ -43,7 +43,6 @@ export const REGULATION_SOURCES: Source[] = [
 
 // Upcoming big events (Regionals, Internationals, Worlds). Remove rows once they're over.
 export const EVENTS = [
-  { name: 'Taiwan Premier Ball League', place: 'Taipei, Taiwan', from: '2026-11-07', to: '2026-11-08', reg: 'M-C' },
   { name: 'Buenos Aires Special Championship', place: 'Buenos Aires, Argentina', from: '2026-11-14', to: '2026-11-15', reg: 'M-C' },
   { name: 'Latin America International (LAIC)', place: 'São Paulo, Brazil', from: '2026-11-20', to: '2026-11-22', reg: 'M-C' },
   { name: 'Malaysia Premier Ball League', place: 'Kuala Lumpur, Malaysia', from: '2026-11-21', to: '2026-11-21', reg: 'M-C' },
