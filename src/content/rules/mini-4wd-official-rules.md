@@ -5,7 +5,7 @@ scope: official
 organizer: "Tamiya"
 sourceUrl: "https://tamiya.com/english/mini4wd/regulation.htm"
 version: "December 2025"
-lastChecked: 2026-11-05
+lastChecked: 2026-11-12
 summary: "Tamiya's official Mini 4WD race regulations covering car dimensions, motors, batteries, allowed modifications, race procedure and car inspection."
 ---
 
@@ -89,6 +89,8 @@ A racer can be disqualified if:
 ## Read the full rules
 
 This is a summary only. Read Tamiya's complete official regulations here: [Tamiya Mini 4WD Regulations](https://tamiya.com/english/mini4wd/regulation.htm). The Japanese version is at [tamiya.com/japan/mini4wd/regulation.html](https://www.tamiya.com/japan/mini4wd/regulation.html).
+
+**What changed (November 12, 2026):** No changes. Tamiya's page still lists the December 2025 update as the latest.
 
 **What changed (November 5, 2026):** No changes. Tamiya's page still lists its latest changes as December 2025.
 
