@@ -20,6 +20,7 @@ const PAGES: Entry[] = [
   { title: 'Typing test', summary: 'How fast can you type? Everyday or hobby words, with a switch-themed rank.', url: '/keyboards/typing-test/', kind: 'Tool', hobby: 'Keyboards' },
   { title: 'Beyblade X parts list', summary: 'Every Blade, Ratchet and Bit in one searchable list.', url: '/beyblade/parts/', kind: 'Tool', hobby: 'Beyblade' },
   { title: 'Unmatched: learn to play, tier list and every fighter', summary: 'How to play, the core rules, a tier list and all the fighters.', url: '/boardgames/unmatched/', kind: 'Hub', hobby: 'Board games' },
+  { title: 'Riftbound: learn to play and tier lists', summary: 'The League of Legends trading card game explained for beginners.', url: '/tcg/riftbound/', kind: 'Hub', hobby: 'TCG' },
   { title: 'Pokémon Champions VGC', summary: 'Rules, usage leaderboards, top teams, events and tools.', url: '/esports/pokemon-champions/', kind: 'Hub', hobby: 'Esports' },
   { title: 'Learn to play Pokémon Champions VGC', summary: 'A beginner guide to Doubles, team building and Ranked.', url: '/esports/pokemon-champions/learn/', kind: 'Guide', hobby: 'Esports' },
   { title: 'Pokémon Champions Pokédex', summary: 'Every Pokémon allowed in the current regulation.', url: '/esports/pokemon-champions/pokedex/', kind: 'Tool', hobby: 'Esports' },

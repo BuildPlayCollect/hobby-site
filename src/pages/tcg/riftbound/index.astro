@@ -1,0 +1,240 @@
+---
+// Riftbound hub (/tcg/riftbound): learn to play + where to find tier lists.
+// Riftbound is Riot Games' League of Legends trading card game.
+//
+// Two rules from Riot's Riftbound policy (developer.riotgames.com/policies/riftbound) shape this page:
+//  1. Card pictures may only come from the Riot API. We don't have a key yet, so there are NO card images here.
+//  2. Fan sites may not publish play rates, win rates or matchup percentages. So the tier list section only
+//     links out to other sites, with no rankings or numbers of our own.
+// Every rule below was checked against the official Core Rules PDF (last updated 9 Oct 2026).
+import Base from '../../../layouts/Base.astro';
+import SourceList from '../../../components/SourceList.astro';
+import { LEGAL } from '../../../lib/esports-hub';
+
+// The official sources. Facts on the page link to these.
+const CORE = 'https://cmsassets.rgpub.io/sanity/files/dsfx7636/news_live/5c7946f7c3b8c6e0faff85ab6dadc6d2e721ea94.pdf';
+const HUB = 'https://playriftbound.com/en-us/rules-hub/';
+const START = 'https://playriftbound.com/en-us/news/rules-and-releases/how-to-play-get-started/';
+const POLICY = 'https://developer.riotgames.com/policies/riftbound';
+
+const sources = [
+  { url: CORE, label: 'Riftbound Core Rules (PDF, updated 9 Oct 2026)' },
+  { url: HUB, label: 'Riftbound Rules Hub' },
+  { url: START, label: 'How to Play: Get Started' },
+  { url: POLICY, label: 'Riot Games: Riftbound developer policy' },
+  { url: 'https://www.riotgames.com/en/legal', label: 'Riot Games: Legal Jibber Jabber' },
+];
+
+// What's in a deck (Core Rules 101-103 and 487).
+const DECK = [
+  { piece: 'Champion Legend', count: '1', text: 'Your "main character". It stays on the table all game, sets which colours (domains) your deck can use, and usually has a handy ability.' },
+  { piece: 'Chosen Champion', count: '1', text: 'A unit version of a champion that matches your Legend. It waits in its own zone, ready to be played.' },
+  { piece: 'Main deck', count: '40 or more', text: 'Units, spells and gear. Your Chosen Champion counts as part of it. Up to 3 copies of any card.' },
+  { piece: 'Rune deck', count: '12', text: 'Your money. Shuffled and kept apart from the main deck.' },
+  { piece: 'Battlefields', count: '3', text: 'The places everyone fights over. In a 1-vs-1 game, only one of yours is used.' },
+];
+
+// The start of every turn (Core Rules 315), then the Main Phase (316) and Ending Phase (317).
+const TURN = [
+  { l: 'A', name: 'Awaken', text: 'Stand all your sideways (exhausted) cards back up.' },
+  { l: 'B', name: 'Beginning', text: '"At the start of your turn" effects happen. Then you score 1 point for each battlefield you still control. This is called holding.' },
+  { l: 'C', name: 'Channel', text: 'Put the top 2 runes of your rune deck onto the table.' },
+  { l: 'D', name: 'Draw', text: 'Draw 1 card.' },
+  { l: '→', name: 'Main', text: 'Play cards, use abilities and move units, in any order you like.' },
+  { l: '✓', name: 'End', text: '"End of turn" effects happen, all damage on units heals, and any energy you didn\'t spend is lost. Your opponent\'s turn!' },
+];
+
+const WORDS = [
+  { term: 'Exhaust', text: 'Turn a card sideways to use it. It stands back up at the start of your next turn.' },
+  { term: 'Recycle', text: 'Put a card on the bottom of its deck. Runes go back to the rune deck.' },
+  { term: 'Domain', text: 'One of the six colours: Fury, Calm, Mind, Body, Chaos and Order.' },
+  { term: 'Might', text: 'A unit\'s strength. It\'s how much damage it deals in a fight, and how much it can take.' },
+  { term: 'Showdown', text: 'A back-and-forth window where players can play quick spells before something happens.' },
+  { term: 'Action / Reaction', text: 'Cards you can play during a showdown, even on your opponent\'s turn. Reaction cards can be played at even more moments.' },
+  { term: 'Tank', text: 'Enemies must finish off this unit before they can damage your other units.' },
+  { term: 'Accelerate', text: 'Pay a little extra when you play this unit and it arrives ready, so it can move right away.' },
+  { term: 'Ganking', text: 'This unit can move straight from one battlefield to another.' },
+];
+
+const TIER_LINKS = [
+  { name: 'Mobalytics', url: 'https://mobalytics.gg/riftbound/tier-list', text: 'Ranks Legends from S tier down, mixing tournament results with how strong each Legend could be.' },
+  { name: 'Riftbound.gg', url: 'https://riftbound.gg/', text: 'Tier lists, deck lists and set guides from a fan site that covers every release.' },
+];
+---
+<Base title="Riftbound: learn to play" description="Riftbound, the League of Legends trading card game, explained for total beginners: what's in a deck, how a turn works, scoring, fights, and where to find tier lists.">
+  <header class="page-head">
+    <p class="kicker"><a class="tag" href="/tcg">TCG</a></p>
+    <h1>Riftbound: learn to play in one sitting</h1>
+    <p>Riftbound is <a href={START}>the League of Legends trading card game</a>. Never played a card game before? Perfect. By the end of this page you'll know enough for your first match, and the rest you'll learn by losing gloriously a few times.</p>
+  </header>
+
+  <nav class="lp-jump" aria-label="On this page">
+    <a href="#learn">The basics</a><a href="#deck">Your deck</a><a href="#setup">Setup</a><a href="#runes">Runes</a><a href="#turn">Your turn</a><a href="#scoring">Scoring</a><a href="#fights">Fights</a><a href="#words">Words to know</a><a href="#tiers">Tier lists</a>
+  </nav>
+
+  <section id="learn" class="lp-section">
+    <div class="section-head"><h2>The 60-second version</h2></div>
+    <ul class="lp-cards lp-basics">
+      <li><strong>1</strong><span>Pick a champion Legend. It decides your colours and your plan.</span></li>
+      <li><strong>+2</strong><span>Every turn you get 2 new runes to pay for cards.</span></li>
+      <li><strong>⚔</strong><span>Send units to battlefields and fight over them.</span></li>
+      <li><strong>8</strong><span>Score points for taking and keeping battlefields. <a href={CORE}>First to 8 points wins</a>.</span></li>
+    </ul>
+  </section>
+
+  <section id="deck" class="lp-section">
+    <div class="section-head"><h2>What's in your deck</h2></div>
+    <p class="lp-lead">A Riftbound deck is really a few small piles. The <a href={CORE}>official Core Rules</a> set them like this:</p>
+    <div class="rb-table-wrap">
+      <table class="rb-table">
+        <thead><tr><th>Piece</th><th>How many</th><th>What it does</th></tr></thead>
+        <tbody>{DECK.map((d) => <tr><td><strong>{d.piece}</strong></td><td>{d.count}</td><td>{d.text}</td></tr>)}</tbody>
+      </table>
+    </div>
+    <p class="lp-note">Brand new? Riot suggests starting with a <a href={START}>ready-made (preconstructed) deck</a> and swapping cards as you collect more. Building your own can wait.</p>
+  </section>
+
+  <section id="setup" class="lp-section">
+    <div class="section-head"><h2>Setting up a 1-vs-1 game</h2></div>
+    <ol class="lp-steps">
+      <li><h3>Pick a battlefield</h3><p>Each player picks one of their 3 battlefields at random and puts it in the middle. So <a href={CORE}>a duel has 2 battlefields</a>.</p></li>
+      <li><h3>Set out your champions</h3><p>Put your Legend and your Chosen Champion in their spots.</p></li>
+      <li><h3>Shuffle</h3><p>Shuffle your main deck and your rune deck. Separately!</p></li>
+      <li><h3>Who goes first?</h3><p>Decide at random. A coin flip works. To keep it fair, <a href={CORE}>the player going second gets 1 extra rune</a> on their first turn.</p></li>
+      <li><h3>Draw 4</h3><p>Don't like your hand? <a href={CORE}>Set aside up to 2 cards, draw that many, then put the old ones at the bottom</a> of your deck. You get one try.</p></li>
+    </ol>
+  </section>
+
+  <section id="runes" class="lp-section">
+    <div class="section-head"><h2>Runes: paying for your cards</h2></div>
+    <p class="lp-lead">Cards cost two kinds of things, and <a href={CORE}>each rune can pay for either one</a>:</p>
+    <div class="lp-cards lp-grid">
+      <div class="lp-card"><h4>Energy (the number on a card)</h4><p>Turn a rune sideways (exhaust it) for 1 energy. It stands back up next turn.</p></div>
+      <div class="lp-card"><h4>Power (the coloured symbols)</h4><p>Send a rune to the bottom of your rune deck (recycle it) for 1 power of its colour. Bigger cards need this.</p></div>
+    </div>
+    <p class="rb-tip">Think of it like this: exhausting is spending pocket money, recycling is breaking open the piggy bank. Don't worry, <a href={START}>the runes come back</a>. Just remember that <a href={CORE}>unspent energy and power vanish</a> at the end of your turn.</p>
+  </section>
+
+  <section id="turn" class="lp-section">
+    <div class="section-head"><h2>Your turn, A-B-C-D</h2></div>
+    <p class="lp-lead">Every turn starts with the same four steps, <a href={CORE}>in this order</a>. Easy to remember: A, B, C, D.</p>
+    <ol class="rb-turn">
+      {TURN.map((t) => <li><span class="rb-l" aria-hidden="true">{t.l}</span><div><strong>{t.name}.</strong> {t.text}</div></li>)}
+    </ol>
+  </section>
+
+  <section id="cards" class="lp-section">
+    <div class="section-head"><h2>The cards you'll play</h2></div>
+    <div class="lp-cards lp-grid">
+      <div class="lp-card"><h4>Units</h4><p>Your fighters, each with a Might number. <a href={CORE}>They arrive exhausted</a>, so they can't move on the turn you play them (unless a card says so).</p></div>
+      <div class="lp-card"><h4>Spells</h4><p>Do something once, then <a href={CORE}>go to your trash</a>.</p></div>
+      <div class="lp-card"><h4>Gear</h4><p>Stays on the table to help out. It's <a href={CORE}>played to your base</a> and doesn't fight by itself.</p></div>
+    </div>
+  </section>
+
+  <section id="scoring" class="lp-section">
+    <div class="section-head"><h2>Moving and scoring</h2></div>
+    <p class="lp-lead">To move a unit, exhaust it and send it <a href={CORE}>from your base to a battlefield, or from a battlefield back home</a>. You can move several at once if they're going to the same place. There are <a href={CORE}>two ways to score</a> a battlefield:</p>
+    <div class="lp-cards lp-grid">
+      <div class="lp-card"><h4>Conquer: +1</h4><p>Take control of a battlefield, by walking into an empty one or by winning a fight there.</p></div>
+      <div class="lp-card"><h4>Hold: +1</h4><p>Still control it at the start of your turn. You score again every turn you keep it.</p></div>
+    </div>
+    <p class="lp-note">You can only score each battlefield once per turn.</p>
+    <p class="rb-tip"><strong>The last-point rule.</strong> If your winning point would come from conquering, <a href={CORE}>you only get it if you've scored every battlefield this turn</a>. If not, you draw a card instead. Holding still wins the game normally. So no sneaky last-second steals.</p>
+  </section>
+
+  <section id="fights" class="lp-section">
+    <div class="section-head"><h2>Fights (combat)</h2></div>
+    <p class="lp-lead">Move units onto a battlefield where enemy units are standing, and a fight starts. You're the attacker, they're the defender. Here's <a href={CORE}>how it plays out</a>:</p>
+    <ol class="lp-steps">
+      <li><h3>Showdown</h3><p>"When I attack" and "When I defend" abilities happen. Then both players take turns playing quick spells (cards marked Action or Reaction). When everyone passes, the units fight.</p></li>
+      <li><h3>Add up the Might</h3><p>Each side adds up its units' Might and splits that much damage among the enemy units. You have to finish off one unit before moving to the next, and units with Tank must be hit first.</p></li>
+      <li><h3>Ouch, all at once</h3><p>All damage lands at the same time. Any unit with damage equal to or more than its Might is knocked out. Survivors heal right after.</p></li>
+      <li><h3>Who wins?</h3><p>If only attackers are left, they conquer the battlefield and score. If any defenders are still standing, the attackers go back to base.</p></li>
+    </ol>
+  </section>
+
+  <section id="tips" class="lp-section">
+    <div class="section-head"><h2>Five tips for your first games</h2></div>
+    <ol class="lp-tips">
+      <li><strong>Grab the free point.</strong><span>Early on, send one unit to a battlefield nobody is guarding.</span></li>
+      <li><strong>Holding is steady.</strong><span>A battlefield you keep scores every single turn.</span></li>
+      <li><strong>Keep a trick for their turn.</strong><span>Action and Reaction spells can protect what you hold when your opponent attacks.</span></li>
+      <li><strong>Mind your piggy bank.</strong><span>Recycling runes too early can leave you short when the big cards show up.</span></li>
+      <li><strong>Read new cards out loud.</strong><span>Everyone forgets something the first time. <a href={CORE}>Card text beats the rulebook</a> when they disagree, so the card is always right.</span></li>
+    </ol>
+  </section>
+
+  <section id="words" class="lp-section">
+    <div class="section-head"><h2>Words to know</h2></div>
+    <dl class="lp-words">
+      {WORDS.map((w) => <div><dt>{w.term}</dt><dd>{w.text}</dd></div>)}
+    </dl>
+  </section>
+
+  <section id="tiers" class="lp-section">
+    <div class="section-head"><h2>Tier lists</h2></div>
+    <p class="lp-lead">Want to know which Legends are strong right now? These sites keep tier lists up to date. We link to them instead of ranking decks ourselves. Check the date on each list, since a new set can shake things up overnight.</p>
+    <div class="rules-list parts-cards">
+      {TIER_LINKS.map((t) => (
+        <a class="rules-item" href={t.url} rel="noopener">
+          <span class="badge badge-official">Outside site ↗</span>
+          <strong>{t.name}</strong>
+          <small>{t.text}</small>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="lp-section lp-end">
+    <h2>Ready?</h2>
+    <p>Grab a ready-made deck, sit down with a friend, and keep this page open for your first game. Want every last detail? The <a href={HUB}>official Rules Hub</a> has the full Core Rules.</p>
+  </section>
+
+  <SourceList sources={sources} />
+  <p class="rb-legal">{LEGAL.riot} No card pictures are shown on this page.</p>
+</Base>
+
+<style>
+  .lp-jump { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 24px; }
+  .lp-jump a { padding: 6px 14px; border: 2px solid var(--line); border-radius: 999px; font-weight: 700; font-size: .85rem; color: var(--ink); background: var(--surface); }
+  .lp-jump a:hover { text-decoration: none; background: var(--mark); color: #1b1a1f; }
+  .lp-section { margin-top: 44px; }
+  .lp-lead { max-width: 75ch; }
+  .lp-note { color: var(--muted); font-size: .9rem; margin: 12px 0 8px; }
+  .lp-cards { list-style: none; margin: 0; padding: 0; }
+  .lp-basics { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+  .lp-basics li { display: grid; gap: 4px; padding: 16px; border: 2px solid var(--line); border-radius: 16px; background: var(--surface); box-shadow: var(--lift); }
+  .lp-basics strong { font-family: var(--display); font-size: 1.8rem; line-height: 1; color: var(--c1); }
+  .lp-grid { columns: 3 260px; column-gap: 10px; }
+  .lp-card { break-inside: avoid; margin-bottom: 10px; padding: 12px 16px; border: 2px solid var(--line); border-radius: 14px; background: var(--surface); }
+  .lp-card h4 { margin: 0 0 4px; font-size: 1rem; }
+  .lp-card p { margin: 0; font-size: .92rem; }
+  .lp-steps { list-style: none; counter-reset: step; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .lp-steps > li { counter-increment: step; position: relative; padding: 14px 18px 14px 62px; border: 2px solid var(--line); border-radius: 16px; background: var(--surface); }
+  .lp-steps > li::before { content: counter(step); position: absolute; left: 16px; top: 13px; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; background: var(--c1); color: #fff; font-family: var(--display); font-weight: 800; }
+  .lp-steps h3 { margin: 0 0 4px; font-size: 1.05rem; }
+  .lp-steps p { margin: 0; }
+  .rb-table-wrap { overflow-x: auto; border: 2px solid var(--line); border-radius: 14px; background: var(--surface); }
+  .rb-table { border-collapse: collapse; width: 100%; font-size: .92rem; }
+  .rb-table th, .rb-table td { padding: 10px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+  .rb-table tr:last-child td { border-bottom: 0; }
+  .rb-table th { font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+  .rb-table td:nth-child(2) { white-space: nowrap; }
+  .rb-tip { max-width: 75ch; margin: 14px 0 0; padding: 6px 0 6px 14px; border-left: 4px solid var(--c1); }
+  .rb-turn { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .rb-turn li { display: grid; grid-template-columns: 2.6rem 1fr; gap: 12px; align-items: start; padding: 12px 16px; border: 2px solid var(--line); border-radius: 14px; background: var(--surface); }
+  .rb-l { font-family: var(--display); font-weight: 800; font-size: 1.6rem; line-height: 1; color: var(--c1); text-align: center; padding-top: 2px; }
+  .lp-words { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; margin: 0; }
+  .lp-words div { padding: 12px 14px; border: 2px solid var(--line); border-radius: 14px; background: var(--surface); }
+  .lp-words dt { font-weight: 800; font-family: var(--display); }
+  .lp-words dd { margin: 2px 0 0; font-size: .9rem; }
+  .lp-tips { margin: 0; padding-left: 22px; display: grid; gap: 10px; max-width: 80ch; }
+  .lp-tips strong { display: block; }
+  .lp-end { padding: 22px 24px; border: 2px solid var(--line); border-radius: 18px; background: var(--c2); color: #1b1a1f; box-shadow: var(--lift); }
+  .lp-end h2 { margin: 0 0 6px; }
+  .lp-end p { margin: 0; max-width: 75ch; }
+  .lp-end a { color: #1b1a1f; font-weight: 800; text-decoration: underline; }
+  .rb-legal { margin-top: 16px; font-size: .8rem; color: var(--muted); max-width: 90ch; }
+  @media (max-width: 560px) { .lp-steps > li { padding: 52px 14px 14px; } }
+</style>
