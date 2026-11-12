@@ -203,6 +203,23 @@ const shareImage = new URL(image ?? '/share-preview-v2.png', Astro.site).href;
       (function () {
         var root = document.documentElement;
 
+        // Links to other websites open in a new tab, so readers keep their place on our site.
+        // Works for every page, including links a page adds later (like Search results).
+        // rel="noopener noreferrer" stops the other site from controlling our tab.
+        function isOutside(a) {
+          return (a.protocol === 'http:' || a.protocol === 'https:') && a.hostname !== location.hostname && !/(^|\.)buildplaycollect\.com$/.test(a.hostname);
+        }
+        function newTab(a) {
+          if (!isOutside(a) || a.target) return;
+          a.target = '_blank';
+          a.rel = (a.rel + ' noopener noreferrer').trim();
+        }
+        document.querySelectorAll('a[href]').forEach(newTab);
+        document.addEventListener('click', function (e) {
+          var a = e.target instanceof Element ? e.target.closest('a[href]') : null;
+          if (a) newTab(a);
+        }, true);
+
         // Dateline: show the reader's date, like the top of a newspaper.
         var today = document.querySelector('[data-today]');
         if (today) today.textContent = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });

@@ -174,3 +174,12 @@ Under the Riftbound hub there's a page for every card (`/tcg/riftbound/cards/...
 - **Search:** `cards.json.ts` builds a small list of every card at `/tcg/riftbound/cards.json`. The Search page downloads it once and filters it in the reader's browser, so typing is instant and nothing is sent anywhere.
 - **Card symbols:** card text has codes like `:rb_energy_2:` and `[Tank]`. `cardTextHtml()` in `src/lib/riftbound.ts` turns them into little labels and bold keywords.
 - **Riot's rules:** every card page keeps Riot's "Legal Jibber Jabber" notice and credits RiftHunt. Riot's policy prefers card pictures from its own API; we chose RiftHunt anyway, so if Riot ever asks, these are the pages to change. No prices or shop links are shown.
+
+## Outside links open in a new tab
+
+Every link to another website opens in a new tab, so readers don't lose their place on our site. Two pieces do this:
+
+- **Articles:** `src/lib/rehype-external-links.mjs` adds `target="_blank"` while the site builds.
+- **Everything else** (hubs, card pages, tools, the footer): a few lines in the script at the bottom of `src/layouts/Base.astro` find every link whose address isn't buildplaycollect.com and mark it the same way when the page opens. It also catches links a page adds later, like search results.
+
+Both add `rel="noopener noreferrer"`, which stops the other website from being able to control our tab.
