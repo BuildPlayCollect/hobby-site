@@ -31,11 +31,15 @@ export const fmtDate = (d: string | null) =>
 export const bySetOrder = (a: RbCard, b: RbCard) =>
   a.sort - b.sort || a.number.localeCompare(b.number, 'en', { numeric: true }) || Number(!!a.variant) - Number(!!b.variant) || a.name.localeCompare(b.name);
 
-// One printing per card: the plain one (no variant, no "(Metal)") from the oldest set, so each card shows once.
+// One printing per card, so each card shows once: the plain one (no variant, no "(Metal)", no letter after
+// the number like the Worlds Bundle's "276a", not a promo reprint), from the oldest set.
+// Main sets are the big expansions and starter boxes; promos and bundles reprint their cards.
+const isMainSet = (c: RbCard) => ['Expansion', 'Starter box set'].includes(setOf(c)?.kind ?? '');
+
 export function oneEach(cards: RbCard[]): RbCard[] {
   const best = new Map<string, RbCard>();
   const releasedOf = (c: RbCard) => setOf(c)?.released ?? '9999';
-  const score = (c: RbCard) => (c.variant ? 2 : 0) + (c.name !== c.base ? 1 : 0);
+  const score = (c: RbCard) => (c.variant ? 4 : 0) + (c.name !== c.base ? 2 : 0) + (/[a-z]$/i.test(c.number) ? 1 : 0) + (isMainSet(c) ? 0 : 1);
   for (const c of cards) {
     const cur = best.get(c.oracle);
     if (!cur || score(c) < score(cur) || (score(c) === score(cur) && releasedOf(c) < releasedOf(cur))) best.set(c.oracle, c);
@@ -65,14 +69,19 @@ export function cardTextHtml(text: string | null): string {
       const n = code.match(/^energy_(\d+)$/);
       if (n) return `<span class="rb-sym rb-sym-energy" title="${n[1]} energy">${n[1]}</span>`;
       const rune = code.match(/^rune_([a-z]+)$/);
-      if (rune) return `<span class="rb-sym rb-sym-rune" title="${title(rune[1])} power">${title(rune[1])}</span>`;
+      if (rune) {
+        const name = rune[1] === 'rainbow' ? 'Any' : title(rune[1]);
+        return `<span class="rb-sym rb-sym-rune" title="1 power of ${rune[1] === 'rainbow' ? 'any colour' : name}">${name}</span>`;
+      }
+      if (code === 'might') return '<span class="rb-sym" title="Might">Might</span>';
       if (code === 'exhaust') return '<span class="rb-sym" title="Exhaust (turn this sideways)">↷</span>';
       return `<span class="rb-sym">${title(code)}</span>`;
     })
+    .replace(/\[&gt;\]/g, ' →')
     .replace(/\[([A-Za-z][A-Za-z0-9 '\-]*)\]/g, '<strong class="rb-kw">$1</strong>')
     .replace(/\n/g, '<br />');
 }
 
 // Plain-text version for page descriptions (search engines, link previews).
 export const cardTextPlain = (text: string | null) =>
-  (text ?? '').replace(/:rb_energy_(\d+):/g, '$1 energy').replace(/:rb_rune_([a-z]+):/g, (_m, r) => `${title(r)} power`).replace(/:rb_([a-z0-9_]+):/g, (_m, c) => title(c)).replace(/[[\]]/g, '').replace(/\s+/g, ' ').trim();
+  (text ?? '').replace(/\[>\]/g, ' →').replace(/:rb_rune_rainbow:/g, 'any power').replace(/:rb_energy_(\d+):/g, '$1 energy').replace(/:rb_rune_([a-z]+):/g, (_m, r) => `${title(r)} power`).replace(/:rb_([a-z0-9_]+):/g, (_m, c) => title(c)).replace(/[[\]]/g, '').replace(/\s+/g, ' ').trim();

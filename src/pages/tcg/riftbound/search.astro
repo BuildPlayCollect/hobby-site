@@ -45,7 +45,7 @@ const domains = Object.keys(DOMAIN_COLOURS).filter((d) => RB_CARDS.some((c) => c
 </Base>
 
 <script>
-  type Row = { n: string; o: string; t: string; d: string[]; s: string; no: string; u: string; i: string; x: string; e: number | null; v: string | null; w: number; rel: string };
+  type Row = { n: string; b: number; t: string; d: string[]; s: string; no: string; u: string; i: string; x: string; e: number | null; v: string | null; w: number };
   const form = document.querySelector<HTMLFormElement>('[data-rs-form]')!;
   const grid = document.querySelector<HTMLUListElement>('[data-rs-grid]')!;
   const count = document.querySelector<HTMLElement>('[data-rs-count]')!;
@@ -97,14 +97,14 @@ const domains = Object.keys(DOMAIN_COLOURS).filter((d) => RB_CARDS.some((c) => c
     const set = String(f.get('set') ?? '');
     const energy = String(f.get('energy') ?? '');
     const all = f.has('all');
-    const seen = new Set<string>();
     hits = rows.filter((r) => {
       if (type && r.t !== type) return false;
       if (domain && !r.d.includes(domain)) return false;
       if (set && r.s !== set) return false;
       if (energy !== '' && !(energy === '6' ? (r.e ?? -1) >= 6 : r.e === Number(energy))) return false;
       if (!words.every((w) => r.hay.includes(w))) return false;
-      if (!all && !set) { if (seen.has(r.o)) return false; seen.add(r.o); }
+      // Without "special versions", show each card once (its main printing). Picking a set shows all of that set.
+      if (!all && !set && !r.b) return false;
       return true;
     });
     // Cards whose NAME matches come first, then the rest A to Z.
@@ -121,9 +121,7 @@ const domains = Object.keys(DOMAIN_COLOURS).filter((d) => RB_CARDS.some((c) => c
   fetch('/tcg/riftbound/cards.json')
     .then((r) => r.json())
     .then((data: Row[]) => {
-      // Plain versions first, so "one per card" keeps the plain printing rather than a special one.
-      rows = data.map((r) => ({ ...r, hay: norm(`${r.n} ${r.x} ${r.t}`) }))
-        .sort((a, b) => Number(!!a.v) - Number(!!b.v) || a.rel.localeCompare(b.rel));
+      rows = data.map((r) => ({ ...r, hay: norm(`${r.n} ${r.x} ${r.t}`) }));
       form.addEventListener('input', apply);
       form.addEventListener('change', apply);
       form.addEventListener('submit', (e) => { e.preventDefault(); apply(); });

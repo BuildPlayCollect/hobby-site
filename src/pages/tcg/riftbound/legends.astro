@@ -13,7 +13,7 @@ import { LEGENDS, RB_HUB } from '../../../lib/riftbound';
     <p>Your Legend is the star of your deck. It sits on the table all game, decides which two colours (domains) your deck can use, and usually has a handy ability. <a href={`${RB_HUB}#deck`}>More on how decks work</a>.</p>
     <p class="rb-count">{LEGENDS.length} Legends, A to Z. Each one appears once here; tap it to see its special versions.</p>
   </header>
-  <CardGrid cards={LEGENDS} eager={8} />
+  <CardGrid cards={LEGENDS} eager={8} showSet />
   <Credit />
 </Base>
 

@@ -13,7 +13,7 @@ import { BATTLEFIELDS, RB_HUB } from '../../../lib/riftbound';
     <p>Battlefields are the places everyone fights over. You bring 3 to a game, and in a 1-vs-1 match one of yours is picked at random. Many have their own twist, like a bonus for whoever holds them. <a href={`${RB_HUB}#scoring`}>How scoring works</a>.</p>
     <p class="rb-count">{BATTLEFIELDS.length} Battlefields, A to Z.</p>
   </header>
-  <div class="rb-bf"><CardGrid cards={BATTLEFIELDS} eager={6} /></div>
+  <div class="rb-bf"><CardGrid cards={BATTLEFIELDS} eager={6} showSet /></div>
   <Credit />
 </Base>
 
