@@ -1,0 +1,35 @@
+---
+// A grid of Riftbound card pictures. Each one links to that card's own page.
+// Pictures load from RiftHunt's picture server (images.rifthunt.com); "lazy" means a picture only
+// downloads when the reader scrolls near it, so a 300-card list stays quick on a phone.
+import { cardUrl, type RbCard } from '../../lib/riftbound';
+
+interface Props { cards: RbCard[]; eager?: number; showSet?: boolean }
+const { cards, eager = 6, showSet = false } = Astro.props;
+---
+<ul class="rb-grid">
+  {cards.map((c, i) => (
+    <li class:list={{ 'rb-wide': c.landscape }}>
+      <a href={cardUrl(c)}>
+        <img src={c.img.s} srcset={`${c.img.s} 200w, ${c.img.n} 480w`} sizes="(max-width: 560px) 45vw, 200px"
+          alt={`${c.name}, Riftbound card`} width={c.landscape ? 280 : 200} height={c.landscape ? 200 : 279}
+          loading={i < eager ? 'eager' : 'lazy'} decoding="async" />
+        <strong>{c.name}</strong>
+        <span class="rb-meta"><span class="rb-mono">{showSet ? `${c.set.toUpperCase()} ` : ''}#{c.number}</span> <span>{c.type}</span>{c.variant && <span class="rb-var">{c.variant}</span>}</span>
+      </a>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .rb-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+  .rb-grid a { display: grid; gap: 4px; color: var(--ink); text-decoration: none; }
+  .rb-grid a:hover strong { text-decoration: underline; }
+  .rb-grid img { width: 100%; height: auto; aspect-ratio: 200 / 279; object-fit: cover; border-radius: 10px; background: var(--surface); box-shadow: var(--lift); }
+  .rb-wide img { aspect-ratio: 279 / 200; }
+  .rb-grid strong { font-size: .9rem; line-height: 1.25; }
+  .rb-meta { display: flex; flex-wrap: wrap; gap: 6px; font-size: .78rem; color: var(--muted); }
+  .rb-mono { font-family: var(--mono, ui-monospace, monospace); }
+  .rb-var { padding: 0 6px; border-radius: 999px; background: var(--mark); color: #1b1a1f; font-weight: 700; }
+  @media (max-width: 560px) { .rb-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; } }
+</style>

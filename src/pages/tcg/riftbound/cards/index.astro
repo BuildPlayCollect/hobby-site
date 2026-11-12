@@ -1,0 +1,56 @@
+---
+// /tcg/riftbound/cards: every Riftbound set in one table, newest first. Each set links to its full card list.
+// The numbers come from src/data/riftbound/cards.json (RiftHunt's card API, refreshed with `npm run riftbound:data`).
+import Base from '../../../../layouts/Base.astro';
+import CardsHead from '../../../../components/riftbound/CardsHead.astro';
+import Credit from '../../../../components/riftbound/Credit.astro';
+import { RB_SETS, RB_CARDS, RB_FETCHED, setUrl, fmtDate } from '../../../../lib/riftbound';
+---
+<Base title="Riftbound cards: every set and card list" description={`All ${RB_CARDS.length.toLocaleString('en-GB')} Riftbound cards across ${RB_SETS.length} sets, with pictures, card text and stats. Browse by set, Legend or Battlefield, or search.`}>
+  <CardsHead crumbs={[{ label: 'Cards' }]} />
+  <header class="page-head">
+    <h1>Riftbound cards</h1>
+    <p class="rb-stats"><span>{RB_SETS.length} sets</span><span>{RB_CARDS.length.toLocaleString('en-GB')} cards</span><span>Card list updated {fmtDate(RB_FETCHED)}</span></p>
+    <p>Every card printed for Riftbound, the League of Legends card game. Pick a set to see all its cards, or jump straight to the Legends, the Battlefields, or a search.</p>
+  </header>
+
+  <section>
+    <div class="section-head"><h2>Sets and card lists</h2></div>
+    <div class="rb-table-wrap">
+      <table class="rb-sets">
+        <thead><tr><th>Set</th><th>Code</th><th>Kind</th><th class="num">Cards</th><th>Released</th></tr></thead>
+        <tbody>
+          {RB_SETS.map((s) => (
+            <tr>
+              <td><a href={setUrl(s.code)}>{s.name} card list</a></td>
+              <td class="code">{s.code.toUpperCase()}</td>
+              <td>{s.kind}</td>
+              <td class="num">{s.count}</td>
+              <td>{fmtDate(s.released)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="rb-note">"Cards" counts every printing, so a card and its special versions (like alternate art or Signature) each count once.</p>
+  </section>
+
+  <Credit />
+</Base>
+
+<style>
+  .rb-stats { display: flex; flex-wrap: wrap; gap: 6px 18px; color: var(--muted); font-size: .9rem; }
+  .rb-table-wrap { overflow-x: auto; border: 2px solid var(--line); border-radius: 14px; background: var(--surface); }
+  .rb-sets { border-collapse: collapse; width: 100%; font-size: .92rem; }
+  .rb-sets th, .rb-sets td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  .rb-sets tr:last-child td { border-bottom: 0; }
+  .rb-sets th { font-size: .75rem; letter-spacing: .05em; color: var(--muted); }
+  .rb-sets td a { font-weight: 700; }
+  .rb-sets .num { text-align: right; }
+  .rb-sets .code { font-family: var(--mono); }
+  .rb-note { color: var(--muted); font-size: .85rem; margin-top: 10px; }
+  @media (max-width: 560px) {
+    .rb-sets th, .rb-sets td { padding: 9px 10px; }
+    .rb-sets td:first-child { white-space: normal; min-width: 9rem; }
+  }
+</style>

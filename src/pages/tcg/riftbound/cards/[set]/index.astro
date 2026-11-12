@@ -1,0 +1,50 @@
+---
+// /tcg/riftbound/cards/<set>: every card in one set, grouped by type (Legends, Units, Spells...), in printed order.
+// Astro makes one of these pages for each set in src/data/riftbound/cards.json.
+import Base from '../../../../../layouts/Base.astro';
+import CardsHead from '../../../../../components/riftbound/CardsHead.astro';
+import CardGrid from '../../../../../components/riftbound/CardGrid.astro';
+import Credit from '../../../../../components/riftbound/Credit.astro';
+import { RB_SETS, RB_CARDS, TYPE_ORDER, typePlural, bySetOrder, fmtDate, type RbSet } from '../../../../../lib/riftbound';
+
+export function getStaticPaths() {
+  return RB_SETS.map((s) => ({ params: { set: s.code }, props: { s } }));
+}
+const { s } = Astro.props as { s: RbSet };
+const cards = RB_CARDS.filter((c) => c.set === s.code).sort(bySetOrder);
+const types = [...new Set(cards.map((c) => c.type))].sort((a, b) => (TYPE_ORDER.indexOf(a) + 1 || 99) - (TYPE_ORDER.indexOf(b) + 1 || 99));
+const groups = types.map((t) => ({ t, cards: cards.filter((c) => c.type === t) }));
+const summary = groups.map((g) => `${g.cards.length} ${g.cards.length === 1 ? g.t.toLowerCase() : typePlural(g.t).toLowerCase()}`).join(', ');
+---
+<Base title={`${s.name} card list (Riftbound ${s.code.toUpperCase()})`} description={`Every card in Riftbound's ${s.fullName} (${s.code.toUpperCase()}), released ${fmtDate(s.released)}: ${summary}. With pictures, text and stats.`}>
+  <CardsHead crumbs={[{ label: 'Cards', href: '/tcg/riftbound/cards/' }, { label: s.name }]} />
+  <header class="page-head">
+    <h1>{s.name} card list</h1>
+    <p class="rb-stats"><span class="code">{s.code.toUpperCase()}</span><span>{s.kind}</span><span>{s.count} cards</span><span>Released {fmtDate(s.released)}</span></p>
+    {s.fullName !== s.name && <p>Full name: {s.fullName}.</p>}
+    <p>In this set: {summary}. Tap a card for its full text and stats.</p>
+  </header>
+
+  {groups.length > 1 && (
+    <nav class="rb-jump" aria-label="Card types">
+      {groups.map((g) => <a href={`#${g.t.toLowerCase()}`}>{typePlural(g.t)} ({g.cards.length})</a>)}
+    </nav>
+  )}
+
+  {groups.map((g, i) => (
+    <section id={g.t.toLowerCase()} class="rb-group">
+      <div class="section-head"><h2>{typePlural(g.t)}</h2></div>
+      <CardGrid cards={g.cards} eager={i === 0 ? 6 : 0} />
+    </section>
+  ))}
+
+  <Credit />
+</Base>
+
+<style>
+  .rb-stats { display: flex; flex-wrap: wrap; gap: 6px 18px; color: var(--muted); font-size: .9rem; }
+  .code { font-family: var(--mono); }
+  .rb-jump { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 8px; }
+  .rb-jump a { font-weight: 700; font-size: .85rem; }
+  .rb-group { margin-top: 32px; }
+</style>

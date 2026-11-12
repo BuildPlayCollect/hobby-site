@@ -1,0 +1,155 @@
+---
+// /tcg/riftbound/search: find any Riftbound card by name, words in its text, type, colour, set or cost.
+// The search runs in the reader's browser: the page downloads /tcg/riftbound/cards.json once, then filters it
+// instantly as you type. The search box is also kept in the address (?q=...), so a search can be shared.
+import Base from '../../../layouts/Base.astro';
+import CardsHead from '../../../components/riftbound/CardsHead.astro';
+import Credit from '../../../components/riftbound/Credit.astro';
+import { RB_SETS, RB_CARDS, TYPE_ORDER, typePlural, DOMAIN_COLOURS } from '../../../lib/riftbound';
+
+const types = TYPE_ORDER.filter((t) => RB_CARDS.some((c) => c.type === t));
+const domains = Object.keys(DOMAIN_COLOURS).filter((d) => RB_CARDS.some((c) => c.domains.includes(d)));
+---
+<Base title="Search Riftbound cards" description={`Search all ${RB_CARDS.length.toLocaleString('en-GB')} Riftbound cards by name, card text, type, domain, set or cost.`}>
+  <CardsHead crumbs={[{ label: 'Search' }]} />
+  <header class="page-head">
+    <h1>Search Riftbound cards</h1>
+    <p>Type a card name or any words from a card's text (try <em>draw a card</em> or <em>Tank</em>), then narrow it down with the filters.</p>
+  </header>
+
+  <form class="rs-tools" data-rs-form role="search">
+    <label class="rs-q"><span class="sr-only">Name or card text</span>
+      <input type="search" name="q" placeholder="Name or card text" autocomplete="off" spellcheck="false" />
+    </label>
+    <label><span class="sr-only">Type</span>
+      <select name="type"><option value="">All types</option>{types.map((t) => <option value={t}>{typePlural(t)}</option>)}</select>
+    </label>
+    <label><span class="sr-only">Domain</span>
+      <select name="domain"><option value="">All domains</option>{domains.map((d) => <option value={d}>{d}</option>)}</select>
+    </label>
+    <label><span class="sr-only">Set</span>
+      <select name="set"><option value="">All sets</option>{RB_SETS.map((s) => <option value={s.code}>{s.name} ({s.code.toUpperCase()})</option>)}</select>
+    </label>
+    <label><span class="sr-only">Energy cost</span>
+      <select name="energy"><option value="">Any energy cost</option>{[0, 1, 2, 3, 4, 5, 6].map((n) => <option value={n}>{n === 6 ? '6 or more' : n} energy</option>)}</select>
+    </label>
+    <label class="rs-toggle"><input type="checkbox" name="all" /> Show special versions too</label>
+  </form>
+
+  <p class="rs-count" data-rs-count aria-live="polite">Loading cards…</p>
+  <ul class="rs-grid" data-rs-grid></ul>
+  <button type="button" class="rs-more" data-rs-more hidden>Show more</button>
+  <noscript><p>Search needs JavaScript. You can still browse <a href="/tcg/riftbound/cards/">every set's card list</a>.</p></noscript>
+
+  <Credit />
+</Base>
+
+<script>
+  type Row = { n: string; o: string; t: string; d: string[]; s: string; no: string; u: string; i: string; x: string; e: number | null; v: string | null; w: number; rel: string };
+  const form = document.querySelector<HTMLFormElement>('[data-rs-form]')!;
+  const grid = document.querySelector<HTMLUListElement>('[data-rs-grid]')!;
+  const count = document.querySelector<HTMLElement>('[data-rs-count]')!;
+  const more = document.querySelector<HTMLButtonElement>('[data-rs-more]')!;
+  const PAGE = 60;
+  const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  let rows: (Row & { hay: string })[] = [];
+  let hits: Row[] = [];
+  let shown = 0;
+
+  // Fill the form from the address (?q=annie&type=Unit), so shared links open the same search.
+  const params = new URLSearchParams(location.search);
+  for (const [k, v] of params) {
+    const el = form.elements.namedItem(k);
+    if (el instanceof HTMLInputElement && el.type === 'checkbox') el.checked = v === '1';
+    else if (el instanceof HTMLInputElement || el instanceof HTMLSelectElement) el.value = v;
+  }
+
+  function tile(r: Row) {
+    const li = document.createElement('li');
+    if (r.w) li.className = 'rs-wide';
+    const a = document.createElement('a');
+    a.href = r.u;
+    const img = document.createElement('img');
+    img.src = r.i; img.alt = `${r.n}, Riftbound card`; img.loading = 'lazy'; img.decoding = 'async';
+    img.width = r.w ? 280 : 200; img.height = r.w ? 200 : 279;
+    const name = document.createElement('strong');
+    name.textContent = r.n;
+    const meta = document.createElement('span');
+    meta.textContent = `${r.s.toUpperCase()} #${r.no} · ${r.t}${r.v ? ` · ${r.v}` : ''}`;
+    a.append(img, name, meta);
+    li.append(a);
+    return li;
+  }
+
+  function render(reset: boolean) {
+    if (reset) { grid.replaceChildren(); shown = 0; }
+    const next = hits.slice(shown, shown + PAGE);
+    grid.append(...next.map(tile));
+    shown += next.length;
+    more.hidden = shown >= hits.length;
+  }
+
+  function apply() {
+    const f = new FormData(form);
+    const words = norm(String(f.get('q') ?? '')).split(/\s+/).filter(Boolean);
+    const type = String(f.get('type') ?? '');
+    const domain = String(f.get('domain') ?? '');
+    const set = String(f.get('set') ?? '');
+    const energy = String(f.get('energy') ?? '');
+    const all = f.has('all');
+    const seen = new Set<string>();
+    hits = rows.filter((r) => {
+      if (type && r.t !== type) return false;
+      if (domain && !r.d.includes(domain)) return false;
+      if (set && r.s !== set) return false;
+      if (energy !== '' && !(energy === '6' ? (r.e ?? -1) >= 6 : r.e === Number(energy))) return false;
+      if (!words.every((w) => r.hay.includes(w))) return false;
+      if (!all && !set) { if (seen.has(r.o)) return false; seen.add(r.o); }
+      return true;
+    });
+    // Cards whose NAME matches come first, then the rest A to Z.
+    const q = words.join(' ');
+    hits.sort((a, b) => Number(!norm(a.n).includes(q)) - Number(!norm(b.n).includes(q)) || a.n.localeCompare(b.n));
+    count.textContent = hits.length ? `${hits.length.toLocaleString('en-GB')} card${hits.length === 1 ? '' : 's'}` : 'No cards match that. Try fewer words or clear a filter.';
+    render(true);
+    // Keep the search in the address bar, without adding to the Back button history.
+    const out = new URLSearchParams();
+    for (const [k, v] of f) if (v !== '') out.set(k, k === 'all' ? '1' : String(v));
+    history.replaceState(null, '', out.size ? `?${out}` : location.pathname);
+  }
+
+  fetch('/tcg/riftbound/cards.json')
+    .then((r) => r.json())
+    .then((data: Row[]) => {
+      // Plain versions first, so "one per card" keeps the plain printing rather than a special one.
+      rows = data.map((r) => ({ ...r, hay: norm(`${r.n} ${r.x} ${r.t}`) }))
+        .sort((a, b) => Number(!!a.v) - Number(!!b.v) || a.rel.localeCompare(b.rel));
+      form.addEventListener('input', apply);
+      form.addEventListener('change', apply);
+      form.addEventListener('submit', (e) => { e.preventDefault(); apply(); });
+      more.addEventListener('click', () => render(false));
+      apply();
+    })
+    .catch(() => { count.textContent = 'Sorry, the card list did not load. Please refresh the page.'; });
+</script>
+
+<style>
+  .rs-tools { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+  .rs-tools input[type='search'], .rs-tools select { padding: 8px 12px; border: 2px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--ink); font: inherit; font-size: .92rem; }
+  .rs-q { flex: 1 1 100%; }
+  .rs-q input { width: 100%; }
+  .rs-toggle { display: flex; align-items: center; gap: 6px; font-size: .9rem; font-weight: 700; }
+  .rs-count { color: var(--muted); font-size: .9rem; }
+  .rs-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+  .rs-grid :global(a) { display: grid; gap: 4px; color: var(--ink); text-decoration: none; }
+  .rs-grid :global(img) { width: 100%; height: auto; aspect-ratio: 200 / 279; object-fit: cover; border-radius: 10px; background: var(--surface); box-shadow: var(--lift); }
+  .rs-grid :global(.rs-wide img) { aspect-ratio: 279 / 200; }
+  .rs-grid :global(strong) { font-size: .9rem; line-height: 1.25; }
+  .rs-grid :global(span) { font-size: .78rem; color: var(--muted); }
+  .rs-more[hidden] { display: none; }
+  .rs-more { margin: 18px auto 0; display: block; padding: 8px 20px; border: 2px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); font-weight: 700; cursor: pointer; }
+  @media (max-width: 560px) {
+    .rs-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .rs-tools select { flex: 1 1 45%; }
+  }
+</style>

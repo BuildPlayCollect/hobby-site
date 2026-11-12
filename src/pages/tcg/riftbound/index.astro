@@ -3,13 +3,16 @@
 // Riftbound is Riot Games' League of Legends trading card game.
 //
 // Two rules from Riot's Riftbound policy (developer.riotgames.com/policies/riftbound) shape this page:
-//  1. Card pictures may only come from the Riot API. We don't have a key yet, so there are NO card images here.
+//  1. Card pictures may only come from the Riot API. This learn-to-play page has NO card images.
+//     (The card pages under /tcg/riftbound/cards use RiftHunt's fan API for pictures. Echo chose that knowing
+//      Riot's policy prefers its own API; if Riot ever asks, those pages are the ones to change.)
 //  2. Fan sites may not publish play rates, win rates or matchup percentages. So the tier list section only
 //     links out to other sites, with no rankings or numbers of our own.
 // Every rule below was checked against the official Core Rules PDF (last updated 9 Oct 2026).
 import Base from '../../../layouts/Base.astro';
 import SourceList from '../../../components/SourceList.astro';
 import { LEGAL } from '../../../lib/esports-hub';
+import { RB_CARDS, RB_SETS, LEGENDS, BATTLEFIELDS } from '../../../lib/riftbound';
 
 // The official sources. Facts on the page link to these.
 const CORE = 'https://cmsassets.rgpub.io/sanity/files/dsfx7636/news_live/5c7946f7c3b8c6e0faff85ab6dadc6d2e721ea94.pdf';
@@ -69,8 +72,21 @@ const TIER_LINKS = [
   </header>
 
   <nav class="lp-jump" aria-label="On this page">
-    <a href="#learn">The basics</a><a href="#deck">Your deck</a><a href="#setup">Setup</a><a href="#runes">Runes</a><a href="#turn">Your turn</a><a href="#scoring">Scoring</a><a href="#fights">Fights</a><a href="#words">Words to know</a><a href="#tiers">Tier lists</a>
+    <a href="#learn">The basics</a><a href="#deck">Your deck</a><a href="#setup">Setup</a><a href="#runes">Runes</a><a href="#turn">Your turn</a><a href="#scoring">Scoring</a><a href="#fights">Fights</a><a href="#words">Words to know</a><a href="#tiers">Tier lists</a><a href="#card-lists">Every card</a>
   </nav>
+
+  <div class="rb-cards-cta" id="card-lists">
+    <div>
+      <h2>Every Riftbound card</h2>
+      <p>All {RB_CARDS.length.toLocaleString('en-GB')} cards from {RB_SETS.length} sets, with pictures and stats.</p>
+    </div>
+    <nav aria-label="Riftbound card lists">
+      <a href="/tcg/riftbound/cards/">All sets</a>
+      <a href="/tcg/riftbound/legends/">Legends ({LEGENDS.length})</a>
+      <a href="/tcg/riftbound/battlefields/">Battlefields ({BATTLEFIELDS.length})</a>
+      <a href="/tcg/riftbound/search/">Search</a>
+    </nav>
+  </div>
 
   <section id="learn" class="lp-section">
     <div class="section-head"><h2>The 60-second version</h2></div>
@@ -235,6 +251,12 @@ const TIER_LINKS = [
   .lp-end h2 { margin: 0 0 6px; }
   .lp-end p { margin: 0; max-width: 75ch; }
   .lp-end a { color: #1b1a1f; font-weight: 800; text-decoration: underline; }
+  .rb-cards-cta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; padding: 16px 20px; border: 2px solid var(--line); border-radius: 18px; background: var(--surface); box-shadow: var(--lift); }
+  .rb-cards-cta h2 { margin: 0 0 2px; font-size: 1.2rem; }
+  .rb-cards-cta p { margin: 0; color: var(--muted); font-size: .9rem; }
+  .rb-cards-cta nav { display: flex; flex-wrap: wrap; gap: 8px; }
+  .rb-cards-cta nav a { padding: 6px 14px; border-radius: 999px; background: var(--c1); color: #fff; font-weight: 700; font-size: .85rem; }
+  .rb-cards-cta nav a:hover { text-decoration: none; filter: brightness(1.1); }
   .rb-legal { margin-top: 16px; font-size: .8rem; color: var(--muted); max-width: 90ch; }
   @media (max-width: 560px) { .lp-steps > li { padding: 52px 14px 14px; } }
 </style>

@@ -1,0 +1,13 @@
+---
+// The small print at the bottom of every Riftbound card page: where the cards come from and Riot's required notice.
+import { LEGAL } from '../../lib/esports-hub';
+import { RIFTHUNT, RB_FETCHED, fmtDate } from '../../lib/riftbound';
+---
+<p class="rb-credit">
+  Card data and pictures from the <a href={RIFTHUNT.api} rel="noopener">RiftHunt card API</a>, a free fan-made Riftbound database (card list as of {fmtDate(RB_FETCHED)}).
+  Card names, text and art belong to Riot Games. {LEGAL.riot}
+</p>
+
+<style>
+  .rb-credit { margin-top: 28px; font-size: .8rem; color: var(--muted); max-width: 90ch; }
+</style>

@@ -1,0 +1,22 @@
+---
+// /tcg/riftbound/legends: every champion Legend, one picture each (special versions are on each card's page).
+import Base from '../../../layouts/Base.astro';
+import CardsHead from '../../../components/riftbound/CardsHead.astro';
+import CardGrid from '../../../components/riftbound/CardGrid.astro';
+import Credit from '../../../components/riftbound/Credit.astro';
+import { LEGENDS, RB_HUB } from '../../../lib/riftbound';
+---
+<Base title={`All ${LEGENDS.length} Riftbound Legends`} description={`Every champion Legend in Riftbound, the League of Legends card game: ${LEGENDS.length} Legends with pictures, abilities and domains.`}>
+  <CardsHead crumbs={[{ label: 'Legends' }]} />
+  <header class="page-head">
+    <h1>Riftbound Legends</h1>
+    <p>Your Legend is the star of your deck. It sits on the table all game, decides which two colours (domains) your deck can use, and usually has a handy ability. <a href={`${RB_HUB}#deck`}>More on how decks work</a>.</p>
+    <p class="rb-count">{LEGENDS.length} Legends, A to Z. Each one appears once here; tap it to see its special versions.</p>
+  </header>
+  <CardGrid cards={LEGENDS} eager={8} />
+  <Credit />
+</Base>
+
+<style>
+  .rb-count { color: var(--muted); font-size: .9rem; }
+</style>

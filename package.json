@@ -8,6 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "esports:data": "node scripts/esports-rosters.mjs",
+    "riftbound:data": "node scripts/riftbound-cards.mjs",
     "check:articles": "node scripts/check-articles.mjs"
   },
   "dependencies": {
