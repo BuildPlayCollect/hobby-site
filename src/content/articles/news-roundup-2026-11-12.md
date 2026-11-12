@@ -36,7 +36,7 @@ Meanwhile, [Grand Theft Auto VI pre-loads opened on PS5](https://blog.playstatio
 
 If you've been eyeing [Pokémon TCG: Mega Evolution, Delta Reign](https://icv2.com/articles/news/view/63514), it landed on November 6. Time to find out who pulled the shiny stuff.
 
-Over in One Piece, [The Dominance of God (OP-18)](https://en.onepiece-cardgame.com/products/boosters/op18.html) arrives November 20 at $4.99 a pack. It brings Water Seven and the Holy Knights of God, with Saint Gunko and Saint Shamrock making their card game debut, plus a new Monkey.D.Luffy Leader. Collectors, watch for a Super Alt Art Nico Robin and an alt art drawn by Yoshitaka Amano. The cards become tournament legal 7 days after release.
+Over in One Piece, [The Dominance of God (OP-18)](https://en.onepiece-cardgame.com/products/op18.html) arrives November 20 at $4.99 a pack. It brings Water Seven and the Holy Knights of God, with Saint Gunko and Saint Shamrock making their card game debut, plus a new Monkey.D.Luffy Leader. Collectors, watch for a Super Alt Art Nico Robin and an alt art drawn by Yoshitaka Amano. The cards become tournament legal 7 days after release.
 
 ## Beyblade
 
@@ -58,6 +58,6 @@ The big one is coming. Tamiya's [Mini 4WD Championship 2026](https://www.tamiya.
 6. PlayStation Blog: [Pre-load Grand Theft Auto VI on PS5](https://blog.playstation.com/2026/11/10/pre-load-grand-theft-auto-vi-on-ps5-starting-today/) (November 10, 2026)
 7. Xbox Wire: [GTA VI on Xbox Cloud Gaming](https://news.xbox.com/en-us/2026/11/10/grand-theft-auto-6-comes-to-xbox-cloud-gaming-november-19/) (November 10, 2026)
 8. ICv2: [Pokémon TCG: Mega Evolution, Delta Reign](https://icv2.com/articles/news/view/63514)
-9. Bandai: [One Piece Card Game Booster Pack The Dominance of God (OP-18)](https://en.onepiece-cardgame.com/products/boosters/op18.html)
+9. Bandai: [One Piece Card Game Booster Pack The Dominance of God (OP-18)](https://en.onepiece-cardgame.com/products/op18.html)
 10. Takara Tomy: [Beyblade X Casual Battle Day supported by DMM Kuji](https://beyblade.takaratomy.co.jp/beyblade-x/news/news260321_3.html)
 11. Tamiya: [Mini 4WD Championship 2026](https://www.tamiya.com/japan/event/m4_championship2026) and [Station Champion Decider 2026](https://www.tamiya.com/japan/event/mini4wd/m4stc2026)
