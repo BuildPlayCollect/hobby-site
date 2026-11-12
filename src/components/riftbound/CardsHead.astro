@@ -1,0 +1,29 @@
+---
+// The top of every Riftbound card page: breadcrumbs (Home › Riftbound › Cards › ...) and the quick-jump buttons.
+import { LEGENDS, BATTLEFIELDS, RB_HUB, RB_CARDS_URL } from '../../lib/riftbound';
+
+interface Props { crumbs?: { label: string; href?: string }[] }
+const { crumbs = [] } = Astro.props;
+const path = Astro.url.pathname;
+const buttons = [
+  { label: 'All sets', href: RB_CARDS_URL },
+  { label: `Legends (${LEGENDS.length})`, href: '/tcg/riftbound/legends/' },
+  { label: `Battlefields (${BATTLEFIELDS.length})`, href: '/tcg/riftbound/battlefields/' },
+  { label: 'Search', href: '/tcg/riftbound/search/' },
+  { label: 'Learn to play', href: RB_HUB },
+];
+const all = [{ label: 'TCG', href: '/tcg/' }, { label: 'Riftbound', href: RB_HUB }, ...crumbs];
+---
+<nav class="rb-crumbs" aria-label="Breadcrumb">
+  {all.map((c, i) => <>{i > 0 && <span aria-hidden="true">›</span>}{c.href && i < all.length - 1 ? <a href={c.href}>{c.label}</a> : <span aria-current={i === all.length - 1 ? 'page' : undefined}>{c.label}</span>}</>)}
+</nav>
+<nav class="rb-buttons" aria-label="Riftbound cards">
+  {buttons.map((b) => <a href={b.href} aria-current={path === b.href ? 'page' : undefined}>{b.label}</a>)}
+</nav>
+
+<style>
+  .rb-crumbs { display: flex; flex-wrap: wrap; gap: 8px; font-size: .85rem; color: var(--muted); margin: 0 0 10px; }
+  .rb-buttons { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 24px; }
+  .rb-buttons a { padding: 6px 14px; border: 2px solid var(--line); border-radius: 999px; font-weight: 700; font-size: .85rem; color: var(--ink); background: var(--surface); }
+  .rb-buttons a:hover, .rb-buttons a[aria-current='page'] { text-decoration: none; background: var(--mark); color: #1b1a1f; }
+</style>

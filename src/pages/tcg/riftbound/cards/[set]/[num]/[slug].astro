@@ -1,0 +1,113 @@
+---
+// /tcg/riftbound/cards/<set>/<number>/<name>: one page per printed card.
+// Shows the picture, what the card costs and does, who drew it, and every other version of the same card.
+// The address copies RiftHunt's (e.g. /cards/ogn/017/annie-dark-child/), so it's easy to compare with their page.
+import Base from '../../../../../../layouts/Base.astro';
+import CardsHead from '../../../../../../components/riftbound/CardsHead.astro';
+import CardGrid from '../../../../../../components/riftbound/CardGrid.astro';
+import Credit from '../../../../../../components/riftbound/Credit.astro';
+import { RB_CARDS, setOf, setUrl, cardUrl, bySetOrder, cardTextHtml, cardTextPlain, DOMAIN_COLOURS, RB_HUB, type RbCard } from '../../../../../../lib/riftbound';
+
+export function getStaticPaths() {
+  return RB_CARDS.map((c) => ({ params: { set: c.set, num: c.num, slug: c.slug }, props: { c } }));
+}
+const { c } = Astro.props as { c: RbCard };
+const set = setOf(c);
+const others = RB_CARDS.filter((x) => x.oracle === c.oracle && x.id !== c.id).sort((a, b) => (setOf(a).released ?? '').localeCompare(setOf(b).released ?? '') || bySetOrder(a, b));
+const inSet = RB_CARDS.filter((x) => x.set === c.set).sort(bySetOrder);
+const at = inSet.findIndex((x) => x.id === c.id);
+const prev = inSet[at - 1];
+const next = inSet[at + 1];
+const typeLine = [c.super, c.type].filter(Boolean).join(' ');
+
+// The stats box. Rows with nothing to say (like Might on a spell) are left out.
+const stats = [
+  { k: 'Type', v: typeLine },
+  { k: 'Domains', v: c.domains.length ? c.domains : null, domains: true },
+  { k: 'Energy cost', v: c.energy, tip: 'Paid by turning runes sideways (exhausting them).' },
+  { k: 'Power cost', v: c.power, tip: 'Paid by sending runes back to your rune deck (recycling them).' },
+  { k: 'Might', v: c.might, tip: 'How hard this unit hits, and how much damage it can take.' },
+  { k: 'Keywords', v: c.keywords.length ? c.keywords.join(', ') : null },
+  { k: 'Rarity', v: c.rarity },
+  { k: 'Version', v: c.variant },
+  { k: 'Set', v: `${set.name} (${c.set.toUpperCase()}) #${c.number}`, href: setUrl(c.set) },
+  { k: 'Artist', v: c.artist },
+].filter((s) => s.v !== null && s.v !== undefined && s.v !== '');
+const plain = cardTextPlain(c.text);
+const description = `${c.name}: a Riftbound ${typeLine.toLowerCase()} from ${set.fullName}.${plain ? ' ' + plain : ''}`.slice(0, 300);
+---
+<Base title={`${c.name} (Riftbound ${c.set.toUpperCase()} #${c.number})`} description={description} image={c.img.n}>
+  <CardsHead crumbs={[{ label: 'Cards', href: '/tcg/riftbound/cards/' }, { label: set.name, href: setUrl(c.set) }, { label: c.name }]} />
+
+  <article class="rb-card">
+    <div class="rb-pic">
+      <img data-zoom src={c.img.n} srcset={`${c.img.n} 480w, ${c.img.l} 744w`} sizes="(max-width: 700px) 90vw, 360px" alt={`${c.name}, Riftbound card${c.artist ? `, art by ${c.artist}` : ''}`}
+          width={c.landscape ? 480 : 360} height={c.landscape ? 344 : 503} loading="eager" />
+      {c.img.back && <a class="rb-back" href={c.img.back}>See the back of this card</a>}
+    </div>
+
+    <div class="rb-info">
+      <h1>{c.name}</h1>
+      <p class="rb-sub">{typeLine} · <a href={setUrl(c.set)}>{set.name}</a> #{c.number}</p>
+
+      {c.text && <div class="rb-text" set:html={cardTextHtml(c.text)} />}
+      {c.flavour && <p class="rb-flavour">{c.flavour}</p>}
+
+      <dl class="rb-stats">
+        {stats.map((s) => (
+          <div>
+            <dt>{s.k}</dt>
+            <dd>
+              {s.domains ? (s.v as string[]).map((d) => <span class="rb-domain" style={`--dc:${DOMAIN_COLOURS[d] ?? '#888'}`}>{d}</span>)
+                : s.href ? <a href={s.href}>{s.v}</a> : s.v}
+              {s.tip && <small>{s.tip}</small>}
+            </dd>
+          </div>
+        ))}
+      </dl>
+
+      <p class="rb-help">New to Riftbound? <a href={`${RB_HUB}#runes`}>Here's how energy and power work</a>.</p>
+      {c.rifthunt && <p class="rb-help">Prices, rulings and more on <a href={c.rifthunt} rel="noopener">this card's RiftHunt page</a>.</p>}
+
+      <nav class="rb-pn" aria-label="Previous and next card in this set">
+        {prev ? <a href={cardUrl(prev)}>‹ {prev.name}</a> : <span />}
+        {next ? <a href={cardUrl(next)}>{next.name} ›</a> : <span />}
+      </nav>
+    </div>
+  </article>
+
+  {others.length > 0 && (
+    <section class="rb-others">
+      <div class="section-head"><h2>Other versions of this card ({others.length})</h2></div>
+      <CardGrid cards={others} eager={0} showSet />
+    </section>
+  )}
+
+  <Credit />
+</Base>
+
+<style>
+  .rb-card { display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr); gap: 32px; align-items: start; }
+  .rb-pic img { width: 100%; height: auto; border-radius: 16px; box-shadow: var(--lift); background: var(--surface); }
+  .rb-back { display: inline-block; margin-top: 8px; font-size: .9rem; font-weight: 700; }
+  .rb-info h1 { margin: 0 0 4px; }
+  .rb-sub { color: var(--muted); margin: 0 0 16px; }
+  .rb-text { padding: 14px 16px; border: 2px solid var(--line); border-radius: 14px; background: var(--surface); line-height: 1.55; }
+  .rb-text :global(.rb-kw) { font-weight: 800; }
+  .rb-text :global(.rb-sym) { display: inline-block; padding: 0 6px; border-radius: 6px; background: var(--mark); color: #1b1a1f; font-size: .85em; font-weight: 700; }
+  .rb-text :global(.rb-sym-energy) { border-radius: 50%; min-width: 1.4em; text-align: center; padding: 0; }
+  .rb-flavour { font-style: italic; color: var(--muted); margin: 12px 0 0; }
+  .rb-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; margin: 18px 0 0; }
+  .rb-stats div { padding: 10px 12px; border: 2px solid var(--line); border-radius: 12px; background: var(--surface); }
+  .rb-stats dt { font-size: .75rem; font-weight: 700; color: var(--muted); }
+  .rb-stats dd { margin: 2px 0 0; font-weight: 700; display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+  .rb-stats small { display: block; width: 100%; font-weight: 400; color: var(--muted); font-size: .78rem; }
+  .rb-domain { padding: 1px 8px; border-radius: 999px; background: var(--dc); color: #fff; font-size: .82rem; }
+  .rb-help { font-size: .9rem; margin: 14px 0 0; }
+  .rb-pn { display: flex; justify-content: space-between; gap: 12px; margin-top: 22px; font-weight: 700; font-size: .9rem; }
+  .rb-others { margin-top: 40px; }
+  @media (max-width: 700px) {
+    .rb-card { grid-template-columns: 1fr; gap: 18px; }
+    .rb-pic { max-width: 340px; margin: 0 auto; }
+  }
+</style>

@@ -163,3 +163,14 @@ Every hobby page ends with "beginner questions" that fold open when tapped. They
 Every fighter page has a "Good and tough matchups" box. The numbers live in `src/data/unmatched-matchups.json` (one entry per fighter: total games, then up to 3 good and 3 tough opponents with wins, losses, games and win %). `src/lib/unmatched-matchups.ts` turns those ids into real fighters for the page and holds the source name and "checked" date.
 
 They come from each fighter's page on Tabletop League (tabletopleague.com/games/unmatched/stats/characters). Rules: only pairs with 20+ real games, good = 55%+ wins, tough = 45% or less. To refresh, re-read those pages, update the JSON and change the `checked` date in the lib file.
+
+## Riftbound card pages
+
+Under the Riftbound hub there's a page for every card (`/tcg/riftbound/cards/...`), one card list per set, a sets table, Legends, Battlefields and a Search page. All of them are built from one file, `src/data/riftbound/cards.json`.
+
+- **Where the cards come from:** the free [RiftHunt card API](https://rifthunt.com/api/), a fan-made Riftbound database. `npm run riftbound:data` downloads the whole card list in one go (plus one request per set for the picture links, a second apart, so we're gentle on their server) and rewrites the JSON. Run it after a new set comes out; once a day at most.
+- **Pictures:** not saved on our site. Each card stores links to RiftHunt's picture server (images.rifthunt.com) and readers' browsers load them from there. 1,700+ card pictures would make the site too big.
+- **How 1,725 pages appear from one file:** `src/pages/tcg/riftbound/cards/[set]/[num]/[slug].astro` is one template. Its `getStaticPaths()` hands Astro every card, and Astro builds one page per card. Square brackets in a file name mean "fill this in for each item".
+- **Search:** `cards.json.ts` builds a small list of every card at `/tcg/riftbound/cards.json`. The Search page downloads it once and filters it in the reader's browser, so typing is instant and nothing is sent anywhere.
+- **Card symbols:** card text has codes like `:rb_energy_2:` and `[Tank]`. `cardTextHtml()` in `src/lib/riftbound.ts` turns them into little labels and bold keywords.
+- **Riot's rules:** every card page keeps Riot's "Legal Jibber Jabber" notice and credits RiftHunt. Riot's policy prefers card pictures from its own API; we chose RiftHunt anyway, so if Riot ever asks, these are the pages to change. No prices or shop links are shown.

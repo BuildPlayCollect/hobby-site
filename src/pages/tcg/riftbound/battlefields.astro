@@ -1,0 +1,24 @@
+---
+// /tcg/riftbound/battlefields: every Battlefield card, one picture each. Battlefields are printed sideways (landscape).
+import Base from '../../../layouts/Base.astro';
+import CardsHead from '../../../components/riftbound/CardsHead.astro';
+import CardGrid from '../../../components/riftbound/CardGrid.astro';
+import Credit from '../../../components/riftbound/Credit.astro';
+import { BATTLEFIELDS, RB_HUB } from '../../../lib/riftbound';
+---
+<Base title={`All ${BATTLEFIELDS.length} Riftbound Battlefields`} description={`Every Battlefield card in Riftbound, the League of Legends card game: ${BATTLEFIELDS.length} places to fight over, with pictures and what each one does.`}>
+  <CardsHead crumbs={[{ label: 'Battlefields' }]} />
+  <header class="page-head">
+    <h1>Riftbound Battlefields</h1>
+    <p>Battlefields are the places everyone fights over. You bring 3 to a game, and in a 1-vs-1 match one of yours is picked at random. Many have their own twist, like a bonus for whoever holds them. <a href={`${RB_HUB}#scoring`}>How scoring works</a>.</p>
+    <p class="rb-count">{BATTLEFIELDS.length} Battlefields, A to Z.</p>
+  </header>
+  <div class="rb-bf"><CardGrid cards={BATTLEFIELDS} eager={6} showSet /></div>
+  <Credit />
+</Base>
+
+<style>
+  .rb-count { color: var(--muted); font-size: .9rem; }
+  .rb-bf :global(.rb-grid) { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+  @media (max-width: 560px) { .rb-bf :global(.rb-grid) { grid-template-columns: 1fr 1fr; } }
+</style>

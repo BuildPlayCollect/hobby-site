@@ -26,5 +26,8 @@ exclude = [
   '^https?://takaratomymall\.jp/',          # 2026-10-28: timeout for the checker, pages load
   '^https?://(www\.)?gmk\.net/',           # 2026-10-28: 404 for the checker, page loads
   '^https?://metavgc\.com/',               # 2026-10-29: 500 for the checker twice, page loads
+  # RiftHunt: src/data/riftbound/cards.json holds ~5,000 of its links (one picture set + page per card).
+  # Checking them all every week would flood their small fan-run server, which their terms ask us not to do.
+  '^https?://(api\.|images\.)?rifthunt\.com/',  # 2026-11-12
 ]
 exclude_all_private = true
