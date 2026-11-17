@@ -2,6 +2,7 @@
 // GameHub.astro: one esports game hub (VALORANT, League of Legends, TFT, Dota 2).
 // The facts come from src/data/<game>.ts. Slots: "hero" replaces the illustrated banner
 // (e.g. with a press photo), and the default slot adds extra sections after "What's happening now".
+import JumpNav from '../JumpNav.astro';
 import Base from '../../layouts/Base.astro';
 import SourceList from '../SourceList.astro';
 import GameLogo from './GameLogo.astro';
@@ -42,9 +43,16 @@ const hasHero = Astro.slots.has('hero');
     </div>
   )}
 
-  <nav class="gh-jump" aria-label="On this page">
-    <a href="#about">What is it?</a><a href="#start">New? Start here</a><a href="#now">Happening now</a>{game.patches && <a href="#patches">Patch notes</a>}{game.teams && <a href="#teams">{game.teamsTitle ?? 'Team updates'}</a>}{extraJump.map((j) => <a href={j.href}>{j.label}</a>)}<a href="#scene">The pro scene</a>{game.ph && <a href="#ph">Philippines</a>}
-  </nav>
+  <JumpNav links={[
+    { href: '#about', label: 'What is it?' },
+    { href: '#start', label: 'New? Start here' },
+    { href: '#now', label: 'Happening now' },
+    ...(game.patches ? [{ href: '#patches', label: 'Patch notes' }] : []),
+    ...(game.teams ? [{ href: '#teams', label: game.teamsTitle ?? 'Team updates' }] : []),
+    ...extraJump,
+    { href: '#scene', label: 'The pro scene' },
+    ...(game.ph ? [{ href: '#ph', label: 'Philippines' }] : []),
+  ]} />
 
   {game.tools && (
     <div class="gh-tools">
@@ -195,9 +203,6 @@ const hasHero = Astro.slots.has('hero');
   .gh-badge { flex: none; width: clamp(64px, 16vw, 112px); height: auto; padding: 10px; border-radius: 20px; background: rgba(255, 255, 255, .55); border: 2px solid #1b1a1f; }
   .gh-banner-word { position: relative; z-index: 1; font-family: var(--display); font-weight: 800; font-size: clamp(1.6rem, 6vw, 3.2rem); line-height: 1; letter-spacing: -.03em; overflow-wrap: anywhere; }
 
-  .gh-jump { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 8px; }
-  .gh-jump a { padding: 6px 14px; border: 2px solid var(--line); border-radius: 999px; font-weight: 700; font-size: .85rem; color: var(--ink); background: var(--surface); }
-  .gh-jump a:hover { text-decoration: none; background: var(--mark); color: #1b1a1f; }
 
   .gh-section { margin-top: 44px; }
   .gh-section h2 { margin: 0 0 12px; }

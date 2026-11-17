@@ -2,6 +2,7 @@
 // /tcg/riftbound/cards/<set>: every card in one set, grouped by type (Legends, Units, Spells...), in printed order.
 // Astro makes one of these pages for each set in src/data/riftbound/cards.json.
 import Base from '../../../../../layouts/Base.astro';
+import JumpNav from '../../../../../components/JumpNav.astro';
 import CardsHead from '../../../../../components/riftbound/CardsHead.astro';
 import CardGrid from '../../../../../components/riftbound/CardGrid.astro';
 import Credit from '../../../../../components/riftbound/Credit.astro';
@@ -25,11 +26,7 @@ const summary = groups.map((g) => `${g.cards.length} ${g.cards.length === 1 ? g.
     <p>In this set: {summary}. Tap a card for its full text and stats.</p>
   </header>
 
-  {groups.length > 1 && (
-    <nav class="rb-jump" aria-label="Card types">
-      {groups.map((g) => <a href={`#${g.t.toLowerCase()}`}>{typePlural(g.t)} ({g.cards.length})</a>)}
-    </nav>
-  )}
+  {groups.length > 1 && <JumpNav label="Card types" links={groups.map((g) => ({ href: `#${g.t.toLowerCase()}`, label: `${typePlural(g.t)} (${g.cards.length})` }))} />}
 
   {groups.map((g, i) => (
     <section id={g.t.toLowerCase()} class="rb-group">
@@ -44,7 +41,5 @@ const summary = groups.map((g) => `${g.cards.length} ${g.cards.length === 1 ? g.
 <style>
   .rb-stats { display: flex; flex-wrap: wrap; gap: 6px 18px; color: var(--muted); font-size: .9rem; }
   .code { font-family: var(--mono); }
-  .rb-jump { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 8px; }
-  .rb-jump a { font-weight: 700; font-size: .85rem; }
   .rb-group { margin-top: 32px; }
 </style>

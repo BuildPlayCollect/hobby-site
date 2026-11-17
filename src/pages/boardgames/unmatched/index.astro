@@ -1,6 +1,7 @@
 ---
 // The Unmatched hub (/boardgames/unmatched): learn to play, the rules, a tier list and every fighter.
 // All facts live in src/data/unmatched.ts, each with its source.
+import JumpNav from '../../../components/JumpNav.astro';
 import Disclaimer from '../../../components/unmatched/Disclaimer.astro';
 import Base from '../../../layouts/Base.astro';
 import Badge from '../../../components/unmatched/Badge.astro';
@@ -32,9 +33,13 @@ const guides = UM_FIGHTERS.filter((f) => f.guide).length;
     <p>Two heroes who should never meet, one small board, and a deck of cards each. Medusa vs. Spider-Man? Sherlock Holmes vs. a T. Rex? In Unmatched, that's a Tuesday.</p>
   </header>
 
-  <nav class="um-jump" aria-label="On this page">
-    <a href="#start">New? Start here</a><a href="#rules">Rules</a><a href="#tiers">Tier list</a><a href="#fighters">All {UM_FIGHTERS.length} fighters</a><a href="#next">Coming soon</a>
-  </nav>
+  <JumpNav links={[
+    { href: '#start', label: 'New? Start here' },
+    { href: '#rules', label: 'Rules' },
+    { href: '#tiers', label: 'Tier list' },
+    { href: '#fighters', label: `All ${UM_FIGHTERS.length} fighters` },
+    { href: '#next', label: 'Coming soon' },
+  ]} />
 
   <!-- Learn to play -->
   <section id="start" class="um-section">
@@ -163,9 +168,6 @@ const guides = UM_FIGHTERS.filter((f) => f.guide).length;
   .um-logo-h1 { margin: 4px 0 10px; }
   .um-logo { display: block; max-width: min(420px, 100%); max-height: 120px; width: auto; height: auto; }
   .um-thumb { flex: none; width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2.5px solid #1b1a1f; background: var(--surface-2); }
-  .um-jump { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 24px; }
-  .um-jump a { padding: 6px 14px; border: 2px solid var(--line); border-radius: 999px; font-weight: 700; font-size: .85rem; color: var(--ink); background: var(--surface); }
-  .um-jump a:hover { text-decoration: none; background: var(--mark); color: #1b1a1f; }
   .um-section { margin-top: 44px; }
   .um-lead { font-size: 1.05rem; max-width: 70ch; }
   .um-note { color: var(--muted); font-size: .9rem; margin: 0 0 14px; max-width: 80ch; }

@@ -1,6 +1,7 @@
 ---
 // The Pokémon Champions VGC hub (/esports/pokemon-champions).
 // Hand-edited facts live in src/data/champions.ts; usage stats are fetched from Smogon at build time.
+import JumpNav from '../../../components/JumpNav.astro';
 import Base from '../../../layouts/Base.astro';
 import Mon from '../../../components/champions/Mon.astro';
 import SourceList from '../../../components/SourceList.astro';
@@ -39,9 +40,18 @@ const starterTips = LEARN.starters.filter((n) => RESULTS.some((ev) => ev.top.som
     <p>The rules, the most used Pokémon, the teams winning Regionals and what's coming up next. Usage stats refresh by themselves every month.</p>
   </header>
 
-  <nav class="pc-jump" aria-label="On this page">
-    <a href="#start">New? Start here</a><a href="/esports/pokemon-champions/learn">Learn to play</a><a href="/esports/pokemon-champions/pokedex">Pokédex</a><a href="#usage">Usage</a><a href="#teams">Top teams</a><a href="#events">Events</a><a href="#rules">Rules</a><a href="/esports/pokemon-champions/team-builder">Team builder</a><a href="/esports/pokemon-champions/calc">Damage calc</a><a href="#about">About the game</a>
-  </nav>
+  <JumpNav links={[
+    { href: '#start', label: 'New? Start here' },
+    { href: '/esports/pokemon-champions/learn', label: 'Learn to play' },
+    { href: '/esports/pokemon-champions/pokedex', label: 'Pokédex' },
+    { href: '#usage', label: 'Usage' },
+    { href: '#teams', label: 'Top teams' },
+    { href: '#events', label: 'Events' },
+    { href: '#rules', label: 'Rules' },
+    { href: '/esports/pokemon-champions/team-builder', label: 'Team builder' },
+    { href: '/esports/pokemon-champions/calc', label: 'Damage calc' },
+    { href: '#about', label: 'About the game' },
+  ]} />
 
   <section class="pc-now" aria-label="Current rules">
     <div>
@@ -226,9 +236,6 @@ const starterTips = LEARN.starters.filter((n) => RESULTS.some((ev) => ev.top.som
 </script>
 
 <style>
-  .pc-jump { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 24px; }
-  .pc-jump a { padding: 6px 14px; border: 2px solid var(--line); border-radius: 999px; font-weight: 700; font-size: .85rem; color: var(--ink); background: var(--surface); }
-  .pc-jump a:hover { text-decoration: none; background: var(--mark); color: #1b1a1f; }
   .pc-now { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding: 18px 22px; border: 2px solid var(--line); border-radius: 18px; background: var(--c1); color: #fff; box-shadow: var(--lift); }
   .pc-now div { display: grid; gap: 2px; }
   .pc-now-links { display: flex; flex-wrap: wrap; gap: 8px; }

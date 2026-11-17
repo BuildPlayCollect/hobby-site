@@ -192,3 +192,16 @@ Both add `rel="noopener noreferrer"`, which stops the other website from being a
 - **Share links:** the whole deck is written into the address after `#` (for example `#l=ogn-255&c=ogn-119&m=ogn-097*3`), using each card's set and number. Nothing is sent to us.
 - **Saved decks:** kept in the reader's own browser (localStorage), so they don't follow them to another phone. The share link does.
 - **Copy as text:** gives the same plain list format Riftwatch and other deck sites use.
+
+## The "Jump to" menu and the Riftbound tabs
+
+Long pages (learn-to-play pages, game hubs, Pokédex pages, Unmatched) share one menu: `src/components/JumpNav.astro`. You give it a list of links, like `<JumpNav links={[{ href: '#rules', label: 'Rules' }]} />`.
+
+- It **sticks** under the site header while you scroll, so every section is one tap away.
+- The section you're reading **lights up**. A small script checks which section's heading has scrolled past the menu.
+- On a phone it's **one row you swipe**, with a fade on the right edge as a hint, instead of three or four rows of buttons.
+- `html:has(.jump)` adds extra `scroll-padding-top`, so jumping to a section doesn't hide its heading under the menu.
+
+The Riftbound pages share a tab menu instead (`src/components/riftbound/CardsHead.astro`): big tabs with small line pictures, with the page you're on filled in. It's on the Learn to Play page too, so the whole Riftbound section has the same menu.
+
+The Learn to Play page now shows example cards (from RiftHunt, like the card pages) in four places: "What's in your deck", "How to read a card" (numbered pins placed with `left`/`top` percentages over the picture), the six runes, and the card types. The table layout and the score track are plain HTML and CSS.

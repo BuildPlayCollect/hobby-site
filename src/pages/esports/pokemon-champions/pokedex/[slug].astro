@@ -1,6 +1,7 @@
 ---
 // One page per Pokémon allowed in the current regulation (/esports/pokemon-champions/pokedex/garchomp):
 // base stats (and Mega Evolutions), what strong players pick for it, and the real Regionals teams it was on.
+import JumpNav from '../../../../components/JumpNav.astro';
 import Base from '../../../../layouts/Base.astro';
 import Mon from '../../../../components/champions/Mon.astro';
 import SourceList from '../../../../components/SourceList.astro';
@@ -55,9 +56,12 @@ const description = `${name} in Pokémon Champions VGC ${dex.regulation}: ${e.ty
     </div>
   </header>
 
-  <nav class="dp-jump" aria-label="On this page">
-    <a href="#stats">Stats</a>{used.length > 0 && <a href="#sets">How players use it</a>}<a href="#teams">Tournament teams</a>{top && top.u.teammates.length > 0 && <a href="#partners">Partners</a>}
-  </nav>
+  <JumpNav links={[
+    { href: '#stats', label: 'Stats' },
+    ...(used.length > 0 ? [{ href: '#sets', label: 'How players use it' }] : []),
+    { href: '#teams', label: 'Tournament teams' },
+    ...(top && top.u.teammates.length > 0 ? [{ href: '#partners', label: 'Partners' }] : []),
+  ]} />
 
   <section id="stats" class="dp-section">
     <div class="section-head"><h2>{e.megas.length ? 'Stats and Mega Evolution' : 'Base stats'}</h2></div>
@@ -172,9 +176,6 @@ const description = `${name} in Pokémon Champions VGC ${dex.regulation}: ${e.ty
   .dp-mega { background: var(--ink); color: var(--bg); }
   .dp-new { background: var(--c2); color: #1b1a1f; }
   .dp-lead { margin: 0; max-width: 60ch; }
-  .dp-jump { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 0; }
-  .dp-jump a { padding: 6px 14px; border: 2px solid var(--line); border-radius: 999px; font-weight: 700; font-size: .85rem; color: var(--ink); background: var(--surface); }
-  .dp-jump a:hover { text-decoration: none; background: var(--mark); color: #1b1a1f; }
   .dp-section { margin-top: 40px; }
   .dp-forms { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr)); gap: 12px; }
   .dp-form { padding: 16px 18px; border: 2px solid var(--line); border-radius: 18px; background: var(--surface); }
