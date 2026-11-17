@@ -9,7 +9,7 @@
 //
 // How we stay polite (RiftHunt's API guide asks for this):
 //   - One "bulk" download for all the card data, instead of one request per card.
-//   - A few search requests (one per page of each set) for the picture links, with a 1-second pause between them.
+//   - A few search requests (one per page of each set, plus the Standard ban list), with a 1-second pause between them.
 //   - A User-Agent that names our project. Run this at most once a day (new cards only arrive with a new set).
 //
 // Facts from RiftHunt's API guide that this file relies on:
@@ -77,6 +77,23 @@ for (const code of codes) {
   console.log(`  ${code.toUpperCase()}: ${n} picture links`);
 }
 
+// 3b. Cards banned in Standard play (one search), so the deck builder can warn about them.
+await sleep(1000);
+const bannedNames = new Set();
+try {
+  let next = `/cards/search?q=${encodeURIComponent('banned:standard')}&unique=prints`;
+  while (next) {
+    const page = await get(next);
+    if (!page) break;
+    for (const c of page.data ?? []) bannedNames.add(c.oracle_id);
+    next = page.has_more ? page.next_page : null;
+    if (next) await sleep(1000);
+  }
+  console.log(`  ${bannedNames.size} cards banned in Standard`);
+} catch (e) {
+  console.warn(`  Couldn't load the ban list (${e.message}); no cards are marked banned.`);
+}
+
 // 4. Trim each printing down to what our pages use.
 const slugOf = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/['’.]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const cards = bulk.cards.map((b) => {
@@ -112,6 +129,7 @@ const cards = bulk.cards.map((b) => {
     landscape: b.orientation === 'landscape',
     img: x.images ? { s: x.images.small, n: x.images.normal, l: x.images.large, back: x.images.back ?? null } : { s: b.imgUrl, n: b.imgUrl, l: b.imgUrl, back: b.imgBackUrl ?? null },
     rifthunt: x.rifthunt_uri ? new URL(x.rifthunt_uri, 'https://rifthunt.com').href : null,
+    banned: bannedNames.has(b.oracle_id),
   };
 });
 

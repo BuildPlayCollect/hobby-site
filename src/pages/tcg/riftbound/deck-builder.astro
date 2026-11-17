@@ -1,0 +1,379 @@
+---
+// /tcg/riftbound/deck-builder: build a Riftbound deck in the browser (PREVIEW).
+// Pick a Legend, and the card list shows only cards that deck is allowed to use. A checklist checks the deck
+// against the official deck-building rules (Core Rules 103) as you build. Decks save in the reader's own browser,
+// and a share link holds the whole deck in the address, so nothing is sent to us.
+// The card list comes from /tcg/riftbound/builder.json (see builder.json.ts).
+import Base from '../../../layouts/Base.astro';
+import CardsHead from '../../../components/riftbound/CardsHead.astro';
+import Credit from '../../../components/riftbound/Credit.astro';
+import { LEGENDS, DOMAIN_COLOURS, RB_HUB } from '../../../lib/riftbound';
+
+const CORE = 'https://cmsassets.rgpub.io/sanity/files/dsfx7636/news_live/5c7946f7c3b8c6e0faff85ab6dadc6d2e721ea94.pdf';
+const legends = LEGENDS.map((l) => ({ k: `${l.set}-${l.number}`, n: l.name, d: l.domains }));
+---
+<Base title="Riftbound deck builder (preview)" description="Build a Riftbound deck in your browser: pick a Legend, add cards, and see straight away if the deck follows the official rules. Save decks and share them with a link.">
+  <CardsHead crumbs={[{ label: 'Deck builder' }]} />
+  <header class="page-head">
+    <p class="kicker"><span class="db-preview">Preview</span></p>
+    <h1>Riftbound deck builder</h1>
+    <p>Pick a Legend, then tap cards to add them. The checklist tells you straight away if your deck follows the <a href={CORE}>official deck rules</a>. New to Riftbound? <a href={`${RB_HUB}#deck`}>Here's what goes in a deck</a>.</p>
+  </header>
+
+  <div class="db-top">
+    <label class="db-legend">
+      <span>1. Pick your Legend</span>
+      <select data-db-legend>
+        <option value="">Choose a Legend…</option>
+        {legends.map((l) => <option value={l.k}>{l.n} ({l.d.join(' + ')})</option>)}
+      </select>
+    </label>
+    <div class="db-actions">
+      <button type="button" data-db-act="share">Copy share link</button>
+      <button type="button" data-db-act="text">Copy as text</button>
+      <button type="button" data-db-act="save">Save</button>
+      <select data-db-saved aria-label="Open a saved deck"><option value="">Saved decks…</option></select>
+      <button type="button" data-db-act="clear" class="db-ghost">Start over</button>
+    </div>
+    <p class="db-status" data-db-status aria-live="polite"></p>
+  </div>
+
+  <div class="db-layout">
+    <section class="db-pool" aria-label="Cards you can add">
+      <h2>2. Add cards</h2>
+      <form class="db-filters" data-db-filters role="search">
+        <label class="db-q"><span class="sr-only">Find a card</span><input type="search" name="q" placeholder="Find a card by name or text" autocomplete="off" /></label>
+        <div class="db-types" role="group" aria-label="Card type">
+          {['All', 'Unit', 'Spell', 'Gear', 'Battlefield', 'Rune'].map((t, i) => (
+            <label><input type="radio" name="type" value={t === 'All' ? '' : t} checked={i === 0} /> {t === 'All' ? 'All' : t + 's'}</label>
+          ))}
+        </div>
+      </form>
+      <p class="db-count" data-db-count>Pick a Legend to see the cards your deck can use.</p>
+      <ul class="db-grid" data-db-grid></ul>
+      <button type="button" class="db-more" data-db-more hidden>Show more</button>
+    </section>
+
+    <aside class="db-deck" id="deck" aria-label="Your deck">
+      <h2>Your deck</h2>
+      <div class="db-legend-pic" data-db-legend-pic></div>
+      <label class="db-champ">
+        <span>Chosen Champion</span>
+        <select data-db-champ disabled><option value="">Pick a Legend first</option></select>
+      </label>
+      <ul class="db-checks" data-db-checks></ul>
+      <div data-db-list></div>
+    </aside>
+  </div>
+
+  <div class="db-bar" data-db-bar><a href="#deck"><span data-db-bar-text>No Legend yet</span> ↓</a></div>
+
+  <section class="db-help">
+    <h2>How the checks work</h2>
+    <p>The checklist follows section 103 of the <a href={CORE}>Riftbound Core Rules</a>: 1 Legend, a Chosen Champion with the same champion name, at least 40 cards in the main deck (your Chosen Champion counts), no more than 3 of any card, only cards in your Legend's colours (domains), at most 3 Signature cards that match your Legend, exactly 12 runes and 3 different Battlefields. It also warns about cards banned in Standard. Tournaments can have extra rules, so check with your organiser.</p>
+    <p>This is a preview: it works, but it's new. Spotted a mistake? <a href="/contact/">Tell us</a>.</p>
+  </section>
+
+  <Credit />
+</Base>
+
+<script>
+  type Card = { k: string; n: string; t: string; s: string | null; d: string[]; g: string[]; e: number | null; p: number | null; m: number | null; uq: number; b: number; w: number; i: string; u: string; x: string };
+  type Deck = { legend: string; champ: string; main: Record<string, number>; bf: string[]; runes: Record<string, number> };
+
+  const $ = <T extends Element>(s: string) => document.querySelector<T>(s)!;
+  const legendSel = $<HTMLSelectElement>('[data-db-legend]');
+  const champSel = $<HTMLSelectElement>('[data-db-champ]');
+  const savedSel = $<HTMLSelectElement>('[data-db-saved]');
+  const filters = $<HTMLFormElement>('[data-db-filters]');
+  const grid = $<HTMLUListElement>('[data-db-grid]');
+  const more = $<HTMLButtonElement>('[data-db-more]');
+  const countEl = $<HTMLElement>('[data-db-count]');
+  const checksEl = $<HTMLUListElement>('[data-db-checks]');
+  const listEl = $<HTMLElement>('[data-db-list]');
+  const statusEl = $<HTMLElement>('[data-db-status]');
+  const legendPic = $<HTMLElement>('[data-db-legend-pic]');
+  const barText = $<HTMLElement>('[data-db-bar-text]');
+  const PAGE = 48;
+  const STORE = 'rb-decks';
+  const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+
+  let cards: Card[] = [];
+  let byKey = new Map<string, Card>();
+  let deck: Deck = { legend: '', champ: '', main: {}, bf: [], runes: {} };
+  let pool: Card[] = [];
+  let shown = 0;
+
+  const legend = () => byKey.get(deck.legend);
+  // Rule 103.2.b: a card fits if all of its domains are among the Legend's. Cards with no domain fit any deck.
+  const fits = (c: Card) => { const L = legend(); return !!L && c.d.every((d) => d === 'Colorless' || L.d.includes(d)); };
+  const tagMatch = (c: Card) => { const L = legend(); return !!L && c.g.some((g) => L.g.includes(g)); };
+  const isChampionUnit = (c: Card) => c.t === 'Unit' && c.s === 'Champion';
+  // Signature cards may only be the Legend's own (rule 103.3.d.2).
+  const allowed = (c: Card) => c.t !== 'Legend' && fits(c) && (c.s !== 'Signature' || tagMatch(c));
+  const limitOf = (c: Card) => (c.uq ? 1 : 3);
+  const mainCount = () => Object.values(deck.main).reduce((a, b) => a + b, 0) + (deck.champ ? 1 : 0);
+  const copies = (k: string) => (deck.main[k] ?? 0) + (deck.champ === k ? 1 : 0);
+  const runeCount = () => Object.values(deck.runes).reduce((a, b) => a + b, 0);
+
+  function say(msg: string) { statusEl.textContent = msg; window.clearTimeout((say as any).t); (say as any).t = window.setTimeout(() => (statusEl.textContent = ''), 4000); }
+
+  // ---- Adding and removing ----
+  function add(c: Card) {
+    if (!legend()) return say('Pick a Legend first.');
+    if (c.t === 'Battlefield') {
+      if (deck.bf.includes(c.k)) return say(`${c.n} is already one of your Battlefields.`);
+      if (deck.bf.length >= 3) return say('You already have 3 Battlefields. Remove one first.');
+      deck.bf.push(c.k);
+    } else if (c.t === 'Rune') {
+      if (runeCount() >= 12) return say('Your rune deck is full (12 runes).');
+      deck.runes[c.k] = (deck.runes[c.k] ?? 0) + 1;
+    } else {
+      if (copies(c.k) >= limitOf(c)) return say(c.uq ? `${c.n} is Unique: only 1 allowed.` : `You already have 3 ${c.n}.`);
+      deck.main[c.k] = (deck.main[c.k] ?? 0) + 1;
+    }
+    update();
+  }
+  function remove(k: string, where: 'main' | 'bf' | 'runes') {
+    if (where === 'bf') deck.bf = deck.bf.filter((x) => x !== k);
+    else { const box = deck[where]; box[k] = (box[k] ?? 0) - 1; if (box[k] <= 0) delete box[k]; }
+    update();
+  }
+
+  // ---- The legality checklist (Core Rules 103) ----
+  function checks() {
+    const L = legend();
+    const out: { ok: boolean; text: string }[] = [];
+    if (!L) return [{ ok: false, text: 'Pick a Legend' }];
+    const champ = byKey.get(deck.champ);
+    out.push({ ok: !!champ && isChampionUnit(champ) && tagMatch(champ), text: champ ? `Chosen Champion: ${champ.n}` : 'Pick a Chosen Champion' });
+    const n = mainCount();
+    out.push({ ok: n >= 40, text: `Main deck: ${n} of at least 40 cards` });
+    const over = Object.keys(deck.main).map((k) => byKey.get(k)!).filter((c) => c && copies(c.k) > limitOf(c));
+    out.push({ ok: !over.length, text: over.length ? `Too many copies: ${over.map((c) => c.n).join(', ')}` : 'No more than 3 of any card' });
+    const wrong = [...Object.keys(deck.main), ...deck.bf, ...Object.keys(deck.runes)].map((k) => byKey.get(k)!).filter((c) => c && !allowed(c));
+    out.push({ ok: !wrong.length, text: wrong.length ? `Not allowed with this Legend: ${wrong.map((c) => c.n).join(', ')}` : `Only ${L.d.join(' + ')} cards` });
+    const sig = Object.entries(deck.main).filter(([k]) => byKey.get(k)?.s === 'Signature').reduce((a, [, q]) => a + q, 0);
+    out.push({ ok: sig <= 3, text: `Signature cards: ${sig} of up to 3` });
+    out.push({ ok: runeCount() === 12, text: `Runes: ${runeCount()} of 12` });
+    out.push({ ok: deck.bf.length === 3, text: `Battlefields: ${deck.bf.length} of 3, all different` });
+    const banned = [L, champ, ...Object.keys(deck.main).map((k) => byKey.get(k)), ...deck.bf.map((k) => byKey.get(k))].filter((c): c is Card => !!c && !!c.b);
+    out.push({ ok: !banned.length, text: banned.length ? `Banned in Standard: ${banned.map((c) => c.n).join(', ')}` : 'No banned cards' });
+    return out;
+  }
+
+  // ---- Drawing the page ----
+  function el<K extends keyof HTMLElementTagNameMap>(tag: K, props: Partial<HTMLElementTagNameMap[K]> = {}, ...kids: (Node | string)[]) {
+    const e = Object.assign(document.createElement(tag), props);
+    e.append(...kids);
+    return e;
+  }
+  function tile(c: Card) {
+    const n = c.t === 'Rune' ? deck.runes[c.k] ?? 0 : c.t === 'Battlefield' ? (deck.bf.includes(c.k) ? 1 : 0) : copies(c.k);
+    const img = el('img', { src: c.i, alt: '', loading: 'lazy', decoding: 'async', width: c.w ? 280 : 200, height: c.w ? 200 : 279 });
+    const btn = el('button', { type: 'button', className: 'db-add', title: `Add ${c.n}` }, img, el('strong', {}, c.n), el('span', {}, [c.t, c.e != null ? `${c.e} energy` : ''].filter(Boolean).join(' · ')));
+    btn.setAttribute('aria-label', `Add ${c.n}${n ? `, you have ${n}` : ''}`);
+    btn.addEventListener('click', () => add(c));
+    const li = el('li', { className: c.w ? 'db-wide' : '' }, btn);
+    if (n) li.append(el('b', { className: 'db-have' }, `×${n}`));
+    if (c.b) li.append(el('b', { className: 'db-ban' }, 'Banned'));
+    li.append(el('a', { href: c.u, className: 'db-info', target: '_blank', rel: 'noopener', title: `${c.n}: card page` }, 'ⓘ'));
+    return li;
+  }
+  function renderPool(reset: boolean) {
+    if (reset) { grid.replaceChildren(); shown = 0; }
+    const next = pool.slice(shown, shown + PAGE);
+    grid.append(...next.map(tile));
+    shown += next.length;
+    more.hidden = shown >= pool.length;
+  }
+  function filterPool() {
+    if (!legend()) { pool = []; countEl.textContent = 'Pick a Legend to see the cards your deck can use.'; renderPool(true); return; }
+    const f = new FormData(filters);
+    const words = norm(String(f.get('q') ?? '')).split(/\s+/).filter(Boolean);
+    const type = String(f.get('type') ?? '');
+    pool = cards.filter((c) => allowed(c) && (!type || c.t === type) && words.every((w) => norm(`${c.n} ${c.x} ${c.t}`).includes(w)))
+      .sort((a, b) => (a.e ?? 99) - (b.e ?? 99) || a.n.localeCompare(b.n));
+    countEl.textContent = `${pool.length} cards your deck can use. Tap one to add it.`;
+    renderPool(true);
+  }
+  function row(c: Card, q: number, where: 'main' | 'bf' | 'runes') {
+    const minus = el('button', { type: 'button', className: 'db-step', title: `Remove one ${c.n}` }, '−');
+    minus.addEventListener('click', () => remove(c.k, where));
+    const kids: Node[] = [minus, el('span', { className: 'db-q' }, where === 'bf' ? '' : `${q}`), el('a', { href: c.u, target: '_blank', rel: 'noopener' }, c.n)];
+    if (where !== 'bf') {
+      const plus = el('button', { type: 'button', className: 'db-step', title: `Add one ${c.n}` }, '+');
+      plus.addEventListener('click', () => add(c));
+      kids.splice(2, 0, plus);
+    }
+    return el('li', {}, ...kids);
+  }
+  function renderDeck() {
+    const L = legend();
+    legendPic.replaceChildren(...(L ? [el('img', { src: L.i, alt: L.n, width: 200, height: 279 })] : []));
+    // Chosen Champion choices: champion units with the Legend's champion name (rule 103.3.a.2).
+    const champs = L ? cards.filter((c) => isChampionUnit(c) && tagMatch(c) && fits(c)) : [];
+    champSel.disabled = !L;
+    champSel.replaceChildren(el('option', { value: '' }, L ? 'Pick a Chosen Champion…' : 'Pick a Legend first'), ...champs.map((c) => el('option', { value: c.k, selected: c.k === deck.champ }, c.n)));
+    checksEl.replaceChildren(...checks().map((c) => el('li', { className: c.ok ? 'ok' : 'no' }, `${c.ok ? '✓' : '✗'} ${c.text}`)));
+    const groups: [string, [string, number][], 'main' | 'bf' | 'runes'][] = [
+      ['Units', Object.entries(deck.main).filter(([k]) => byKey.get(k)?.t === 'Unit'), 'main'],
+      ['Spells', Object.entries(deck.main).filter(([k]) => byKey.get(k)?.t === 'Spell'), 'main'],
+      ['Gear', Object.entries(deck.main).filter(([k]) => byKey.get(k)?.t === 'Gear'), 'main'],
+      ['Battlefields', deck.bf.map((k) => [k, 1] as [string, number]), 'bf'],
+      ['Runes', Object.entries(deck.runes), 'runes'],
+    ];
+    listEl.replaceChildren(...groups.filter(([, rows]) => rows.length).map(([name, rows, where]) =>
+      el('div', { className: 'db-group' }, el('h3', {}, `${name} (${rows.reduce((a, [, q]) => a + q, 0)})`),
+        el('ul', {}, ...rows.map(([k, q]) => byKey.get(k)).map((c, i) => c ? row(c, rows[i][1], where) : el('li', {}, `Unknown card ${rows[i][0]}`))))));
+    const bad = checks().filter((c) => !c.ok).length;
+    barText.textContent = L ? `${mainCount() < 40 ? `${mainCount()}/40` : mainCount()} cards · ${bad ? `${bad} to fix` : 'Ready to play!'}` : 'No Legend yet';
+  }
+  function update() {
+    renderDeck();
+    // Keep the number badges on the visible tiles in step without losing the reader's scroll place.
+    const keep = shown; grid.replaceChildren(); shown = 0; renderPool(false); while (shown < keep && shown < pool.length) renderPool(false);
+    history.replaceState(null, '', `#${encode(deck)}`);
+  }
+
+  // ---- Share links and text (the whole deck lives in the address after #) ----
+  const pack = (o: Record<string, number>) => Object.entries(o).map(([k, q]) => (q > 1 ? `${k}*${q}` : k)).join('.');
+  const unpack = (s: string | null) => Object.fromEntries((s ?? '').split('.').filter(Boolean).map((p) => { const [k, q] = p.split('*'); return [k, Number(q ?? 1)]; }));
+  function encode(d: Deck) {
+    const p = new URLSearchParams();
+    if (d.legend) p.set('l', d.legend);
+    if (d.champ) p.set('c', d.champ);
+    if (Object.keys(d.main).length) p.set('m', pack(d.main));
+    if (d.bf.length) p.set('b', d.bf.join('.'));
+    if (Object.keys(d.runes).length) p.set('r', pack(d.runes));
+    return p.toString();
+  }
+  function decode(s: string): Deck {
+    const p = new URLSearchParams(s);
+    const real = (o: Record<string, number>) => Object.fromEntries(Object.entries(o).filter(([k, q]) => byKey.has(k) && q > 0).map(([k, q]) => [k, Math.min(q, 12)]));
+    return {
+      legend: byKey.get(p.get('l') ?? '')?.t === 'Legend' ? p.get('l')! : '',
+      champ: byKey.has(p.get('c') ?? '') ? p.get('c')! : '',
+      main: real(unpack(p.get('m'))),
+      bf: (p.get('b') ?? '').split('.').filter((k) => byKey.get(k)?.t === 'Battlefield').slice(0, 3),
+      runes: real(unpack(p.get('r'))),
+    };
+  }
+  function asText() {
+    const name = (k: string) => byKey.get(k)?.n ?? k;
+    const lines = (o: Record<string, number>) => Object.entries(o).map(([k, q]) => `${q} ${name(k)}`);
+    return ['Legend:', ...(deck.legend ? [`1 ${name(deck.legend)}`] : []), '', 'Champion:', ...(deck.champ ? [`1 ${name(deck.champ)}`] : []), '',
+      'MainDeck:', ...lines(deck.main), '', 'Battlefields:', ...deck.bf.map((k) => `1 ${name(k)}`), '', 'Runes:', ...lines(deck.runes)].join('\n');
+  }
+  async function copy(text: string, msg: string) {
+    try { await navigator.clipboard.writeText(text); say(msg); } catch { say('Your browser blocked copying. Copy the address bar instead.'); }
+  }
+
+  // ---- Saved decks (only in this browser) ----
+  function readSaved(): Record<string, string> { try { return JSON.parse(localStorage.getItem(STORE) ?? '{}'); } catch { return {}; } }
+  function writeSaved(s: Record<string, string>) { try { localStorage.setItem(STORE, JSON.stringify(s)); return true; } catch { return false; } }
+  function renderSaved() {
+    const s = readSaved();
+    savedSel.replaceChildren(el('option', { value: '' }, Object.keys(s).length ? 'Saved decks…' : 'No saved decks yet'), ...Object.keys(s).map((n) => el('option', { value: n }, n)));
+  }
+
+  // ---- Wiring ----
+  document.querySelectorAll<HTMLButtonElement>('[data-db-act]').forEach((b) => b.addEventListener('click', () => {
+    const act = b.dataset.dbAct;
+    if (act === 'share') copy(location.href, 'Share link copied. Anyone who opens it sees this deck.');
+    if (act === 'text') copy(asText(), 'Deck list copied as text.');
+    if (act === 'clear') { deck = { legend: '', champ: '', main: {}, bf: [], runes: {} }; legendSel.value = ''; filterPool(); update(); say('Started a new deck.'); }
+    if (act === 'save') {
+      if (!deck.legend) return say('Pick a Legend first.');
+      const fallback = `${byKey.get(deck.legend)!.n.split(',')[0]} deck`;
+      const name = (window.prompt('Name this deck:', savedSel.value || fallback) ?? '').trim().slice(0, 40);
+      if (!name) return;
+      const s = readSaved(); s[name] = encode(deck);
+      say(writeSaved(s) ? `Saved "${name}" in this browser.` : "Couldn't save here (private browsing?). Use the share link instead.");
+      renderSaved(); savedSel.value = name;
+    }
+  }));
+  savedSel.addEventListener('change', () => {
+    const s = readSaved()[savedSel.value];
+    if (!s) return;
+    deck = decode(s); legendSel.value = deck.legend; filterPool(); update(); say(`Opened "${savedSel.value}".`);
+  });
+  legendSel.addEventListener('change', () => {
+    deck.legend = legendSel.value;
+    // Keep only the cards that still fit the new Legend.
+    const L = legend();
+    const champ = byKey.get(deck.champ);
+    if (!L || !champ || !tagMatch(champ)) deck.champ = '';
+    filterPool(); update();
+  });
+  champSel.addEventListener('change', () => { deck.champ = champSel.value; update(); });
+  filters.addEventListener('input', filterPool);
+  filters.addEventListener('submit', (e) => { e.preventDefault(); filterPool(); });
+  more.addEventListener('click', () => renderPool(false));
+
+  fetch('/tcg/riftbound/builder.json')
+    .then((r) => r.json())
+    .then((data: Card[]) => {
+      cards = data; byKey = new Map(data.map((c) => [c.k, c]));
+      if (location.hash.length > 1) deck = decode(location.hash.slice(1));
+      legendSel.value = deck.legend;
+      renderSaved(); filterPool(); update();
+    })
+    .catch(() => { countEl.textContent = 'Sorry, the card list did not load. Please refresh the page.'; });
+</script>
+
+<style>
+  .db-preview { display: inline-block; padding: 2px 10px; border-radius: 999px; background: var(--mark); color: #1b1a1f; font-weight: 800; font-size: .8rem; }
+  .db-top { display: grid; gap: 12px; margin-bottom: 18px; }
+  .db-legend { display: grid; gap: 4px; font-weight: 800; min-width: 0; }
+  .db-legend select, .db-champ select { width: 100%; min-width: 0; }
+  .db-legend select, .db-champ select, .db-actions select, .db-filters input[type='search'] { padding: 8px 12px; border: 2px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--ink); font: inherit; font-size: .95rem; max-width: 100%; }
+  .db-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .db-actions button, .db-more { padding: 7px 14px; border: 2px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); font: inherit; font-weight: 700; font-size: .85rem; cursor: pointer; }
+  .db-actions button:hover { background: var(--mark); color: #1b1a1f; }
+  .db-ghost { opacity: .75; }
+  .db-status { min-height: 1.3em; margin: 0; font-size: .9rem; font-weight: 700; color: var(--c1); }
+  .db-layout { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 24px; align-items: start; }
+  .db-pool h2, .db-deck h2 { margin: 0 0 10px; font-size: 1.2rem; }
+  .db-filters { display: grid; gap: 8px; margin-bottom: 8px; }
+  .db-q input { width: 100%; }
+  .db-types { display: flex; flex-wrap: wrap; gap: 6px; }
+  .db-types label { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border: 2px solid var(--line); border-radius: 999px; font-size: .82rem; font-weight: 700; background: var(--surface); cursor: pointer; }
+  .db-types label:has(input:checked) { background: var(--mark); color: #1b1a1f; }
+  .db-types input { position: absolute; opacity: 0; pointer-events: none; }
+  .db-count { color: var(--muted); font-size: .88rem; }
+  .db-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
+  .db-grid li { position: relative; }
+  .db-grid :global(.db-add) { display: grid; gap: 3px; width: 100%; padding: 0; border: 0; background: none; color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
+  .db-grid :global(.db-add img) { width: 100%; height: auto; aspect-ratio: 200 / 279; object-fit: cover; border-radius: 9px; background: var(--surface); box-shadow: var(--lift); }
+  .db-grid :global(.db-wide .db-add img) { aspect-ratio: 279 / 200; }
+  .db-grid :global(.db-add strong) { font-size: .82rem; line-height: 1.2; }
+  .db-grid :global(.db-add span) { font-size: .72rem; color: var(--muted); }
+  .db-grid :global(.db-have), .db-grid :global(.db-ban) { position: absolute; top: 6px; left: 6px; padding: 1px 8px; border-radius: 999px; background: var(--c1); color: #fff; font-size: .8rem; }
+  .db-grid :global(.db-ban) { left: auto; right: 34px; background: #b42318; }
+  .db-grid :global(.db-info) { position: absolute; top: 4px; right: 4px; width: 26px; height: 26px; display: grid; place-items: center; border-radius: 50%; background: var(--surface); color: var(--ink); font-size: .9rem; text-decoration: none; box-shadow: var(--lift); }
+  .db-more { margin: 14px auto 0; display: block; }
+  .db-more[hidden] { display: none; }
+  .db-deck { position: sticky; top: 76px; max-height: calc(100vh - 90px); overflow: auto; padding: 14px; border: 2px solid var(--line); border-radius: 16px; background: var(--surface); }
+  .db-legend-pic :global(img) { width: 120px; height: auto; border-radius: 8px; margin-bottom: 8px; }
+  .db-champ { display: grid; gap: 4px; font-weight: 700; font-size: .88rem; margin-bottom: 10px; }
+  .db-checks { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 4px; font-size: .84rem; }
+  .db-checks :global(.ok) { color: #1f7a45; }
+  .db-checks :global(.no) { color: #b42318; font-weight: 700; }
+  :global([data-theme='dark']) .db-checks :global(.ok) { color: #6fd39a; }
+  :global([data-theme='dark']) .db-checks :global(.no) { color: #ff8a80; }
+  .db-deck :global(.db-group h3) { margin: 12px 0 4px; font-size: .9rem; }
+  .db-deck :global(.db-group ul) { list-style: none; margin: 0; padding: 0; display: grid; gap: 3px; }
+  .db-deck :global(.db-group li) { display: flex; align-items: center; gap: 6px; font-size: .86rem; }
+  .db-deck :global(.db-step) { width: 24px; height: 24px; border: 2px solid var(--line); border-radius: 50%; background: var(--surface); color: var(--ink); font-weight: 800; line-height: 1; cursor: pointer; padding: 0; }
+  .db-deck :global(.db-q) { min-width: 1.2em; text-align: center; font-weight: 800; }
+  .db-bar { display: none; }
+  .db-help { margin-top: 36px; max-width: 80ch; font-size: .92rem; }
+  @media (max-width: 860px) {
+    .db-layout { grid-template-columns: 1fr; }
+    .db-deck { position: static; max-height: none; }
+    .db-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .db-bar { display: block; position: sticky; bottom: 10px; z-index: 5; margin-top: 12px; text-align: center; }
+    .db-bar a { display: inline-block; padding: 8px 18px; border-radius: 999px; background: var(--c1); color: #fff; font-weight: 800; box-shadow: var(--lift); text-decoration: none; }
+  }
+</style>

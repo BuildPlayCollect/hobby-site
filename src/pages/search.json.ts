@@ -25,6 +25,7 @@ const PAGES: Entry[] = [
   { title: 'Riftbound cards: every set and card list', summary: 'Every Riftbound card, set by set, with pictures and stats.', url: '/tcg/riftbound/cards/', kind: 'Tool', hobby: 'TCG' },
   { title: 'Riftbound Legends', summary: 'Every champion Legend in Riftbound.', url: '/tcg/riftbound/legends/', kind: 'Tool', hobby: 'TCG' },
   { title: 'Riftbound Battlefields', summary: 'Every Battlefield card in Riftbound.', url: '/tcg/riftbound/battlefields/', kind: 'Tool', hobby: 'TCG' },
+  { title: 'Riftbound deck builder (preview)', summary: 'Build a Riftbound deck and check it against the official deck rules.', url: '/tcg/riftbound/deck-builder/', kind: 'Tool', hobby: 'TCG' },
   { title: 'Search Riftbound cards', summary: 'Find any Riftbound card by name, text, type, domain or cost.', url: '/tcg/riftbound/search/', kind: 'Tool', hobby: 'TCG' },
   { title: 'Pokémon Champions VGC', summary: 'Rules, usage leaderboards, top teams, events and tools.', url: '/esports/pokemon-champions/', kind: 'Hub', hobby: 'Esports' },
   { title: 'Learn to play Pokémon Champions VGC', summary: 'A beginner guide to Doubles, team building and Ranked.', url: '/esports/pokemon-champions/learn/', kind: 'Guide', hobby: 'Esports' },
