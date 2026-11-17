@@ -3,16 +3,28 @@
 // Riftbound is Riot Games' League of Legends trading card game.
 //
 // Two rules from Riot's Riftbound policy (developer.riotgames.com/policies/riftbound) shape this page:
-//  1. Card pictures may only come from the Riot API. This learn-to-play page has NO card images.
-//     (The card pages under /tcg/riftbound/cards use RiftHunt's fan API for pictures. Echo chose that knowing
-//      Riot's policy prefers its own API; if Riot ever asks, those pages are the ones to change.)
+//  1. Card pictures may only come from the Riot API. Echo chose to use RiftHunt's fan API for pictures anyway
+//     (2026-11-12, for the card pages; 2026-11-18, for the example cards on this page). If Riot ever asks,
+//     the <Ex> pictures here and the card pages under /tcg/riftbound/cards are the ones to change.
+//     The table layout and score track are drawn with plain HTML and CSS, so they're ours.
 //  2. Fan sites may not publish play rates, win rates or matchup percentages. So the tier list section only
 //     links out to other sites, with no rankings or numbers of our own.
 // Every rule below was checked against the official Core Rules PDF (last updated 9 Oct 2026).
+import JumpNav from '../../../components/JumpNav.astro';
 import Base from '../../../layouts/Base.astro';
+import CardsHead from '../../../components/riftbound/CardsHead.astro';
 import SourceList from '../../../components/SourceList.astro';
-import { LEGAL } from '../../../lib/esports-hub';
-import { RB_CARDS, RB_SETS, LEGENDS, BATTLEFIELDS } from '../../../lib/riftbound';
+import Credit from '../../../components/riftbound/Credit.astro';
+import { RB_CARDS, cardUrl, type RbCard } from '../../../lib/riftbound';
+
+// Example cards shown on this page, picked from the first set (Origins) so they're easy to find.
+// Ahri is the example champion because she's a popular beginner pick.
+const card = (num: string) => RB_CARDS.find((c) => c.set === 'ogn' && c.number === num && !c.variant)!;
+const EX = {
+  legend: card('255'), champ: card('119'), unit: card('052'), spell: card('004'), gear: card('021'),
+  fieldA: card('277'), fieldB: card('275'),
+};
+const RUNES = ['007', '042', '089', '126', '166', '214'].map(card);
 
 // The official sources. Facts on the page link to these.
 const CORE = 'https://cmsassets.rgpub.io/sanity/files/dsfx7636/news_live/5c7946f7c3b8c6e0faff85ab6dadc6d2e721ea94.pdf';
@@ -65,29 +77,25 @@ const TIER_LINKS = [
 ];
 ---
 <Base title="Riftbound: learn to play" description="Riftbound, the League of Legends trading card game, explained for total beginners: what's in a deck, how a turn works, scoring, fights, and where to find tier lists.">
+  <CardsHead />
   <header class="page-head">
-    <p class="kicker"><a class="tag" href="/tcg">TCG</a></p>
     <h1>Riftbound: learn to play in one sitting</h1>
     <p>Riftbound is <a href={START}>the League of Legends trading card game</a>. Never played a card game before? Perfect. By the end of this page you'll know enough for your first match, and the rest you'll learn by losing gloriously a few times.</p>
   </header>
 
-  <nav class="lp-jump" aria-label="On this page">
-    <a href="#learn">The basics</a><a href="#deck">Your deck</a><a href="#setup">Setup</a><a href="#runes">Runes</a><a href="#turn">Your turn</a><a href="#scoring">Scoring</a><a href="#fights">Fights</a><a href="#words">Words to know</a><a href="#tiers">Tier lists</a><a href="#card-lists">Every card</a>
-  </nav>
-
-  <div class="rb-cards-cta" id="card-lists">
-    <div>
-      <h2>Every Riftbound card</h2>
-      <p>All {RB_CARDS.length.toLocaleString('en-GB')} cards from {RB_SETS.length} sets, with pictures and stats.</p>
-    </div>
-    <nav aria-label="Riftbound card lists">
-      <a href="/tcg/riftbound/cards/">All sets</a>
-      <a href="/tcg/riftbound/legends/">Legends ({LEGENDS.length})</a>
-      <a href="/tcg/riftbound/battlefields/">Battlefields ({BATTLEFIELDS.length})</a>
-      <a href="/tcg/riftbound/search/">Search</a>
-      <a href="/tcg/riftbound/deck-builder/">Deck builder</a>
-    </nav>
-  </div>
+  <JumpNav links={[
+    { href: '#learn', label: 'The basics' },
+    { href: '#deck', label: 'Your deck' },
+    { href: '#setup', label: 'Setup' },
+    { href: '#read', label: 'Reading a card' },
+    { href: '#runes', label: 'Runes' },
+    { href: '#turn', label: 'Your turn' },
+    { href: '#cards', label: 'Card types' },
+    { href: '#scoring', label: 'Scoring' },
+    { href: '#fights', label: 'Fights' },
+    { href: '#words', label: 'Words to know' },
+    { href: '#tiers', label: 'Tier lists' },
+  ]} />
 
   <section id="learn" class="lp-section">
     <div class="section-head"><h2>The 60-second version</h2></div>
@@ -108,11 +116,39 @@ const TIER_LINKS = [
         <tbody>{DECK.map((d) => <tr><td><strong>{d.piece}</strong></td><td>{d.count}</td><td>{d.text}</td></tr>)}</tbody>
       </table>
     </div>
+    <ul class="lp-strip" aria-label="An example of each piece, from an Ahri deck">
+      {[
+        { c: EX.legend, label: 'Champion Legend' },
+        { c: EX.champ, label: 'Chosen Champion' },
+        { c: EX.unit, label: 'Main deck card' },
+        { c: RUNES[1], label: 'Rune' },
+        { c: EX.fieldA, label: 'Battlefield' },
+      ].map(({ c, label }) => (
+        <li class={c.landscape ? 'is-wide' : ''}><a href={cardUrl(c)}><img src={c.img.s} alt={c.name} width={c.landscape ? 279 : 200} height={c.landscape ? 200 : 279} loading="lazy" decoding="async" /><strong>{label}</strong><span>{c.name}</span></a></li>
+      ))}
+    </ul>
+    <p class="lp-note">An example of each piece from an Ahri deck. Tap any card to see it up close.</p>
     <p class="lp-note">Brand new? Riot suggests starting with a <a href={START}>ready-made (preconstructed) deck</a> and swapping cards as you collect more. Building your own can wait.</p>
   </section>
 
   <section id="setup" class="lp-section">
     <div class="section-head"><h2>Setting up a 1-vs-1 game</h2></div>
+    <figure class="lp-board">
+      <div class="lp-board-them">Your opponent's side: a mirror of yours</div>
+      <div class="lp-board-mid">
+        <div class="lp-zone lp-field"><img src={EX.fieldA.img.s} alt="" width="279" height="200" loading="lazy" decoding="async" /><span>Your battlefield</span></div>
+        <div class="lp-zone lp-field"><img src={EX.fieldB.img.s} alt="" width="279" height="200" loading="lazy" decoding="async" /><span>Their battlefield</span></div>
+      </div>
+      <div class="lp-board-you">
+        <div class="lp-zone lp-mini"><img src={EX.legend.img.s} alt="" width="200" height="279" loading="lazy" decoding="async" /><span>Legend</span></div>
+        <div class="lp-zone lp-mini"><img src={EX.champ.img.s} alt="" width="200" height="279" loading="lazy" decoding="async" /><span>Chosen Champion</span></div>
+        <div class="lp-zone lp-base"><b>Base</b><span>Your units and gear wait here</span></div>
+        <div class="lp-zone lp-pile"><i aria-hidden="true"></i><span>Main deck</span></div>
+        <div class="lp-zone lp-pile lp-pile-rune"><i aria-hidden="true"></i><span>Rune deck</span></div>
+        <div class="lp-zone lp-pile lp-pile-trash"><i aria-hidden="true"></i><span>Trash</span></div>
+      </div>
+      <figcaption>Roughly how the table looks in a duel. Each player brings 1 battlefield to the middle.</figcaption>
+    </figure>
     <ol class="lp-steps">
       <li><h3>Pick a battlefield</h3><p>Each player picks one of their 3 battlefields at random and puts it in the middle. So <a href={CORE}>a duel has 2 battlefields</a>.</p></li>
       <li><h3>Set out your champions</h3><p>Put your Legend and your Chosen Champion in their spots.</p></li>
@@ -122,6 +158,29 @@ const TIER_LINKS = [
     </ol>
   </section>
 
+  <section id="read" class="lp-section">
+    <div class="section-head"><h2>How to read a card</h2></div>
+    <div class="lp-anatomy">
+      <figure class="lp-anatomy-pic">
+        <a href={cardUrl(EX.champ)}><img src={EX.champ.img.n} alt={`${EX.champ.name}, a champion unit card`} width="480" height="670" loading="lazy" decoding="async" /></a>
+        <span class="lp-pin" style="left:21%;top:9%">1</span>
+        <span class="lp-pin" style="left:16%;top:19%">2</span>
+        <span class="lp-pin" style="left:73%;top:9%">3</span>
+        <span class="lp-pin" style="left:4%;top:51%">4</span>
+        <span class="lp-pin" style="left:4%;top:59%">5</span>
+        <span class="lp-pin" style="left:4%;top:74%">6</span>
+      </figure>
+      <ol class="lp-anatomy-list">
+        <li><strong>Energy cost.</strong> The big number. Exhaust this many runes to play the card.</li>
+        <li><strong>Power cost.</strong> The coloured symbol under it. Recycle a rune of that colour for each one. Plenty of cards don't need any.</li>
+        <li><strong>Might.</strong> Only units have it. It's how hard they hit and how much damage they can take.</li>
+        <li><strong>Type line.</strong> What kind of card it is (here a champion unit) and its tags, like <em>Ahri</em>. Tags are how a Chosen Champion matches its Legend.</li>
+        <li><strong>Name.</strong> You can have up to 3 cards with the same name in your deck.</li>
+        <li><strong>Rules text.</strong> What the card does. Bold words like <em>Tank</em> or <em>Accelerate</em> are keywords, explained in <a href="#words">Words to know</a>.</li>
+      </ol>
+    </div>
+  </section>
+
   <section id="runes" class="lp-section">
     <div class="section-head"><h2>Runes: paying for your cards</h2></div>
     <p class="lp-lead">Cards cost two kinds of things, and <a href={CORE}>each rune can pay for either one</a>:</p>
@@ -129,6 +188,10 @@ const TIER_LINKS = [
       <div class="lp-card"><h4>Energy (the number on a card)</h4><p>Turn a rune sideways (exhaust it) for 1 energy. It stands back up next turn.</p></div>
       <div class="lp-card"><h4>Power (the coloured symbols)</h4><p>Send a rune to the bottom of your rune deck (recycle it) for 1 power of its colour. Bigger cards need this.</p></div>
     </div>
+    <ul class="lp-runes" aria-label="The six rune colours">
+      {RUNES.map((r) => <li><a href={cardUrl(r)}><img src={r.img.s} alt="" width="200" height="279" loading="lazy" decoding="async" /><span>{r.domains[0]}</span></a></li>)}
+    </ul>
+    <p class="lp-note">One rune for each of the six colours. Your 12 runes must match your Legend's two colours.</p>
     <p class="rb-tip">Think of it like this: exhausting is spending pocket money, recycling is breaking open the piggy bank. Don't worry, <a href={START}>the runes come back</a>. Just remember that <a href={CORE}>unspent energy and power vanish</a> at the end of your turn.</p>
   </section>
 
@@ -142,10 +205,10 @@ const TIER_LINKS = [
 
   <section id="cards" class="lp-section">
     <div class="section-head"><h2>The cards you'll play</h2></div>
-    <div class="lp-cards lp-grid">
-      <div class="lp-card"><h4>Units</h4><p>Your fighters, each with a Might number. <a href={CORE}>They arrive exhausted</a>, so they can't move on the turn you play them (unless a card says so).</p></div>
-      <div class="lp-card"><h4>Spells</h4><p>Do something once, then <a href={CORE}>go to your trash</a>.</p></div>
-      <div class="lp-card"><h4>Gear</h4><p>Stays on the table to help out. It's <a href={CORE}>played to your base</a> and doesn't fight by itself.</p></div>
+    <div class="lp-cards lp-trio">
+      <div class="lp-card lp-card-pic"><a href={cardUrl(EX.unit)}><img src={EX.unit.img.s} alt={EX.unit.name} width="200" height="279" loading="lazy" decoding="async" /></a><h4>Units</h4><p>Your fighters, each with a Might number. <a href={CORE}>They arrive exhausted</a>, so they can't move on the turn you play them (unless a card says so).</p></div>
+      <div class="lp-card lp-card-pic"><a href={cardUrl(EX.spell)}><img src={EX.spell.img.s} alt={EX.spell.name} width="200" height="279" loading="lazy" decoding="async" /></a><h4>Spells</h4><p>Do something once, then <a href={CORE}>go to your trash</a>.</p></div>
+      <div class="lp-card lp-card-pic"><a href={cardUrl(EX.gear)}><img src={EX.gear.img.s} alt={EX.gear.name} width="200" height="279" loading="lazy" decoding="async" /></a><h4>Gear</h4><p>Stays on the table to help out. It's <a href={CORE}>played to your base</a> and doesn't fight by itself.</p></div>
     </div>
   </section>
 
@@ -157,6 +220,9 @@ const TIER_LINKS = [
       <div class="lp-card"><h4>Hold: +1</h4><p>Still control it at the start of your turn. You score again every turn you keep it.</p></div>
     </div>
     <p class="lp-note">You can only score each battlefield once per turn.</p>
+    <div class="lp-track" role="img" aria-label="A score track from 1 to 8. The first player to reach 8 points wins.">
+      {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => <span class={n === 8 ? 'is-win' : ''}>{n === 8 ? '8 🏆' : n}</span>)}
+    </div>
     <p class="rb-tip"><strong>The last-point rule.</strong> If your winning point would come from conquering, <a href={CORE}>you only get it if you've scored every battlefield this turn</a>. If not, you draw a card instead. Holding still wins the game normally. So no sneaky last-second steals.</p>
   </section>
 
@@ -209,13 +275,10 @@ const TIER_LINKS = [
   </section>
 
   <SourceList sources={sources} />
-  <p class="rb-legal">{LEGAL.riot} No card pictures are shown on this page.</p>
+  <Credit />
 </Base>
 
 <style>
-  .lp-jump { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 24px; }
-  .lp-jump a { padding: 6px 14px; border: 2px solid var(--line); border-radius: 999px; font-weight: 700; font-size: .85rem; color: var(--ink); background: var(--surface); }
-  .lp-jump a:hover { text-decoration: none; background: var(--mark); color: #1b1a1f; }
   .lp-section { margin-top: 44px; }
   .lp-lead { max-width: 75ch; }
   .lp-note { color: var(--muted); font-size: .9rem; margin: 12px 0 8px; }
@@ -252,12 +315,69 @@ const TIER_LINKS = [
   .lp-end h2 { margin: 0 0 6px; }
   .lp-end p { margin: 0; max-width: 75ch; }
   .lp-end a { color: #1b1a1f; font-weight: 800; text-decoration: underline; }
-  .rb-cards-cta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; padding: 16px 20px; border: 2px solid var(--line); border-radius: 18px; background: var(--surface); box-shadow: var(--lift); }
-  .rb-cards-cta h2 { margin: 0 0 2px; font-size: 1.2rem; }
-  .rb-cards-cta p { margin: 0; color: var(--muted); font-size: .9rem; }
-  .rb-cards-cta nav { display: flex; flex-wrap: wrap; gap: 8px; }
-  .rb-cards-cta nav a { padding: 6px 14px; border-radius: 999px; background: var(--c1); color: #fff; font-weight: 700; font-size: .85rem; }
-  .rb-cards-cta nav a:hover { text-decoration: none; filter: brightness(1.1); }
-  .rb-legal { margin-top: 16px; font-size: .8rem; color: var(--muted); max-width: 90ch; }
+  /* Example card pictures */
+  .lp-strip { list-style: none; margin: 16px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(0, 1.4fr); gap: 12px; align-items: end; }
+  .lp-strip a, .lp-runes a { display: grid; gap: 2px; color: var(--ink); text-decoration: none; }
+  .lp-strip img, .lp-runes img, .lp-card-pic img { width: 100%; height: auto; border-radius: 10px; box-shadow: var(--lift); background: var(--surface); }
+  .lp-strip strong { margin-top: 6px; font-size: .85rem; }
+  .lp-strip span { font-size: .78rem; color: var(--muted); }
+  .lp-strip a:hover img, .lp-runes a:hover img, .lp-card-pic a:hover img { transform: translateY(-3px); }
+  .lp-strip img, .lp-runes img, .lp-card-pic img { transition: transform .15s; }
+  .lp-runes { list-style: none; margin: 16px 0 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; max-width: 720px; }
+  .lp-runes span { text-align: center; font-weight: 800; font-size: .85rem; margin-top: 4px; }
+  .lp-trio { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+  .lp-card-pic { display: grid; grid-template-columns: 96px 1fr; grid-template-rows: auto 1fr; column-gap: 14px; margin: 0; align-items: start; }
+  .lp-card-pic > a { grid-row: span 2; }
+  /* How to read a card */
+  .lp-anatomy { display: grid; grid-template-columns: minmax(0, 320px) minmax(0, 1fr); gap: 24px 32px; align-items: center; }
+  .lp-anatomy-pic { position: relative; margin: 0; }
+  .lp-anatomy-pic img { display: block; width: 100%; height: auto; border-radius: 16px; box-shadow: var(--lift); }
+  .lp-pin { position: absolute; transform: translate(-50%, -50%); width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; background: var(--c1); color: #fff; font-family: var(--display); font-weight: 800; font-size: .9rem; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0, 0, 0, .4); pointer-events: none; }
+  .lp-anatomy-list { margin: 0; padding: 0; list-style: none; counter-reset: pin; display: grid; gap: 10px; }
+  .lp-anatomy-list li { counter-increment: pin; position: relative; padding: 10px 14px 10px 52px; border: 2px solid var(--line); border-radius: 14px; background: var(--surface); font-size: .95rem; }
+  .lp-anatomy-list li::before { content: counter(pin); position: absolute; left: 12px; top: 10px; width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; background: var(--c1); color: #fff; font-family: var(--display); font-weight: 800; font-size: .9rem; }
+  /* The table layout */
+  .lp-board { margin: 0 0 18px; padding: 14px; border: 2px solid var(--line); border-radius: 18px; background: var(--surface); box-shadow: var(--lift); display: grid; gap: 12px; }
+  .lp-board-them { padding: 12px; border: 2px dashed var(--line); border-radius: 12px; text-align: center; color: var(--muted); font-size: .85rem; font-weight: 700; }
+  .lp-board-mid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 560px; width: 100%; margin: 0 auto; }
+  .lp-board-you { display: grid; grid-template-columns: 70px 70px minmax(0, 1fr) 62px 62px 62px; gap: 12px; align-items: end; }
+  .lp-zone { display: grid; gap: 4px; justify-items: center; text-align: center; font-size: .78rem; font-weight: 700; }
+  .lp-zone img { width: 100%; height: auto; border-radius: 8px; }
+  .lp-field span { color: var(--muted); }
+  .lp-base { align-self: stretch; align-content: center; padding: 10px; border: 2px dashed var(--c1); border-radius: 12px; min-height: 96px; }
+  .lp-base b { font-family: var(--display); font-size: 1rem; }
+  .lp-base span { color: var(--muted); font-weight: 600; }
+  .lp-pile i { display: block; width: 100%; aspect-ratio: 200 / 279; border-radius: 8px; background: var(--c2); box-shadow: 3px 3px 0 var(--line), 6px 6px 0 var(--line); }
+  .lp-pile-rune i { background: var(--c1); }
+  .lp-pile-trash i { background: transparent; border: 2px dashed var(--line); box-shadow: none; }
+  .lp-board figcaption { font-size: .82rem; color: var(--muted); text-align: center; }
+  /* Score track */
+  .lp-track { display: grid; grid-template-columns: repeat(7, 1fr) 1.6fr; gap: 6px; margin: 14px 0 0; max-width: 560px; }
+  .lp-track span { display: grid; place-items: center; height: 40px; border: 2px solid var(--line); border-radius: 10px; background: var(--surface); font-family: var(--display); font-weight: 800; }
+  .lp-track .is-win { background: var(--c2); color: #1b1a1f; }
+  @media (max-width: 600px) {
+    /* On a phone the deck table becomes a short list, one piece per row, instead of three squashed columns. */
+    .rb-table thead { display: none; }
+    .rb-table tr { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+    .rb-table tr:last-child { border-bottom: 0; }
+    .rb-table td { padding: 0; border: 0; }
+    .rb-table td:nth-child(2) { font-weight: 800; color: var(--c1); text-align: right; }
+    .rb-table td:nth-child(3) { grid-column: 1 / -1; color: var(--muted); }
+  }
+  @media (max-width: 700px) {
+    .lp-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .lp-strip .is-wide { grid-column: span 2; }
+    .lp-anatomy { grid-template-columns: 1fr; }
+    .lp-anatomy-pic { max-width: 300px; width: 100%; margin: 0 auto; }
+    .lp-runes { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .lp-board-you { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .lp-board-you .lp-mini img { max-width: 76px; }
+    .lp-base { grid-column: 1 / -1; grid-row: 1; min-height: 64px; }
+    .lp-pile i { max-width: 56px; }
+    .lp-track { grid-template-columns: repeat(8, 1fr); gap: 4px; }
+    .lp-track span { height: 34px; font-size: .85rem; }
+    .lp-track .is-win { font-size: .7rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { .lp-strip img, .lp-runes img, .lp-card-pic img { transition: none; } }
   @media (max-width: 560px) { .lp-steps > li { padding: 52px 14px 14px; } }
 </style>

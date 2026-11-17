@@ -1,6 +1,7 @@
 ---
 // Learn to play Pokémon Champions VGC (/esports/pokemon-champions/learn): a beginner's guide in plain words.
 // The facts live in src/data/champions-learn.ts, each with its sources.
+import JumpNav from '../../../components/JumpNav.astro';
 import Base from '../../../layouts/Base.astro';
 import Mon from '../../../components/champions/Mon.astro';
 import SourceList from '../../../components/SourceList.astro';
@@ -22,9 +23,15 @@ const turnExtras = LEARN_TURN.filter((x) => !ORDER.includes(x.title));
     <p>VGC is how Pokémon is played at official tournaments: Double Battles, two Pokémon each on the field at once. It looks wild at first. By the end of this page you'll know what's going on, and maybe even win a few.</p>
   </header>
 
-  <nav class="lp-jump" aria-label="On this page">
-    <a href="#basics">The basics</a><a href="#turn">How a turn works</a><a href="#team">Your team</a><a href="#types">Types</a><a href="#words">Words to know</a><a href="#tips">Tips</a><a href="#ranked">Ranked</a>
-  </nav>
+  <JumpNav links={[
+    { href: '#basics', label: 'The basics' },
+    { href: '#turn', label: 'How a turn works' },
+    { href: '#team', label: 'Your team' },
+    { href: '#types', label: 'Types' },
+    { href: '#words', label: 'Words to know' },
+    { href: '#tips', label: 'Tips' },
+    { href: '#ranked', label: 'Ranked' },
+  ]} />
 
   <section id="basics" class="lp-section">
     <div class="section-head"><h2>The basics in 30 seconds</h2></div>
@@ -132,9 +139,6 @@ const turnExtras = LEARN_TURN.filter((x) => !ORDER.includes(x.title));
 </Base>
 
 <style>
-  .lp-jump { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 24px; }
-  .lp-jump a { padding: 6px 14px; border: 2px solid var(--line); border-radius: 999px; font-weight: 700; font-size: .85rem; color: var(--ink); background: var(--surface); }
-  .lp-jump a:hover { text-decoration: none; background: var(--mark); color: #1b1a1f; }
   .kicker .tag + .tag { margin-left: 6px; }
   .lp-section { margin-top: 44px; }
   .lp-lead { max-width: 75ch; }
