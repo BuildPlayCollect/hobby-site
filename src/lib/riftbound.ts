@@ -8,7 +8,7 @@ export type RbCard = {
   domains: string[]; energy: number | null; power: number | null; might: number | null; keywords: string[]; tags: string[];
   text: string | null; flavour: string | null; artist: string | null; set: string; number: string; num: string; slug: string;
   sort: number; variant: string | null; landscape: boolean;
-  img: { s: string; n: string; l: string; back: string | null }; rifthunt: string | null;
+  img: { s: string; n: string; l: string; back: string | null }; rifthunt: string | null; banned?: boolean;
 };
 
 export const RB_SETS = DATA.sets as RbSet[];

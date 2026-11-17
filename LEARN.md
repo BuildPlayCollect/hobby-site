@@ -183,3 +183,12 @@ Every link to another website opens in a new tab, so readers don't lose their pl
 - **Everything else** (hubs, card pages, tools, the footer): a few lines in the script at the bottom of `src/layouts/Base.astro` find every link whose address isn't buildplaycollect.com and mark it the same way when the page opens. It also catches links a page adds later, like search results.
 
 Both add `rel="noopener noreferrer"`, which stops the other website from being able to control our tab.
+
+## Riftbound deck builder (preview)
+
+`/tcg/riftbound/deck-builder/` lets readers build a deck in their browser. Pick a Legend and the card list shows only the cards that deck may use. A checklist then checks the deck against the official deck rules (Core Rules section 103): Chosen Champion, 40+ cards, no more than 3 of a card, the Legend's colours only, at most 3 Signature cards, 12 runes, 3 different Battlefields, and no cards banned in Standard.
+
+- **Card list:** `src/pages/tcg/riftbound/builder.json.ts` makes `/tcg/riftbound/builder.json` (one entry per card). `npm run riftbound:data` also saves the Standard ban list now.
+- **Share links:** the whole deck is written into the address after `#` (for example `#l=ogn-255&c=ogn-119&m=ogn-097*3`), using each card's set and number. Nothing is sent to us.
+- **Saved decks:** kept in the reader's own browser (localStorage), so they don't follow them to another phone. The share link does.
+- **Copy as text:** gives the same plain list format Riftwatch and other deck sites use.
