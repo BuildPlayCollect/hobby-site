@@ -1,6 +1,6 @@
 // search.json.ts: builds /search.json, the list the search box looks through.
 // It covers every page a reader might look for: articles, wiki, rules, Beyblade X parts, the tools and hubs,
-// every Unmatched fighter, every Pokédex entry, and every esports Agent, champion and hero.
+// every Unmatched fighter, every Pokédex entry, every esports Agent, champion and hero, and every Riftbound card.
 import { getCollection } from 'astro:content';
 import { HOBBIES, TYPES, type HobbyKey, type TypeKey } from '../data/site';
 import { UM_FIGHTERS } from '../data/unmatched';
@@ -11,6 +11,7 @@ import AGENTS from '../data/esports/valorant-agents.json';
 import LOL from '../data/esports/lol-champions.json';
 import TFT from '../data/esports/tft-champions.json';
 import DOTA from '../data/esports/dota-heroes.json';
+import { RB_CARDS, oneEach, cardUrl, setOf as rbSetOf } from '../lib/riftbound';
 
 type Entry = { title: string; summary: string; url: string; kind: string; hobby: string };
 
@@ -109,6 +110,15 @@ export async function GET() {
     ...TFT.units.map((u) => roster(u.name, `TFT Set ${TFT.set} champion, ${u.cost} cost`, '/esports/tft/champions/')),
     ...DOTA.heroes.map((h) => roster(h.name, `Dota 2 hero, ${h.attr}`, '/esports/dota-2/heroes/')),
   ];
-  const all: Entry[] = [...hobbyPages, ...PAGES, ...wiki, ...rules, ...articles, ...fighters, ...pokemon, ...parts, ...characters];
+  // Riftbound: one entry per card (its main printing, like the Legends page), so special versions don't crowd the results.
+  // They go last, so a guide or wiki page with the same word still shows first.
+  const riftbound = oneEach(RB_CARDS).map((c) => ({
+    title: c.name,
+    summary: `Riftbound ${[c.super, c.type].filter(Boolean).join(' ').toLowerCase()}${c.domains.length ? `, ${c.domains.join(' / ')}` : ''}, ${rbSetOf(c).name}`,
+    url: cardUrl(c),
+    kind: 'Card',
+    hobby: 'TCG',
+  }));
+  const all: Entry[] = [...hobbyPages, ...PAGES, ...wiki, ...rules, ...articles, ...fighters, ...pokemon, ...parts, ...characters, ...riftbound];
   return new Response(JSON.stringify(all), { headers: { 'Content-Type': 'application/json' } });
 }
