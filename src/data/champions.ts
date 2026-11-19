@@ -82,6 +82,20 @@ export const EVENT_SOURCES: Source[] = [
 // Recent big results with the top 8 teams (Pokémon as Smogon/Showdown names, so icons and type colours work).
 export const RESULTS = [
   {
+    name: 'Buenos Aires Special Championship', place: 'Buenos Aires, Argentina', date: '2026-11-15', reg: 'M-C', players: '128 Masters',
+    source: { label: 'Victory Road: 2027 Buenos Aires SC', url: 'https://victoryroad.pro/2027-buenos-aires/' },
+    top: [
+      { p: 'Ezequiel Bustamante', c: 'ARG', team: ['Raichu-Mega-Y', 'Baxcalibur-Mega', 'Incineroar', 'Volcarona', 'Milotic', 'Rillaboom'] },
+      { p: 'Bruno Quiroga', c: 'ARG', team: ['Charizard-Mega-Y', 'Aerodactyl-Mega', 'Farigiraf', 'Kingambit', 'Sylveon', 'Garchomp'] },
+      { p: 'Samuel Pereira', c: 'ESP', team: ['Raichu-Mega-Y', 'Staraptor-Mega', 'Arcanine-Hisui', 'Gholdengo', 'Milotic', 'Rillaboom'] },
+      { p: 'Diego Ferreira', c: 'CHL', team: ['Staraptor-Mega', 'Indeedee-F', 'Armarouge', 'Kingambit', 'Torkoal', 'Rillaboom'] },
+      { p: 'Len Deuel', c: 'USA', team: ['Tyranitar-Mega', 'Salamence-Mega', 'Sneasler', 'Gholdengo', 'Clefable', 'Excadrill'] },
+      { p: 'Juan Velasco', c: 'ARG', team: ['Charizard-Mega-Y', 'Floette-Mega', 'Basculegion', 'Kingambit', 'Whimsicott', 'Garchomp'] },
+      { p: 'Robson Hamilton Carréa', c: 'BRA', team: ['Glimmora-Mega', 'Staraptor-Mega', 'Houndstone', 'Kingambit', 'Whimsicott', 'Hippowdon'] },
+      { p: 'Luis Roquet', c: 'VEN', team: ['Raichu-Mega-Y', 'Staraptor-Mega', 'Basculegion', 'Kingambit', 'Armarouge', 'Indeedee-F'] },
+    ],
+  },
+  {
     name: 'Gdańsk Regional', place: 'Gdańsk, Poland', date: '2026-11-01', reg: 'M-C', players: '758 Masters',
     source: { label: 'Victory Road: 2027 Gdańsk Regional', url: 'https://victoryroad.pro/2027-gdansk/' },
     top: [
@@ -135,20 +149,6 @@ export const RESULTS = [
       { p: 'Toler Webb', c: 'USA', team: ['Garchomp-Mega-Z', 'Golisopod-Mega', 'Pelipper', 'Archaludon', 'Sneasler', 'Farigiraf'] },
       { p: 'Keanu Inosanto', c: 'USA', team: ['Salamence-Mega', 'Floette-Mega', 'Basculegion', 'Kingambit', 'Sneasler', 'Rillaboom'] },
       { p: 'Brian Hough', c: 'USA', team: ['Dragonite-Mega', 'Garchomp', 'Incineroar', 'Gholdengo', 'Sneasler', 'Rillaboom'] },
-    ],
-  },
-  {
-    name: 'Frankfurt Regional', place: 'Frankfurt, Germany', date: '2026-09-27', reg: 'M-C', players: '1,129 Masters',
-    source: { label: 'Victory Road: 2027 Frankfurt Regional', url: 'https://victoryroad.pro/2027-frankfurt/' },
-    top: [
-      { p: 'Eric Rios', c: 'ESP', team: ['Garchomp-Mega-Z', 'Raichu-Mega-Y', 'Incineroar', 'Gholdengo', 'Volcarona', 'Rillaboom'] },
-      { p: 'Sebastian Liu Li', c: 'NLD', team: ['Garchomp-Mega-Z', 'Sylveon', 'Incineroar', 'Farigiraf', 'Sneasler', 'Torkoal'] },
-      { p: 'Yvar Vlieger', c: 'NLD', team: ['Charizard-Mega-Y', 'Meowstic-F-Mega', 'Kommo-o', 'Kingambit', 'Sneasler', 'Indeedee'] },
-      { p: 'Eden Batchelor', c: 'GBR', team: ['Dragonite-Mega', 'Floette-Mega', 'Incineroar', 'Gholdengo', 'Sneasler', 'Rillaboom'] },
-      { p: 'Anthony Liuzzo', c: 'FRA', team: ['Gengar-Mega', 'Vivillon-Pokeball', 'Incineroar', 'Kommo-o', 'Politoed', 'Rillaboom'] },
-      { p: 'Juan Manuel Odriozola', c: 'ESP', team: ['Charizard-Mega-Y', 'Venusaur', 'Incineroar', 'Toxapex', 'Sylveon', 'Garchomp'] },
-      { p: 'Valentijn Visser', c: 'NLD', team: ['Glimmora-Mega', 'Froslass-Mega', 'Incineroar', 'Basculegion', 'Volcarona', 'Rillaboom'] },
-      { p: 'Giuseppe Musicco', c: 'ITA', team: ['Dragonite-Mega', 'Floette-Mega', 'Incineroar', 'Gholdengo', 'Sneasler', 'Rillaboom'] },
     ],
   },
 ];

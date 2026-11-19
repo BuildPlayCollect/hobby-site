@@ -5,7 +5,7 @@ scope: official
 organizer: "Bandai"
 sourceUrl: "https://en.onepiece-cardgame.com/pdf/tournament_rules_manual.pdf"
 version: "Last Updated: October 17, 2025"
-lastChecked: 2026-11-16
+lastChecked: 2026-11-19
 summary: "The basics of the Bandai Organized Play One Piece Card Game Tournament Rules Manual: deck building, formats, match structure, time limits, sleeves, conduct and penalties."
 ---
 
@@ -60,6 +60,8 @@ The manual lists penalties from lowest to highest severity, and Head Judges cann
 ## Read the full rules
 
 - [Bandai Organized Play One Piece Card Game Tournament Rules Manual (PDF)](https://en.onepiece-cardgame.com/pdf/tournament_rules_manual.pdf)
+
+**What changed (November 19, 2026):** No changes to the manual, which still says Last Updated: October 17, 2025. Heads-up: Bandai's [banned and restricted list](https://en.onepiece-cardgame.com/news/restriction.html) adds a new banned pair from November 27, 2026. EB05-001 Jewelry Bonney can't share a deck with OP13-001 Monkey.D.Luffy or OP01-002 Trafalgar Law.
 
 **What changed (November 16, 2026):** No changes. The manual still says Last Updated: October 17, 2025.
 
