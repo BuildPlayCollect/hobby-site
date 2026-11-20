@@ -205,3 +205,18 @@ Long pages (learn-to-play pages, game hubs, Pokédex pages, Unmatched) share one
 The Riftbound pages share a tab menu instead (`src/components/riftbound/CardsHead.astro`): big tabs with small line pictures, with the page you're on filled in. It's on the Learn to Play page too, so the whole Riftbound section has the same menu.
 
 The Learn to Play page now shows example cards (from RiftHunt, like the card pages) in four places: "What's in your deck", "How to read a card" (numbered pins placed with `left`/`top` percentages over the picture), the six runes, and the card types. The table layout and the score track are plain HTML and CSS.
+
+## Deck builder pictures, and Next/Previous that stays in its list
+
+The deck builder now goes in four steps, with a "Steps" menu (the same `JumpNav` as other pages) to hop between them:
+
+1. **Legend**: a gallery of all Legend cards, with a search box and colour buttons. After you pick one, the gallery folds away into one small "Your Legend" box with a "Change Legend" button.
+2. **Chosen Champion**: picture tiles of the champions that match your Legend.
+3. **Add cards**: tap a card to add it, tap the round − on it to take one away. The type buttons show how many you have, like "Runes 4/12".
+4. **Your deck**: a progress bar to 40 cards, the rules checklist, small card pictures in the list, and the save/share buttons.
+
+On a phone a bar at the bottom jumps between **Cards** and **your deck**.
+
+One thing to know: pictures and buttons that the page's script makes after it loads (like the champion tiles) don't get Astro's normal "scoped" styles, because Astro only tags the HTML it writes itself. That's why their CSS is wrapped in `:global(...)`.
+
+Card pages opened from **Legends**, **Battlefields** or **Search** now get `?from=legends` (or `battlefields`, `search`) on the end of their address. A small script on the card page reads it and points Next/Previous at the neighbours in that list instead of the set, lights up that tab, and makes the breadcrumbs lead back to the list. Search remembers its results in `sessionStorage` (this browser tab only) so the card page knows the order.

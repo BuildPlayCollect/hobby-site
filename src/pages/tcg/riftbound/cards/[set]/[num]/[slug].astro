@@ -6,7 +6,7 @@ import Base from '../../../../../../layouts/Base.astro';
 import CardsHead from '../../../../../../components/riftbound/CardsHead.astro';
 import CardGrid from '../../../../../../components/riftbound/CardGrid.astro';
 import Credit from '../../../../../../components/riftbound/Credit.astro';
-import { RB_CARDS, setOf, setUrl, cardUrl, bySetOrder, cardTextHtml, cardTextPlain, DOMAIN_COLOURS, RB_HUB, type RbCard } from '../../../../../../lib/riftbound';
+import { RB_CARDS, LEGENDS, BATTLEFIELDS, setOf, setUrl, cardUrl, bySetOrder, cardTextHtml, cardTextPlain, DOMAIN_COLOURS, RB_HUB, type RbCard } from '../../../../../../lib/riftbound';
 
 export function getStaticPaths() {
   return RB_CARDS.map((c) => ({ params: { set: c.set, num: c.num, slug: c.slug }, props: { c } }));
@@ -18,6 +18,14 @@ const inSet = RB_CARDS.filter((x) => x.set === c.set).sort(bySetOrder);
 const at = inSet.findIndex((x) => x.id === c.id);
 const prev = inSet[at - 1];
 const next = inSet[at + 1];
+// Opened from the Legends or Battlefields list (?from=...)? Then Next/Previous should stay in that list.
+// The neighbours for both lists are worked out here and handed to the little script below.
+const near = (list: RbCard[]) => {
+  const i = list.findIndex((x) => x.oracle === c.oracle);
+  const pick = (x?: RbCard) => (x ? { u: cardUrl(x), n: x.name } : null);
+  return i < 0 ? null : { prev: pick(list[i - 1]), next: pick(list[i + 1]) };
+};
+const lists = { legends: c.type === 'Legend' ? near(LEGENDS) : null, battlefields: c.type === 'Battlefield' ? near(BATTLEFIELDS) : null };
 const typeLine = [c.super, c.type].filter(Boolean).join(' ');
 
 // The stats box. Rows with nothing to say (like Might on a spell) are left out.
@@ -69,9 +77,12 @@ const description = `${c.name}: a Riftbound ${typeLine.toLowerCase()} from ${set
       <p class="rb-help">New to Riftbound? <a href={`${RB_HUB}#read`}>Here's how to read a card</a>.</p>
       {c.rifthunt && <p class="rb-help">Prices, rulings and more on <a href={c.rifthunt} rel="noopener">this card's RiftHunt page</a>.</p>}
 
-      <nav class="rb-pn" aria-label="Previous and next card in this set">
-        {prev ? <a href={cardUrl(prev)}>‹ {prev.name}</a> : <span />}
-        {next ? <a href={cardUrl(next)}>{next.name} ›</a> : <span />}
+      <nav class="rb-pn" aria-label="Previous and next card" data-rb-pn data-lists={JSON.stringify(lists)}>
+        <p class="rb-pn-label">Browsing <a href={setUrl(c.set)} data-rb-pn-list>{set.name}</a></p>
+        <div>
+          <a href={prev ? cardUrl(prev) : '#'} data-rb-prev hidden={!prev}><small>‹ Previous</small><span>{prev?.name}</span></a>
+          <a href={next ? cardUrl(next) : '#'} data-rb-next hidden={!next}><small>Next ›</small><span>{next?.name}</span></a>
+        </div>
       </nav>
     </div>
   </article>
@@ -85,6 +96,52 @@ const description = `${c.name}: a Riftbound ${typeLine.toLowerCase()} from ${set
 
   <Credit />
 </Base>
+
+<script>
+  // Came here from the Legends list, the Battlefields list or a search? Then Next/Previous walk through that list
+  // (not the whole set), and the menu and breadcrumbs point back to it. Links keep "?from=..." so the chain carries on.
+  type Near = { prev: { u: string; n: string } | null; next: { u: string; n: string } | null } | null;
+  const SECTIONS: Record<string, { label: string; href: string }> = {
+    legends: { label: 'Legends', href: '/tcg/riftbound/legends/' },
+    battlefields: { label: 'Battlefields', href: '/tcg/riftbound/battlefields/' },
+    search: { label: 'your search results', href: '/tcg/riftbound/search/' },
+  };
+  const nav = document.querySelector<HTMLElement>('[data-rb-pn]');
+  const from = new URLSearchParams(location.search).get('from') ?? '';
+  const sec = SECTIONS[from];
+  if (nav && sec) {
+    let near: Near = null;
+    let back = sec.href;
+    if (from === 'search') {
+      try {
+        const saved = JSON.parse(sessionStorage.getItem('rb-search') ?? 'null') as { q: string; list: { u: string; n: string }[] } | null;
+        const i = saved ? saved.list.findIndex((x) => x.u === location.pathname) : -1;
+        if (saved && i >= 0) { near = { prev: saved.list[i - 1] ?? null, next: saved.list[i + 1] ?? null }; back += saved.q; }
+      } catch {}
+    } else near = (JSON.parse(nav.dataset.lists ?? '{}') as Record<string, Near>)[from] ?? null;
+    if (near) {
+      for (const [key, sel] of [['prev', '[data-rb-prev]'], ['next', '[data-rb-next]']] as const) {
+        const a = nav.querySelector<HTMLAnchorElement>(sel)!;
+        const to = near[key];
+        a.hidden = !to;
+        if (to) { a.href = `${to.u}?from=${from}`; a.querySelector('span')!.textContent = to.n; }
+      }
+      const list = nav.querySelector<HTMLAnchorElement>('[data-rb-pn-list]')!;
+      list.href = back; list.textContent = sec.label;
+      // Light up the matching tab, and make the breadcrumbs lead back to the list.
+      const tab = from === 'search' ? '/tcg/riftbound/search/' : sec.href;
+      document.querySelectorAll('.rb-tabs a').forEach((a) => (a.getAttribute('href') === tab ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current')));
+      const crumbs = document.querySelector('.rb-crumbs');
+      const links = crumbs ? [...crumbs.querySelectorAll('a')] : [];
+      if (links.length >= 4) {
+        // TCG › Riftbound › Cards › Set › name  becomes  TCG › Riftbound › Legends › name
+        links[2].href = back; links[2].textContent = sec.label[0].toUpperCase() + sec.label.slice(1);
+        const sep = links[3].previousElementSibling;
+        sep?.remove(); links[3].remove();
+      }
+    }
+  }
+</script>
 
 <style>
   .rb-card { display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr); gap: 32px; align-items: start; }
@@ -104,7 +161,16 @@ const description = `${c.name}: a Riftbound ${typeLine.toLowerCase()} from ${set
   .rb-stats small { display: block; width: 100%; font-weight: 400; color: var(--muted); font-size: .78rem; }
   .rb-domain { padding: 1px 8px; border-radius: 999px; background: var(--dc); color: #fff; font-size: .82rem; }
   .rb-help { font-size: .9rem; margin: 14px 0 0; }
-  .rb-pn { display: flex; justify-content: space-between; gap: 12px; margin-top: 22px; font-weight: 700; font-size: .9rem; }
+  .rb-pn { margin-top: 22px; }
+  .rb-pn-label { margin: 0 0 8px; font-size: .85rem; color: var(--muted); }
+  .rb-pn-label a { font-weight: 800; }
+  .rb-pn div { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .rb-pn div a { display: grid; gap: 2px; padding: 10px 14px; border: 2px solid var(--line); border-radius: 14px; background: var(--surface); color: var(--ink); text-decoration: none; box-shadow: var(--lift); }
+  .rb-pn div a[hidden] { display: none; }
+  .rb-pn div a:hover { background: var(--mark); color: #1b1a1f; }
+  .rb-pn [data-rb-next] { grid-column: 2; text-align: right; }
+  .rb-pn small { font-size: .75rem; font-weight: 700; opacity: .75; }
+  .rb-pn span { font-weight: 800; font-size: .92rem; line-height: 1.25; }
   .rb-others { margin-top: 40px; }
   @media (max-width: 700px) {
     .rb-card { grid-template-columns: 1fr; gap: 18px; }

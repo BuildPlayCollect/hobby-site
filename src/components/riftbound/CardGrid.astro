@@ -4,13 +4,14 @@
 // downloads when the reader scrolls near it, so a 300-card list stays quick on a phone.
 import { cardUrl, type RbCard } from '../../lib/riftbound';
 
-interface Props { cards: RbCard[]; eager?: number; showSet?: boolean }
-const { cards, eager = 6, showSet = false } = Astro.props;
+// "from" (legends or battlefields) is added to each link, so the card page's Next/Previous buttons stay in that list.
+interface Props { cards: RbCard[]; eager?: number; showSet?: boolean; from?: 'legends' | 'battlefields' }
+const { cards, eager = 6, showSet = false, from } = Astro.props;
 ---
 <ul class="rb-grid">
   {cards.map((c, i) => (
     <li class:list={{ 'rb-wide': c.landscape }}>
-      <a href={cardUrl(c)}>
+      <a href={from ? `${cardUrl(c)}?from=${from}` : cardUrl(c)}>
         <img src={c.img.s} srcset={`${c.img.s} 200w, ${c.img.n} 480w`} sizes="(max-width: 560px) 45vw, 200px"
           alt={`${c.name}, Riftbound card`} width={c.landscape ? 280 : 200} height={c.landscape ? 200 : 279}
           loading={i < eager ? 'eager' : 'lazy'} decoding="async" />
