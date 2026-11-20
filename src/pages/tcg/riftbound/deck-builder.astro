@@ -244,7 +244,7 @@ const TYPES = [['', 'All'], ['Unit', 'Units'], ['Spell', 'Spells'], ['Gear', 'Ge
   function row(c: Card, q: number, where: 'main' | 'bf' | 'runes') {
     const minus = el('button', { type: 'button', className: 'db-step', title: `Remove one ${c.n}` }, '−');
     minus.addEventListener('click', () => remove(c.k, where));
-    const thumb = el('img', { src: c.i, alt: '', width: c.w ? 42 : 30, height: 30, loading: 'lazy', decoding: 'async', className: c.w ? 'db-thumb is-wide' : 'db-thumb' });
+    const thumb = el('img', { src: c.i, alt: '', width: c.w ? 56 : 29, height: 40, loading: 'lazy', decoding: 'async', className: c.w ? 'db-thumb is-wide' : 'db-thumb' });
     const kids: Node[] = [minus, el('span', { className: 'db-q' }, where === 'bf' ? '' : `${q}`), thumb, el('a', { href: c.u, target: '_blank', rel: 'noopener' }, c.n)];
     if (where !== 'bf') {
       const plus = el('button', { type: 'button', className: 'db-step', title: `Add one ${c.n}` }, '+');
@@ -497,6 +497,28 @@ const TYPES = [['', 'All'], ['Unit', 'Units'], ['Spell', 'Spells'], ['Gear', 'Ge
     .db-bar { display: flex; position: sticky; bottom: 10px; z-index: 30; margin-top: 12px; justify-content: center; gap: 8px; }
     .db-bar a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; background: var(--surface); color: var(--ink); border: 2px solid var(--line); font-weight: 800; box-shadow: var(--lift); text-decoration: none; }
     .db-bar .db-bar-deck { background: var(--c1); border-color: var(--c1); color: #fff; }
+  }
+  /* Phones: two big cards per row instead of three small ones, roomier text and bigger buttons. */
+  @media (max-width: 520px) {
+    .db-sec { margin-bottom: 44px; }
+    .db-sec h2, .db-deck h2 { font-size: 1.45rem; }
+    .db-hint, .db-count { font-size: .95rem; line-height: 1.5; }
+    .db-grid, .db-lgrid, .db-champs { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 14px; }
+    .db-lgrid strong, .db-champs :global(strong), .db-grid :global(.db-add strong) { font-size: .95rem; }
+    .db-lgrid span, .db-champs :global(span), .db-grid :global(.db-add span) { font-size: .8rem; }
+    .db-grid :global(.db-wide) { grid-column: 1 / -1; }
+    .db-grid :global(.db-minus) { width: 36px; height: 36px; top: 38px; }
+    .db-grid :global(.db-info) { width: 34px; height: 34px; }
+    .db-chips button { min-height: 40px; }
+    .db-chosen :global(img) { width: 80px; }
+    .db-deck { padding: 16px 14px; }
+    .db-checks { font-size: .92rem; gap: 6px; }
+    .db-deck :global(.db-group li) { font-size: .95rem; gap: 8px; min-height: 40px; }
+    .db-deck :global(.db-step) { width: 36px; height: 36px; font-size: 1.05rem; }
+    .db-deck :global(.db-thumb) { width: 29px; height: 40px; }
+    .db-deck :global(.db-thumb.is-wide) { width: 56px; }
+    .db-actions button { flex: 1 1 auto; min-height: 44px; }
+    .db-bar { bottom: 14px; }
   }
   @media (prefers-reduced-motion: reduce) { .db-lgrid img, .db-champs :global(img), .db-grid :global(.db-add img), .db-progress span { transition: none; } }
 </style>
