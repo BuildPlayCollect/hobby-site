@@ -6,11 +6,14 @@
 // The card list comes from /tcg/riftbound/builder.json (see builder.json.ts).
 import Base from '../../../layouts/Base.astro';
 import CardsHead from '../../../components/riftbound/CardsHead.astro';
+import JumpNav from '../../../components/JumpNav.astro';
 import Credit from '../../../components/riftbound/Credit.astro';
 import { LEGENDS, DOMAIN_COLOURS, RB_HUB } from '../../../lib/riftbound';
 
 const CORE = 'https://cmsassets.rgpub.io/sanity/files/dsfx7636/news_live/5c7946f7c3b8c6e0faff85ab6dadc6d2e721ea94.pdf';
-const legends = LEGENDS.map((l) => ({ k: `${l.set}-${l.number}`, n: l.name, d: l.domains }));
+const legends = LEGENDS.map((l) => ({ k: `${l.set}-${l.number}`, n: l.name, d: l.domains, i: l.img.s }));
+const DOMAINS = ['Fury', 'Calm', 'Mind', 'Body', 'Chaos', 'Order'];
+const TYPES = [['', 'All'], ['Unit', 'Units'], ['Spell', 'Spells'], ['Gear', 'Gear'], ['Battlefield', 'Battlefields'], ['Rune', 'Runes']];
 ---
 <Base title="Riftbound deck builder (preview)" description="Build a Riftbound deck in your browser: pick a Legend, add cards, and see straight away if the deck follows the official rules. Save decks and share them with a link.">
   <CardsHead crumbs={[{ label: 'Deck builder' }]} />
@@ -20,32 +23,53 @@ const legends = LEGENDS.map((l) => ({ k: `${l.set}-${l.number}`, n: l.name, d: l
     <p>Pick a Legend, then tap cards to add them. The checklist tells you straight away if your deck follows the <a href={CORE}>official deck rules</a>. New to Riftbound? <a href={`${RB_HUB}#deck`}>Here's what goes in a deck</a>.</p>
   </header>
 
-  <div class="db-top">
-    <label class="db-legend">
-      <span>1. Pick your Legend</span>
-      <select data-db-legend>
-        <option value="">Choose a Legend…</option>
-        {legends.map((l) => <option value={l.k}>{l.n} ({l.d.join(' + ')})</option>)}
-      </select>
-    </label>
-    <div class="db-actions">
-      <button type="button" data-db-act="share">Copy share link</button>
-      <button type="button" data-db-act="text">Copy as text</button>
-      <button type="button" data-db-act="save">Save</button>
-      <select data-db-saved aria-label="Open a saved deck"><option value="">Saved decks…</option></select>
-      <button type="button" data-db-act="clear" class="db-ghost">Start over</button>
+  <JumpNav label="Steps" links={[
+    { href: '#pick-legend', label: '1. Legend' },
+    { href: '#pick-champ', label: '2. Champion' },
+    { href: '#pick-cards', label: '3. Add cards' },
+    { href: '#deck', label: '4. Check & share' },
+  ]} />
+
+  <section id="pick-legend" class="db-sec">
+    <h2>1. Pick your Legend</h2>
+    <div class="db-chosen" data-db-chosen hidden></div>
+    <div class="db-legends" data-db-legends>
+      <p class="db-hint">Your Legend decides your two colours. Tap one to start.</p>
+      <div class="db-lfilters">
+        <label class="db-lq"><span class="sr-only">Find a Legend</span><input type="search" data-db-lq placeholder="Find a Legend, e.g. Ahri" autocomplete="off" /></label>
+        <div class="db-chips" role="group" aria-label="Colour">
+          <button type="button" data-db-ld="" aria-pressed="true">All colours</button>
+          {DOMAINS.map((d) => <button type="button" data-db-ld={d} aria-pressed="false"><i style={`background:${DOMAIN_COLOURS[d]}`}></i>{d}</button>)}
+        </div>
+      </div>
+      <ul class="db-lgrid">
+        {legends.map((l) => (
+          <li data-name={l.n.toLowerCase()} data-domains={l.d.join(' ')}>
+            <button type="button" data-db-pick={l.k}>
+              <img src={l.i} alt="" width="200" height="279" loading="lazy" decoding="async" />
+              <strong>{l.n}</strong>
+              <span>{l.d.map((d) => <em style={`--dc:${DOMAIN_COLOURS[d]}`}>{d}</em>)}</span>
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
-    <p class="db-status" data-db-status aria-live="polite"></p>
-  </div>
+  </section>
+
+  <section id="pick-champ" class="db-sec">
+    <h2>2. Pick your Chosen Champion</h2>
+    <p class="db-hint" data-db-champ-hint>Pick a Legend first. Then the champions that match it show up here.</p>
+    <ul class="db-champs" data-db-champs></ul>
+  </section>
 
   <div class="db-layout">
-    <section class="db-pool" aria-label="Cards you can add">
-      <h2>2. Add cards</h2>
+    <section class="db-pool db-sec" id="pick-cards" aria-label="Cards you can add">
+      <h2>3. Add cards</h2>
       <form class="db-filters" data-db-filters role="search">
         <label class="db-q"><span class="sr-only">Find a card</span><input type="search" name="q" placeholder="Find a card by name or text" autocomplete="off" /></label>
         <div class="db-types" role="group" aria-label="Card type">
-          {['All', 'Unit', 'Spell', 'Gear', 'Battlefield', 'Rune'].map((t, i) => (
-            <label><input type="radio" name="type" value={t === 'All' ? '' : t} checked={i === 0} /> {t === 'All' ? 'All' : t + 's'}</label>
+          {TYPES.map(([v, label], i) => (
+            <label><input type="radio" name="type" value={v} checked={i === 0} /> {label}<small data-db-tcount={v}></small></label>
           ))}
         </div>
       </form>
@@ -55,18 +79,26 @@ const legends = LEGENDS.map((l) => ({ k: `${l.set}-${l.number}`, n: l.name, d: l
     </section>
 
     <aside class="db-deck" id="deck" aria-label="Your deck">
-      <h2>Your deck</h2>
-      <div class="db-legend-pic" data-db-legend-pic></div>
-      <label class="db-champ">
-        <span>Chosen Champion</span>
-        <select data-db-champ disabled><option value="">Pick a Legend first</option></select>
-      </label>
+      <h2>4. Your deck</h2>
+      <div class="db-progress" aria-hidden="true"><span data-db-progress></span></div>
+      <p class="db-progress-text" data-db-progress-text>0 of 40 cards</p>
       <ul class="db-checks" data-db-checks></ul>
       <div data-db-list></div>
+      <div class="db-actions">
+        <button type="button" data-db-act="share">Copy share link</button>
+        <button type="button" data-db-act="text">Copy as text</button>
+        <button type="button" data-db-act="save">Save</button>
+        <select data-db-saved aria-label="Open a saved deck"><option value="">Saved decks…</option></select>
+        <button type="button" data-db-act="clear" class="db-ghost">Start over</button>
+      </div>
+      <p class="db-status" data-db-status aria-live="polite"></p>
     </aside>
   </div>
 
-  <div class="db-bar" data-db-bar><a href="#deck"><span data-db-bar-text>No Legend yet</span> ↓</a></div>
+  <nav class="db-bar" data-db-bar aria-label="Deck builder">
+    <a href="#pick-cards">Cards</a>
+    <a href="#deck" class="db-bar-deck"><span data-db-bar-text>No Legend yet</span></a>
+  </nav>
 
   <section class="db-help">
     <h2>How the checks work</h2>
@@ -82,8 +114,13 @@ const legends = LEGENDS.map((l) => ({ k: `${l.set}-${l.number}`, n: l.name, d: l
   type Deck = { legend: string; champ: string; main: Record<string, number>; bf: string[]; runes: Record<string, number> };
 
   const $ = <T extends Element>(s: string) => document.querySelector<T>(s)!;
-  const legendSel = $<HTMLSelectElement>('[data-db-legend]');
-  const champSel = $<HTMLSelectElement>('[data-db-champ]');
+  const chosenEl = $<HTMLElement>('[data-db-chosen]');
+  const legendsEl = $<HTMLElement>('[data-db-legends]');
+  const legendQ = $<HTMLInputElement>('[data-db-lq]');
+  const champsEl = $<HTMLUListElement>('[data-db-champs]');
+  const champHint = $<HTMLElement>('[data-db-champ-hint]');
+  const progressEl = $<HTMLElement>('[data-db-progress]');
+  const progressText = $<HTMLElement>('[data-db-progress-text]');
   const savedSel = $<HTMLSelectElement>('[data-db-saved]');
   const filters = $<HTMLFormElement>('[data-db-filters]');
   const grid = $<HTMLUListElement>('[data-db-grid]');
@@ -92,7 +129,6 @@ const legends = LEGENDS.map((l) => ({ k: `${l.set}-${l.number}`, n: l.name, d: l
   const checksEl = $<HTMLUListElement>('[data-db-checks]');
   const listEl = $<HTMLElement>('[data-db-list]');
   const statusEl = $<HTMLElement>('[data-db-status]');
-  const legendPic = $<HTMLElement>('[data-db-legend-pic]');
   const barText = $<HTMLElement>('[data-db-bar-text]');
   const PAGE = 48;
   const STORE = 'rb-decks';
@@ -103,6 +139,8 @@ const legends = LEGENDS.map((l) => ({ k: `${l.set}-${l.number}`, n: l.name, d: l
   let deck: Deck = { legend: '', champ: '', main: {}, bf: [], runes: {} };
   let pool: Card[] = [];
   let shown = 0;
+  let browsing = false; // true while the reader is changing their Legend
+  let legendColour = '';
 
   const legend = () => byKey.get(deck.legend);
   // Rule 103.2.b: a card fits if all of its domains are among the Legend's. Cards with no domain fit any deck.
@@ -175,7 +213,13 @@ const legends = LEGENDS.map((l) => ({ k: `${l.set}-${l.number}`, n: l.name, d: l
     btn.setAttribute('aria-label', `Add ${c.n}${n ? `, you have ${n}` : ''}`);
     btn.addEventListener('click', () => add(c));
     const li = el('li', { className: c.w ? 'db-wide' : '' }, btn);
-    if (n) li.append(el('b', { className: 'db-have' }, `×${n}`));
+    if (n) {
+      li.append(el('b', { className: 'db-have' }, `×${n}`));
+      const minus = el('button', { type: 'button', className: 'db-minus', title: `Remove one ${c.n}` }, '−');
+      minus.setAttribute('aria-label', `Remove one ${c.n}`);
+      minus.addEventListener('click', () => remove(c.k, c.t === 'Battlefield' ? 'bf' : c.t === 'Rune' ? 'runes' : 'main'));
+      li.append(minus);
+    }
     if (c.b) li.append(el('b', { className: 'db-ban' }, 'Banned'));
     li.append(el('a', { href: c.u, className: 'db-info', target: '_blank', rel: 'noopener', title: `${c.n}: card page` }, 'ⓘ'));
     return li;
@@ -200,7 +244,8 @@ const legends = LEGENDS.map((l) => ({ k: `${l.set}-${l.number}`, n: l.name, d: l
   function row(c: Card, q: number, where: 'main' | 'bf' | 'runes') {
     const minus = el('button', { type: 'button', className: 'db-step', title: `Remove one ${c.n}` }, '−');
     minus.addEventListener('click', () => remove(c.k, where));
-    const kids: Node[] = [minus, el('span', { className: 'db-q' }, where === 'bf' ? '' : `${q}`), el('a', { href: c.u, target: '_blank', rel: 'noopener' }, c.n)];
+    const thumb = el('img', { src: c.i, alt: '', width: c.w ? 42 : 30, height: 30, loading: 'lazy', decoding: 'async', className: c.w ? 'db-thumb is-wide' : 'db-thumb' });
+    const kids: Node[] = [minus, el('span', { className: 'db-q' }, where === 'bf' ? '' : `${q}`), thumb, el('a', { href: c.u, target: '_blank', rel: 'noopener' }, c.n)];
     if (where !== 'bf') {
       const plus = el('button', { type: 'button', className: 'db-step', title: `Add one ${c.n}` }, '+');
       plus.addEventListener('click', () => add(c));
@@ -210,11 +255,37 @@ const legends = LEGENDS.map((l) => ({ k: `${l.set}-${l.number}`, n: l.name, d: l
   }
   function renderDeck() {
     const L = legend();
-    legendPic.replaceChildren(...(L ? [el('img', { src: L.i, alt: L.n, width: 200, height: 279 })] : []));
-    // Chosen Champion choices: champion units with the Legend's champion name (rule 103.3.a.2).
+    // Step 1: once a Legend is picked, fold the gallery away and show just that Legend.
+    chosenEl.hidden = !L || browsing;
+    legendsEl.hidden = !!L && !browsing;
+    if (L) {
+      const change = el('button', { type: 'button', className: 'db-change' }, 'Change Legend');
+      change.addEventListener('click', () => { browsing = true; renderDeck(); legendQ.focus(); });
+      chosenEl.replaceChildren(
+        el('img', { src: L.i, alt: L.n, width: 200, height: 279 }),
+        el('div', {}, el('strong', {}, L.n), el('span', {}, `Your colours: ${L.d.join(' + ')}`), change),
+      );
+    }
+    for (const b of document.querySelectorAll<HTMLButtonElement>('[data-db-pick]')) b.setAttribute('aria-pressed', String(b.dataset.dbPick === deck.legend));
+    // Step 2: Chosen Champion choices are champion units with the Legend's champion name (rule 103.3.a.2).
     const champs = L ? cards.filter((c) => isChampionUnit(c) && tagMatch(c) && fits(c)) : [];
-    champSel.disabled = !L;
-    champSel.replaceChildren(el('option', { value: '' }, L ? 'Pick a Chosen Champion…' : 'Pick a Legend first'), ...champs.map((c) => el('option', { value: c.k, selected: c.k === deck.champ }, c.n)));
+    champHint.textContent = !L ? 'Pick a Legend first. Then the champions that match it show up here.'
+      : champs.length ? `Tap the ${L.n.split(',')[0]} you want waiting on the side. It counts as 1 of your 40 cards.` : 'No matching champion cards were found for this Legend.';
+    champsEl.replaceChildren(...champs.map((c) => {
+      const b = el('button', { type: 'button' }, el('img', { src: c.i, alt: '', width: 200, height: 279, loading: 'lazy', decoding: 'async' }), el('strong', {}, c.n), el('span', {}, `${c.e ?? '?'} energy · ${c.m ?? '?'} Might`));
+      b.setAttribute('aria-pressed', String(c.k === deck.champ));
+      b.addEventListener('click', () => { deck.champ = deck.champ === c.k ? '' : c.k; update(); });
+      return el('li', {}, b);
+    }));
+    // Step 3: how many of each type are in the deck, on the type buttons.
+    const inDeck = (t: string) => t === 'Battlefield' ? `${deck.bf.length}/3` : t === 'Rune' ? `${runeCount()}/12`
+      : t ? String(Object.entries(deck.main).filter(([k]) => byKey.get(k)?.t === t).reduce((a, [, q]) => a + q, 0) || '') : '';
+    for (const sm of document.querySelectorAll<HTMLElement>('[data-db-tcount]')) sm.textContent = L ? inDeck(sm.dataset.dbTcount ?? '') : '';
+    // Step 4: progress towards 40 cards.
+    const n = mainCount();
+    progressEl.style.width = `${Math.min(100, (n / 40) * 100)}%`;
+    progressEl.classList.toggle('is-full', n >= 40);
+    progressText.textContent = n >= 40 ? `${n} cards in the main deck` : `${n} of 40 cards in the main deck`;
     checksEl.replaceChildren(...checks().map((c) => el('li', { className: c.ok ? 'ok' : 'no' }, `${c.ok ? '✓' : '✗'} ${c.text}`)));
     const groups: [string, [string, number][], 'main' | 'bf' | 'runes'][] = [
       ['Units', Object.entries(deck.main).filter(([k]) => byKey.get(k)?.t === 'Unit'), 'main'],
@@ -282,7 +353,7 @@ const legends = LEGENDS.map((l) => ({ k: `${l.set}-${l.number}`, n: l.name, d: l
     const act = b.dataset.dbAct;
     if (act === 'share') copy(location.href, 'Share link copied. Anyone who opens it sees this deck.');
     if (act === 'text') copy(asText(), 'Deck list copied as text.');
-    if (act === 'clear') { deck = { legend: '', champ: '', main: {}, bf: [], runes: {} }; legendSel.value = ''; filterPool(); update(); say('Started a new deck.'); }
+    if (act === 'clear') { deck = { legend: '', champ: '', main: {}, bf: [], runes: {} }; browsing = false; filterPool(); update(); say('Started a new deck.'); $('#pick-legend').scrollIntoView(); }
     if (act === 'save') {
       if (!deck.legend) return say('Pick a Legend first.');
       const fallback = `${byKey.get(deck.legend)!.n.split(',')[0]} deck`;
@@ -296,17 +367,31 @@ const legends = LEGENDS.map((l) => ({ k: `${l.set}-${l.number}`, n: l.name, d: l
   savedSel.addEventListener('change', () => {
     const s = readSaved()[savedSel.value];
     if (!s) return;
-    deck = decode(s); legendSel.value = deck.legend; filterPool(); update(); say(`Opened "${savedSel.value}".`);
+    deck = decode(s); browsing = false; filterPool(); update(); say(`Opened "${savedSel.value}".`);
   });
-  legendSel.addEventListener('change', () => {
-    deck.legend = legendSel.value;
-    // Keep only the cards that still fit the new Legend.
-    const L = legend();
+  // Step 1: the Legend gallery. Tapping a Legend picks it; the search box and colour buttons narrow the list.
+  document.querySelectorAll<HTMLButtonElement>('[data-db-pick]').forEach((b) => b.addEventListener('click', () => {
+    const changed = deck.legend !== b.dataset.dbPick;
+    deck.legend = b.dataset.dbPick!;
+    browsing = false;
+    // A champion from the old Legend doesn't fit the new one. Other cards stay, and the checklist flags any misfits.
     const champ = byKey.get(deck.champ);
-    if (!L || !champ || !tagMatch(champ)) deck.champ = '';
+    if (!champ || !tagMatch(champ)) deck.champ = '';
     filterPool(); update();
-  });
-  champSel.addEventListener('change', () => { deck.champ = champSel.value; update(); });
+    if (changed) $('#pick-champ').scrollIntoView({ behavior: 'smooth' });
+  }));
+  function filterLegends() {
+    const q = norm(legendQ.value.trim());
+    for (const li of document.querySelectorAll<HTMLElement>('.db-lgrid li')) {
+      li.hidden = (!!q && !norm(li.dataset.name ?? '').includes(q)) || (!!legendColour && !(li.dataset.domains ?? '').split(' ').includes(legendColour));
+    }
+  }
+  legendQ.addEventListener('input', filterLegends);
+  document.querySelectorAll<HTMLButtonElement>('[data-db-ld]').forEach((b) => b.addEventListener('click', () => {
+    legendColour = b.dataset.dbLd ?? '';
+    document.querySelectorAll('[data-db-ld]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    filterLegends();
+  }));
   filters.addEventListener('input', filterPool);
   filters.addEventListener('submit', (e) => { e.preventDefault(); filterPool(); });
   more.addEventListener('click', () => renderPool(false));
@@ -316,7 +401,6 @@ const legends = LEGENDS.map((l) => ({ k: `${l.set}-${l.number}`, n: l.name, d: l
     .then((data: Card[]) => {
       cards = data; byKey = new Map(data.map((c) => [c.k, c]));
       if (location.hash.length > 1) deck = decode(location.hash.slice(1));
-      legendSel.value = deck.legend;
       renderSaved(); filterPool(); update();
     })
     .catch(() => { countEl.textContent = 'Sorry, the card list did not load. Please refresh the page.'; });
@@ -324,56 +408,95 @@ const legends = LEGENDS.map((l) => ({ k: `${l.set}-${l.number}`, n: l.name, d: l
 
 <style>
   .db-preview { display: inline-block; padding: 2px 10px; border-radius: 999px; background: var(--mark); color: #1b1a1f; font-weight: 800; font-size: .8rem; }
-  .db-top { display: grid; gap: 12px; margin-bottom: 18px; }
-  .db-legend { display: grid; gap: 4px; font-weight: 800; min-width: 0; }
-  .db-legend select, .db-champ select { width: 100%; min-width: 0; }
-  .db-legend select, .db-champ select, .db-actions select, .db-filters input[type='search'] { padding: 8px 12px; border: 2px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--ink); font: inherit; font-size: .95rem; max-width: 100%; }
-  .db-actions { display: flex; flex-wrap: wrap; gap: 8px; }
-  .db-actions button, .db-more { padding: 7px 14px; border: 2px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); font: inherit; font-weight: 700; font-size: .85rem; cursor: pointer; }
-  .db-actions button:hover { background: var(--mark); color: #1b1a1f; }
-  .db-ghost { opacity: .75; }
-  .db-status { min-height: 1.3em; margin: 0; font-size: .9rem; font-weight: 700; color: var(--c1); }
-  .db-layout { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 24px; align-items: start; }
-  .db-pool h2, .db-deck h2 { margin: 0 0 10px; font-size: 1.2rem; }
-  .db-filters { display: grid; gap: 8px; margin-bottom: 8px; }
-  .db-q input { width: 100%; }
+  .db-sec { margin-bottom: 36px; }
+  .db-sec h2 { margin: 0 0 10px; font-size: 1.35rem; }
+  .db-hint { margin: 0 0 12px; color: var(--muted); font-size: .92rem; }
+  /* Step 1: Legend gallery */
+  .db-lfilters { display: grid; gap: 10px; margin-bottom: 14px; }
+  .db-lq input, .db-filters input[type='search'], .db-actions select { width: 100%; min-height: 44px; padding: 8px 12px; border: 2px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--ink); font: inherit; font-size: .95rem; }
+  .db-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .db-chips button { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 12px; border: 2px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); font: inherit; font-weight: 700; font-size: .85rem; cursor: pointer; }
+  .db-chips i { width: 10px; height: 10px; border-radius: 50%; }
+  .db-chips button[aria-pressed='true'] { background: var(--c1); border-color: var(--c1); color: #fff; }
+  .db-lgrid, .db-champs { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 14px; }
+  .db-lgrid li[hidden] { display: none; }
+  .db-lgrid button, .db-champs :global(button) { display: grid; gap: 3px; width: 100%; padding: 0; border: 0; background: none; color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
+  .db-lgrid img, .db-champs :global(img) { width: 100%; height: auto; aspect-ratio: 200 / 279; border-radius: 10px; background: var(--surface); box-shadow: var(--lift); transition: transform .15s; outline: 3px solid transparent; outline-offset: 2px; }
+  .db-lgrid button:hover img, .db-champs :global(button:hover img) { transform: translateY(-3px); }
+  .db-lgrid button[aria-pressed='true'] img, .db-champs :global(button[aria-pressed='true'] img) { outline-color: var(--c2); }
+  .db-lgrid strong, .db-champs :global(strong) { font-size: .85rem; line-height: 1.2; margin-top: 4px; }
+  .db-lgrid span, .db-champs :global(span) { display: flex; flex-wrap: wrap; gap: 4px; font-size: .74rem; color: var(--muted); }
+  .db-lgrid em { font-style: normal; font-weight: 700; padding: 0 7px; border-radius: 999px; background: var(--dc); color: #fff; }
+  .db-champs { grid-template-columns: repeat(auto-fill, minmax(150px, 180px)); }
+  .db-champs :global(button[aria-pressed='true'] strong::before) { content: '✓ '; color: var(--c1); }
+  .db-chosen { display: flex; align-items: center; gap: 16px; padding: 12px; border: 2px solid var(--line); border-radius: 16px; background: var(--surface); box-shadow: var(--lift); max-width: 560px; }
+  .db-chosen[hidden], .db-legends[hidden] { display: none; }
+  .db-chosen :global(img) { width: 90px; height: auto; border-radius: 8px; }
+  .db-chosen :global(div) { display: grid; gap: 4px; justify-items: start; }
+  .db-chosen :global(strong) { font-family: var(--display); font-size: 1.2rem; }
+  .db-chosen :global(span) { color: var(--muted); font-size: .9rem; }
+  .db-chosen :global(.db-change), .db-actions button, .db-more { min-height: 40px; padding: 0 16px; border: 2px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); font: inherit; font-weight: 700; font-size: .88rem; cursor: pointer; }
+  .db-chosen :global(.db-change:hover), .db-actions button:hover { background: var(--mark); color: #1b1a1f; }
+  /* Step 3: card pool */
+  .db-layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 28px; align-items: start; }
+  .db-filters { display: grid; gap: 10px; margin-bottom: 10px; }
   .db-types { display: flex; flex-wrap: wrap; gap: 6px; }
-  .db-types label { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border: 2px solid var(--line); border-radius: 999px; font-size: .82rem; font-weight: 700; background: var(--surface); cursor: pointer; }
-  .db-types label:has(input:checked) { background: var(--mark); color: #1b1a1f; }
+  .db-types label { display: inline-flex; align-items: center; gap: 6px; min-height: 38px; padding: 0 14px; border: 2px solid var(--line); border-radius: 999px; font-size: .88rem; font-weight: 700; background: var(--surface); cursor: pointer; }
+  .db-types label:has(input:checked) { background: var(--c1); border-color: var(--c1); color: #fff; }
+  .db-types label:has(input:focus-visible) { outline: 3px solid var(--c2); outline-offset: 2px; }
+  .db-types small { font-size: .75rem; font-weight: 800; opacity: .8; }
+  .db-types small:empty { display: none; }
   .db-types input { position: absolute; opacity: 0; pointer-events: none; }
-  .db-count { color: var(--muted); font-size: .88rem; }
-  .db-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
+  .db-count { color: var(--muted); font-size: .88rem; margin: 0 0 12px; }
+  .db-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(124px, 1fr)); gap: 14px; }
   .db-grid li { position: relative; }
   .db-grid :global(.db-add) { display: grid; gap: 3px; width: 100%; padding: 0; border: 0; background: none; color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
-  .db-grid :global(.db-add img) { width: 100%; height: auto; aspect-ratio: 200 / 279; object-fit: cover; border-radius: 9px; background: var(--surface); box-shadow: var(--lift); }
+  .db-grid :global(.db-add img) { width: 100%; height: auto; aspect-ratio: 200 / 279; object-fit: cover; border-radius: 9px; background: var(--surface); box-shadow: var(--lift); transition: transform .15s; }
+  .db-grid :global(.db-add:hover img) { transform: translateY(-3px); }
   .db-grid :global(.db-wide .db-add img) { aspect-ratio: 279 / 200; }
   .db-grid :global(.db-add strong) { font-size: .82rem; line-height: 1.2; }
   .db-grid :global(.db-add span) { font-size: .72rem; color: var(--muted); }
-  .db-grid :global(.db-have), .db-grid :global(.db-ban) { position: absolute; top: 6px; left: 6px; padding: 1px 8px; border-radius: 999px; background: var(--c1); color: #fff; font-size: .8rem; }
-  .db-grid :global(.db-ban) { left: auto; right: 34px; background: #b42318; }
-  .db-grid :global(.db-info) { position: absolute; top: 4px; right: 4px; width: 26px; height: 26px; display: grid; place-items: center; border-radius: 50%; background: var(--surface); color: var(--ink); font-size: .9rem; text-decoration: none; box-shadow: var(--lift); }
+  .db-grid :global(.db-have), .db-grid :global(.db-ban) { position: absolute; top: 6px; left: 6px; padding: 1px 8px; border-radius: 999px; background: var(--c1); color: #fff; font-size: .82rem; box-shadow: var(--lift); }
+  .db-grid :global(.db-ban) { left: auto; right: 36px; background: #b42318; }
+  .db-grid :global(.db-minus) { position: absolute; top: 34px; left: 6px; width: 30px; height: 30px; padding: 0; border: 2px solid #fff; border-radius: 50%; background: #1b1a1f; color: #fff; font-weight: 800; font-size: 1.1rem; line-height: 1; cursor: pointer; box-shadow: var(--lift); }
+  .db-grid :global(.db-info) { position: absolute; top: 4px; right: 4px; width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; background: var(--surface); color: var(--ink); font-size: .9rem; text-decoration: none; box-shadow: var(--lift); }
   .db-more { margin: 14px auto 0; display: block; }
   .db-more[hidden] { display: none; }
-  .db-deck { position: sticky; top: 76px; max-height: calc(100vh - 90px); overflow: auto; padding: 14px; border: 2px solid var(--line); border-radius: 16px; background: var(--surface); }
-  .db-legend-pic :global(img) { width: 120px; height: auto; border-radius: 8px; margin-bottom: 8px; }
-  .db-champ { display: grid; gap: 4px; font-weight: 700; font-size: .88rem; margin-bottom: 10px; }
+  /* Step 4: the deck panel */
+  .db-deck { position: sticky; top: calc(var(--header-h) + 84px); max-height: calc(100vh - var(--header-h) - 100px); overflow: auto; padding: 16px; border: 2px solid var(--line); border-radius: 16px; background: var(--surface); box-shadow: var(--lift); }
+  .db-deck h2 { margin: 0 0 10px; font-size: 1.25rem; }
+  .db-progress { height: 10px; border-radius: 999px; background: var(--bg); border: 1px solid var(--line); overflow: hidden; }
+  .db-progress span { display: block; height: 100%; width: 0; background: var(--c1); transition: width .2s; }
+  .db-progress span.is-full { background: #1f9d55; }
+  .db-progress-text { margin: 6px 0 10px; font-size: .85rem; font-weight: 700; }
   .db-checks { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 4px; font-size: .84rem; }
   .db-checks :global(.ok) { color: #1f7a45; }
   .db-checks :global(.no) { color: #b42318; font-weight: 700; }
   :global([data-theme='dark']) .db-checks :global(.ok) { color: #6fd39a; }
   :global([data-theme='dark']) .db-checks :global(.no) { color: #ff8a80; }
-  .db-deck :global(.db-group h3) { margin: 12px 0 4px; font-size: .9rem; }
-  .db-deck :global(.db-group ul) { list-style: none; margin: 0; padding: 0; display: grid; gap: 3px; }
+  .db-deck :global(.db-group h3) { margin: 14px 0 6px; font-size: .9rem; }
+  .db-deck :global(.db-group ul) { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
   .db-deck :global(.db-group li) { display: flex; align-items: center; gap: 6px; font-size: .86rem; }
-  .db-deck :global(.db-step) { width: 24px; height: 24px; border: 2px solid var(--line); border-radius: 50%; background: var(--surface); color: var(--ink); font-weight: 800; line-height: 1; cursor: pointer; padding: 0; }
+  .db-deck :global(.db-thumb) { width: 22px; height: 30px; object-fit: cover; border-radius: 4px; flex: none; }
+  .db-deck :global(.db-thumb.is-wide) { width: 42px; }
+  .db-deck :global(.db-step) { flex: none; width: 28px; height: 28px; border: 2px solid var(--line); border-radius: 50%; background: var(--surface); color: var(--ink); font-weight: 800; line-height: 1; cursor: pointer; padding: 0; }
   .db-deck :global(.db-q) { min-width: 1.2em; text-align: center; font-weight: 800; }
+  .db-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; padding-top: 14px; border-top: 2px solid var(--line); }
+  .db-actions select { min-height: 40px; flex: 1 1 100%; }
+  .db-ghost { opacity: .75; }
+  .db-status { min-height: 1.3em; margin: 8px 0 0; font-size: .88rem; font-weight: 700; color: var(--c1); }
   .db-bar { display: none; }
   .db-help { margin-top: 36px; max-width: 80ch; font-size: .92rem; }
   @media (max-width: 860px) {
     .db-layout { grid-template-columns: 1fr; }
     .db-deck { position: static; max-height: none; }
-    .db-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
-    .db-bar { display: block; position: sticky; bottom: 10px; z-index: 5; margin-top: 12px; text-align: center; }
-    .db-bar a { display: inline-block; padding: 8px 18px; border-radius: 999px; background: var(--c1); color: #fff; font-weight: 800; box-shadow: var(--lift); text-decoration: none; }
+    .db-grid, .db-lgrid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    .db-champs { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    .db-types { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: -4px; padding: 2px 4px; }
+    .db-types label { flex: none; }
+    .db-bar { display: flex; position: sticky; bottom: 10px; z-index: 30; margin-top: 12px; justify-content: center; gap: 8px; }
+    .db-bar a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; background: var(--surface); color: var(--ink); border: 2px solid var(--line); font-weight: 800; box-shadow: var(--lift); text-decoration: none; }
+    .db-bar .db-bar-deck { background: var(--c1); border-color: var(--c1); color: #fff; }
   }
+  @media (prefers-reduced-motion: reduce) { .db-lgrid img, .db-champs :global(img), .db-grid :global(.db-add img), .db-progress span { transition: none; } }
 </style>

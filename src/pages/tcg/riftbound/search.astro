@@ -68,7 +68,7 @@ const domains = Object.keys(DOMAIN_COLOURS).filter((d) => RB_CARDS.some((c) => c
     const li = document.createElement('li');
     if (r.w) li.className = 'rs-wide';
     const a = document.createElement('a');
-    a.href = r.u;
+    a.href = `${r.u}?from=search`;
     const img = document.createElement('img');
     img.src = r.i; img.alt = `${r.n}, Riftbound card`; img.loading = 'lazy'; img.decoding = 'async';
     img.width = r.w ? 280 : 200; img.height = r.w ? 200 : 279;
@@ -126,6 +126,11 @@ const domains = Object.keys(DOMAIN_COLOURS).filter((d) => RB_CARDS.some((c) => c
       form.addEventListener('change', apply);
       form.addEventListener('submit', (e) => { e.preventDefault(); apply(); });
       more.addEventListener('click', () => render(false));
+      // Remember these results, so the card page's Next/Previous buttons walk through them in this order.
+      grid.addEventListener('click', (e) => {
+        if (!(e.target as Element).closest('a')) return;
+        try { sessionStorage.setItem('rb-search', JSON.stringify({ q: location.search, list: hits.map((r) => ({ u: r.u, n: r.n })) })); } catch {}
+      });
       apply();
     })
     .catch(() => { count.textContent = 'Sorry, the card list did not load. Please refresh the page.'; });
