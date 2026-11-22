@@ -134,6 +134,7 @@ const sources = [...new Set([f.url, ...(g?.sources ?? []), ...(sameDeck ? [sameD
           ))}
         </div>
         <p class="f-source">From games logged on <a href={UM_MATCHUP_SOURCE.url}>{UM_MATCHUP_SOURCE.name}</a> (checked {UM_MATCHUP_SOURCE.checked}). We only count {name}'s 10 most-played opponents, and only pairs with {UM_MATCHUP_SOURCE.minGames} or more games. "Good" means {name} won at least 55%, "tough" means 45% or less. These are players of every skill level, so a good player can still win a tough matchup.</p>
+        <p class="f-versus"><a href={`/boardgames/unmatched/versus?a=${f.id}`}>Pick any opponent for {name} in Versus →</a></p>
       </>
     ) : (
       <p class="f-empty">{f.id === 'bruce-lee-2' ? 'Our matchup source lists only one Bruce Lee, and it doesn\'t say which version, so we\'re not guessing for the 2025 one. Check the original Bruce Lee\'s page for a rough idea.' : `We don't have matchup numbers for ${name} yet.`}</p>
@@ -233,6 +234,7 @@ const sources = [...new Set([f.url, ...(g?.sources ?? []), ...(sameDeck ? [sameD
   .f-tier p { margin: 0; }
   .f-tier-S { --tc: #ff7b72; } .f-tier-A { --tc: #ffb36b; } .f-tier-B { --tc: #ffe06b; } .f-tier-C { --tc: #b9e66f; } .f-tier-D { --tc: #8fd3f4; }
   .f-source { color: var(--muted); font-size: .82rem; margin: 8px 0 0; }
+  .f-versus { margin: 12px 0 0; font-weight: 800; }
   .f-tips { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
   .f-combos { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
   .f-combos li { display: grid; gap: 2px; padding: 12px 14px; border: 2px solid var(--line); border-radius: 14px; background: var(--surface); }

@@ -1,0 +1,292 @@
+---
+// /boardgames/unmatched/versus: pick any two Unmatched fighters and see who wins more often, plus their decks side by side.
+// - Odds: if the two have met in 20+ real games on Tabletop League, we show that record (the same numbers as the
+//   "Good and tough matchups" box on each fighter page). If not, a rough estimate from each fighter's overall
+//   win rate (the "log5" formula). Fighters with no stats at all get "no odds" instead of a guess.
+// - Head-to-head data: src/data/unmatched-versus.json. Fighter stats: src/data/unmatched.ts. Deck counts are worked
+//   out from the card lists in src/data/unmatched-cards.json while the site builds.
+// - A matchup can be shared: /boardgames/unmatched/versus?a=medusa&b=houdini
+import Base from '../../../layouts/Base.astro';
+import Disclaimer from '../../../components/unmatched/Disclaimer.astro';
+import { UM_FIGHTERS, UM_SETS } from '../../../data/unmatched';
+import { setOf, displayName, fighterUrl, fighterColor } from '../../../lib/unmatched';
+import { deckOf } from '../../../lib/unmatched-cards';
+import versus from '../../../data/unmatched-versus.json';
+
+const SRC = versus.source;
+const overall = versus.overall as Record<string, { plays: number; win: number }>;
+const round1 = (n: number) => Math.round(n * 10) / 10;
+
+function deckStats(id: string) {
+  const cards = deckOf(id)?.cards;
+  if (!cards?.length) return null;
+  const count = (t: string) => cards.filter((c) => c.type === t).reduce((n, c) => n + c.qty, 0);
+  // Average printed value, counting every copy; cards with no printed number are left out.
+  const avg = (pick: (c: (typeof cards)[number]) => number | null, types: string[]) => {
+    let sum = 0, n = 0;
+    for (const c of cards) {
+      const v = pick(c);
+      if (!types.includes(c.type) || v == null) continue;
+      sum += v * c.qty; n += c.qty;
+    }
+    return n ? round1(sum / n) : null;
+  };
+  return {
+    total: cards.reduce((n, c) => n + c.qty, 0),
+    attack: count('attack'), defense: count('defense'), versatile: count('versatile'), scheme: count('scheme'),
+    atk: avg((c) => c.value, ['attack', 'versatile']),
+    dfn: avg((c) => c.value, ['defense', 'versatile']),
+    boost: avg((c) => c.boost, ['attack', 'defense', 'versatile', 'scheme']),
+  };
+}
+
+const sidekickText = (f: (typeof UM_FIGHTERS)[number]) => {
+  const sk = f.sidekick;
+  if (!sk) return 'None';
+  const many = sk.count != null && sk.count > 1;
+  return [many ? `${sk.count} × ${sk.name}` : sk.name, sk.health != null ? `${sk.health} health${many ? ' each' : ''}` : null].filter(Boolean).join(', ');
+};
+
+// Everything the page script needs, kept small: one row per fighter.
+const fighters = UM_FIGHTERS.map((f) => ({
+  id: f.id, n: displayName(f), s: setOf(f).short, u: fighterUrl(f), c: fighterColor(f),
+  hp: f.health, mv: f.move, at: f.attack, sk: sidekickText(f), ab: f.ability,
+  t: f.tier?.tier ?? null, o: overall[f.id] ?? null, d: deckStats(f.id),
+}));
+const data = { fighters, h2h: versus.h2h, min: SRC.minGames };
+
+// The pickers, grouped by box (oldest box first, like the shelves in a shop).
+const groups = [...UM_SETS]
+  .sort((a, b) => a.released.localeCompare(b.released))
+  .map((s) => ({ name: s.short, list: UM_FIGHTERS.filter((f) => f.set === s.id).map((f) => ({ id: f.id, n: displayName(f) })) }))
+  .filter((g) => g.list.length);
+const A = 'medusa', B = 'houdini';
+---
+<Base title="Unmatched Versus: who wins, fighter vs fighter" description="Pick any two Unmatched fighters and see who wins more often in real games, plus their health, sidekicks and decks side by side.">
+  <header class="page-head">
+    <p class="kicker"><a class="tag" href="/boardgames/unmatched">Unmatched</a></p>
+    <h1 class="vs-h1">Unmatched <span class="vs-word">Versus</span></h1>
+    <p>Pick two fighters to see who wins more often, and how their decks stack up. We use real game results whenever there are enough of them.</p>
+  </header>
+
+  <div class="vs-tool" data-vs={JSON.stringify(data)}>
+    <div class="vs-pick">
+      <label class="vs-side vs-a">
+        <span>Blue corner</span>
+        <select data-vs-a>
+          {groups.map((g) => <optgroup label={g.name}>{g.list.map((f) => <option value={f.id} selected={f.id === A}>{f.n}</option>)}</optgroup>)}
+        </select>
+      </label>
+      <div class="vs-buttons">
+        <button type="button" data-vs-swap aria-label="Swap the two fighters">⇄ Swap</button>
+        <button type="button" data-vs-random>🎲 Random</button>
+      </div>
+      <label class="vs-side vs-b">
+        <span>Orange corner</span>
+        <select data-vs-b>
+          {groups.map((g) => <optgroup label={g.name}>{g.list.map((f) => <option value={f.id} selected={f.id === B}>{f.n}</option>)}</optgroup>)}
+        </select>
+      </label>
+    </div>
+
+    <section class="vs-verdict" aria-live="polite">
+      <div class="vs-row vs-names">
+        <a data-vs-na href="#"></a>
+        <a data-vs-nb href="#"></a>
+      </div>
+      <div class="vs-row vs-pcts">
+        <strong data-vs-pa></strong>
+        <strong data-vs-pb></strong>
+      </div>
+      <div class="vs-bar" aria-hidden="true"><i data-vs-bar></i></div>
+      <p class="vs-basis"><span class="vs-tag" data-vs-tag></span> <span data-vs-text></span></p>
+      <noscript><p>Turn on JavaScript to pick fighters. Every fighter's own page lists their best and worst matchups.</p></noscript>
+    </section>
+
+    <section class="vs-sheet" aria-label="Side-by-side stats">
+      <h2>Side by side</h2>
+      <dl data-vs-rows></dl>
+      <div class="vs-legend" aria-hidden="true">
+        <span><i class="k-atk"></i>Attack</span><span><i class="k-def"></i>Defense</span><span><i class="k-ver"></i>Versatile</span><span><i class="k-sch"></i>Scheme</span>
+      </div>
+      <p class="vs-small">Versatile cards work for attack <em>and</em> defense, so they count in both. A <b>bold ▲</b> number is the bigger one, which isn't always the better one.</p>
+    </section>
+  </div>
+
+  <section class="vs-how">
+    <h2>How the odds work</h2>
+    <p>If the two fighters have met in {SRC.minGames} or more games logged on <a href={SRC.url}>{SRC.name}</a>, you see their real record. These are the same numbers as the "Good and tough matchups" box on each fighter's page.</p>
+    <p>If they haven't, we estimate from each fighter's overall win rate on {SRC.name}, using a formula called "log5". It knows nothing about how their cards work against each other, so treat it as a rough guide. Who's playing matters more than any number here.</p>
+    <p class="vs-small">Win rates checked {SRC.checked}, from each fighter's 10 most-played opponents. The 2025 Bruce Lee has no stats of his own yet. Deck counts come from the card lists on <a href="https://www.the-unmatched.club/">The Unmatched Club</a> (fan site). The Bruce Lee (2025) deck uses the 2019 card list.</p>
+  </section>
+
+  <Disclaimer />
+</Base>
+
+<script>
+  type Deck = { total: number; attack: number; defense: number; versatile: number; scheme: number; atk: number | null; dfn: number | null; boost: number | null };
+  type F = { id: string; n: string; s: string; u: string; c: string; hp: number | null; mv: number | null; at: string | null; sk: string; ab: string; t: string | null; o: { plays: number; win: number } | null; d: Deck | null };
+  type Data = { fighters: F[]; h2h: Record<string, [number, number]>; min: number };
+
+  const root = document.querySelector<HTMLElement>('[data-vs]');
+  if (root) {
+    const data: Data = JSON.parse(root.dataset.vs!);
+    const byId = new Map(data.fighters.map((f) => [f.id, f]));
+    const q = <T extends Element>(s: string) => root.querySelector<T>(s)!;
+    const selA = q<HTMLSelectElement>('[data-vs-a]');
+    const selB = q<HTMLSelectElement>('[data-vs-b]');
+    const cap = (s: string | null) => (s ? s[0].toUpperCase() + s.slice(1) : null);
+    const pct = (x: number) => `${Math.round(x * 10) / 10}%`;
+    const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+
+    function odds(a: F, b: F): { p: number | null; kind: 'real' | 'est' | 'none'; text: string } {
+      if (a.id === b.id) return { p: 0.5, kind: 'none', text: "Same fighter on both sides: it's a mirror match, so it's a coin flip." };
+      const r = data.h2h[`${a.id}|${b.id}`];
+      if (r) {
+        const g = r[0] + r[1];
+        return { p: r[0] / g, kind: 'real', text: `${a.n} won ${r[0]} and lost ${r[1]} of ${g} logged games against ${b.n}.` };
+      }
+      if (!a.o || !b.o) {
+        const who = !a.o ? a : b;
+        return { p: null, kind: 'none', text: `${who.n} doesn't have enough logged games yet, so we can't give odds.` };
+      }
+      const pa = a.o.win / 100, pb = b.o.win / 100;
+      const p = (pa * (1 - pb)) / (pa * (1 - pb) + pb * (1 - pa));
+      return { p, kind: 'est', text: `These two haven't met in ${data.min}+ logged games, so this is an estimate from their overall win rates: ${a.n} ${pct(a.o.win)}, ${b.n} ${pct(b.o.win)}.` };
+    }
+
+    // Pie of the deck: attack, defense, versatile, scheme as one striped bar.
+    const mix = (d: Deck | null) => d
+      ? `<span class="vs-mix" title="${d.attack} attack, ${d.defense} defense, ${d.versatile} versatile, ${d.scheme} scheme">${(['attack', 'defense', 'versatile', 'scheme'] as const)
+          .map((k, i) => `<i class="${['k-atk', 'k-def', 'k-ver', 'k-sch'][i]}" style="width:${(d[k] / d.total) * 100}%"></i>`).join('')}</span>`
+      : '–';
+
+    // One stat row. `more` = 1 bolds the bigger number.
+    function row(label: string, va: string | number | null | undefined, vb: string | number | null | undefined, more = 0, wide = false) {
+      let wa = '', wb = '';
+      if (more && typeof va === 'number' && typeof vb === 'number' && va !== vb) (va > vb ? (wa = ' win') : (wb = ' win'));
+      const show = (v: string | number | null | undefined) => (v == null || v === '' ? '–' : esc(String(v)));
+      return `<div class="vs-stat${wide ? ' wide' : ''}"><dt>${label}</dt><dd class="a${wa}">${show(va)}</dd><dd class="b${wb}">${show(vb)}</dd></div>`;
+    }
+
+    function render(push = true) {
+      const a = byId.get(selA.value)!, b = byId.get(selB.value)!;
+      const o = odds(a, b);
+      const na = q<HTMLAnchorElement>('[data-vs-na]'), nb = q<HTMLAnchorElement>('[data-vs-nb]');
+      na.textContent = a.n; na.href = a.u; nb.textContent = b.n; nb.href = b.u;
+      q('[data-vs-pa]').textContent = o.p == null ? '?' : pct(o.p * 100);
+      q('[data-vs-pb]').textContent = o.p == null ? '?' : pct((1 - o.p) * 100);
+      q<HTMLElement>('[data-vs-bar]').style.width = `${o.p == null ? 50 : o.p * 100}%`;
+      const tag = q<HTMLElement>('[data-vs-tag]');
+      tag.textContent = { real: 'Real games', est: 'Estimate', none: 'No odds' }[o.kind];
+      tag.className = `vs-tag vs-${o.kind}`;
+      q('[data-vs-text]').textContent = o.text;
+
+      const da = a.d, db = b.d;
+      q('[data-vs-rows]').innerHTML = [
+        row('Box', a.s, b.s),
+        row('Tier', a.t, b.t),
+        row('Health', a.hp, b.hp, 1),
+        row('Move', a.mv, b.mv, 1),
+        row('Attack', cap(a.at), cap(b.at)),
+        row('Sidekick', a.sk, b.sk),
+        row('Special ability', a.ab, b.ab, 0, true),
+        `<div class="vs-stat"><dt>Deck mix</dt><dd class="a">${mix(da)}</dd><dd class="b">${mix(db)}</dd></div>`,
+        row('Cards in deck', da?.total, db?.total),
+        row('Attack cards', da ? da.attack + da.versatile : null, db ? db.attack + db.versatile : null, 1),
+        row('Defense cards', da ? da.defense + da.versatile : null, db ? db.defense + db.versatile : null, 1),
+        row('Schemes', da?.scheme, db?.scheme),
+        row('Average attack', da?.atk, db?.atk, 1),
+        row('Average defense', da?.dfn, db?.dfn, 1),
+        row('Average boost', da?.boost, db?.boost, 1),
+      ].join('');
+
+      // Keep the address in step, so the matchup can be shared or bookmarked.
+      if (push) {
+        const url = new URL(location.href);
+        url.searchParams.set('a', a.id); url.searchParams.set('b', b.id);
+        history.replaceState(null, '', url);
+      }
+    }
+
+    // Start from the address (?a=...&b=...) when it names real fighters.
+    const params = new URLSearchParams(location.search);
+    const pa = params.get('a'), pb = params.get('b');
+    if (pa && byId.has(pa)) selA.value = pa;
+    if (pb && byId.has(pb)) selB.value = pb;
+
+    selA.addEventListener('change', () => render());
+    selB.addEventListener('change', () => render());
+    q('[data-vs-swap]').addEventListener('click', () => { [selA.value, selB.value] = [selB.value, selA.value]; render(); });
+    q('[data-vs-random]').addEventListener('click', () => {
+      const ids = data.fighters.map((f) => f.id);
+      const i = Math.floor(Math.random() * ids.length);
+      let j = i;
+      while (j === i) j = Math.floor(Math.random() * ids.length);
+      selA.value = ids[i]; selB.value = ids[j]; render();
+    });
+    render(!!(pa || pb));
+  }
+</script>
+
+<style>
+  .vs-h1 { flex-wrap: wrap; column-gap: .25em; row-gap: 0; }
+  .vs-word { text-decoration: underline; text-decoration-color: var(--c2, #f3701e); text-decoration-thickness: .12em; text-underline-offset: .1em; }
+  .vs-tool { --va: var(--c1, #4b607f); --vb: var(--c2, #f3701e); display: grid; gap: 16px; margin-top: 20px; }
+
+  /* Pickers: stacked on phones, face to face on wider screens. */
+  .vs-pick { display: grid; gap: 10px; }
+  .vs-side { display: grid; gap: 4px; }
+  .vs-side span { font-weight: 800; font-size: .85rem; }
+  .vs-side select { width: 100%; min-height: 46px; font: inherit; font-weight: 700; padding: 8px 12px; border-radius: 12px; border: 3px solid var(--line); background: var(--surface); color: var(--ink); }
+  .vs-a select { border-color: var(--va); }
+  .vs-b select { border-color: var(--vb); }
+  .vs-buttons { display: flex; gap: 8px; justify-content: center; }
+  .vs-buttons button { min-height: 44px; font: inherit; font-weight: 800; padding: 8px 16px; border-radius: 999px; border: 2px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+  .vs-buttons button:hover { background: var(--surface-2); }
+  @media (min-width: 640px) {
+    .vs-pick { grid-template-columns: 1fr auto 1fr; align-items: end; }
+    .vs-buttons { flex-direction: column; }
+  }
+
+  /* The verdict: two names, two percentages and a tug-of-war bar. */
+  .vs-verdict { display: grid; gap: 10px; padding: 16px; border: 2px solid var(--line); border-radius: 16px; background: var(--surface); }
+  .vs-row { display: flex; justify-content: space-between; gap: 12px; }
+  .vs-names a { font-family: var(--display); font-weight: 800; font-size: clamp(1.05rem, 3.5vw, 1.4rem); line-height: 1.15; color: var(--ink); text-decoration-color: var(--va); text-decoration-thickness: 3px; text-underline-offset: 4px; }
+  .vs-names a + a { text-align: right; text-decoration-color: var(--vb); }
+  .vs-pcts strong { font-family: var(--display); font-size: clamp(2rem, 9vw, 3rem); line-height: 1; font-variant-numeric: tabular-nums; }
+  .vs-bar { position: relative; height: 18px; border-radius: 999px; background: var(--vb); border: 2px solid var(--line); overflow: hidden; }
+  .vs-bar i { display: block; height: 100%; background: var(--va); transition: width .4s ease; }
+  .vs-bar::after { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: var(--surface); }
+  @media (prefers-reduced-motion: reduce) { .vs-bar i { transition: none; } }
+  .vs-basis { margin: 0; font-size: .95rem; }
+  .vs-tag { display: inline-block; font-size: .75rem; font-weight: 800; padding: 2px 10px; border-radius: 999px; border: 2px solid var(--line); background: var(--surface-2); }
+  .vs-tag.vs-real { background: var(--va); color: #fff; }
+  .vs-tag.vs-est { background: var(--vb); color: #1b1a1f; }
+
+  /* Side-by-side sheet: label on its own line, blue fighter left, orange fighter right. Fits a phone without sideways scrolling. */
+  .vs-sheet { padding: 16px; border: 2px solid var(--line); border-radius: 16px; background: var(--surface); }
+  .vs-sheet h2 { margin: 0 0 8px; font-size: 1.2rem; }
+  .vs-sheet dl { margin: 0; }
+  .vs-sheet :global(.vs-stat) { display: grid; grid-template-columns: 1fr 1fr; column-gap: 16px; padding: 10px 0; border-top: 1px solid var(--soft-line); font-variant-numeric: tabular-nums; }
+  .vs-sheet :global(.vs-stat:first-child) { border-top: 0; }
+  .vs-sheet :global(dt) { grid-column: 1 / -1; text-align: center; font-size: .78rem; font-weight: 800; color: var(--muted); margin-bottom: 2px; }
+  .vs-sheet :global(dd) { margin: 0; overflow-wrap: anywhere; }
+  .vs-sheet :global(dd.b) { text-align: right; }
+  .vs-sheet :global(.vs-stat.wide dd) { font-size: .9rem; text-align: left; }
+  .vs-sheet :global(dd.win) { font-weight: 800; }
+  .vs-sheet :global(dd.win)::after { content: " ▲"; font-size: .7em; vertical-align: .15em; }
+  .vs-sheet :global(dd.a.win)::after { color: var(--va); }
+  .vs-sheet :global(dd.b.win)::after { color: var(--vb); }
+  .vs-sheet :global(.vs-mix) { display: flex; height: 12px; border-radius: 6px; overflow: hidden; margin-top: 4px; border: 1px solid var(--line); }
+  .vs-sheet :global(.vs-mix i) { display: block; height: 100%; }
+  .vs-sheet :global(.k-atk) { background: #d0573f; }
+  .vs-sheet :global(.k-def) { background: #3f78b5; }
+  .vs-sheet :global(.k-ver) { background: #8a6bb8; }
+  .vs-sheet :global(.k-sch) { background: #d9a21b; }
+  .vs-legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; font-size: .8rem; color: var(--muted); }
+  .vs-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 4px; vertical-align: -1px; }
+  .vs-small { color: var(--muted); font-size: .85rem; margin: 8px 0 0; }
+  .vs-how { margin-top: 32px; max-width: 75ch; }
+  .vs-how h2 { font-size: 1.2rem; }
+</style>
