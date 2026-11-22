@@ -37,6 +37,7 @@ const guides = UM_FIGHTERS.filter((f) => f.guide).length;
     { href: '#start', label: 'New? Start here' },
     { href: '#rules', label: 'Rules' },
     { href: '#tiers', label: 'Tier list' },
+    { href: '/boardgames/unmatched/versus', label: 'Versus' },
     { href: '#fighters', label: `All ${UM_FIGHTERS.length} fighters` },
     { href: '#next', label: 'Coming soon' },
   ]} />
@@ -97,7 +98,7 @@ const guides = UM_FIGHTERS.filter((f) => f.guide).length;
   <!-- Tier list -->
   <section id="tiers" class="um-section">
     <div class="section-head"><h2>Tier list</h2></div>
-    <p class="um-note">Ranked by each fighter's average win rate across all their matchups, from {UM_TIER_SOURCE.games.toLocaleString('en-GB')} online games played on {UM_TIER_SOURCE.from} (data as of {fmtDay(UM_TIER_SOURCE.asOf)}). Tiers show what wins most often, not what's most fun. A <span class="um-few">*</span> means the fighter hasn't played enough games yet for the number to mean much.</p>
+    <p class="um-note">Ranked by each fighter's average win rate across all their matchups, from {UM_TIER_SOURCE.games.toLocaleString('en-GB')} online games played on {UM_TIER_SOURCE.from} (data as of {fmtDay(UM_TIER_SOURCE.asOf)}). Tiers show what wins most often, not what's most fun. A <span class="um-few">*</span> means the fighter hasn't played enough games yet for the number to mean much. Want to know who wins one exact matchup? Try <a href="/boardgames/unmatched/versus">Versus</a>.</p>
     <div class="um-tiers">
       {TIERS.map((t) => (
         <div class={`um-tier um-tier-${t}`}>

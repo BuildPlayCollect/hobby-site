@@ -20,6 +20,7 @@ const PAGES: Entry[] = [
   { title: 'Which hobby fits you? (quiz)', summary: 'Five quick questions, one hobby match.', url: '/quiz/', kind: 'Tool', hobby: 'General' },
   { title: 'Typing test', summary: 'How fast can you type? Everyday or hobby words, with a switch-themed rank.', url: '/keyboards/typing-test/', kind: 'Tool', hobby: 'Keyboards' },
   { title: 'Beyblade X parts list', summary: 'Every Blade, Ratchet and Bit in one searchable list.', url: '/beyblade/parts/', kind: 'Tool', hobby: 'Beyblade' },
+  { title: 'Unmatched Versus: who wins, fighter vs fighter', summary: 'Pick any two Unmatched fighters and see who wins more often, plus their decks side by side.', url: '/boardgames/unmatched/versus/', kind: 'Tool', hobby: 'Board games' },
   { title: 'Unmatched: learn to play, tier list and every fighter', summary: 'How to play, the core rules, a tier list and all the fighters.', url: '/boardgames/unmatched/', kind: 'Hub', hobby: 'Board games' },
   { title: 'Riftbound: learn to play and tier lists', summary: 'The League of Legends trading card game explained for beginners.', url: '/tcg/riftbound/', kind: 'Hub', hobby: 'TCG' },
   { title: 'Riftbound cards: every set and card list', summary: 'Every Riftbound card, set by set, with pictures and stats.', url: '/tcg/riftbound/cards/', kind: 'Tool', hobby: 'TCG' },
