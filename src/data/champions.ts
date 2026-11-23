@@ -43,8 +43,6 @@ export const REGULATION_SOURCES: Source[] = [
 
 // Upcoming big events (Regionals, Internationals, Worlds). Remove rows once they're over.
 export const EVENTS = [
-  { name: 'Latin America International (LAIC)', place: 'São Paulo, Brazil', from: '2026-11-20', to: '2026-11-22', reg: 'M-C' },
-  { name: 'Malaysia Premier Ball League', place: 'Kuala Lumpur, Malaysia', from: '2026-11-21', to: '2026-11-21', reg: 'M-C' },
   { name: 'Stuttgart Regional', place: 'Stuttgart, Germany', from: '2026-11-28', to: '2026-11-29', reg: 'M-C' },
   { name: 'Las Vegas Regional', place: 'Las Vegas, USA', from: '2026-12-05', to: '2026-12-06', reg: 'TBA' },
   { name: 'Hong Kong Premier Ball League', place: 'Wan Chai, Hong Kong', from: '2026-12-05', to: '2026-12-05', reg: 'TBA' },
@@ -81,6 +79,20 @@ export const EVENT_SOURCES: Source[] = [
 
 // Recent big results with the top 8 teams (Pokémon as Smogon/Showdown names, so icons and type colours work).
 export const RESULTS = [
+  {
+    name: 'Latin America International (LAIC)', place: 'São Paulo, Brazil', date: '2026-11-22', reg: 'M-C', players: '652 Masters',
+    source: { label: 'Victory Road: 2027 LAIC', url: 'https://victoryroad.pro/2027-laic/' },
+    top: [
+      { p: 'Masahiro Taoka', c: 'JPN', team: ['Gengar-Mega', 'Swampert-Mega', 'Incineroar', 'Archaludon', 'Politoed', 'Rillaboom'] },
+      { p: 'Emilio Forbes', c: 'USA', team: ['Delphox-Mega', 'Garchomp-Mega-Z', 'Farigiraf', 'Kingambit', 'Torkoal', 'Venusaur'] },
+      { p: 'Yuma Kinugawa', c: 'JPN', team: ['Tyranitar-Mega', 'Salamence-Mega', 'Sneasler', 'Excadrill', 'Milotic', 'Sinistcha'] },
+      { p: 'Samuel Pereira', c: 'ESP', team: ['Raichu-Mega-Y', 'Staraptor-Mega', 'Arcanine-Hisui', 'Gholdengo', 'Milotic', 'Rillaboom'] },
+      { p: 'Kandai Nagatome', c: 'JPN', team: ['Floette-Mega', 'Salamence-Mega', 'Incineroar', 'Basculegion', 'Sneasler', 'Rillaboom'] },
+      { p: 'Louis Markl', c: 'DEU', team: ['Raichu-Mega-Y', 'Floette-Mega', 'Incineroar', 'Basculegion', 'Volcarona', 'Rillaboom'] },
+      { p: 'Daniel Núñez', c: 'MEX', team: ['Raichu-Mega-Y', 'Dragonite-Mega', 'Basculegion', 'Kingambit', 'Sylveon', 'Garchomp'] },
+      { p: 'Adam Cherfaoui', c: 'FRA', team: ['Raichu-Mega-Y', 'Staraptor-Mega', 'Arcanine-Hisui', 'Gholdengo', 'Milotic', 'Rillaboom'] },
+    ],
+  },
   {
     name: 'Buenos Aires Special Championship', place: 'Buenos Aires, Argentina', date: '2026-11-15', reg: 'M-C', players: '128 Masters',
     source: { label: 'Victory Road: 2027 Buenos Aires SC', url: 'https://victoryroad.pro/2027-buenos-aires/' },
@@ -135,20 +147,6 @@ export const RESULTS = [
       { p: 'Riccardo Stellini', c: 'ITA', team: ['Camerupt-Mega', 'Raichu-Mega-Y', 'Incineroar', 'Farigiraf', 'Sylveon', 'Rillaboom'] },
       { p: 'Giovanni Piscitelli', c: 'ITA', team: ['Charizard-Mega-Y', 'Basculegion', 'Kingambit', 'Sneasler', 'Whimsicott', 'Garchomp'] },
       { p: 'Giuseppe Musicco', c: 'ITA', team: ['Dragonite-Mega', 'Floette-Mega', 'Gholdengo', 'Incineroar', 'Sneasler', 'Rillaboom'] },
-    ],
-  },
-  {
-    name: 'Louisville Regional', place: 'Louisville, USA', date: '2026-10-11', reg: 'M-C', players: '1,013 Masters',
-    source: { label: 'Victory Road: 2027 Louisville Regional', url: 'https://victoryroad.pro/2027-louisville/' },
-    top: [
-      { p: 'Joseph Ugarte', c: 'USA', team: ['Charizard-Mega-Y', 'Garchomp', 'Incineroar', 'Farigiraf', 'Sylveon', 'Venusaur'] },
-      { p: 'Andrew Figueras', c: 'USA', team: ['Charizard-Mega-Y', 'Garchomp', 'Grimmsnarl', 'Archaludon', 'Pelipper', 'Venusaur'] },
-      { p: 'Dorian Kang', c: 'CAN', team: ['Charizard-Mega-Y', 'Raichu-Mega-X', 'Grimmsnarl', 'Archaludon', 'Politoed', 'Venusaur'] },
-      { p: 'JJ Miller', c: 'USA', team: ['Staraptor-Mega', 'Swampert-Mega', 'Gholdengo', 'Archaludon', 'Pelipper', 'Sinistcha'] },
-      { p: 'Ryan Loseto', c: 'CAN', team: ['Salamence-Mega', 'Floette-Mega', 'Basculegion', 'Kingambit', 'Sneasler', 'Rillaboom'] },
-      { p: 'Toler Webb', c: 'USA', team: ['Garchomp-Mega-Z', 'Golisopod-Mega', 'Pelipper', 'Archaludon', 'Sneasler', 'Farigiraf'] },
-      { p: 'Keanu Inosanto', c: 'USA', team: ['Salamence-Mega', 'Floette-Mega', 'Basculegion', 'Kingambit', 'Sneasler', 'Rillaboom'] },
-      { p: 'Brian Hough', c: 'USA', team: ['Dragonite-Mega', 'Garchomp', 'Incineroar', 'Gholdengo', 'Sneasler', 'Rillaboom'] },
     ],
   },
 ];

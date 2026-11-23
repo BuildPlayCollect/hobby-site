@@ -6,7 +6,7 @@ import { MORE_TEAMS } from '../data/champions-teams';
 
 export type Team = { p: string; c: string; team: string[]; place: number; event: string; reg: string; url: string };
 
-const short = (name: string) => name.replace(/ (Regional|Special Championship)$/, '');
+const short = (name: string) => name.match(/\(([^)]+)\)$/)?.[1] ?? name.replace(/ (Regional|Special Championship)$/, '');
 const eventOf = new Map(RESULTS.map((ev) => [short(ev.name), ev]));
 
 export const ALL_TEAMS: Team[] = [
