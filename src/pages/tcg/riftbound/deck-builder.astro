@@ -13,6 +13,7 @@ import { LEGENDS, DOMAIN_COLOURS, RB_HUB } from '../../../lib/riftbound';
 const CORE = 'https://cmsassets.rgpub.io/sanity/files/dsfx7636/news_live/5c7946f7c3b8c6e0faff85ab6dadc6d2e721ea94.pdf';
 const legends = LEGENDS.map((l) => ({ k: `${l.set}-${l.number}`, n: l.name, d: l.domains, i: l.img.s }));
 const DOMAINS = ['Fury', 'Calm', 'Mind', 'Body', 'Chaos', 'Order'];
+const COSTS = [['', 'Any cost'], ['0-1', '0–1'], ['2', '2'], ['3', '3'], ['4', '4'], ['5', '5'], ['6-99', '6+']];
 const TYPES = [['', 'All'], ['Unit', 'Units'], ['Spell', 'Spells'], ['Gear', 'Gear'], ['Battlefield', 'Battlefields'], ['Rune', 'Runes']];
 ---
 <Base title="Riftbound deck builder (preview)" description="Build a Riftbound deck in your browser: pick a Legend, add cards, and see straight away if the deck follows the official rules. Save decks and share them with a link.">
@@ -72,7 +73,19 @@ const TYPES = [['', 'All'], ['Unit', 'Units'], ['Spell', 'Spells'], ['Gear', 'Ge
             <label><input type="radio" name="type" value={v} checked={i === 0} /> {label}<small data-db-tcount={v}></small></label>
           ))}
         </div>
+        <div class="db-types db-doms" role="group" aria-label="Colour">
+          <label><input type="radio" name="dom" value="" checked /> All colours</label>
+          {[...DOMAINS, 'Colorless'].map((d) => (
+            <label data-db-dom={d}><input type="radio" name="dom" value={d} /><i style={`background:${DOMAIN_COLOURS[d]}`}></i>{d === 'Colorless' ? 'No colour' : d}</label>
+          ))}
+        </div>
+        <div class="db-types db-costs" role="group" aria-label="Energy cost">
+          {COSTS.map(([v, label], i) => (
+            <label><input type="radio" name="cost" value={v} checked={i === 0} /> {label}</label>
+          ))}
+        </div>
       </form>
+      <div class="db-peek" data-db-peek hidden aria-hidden="true"><img alt="" width="260" height="363" /><div><strong></strong><span></span><p></p></div></div>
       <p class="db-count" data-db-count>Pick a Legend to see the cards your deck can use.</p>
       <ul class="db-grid" data-db-grid></ul>
       <button type="button" class="db-more" data-db-more hidden>Show more</button>
@@ -212,6 +225,9 @@ const TYPES = [['', 'All'], ['Unit', 'Units'], ['Spell', 'Spells'], ['Gear', 'Ge
     const btn = el('button', { type: 'button', className: 'db-add', title: `Add ${c.n}` }, img, el('strong', {}, c.n), el('span', {}, [c.t, c.e != null ? `${c.e} energy` : ''].filter(Boolean).join(' · ')));
     btn.setAttribute('aria-label', `Add ${c.n}${n ? `, you have ${n}` : ''}`);
     btn.addEventListener('click', () => add(c));
+    btn.addEventListener('mouseenter', (e) => showPeek(c, e));
+    btn.addEventListener('mousemove', movePeek);
+    btn.addEventListener('mouseleave', hidePeek);
     const li = el('li', { className: c.w ? 'db-wide' : '' }, btn);
     if (n) {
       li.append(el('b', { className: 'db-have' }, `×${n}`));
@@ -224,8 +240,34 @@ const TYPES = [['', 'All'], ['Unit', 'Units'], ['Spell', 'Spells'], ['Gear', 'Ge
     li.append(el('a', { href: c.u, className: 'db-info', target: '_blank', rel: 'noopener', title: `${c.n}: card page` }, 'ⓘ'));
     return li;
   }
+  // ---- Hover preview (mouse only): a bigger picture and the card's text next to the cursor ----
+  const peek = $<HTMLElement>('[data-db-peek]');
+  const canHover = window.matchMedia('(hover: hover) and (pointer: fine)');
+  function showPeek(c: Card, e: MouseEvent) {
+    if (!canHover.matches) return;
+    const img = peek.querySelector('img')!;
+    img.src = c.i.replace('/small/', '/normal/');
+    img.width = c.w ? 363 : 260; img.height = c.w ? 260 : 363;
+    peek.classList.toggle('is-wide', !!c.w);
+    peek.querySelector('strong')!.textContent = c.n;
+    peek.querySelector('span')!.textContent = [c.t, c.d.filter((d) => d !== 'Colorless').join(' + '), c.e != null ? `${c.e} energy` : '', c.m != null ? `${c.m} Might` : ''].filter(Boolean).join(' · ');
+    peek.querySelector('p')!.textContent = c.x || 'No card text.';
+    peek.hidden = false;
+    movePeek(e);
+  }
+  function movePeek(e: MouseEvent) {
+    if (peek.hidden) return;
+    const w = peek.offsetWidth, h = peek.offsetHeight, gap = 18;
+    let x = e.clientX + gap, y = e.clientY - h / 2;
+    if (x + w > innerWidth - 8) x = e.clientX - w - gap;
+    y = Math.max(8, Math.min(y, innerHeight - h - 8));
+    peek.style.transform = `translate(${Math.max(8, x)}px, ${y}px)`;
+  }
+  function hidePeek() { peek.hidden = true; }
+  window.addEventListener('scroll', hidePeek, { passive: true });
+
   function renderPool(reset: boolean) {
-    if (reset) { grid.replaceChildren(); shown = 0; }
+    if (reset) { grid.replaceChildren(); shown = 0; hidePeek(); }
     const next = pool.slice(shown, shown + PAGE);
     grid.append(...next.map(tile));
     shown += next.length;
@@ -236,9 +278,31 @@ const TYPES = [['', 'All'], ['Unit', 'Units'], ['Spell', 'Spells'], ['Gear', 'Ge
     const f = new FormData(filters);
     const words = norm(String(f.get('q') ?? '')).split(/\s+/).filter(Boolean);
     const type = String(f.get('type') ?? '');
-    pool = cards.filter((c) => allowed(c) && (!type || c.t === type) && words.every((w) => norm(`${c.n} ${c.x} ${c.t}`).includes(w)))
+    // Colour buttons: only show the Legend's own colours (plus No colour); other colours could never match.
+    const L0 = legend()!;
+    for (const lab of filters.querySelectorAll<HTMLElement>('[data-db-dom]')) {
+      const d = lab.dataset.dbDom!;
+      lab.hidden = d !== 'Colorless' && !L0.d.includes(d);
+      const r = lab.querySelector('input')!;
+      if (lab.hidden && r.checked) (filters.querySelector<HTMLInputElement>('input[name="dom"][value=""]')!).checked = true;
+    }
+    const dom = String(new FormData(filters).get('dom') ?? '');
+    const [lo, hi] = String(f.get('cost') ?? '').split('-').map(Number);
+    const costOk = (c: Card) => !String(f.get('cost') ?? '') || (c.e != null && c.e >= lo && c.e <= (hi ?? lo));
+    const matches = (c: Card) => (!type || c.t === type) && (!dom || c.d.includes(dom)) && costOk(c) && words.every((w) => norm(`${c.n} ${c.x} ${c.t}`).includes(w));
+    pool = cards.filter((c) => allowed(c) && matches(c))
       .sort((a, b) => (a.e ?? 99) - (b.e ?? 99) || a.n.localeCompare(b.n));
-    countEl.textContent = `${pool.length} cards your deck can use. Tap one to add it.`;
+    countEl.textContent = `${pool.length} ${pool.length === 1 ? 'card' : 'cards'} your deck can use.${pool.length ? ' Tap one to add it.' : ''}`;
+    // When a search finds cards the Legend can't use, say so, so they don't look missing.
+    if (words.length) {
+      const L = legend()!;
+      const hidden = cards.filter((c) => c.t !== 'Legend' && !allowed(c) && matches(c));
+      if (hidden.length) {
+        const why = (c: Card) => (fits(c) ? 'another Legend\'s Signature card' : c.d.join(' + '));
+        const names = hidden.slice(0, 5).map((c) => `${c.n} (${why(c)})`).join(', ') + (hidden.length > 5 ? ` and ${hidden.length - 5} more` : '');
+        countEl.textContent += ` Not shown because your Legend is ${L.d.join(' + ')}: ${names}.`;
+      }
+    }
     renderPool(true);
   }
   function row(c: Card, q: number, where: 'main' | 'bf' | 'runes') {
@@ -440,6 +504,17 @@ const TYPES = [['', 'All'], ['Unit', 'Units'], ['Spell', 'Spells'], ['Gear', 'Ge
   /* Step 3: card pool */
   .db-layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 28px; align-items: start; }
   .db-filters { display: grid; gap: 10px; margin-bottom: 10px; }
+  .db-doms i { width: 12px; height: 12px; border-radius: 50%; flex: none; }
+  .db-types label[hidden] { display: none; }
+  .db-peek { position: fixed; top: 0; left: 0; z-index: 60; display: flex; gap: 14px; width: min(520px, 90vw); padding: 12px; border: 2px solid var(--line); border-radius: 16px; background: var(--surface); color: var(--ink); box-shadow: 0 12px 32px rgb(0 0 0 / .25); pointer-events: none; }
+  .db-peek[hidden] { display: none; }
+  .db-peek img { width: 220px; height: auto; flex: none; border-radius: 10px; }
+  .db-peek.is-wide { flex-direction: column; width: min(380px, 90vw); }
+  .db-peek.is-wide img { width: 100%; }
+  .db-peek div { display: grid; align-content: start; gap: 6px; }
+  .db-peek strong { font-size: 1.05rem; line-height: 1.2; }
+  .db-peek span { font-size: .8rem; color: var(--muted); font-weight: 700; }
+  .db-peek p { margin: 0; font-size: .88rem; line-height: 1.45; }
   .db-types { display: flex; flex-wrap: wrap; gap: 6px; }
   .db-types label { display: inline-flex; align-items: center; gap: 6px; min-height: 38px; padding: 0 14px; border: 2px solid var(--line); border-radius: 999px; font-size: .88rem; font-weight: 700; background: var(--surface); cursor: pointer; }
   .db-types label:has(input:checked) { background: var(--c1); border-color: var(--c1); color: #fff; }
