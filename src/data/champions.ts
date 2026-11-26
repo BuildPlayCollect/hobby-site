@@ -24,6 +24,7 @@ export const GAME = {
 
 // Regulation sets, newest first. `current: true` marks the one in use today.
 export const REGULATIONS = [
+  { name: 'Regulation M-D', from: '2026-12-02', to: '2027-03-03', current: false, notes: 'Adds 24 Pokémon and 4 new Mega Evolutions to M-C. The full list is not published yet.' },
   { name: 'Regulation M-C', from: '2026-09-09', to: '2026-12-02', current: true, notes: 'Adds 29 Pokémon and 6 new Mega Evolutions to M-B.' },
   { name: 'Regulation M-B', from: '2026-06-17', to: '2026-09-09', current: false, notes: 'Adds 22 Pokémon and 16 new Mega Evolutions to M-A. Used at the 2026 World Championships.' },
   { name: 'Regulation M-A', from: '2026-04-08', to: '2026-06-17', current: false, notes: 'The launch rules. Mega Evolution allowed for a set list of Pokémon.' },
@@ -44,7 +45,7 @@ export const REGULATION_SOURCES: Source[] = [
 // Upcoming big events (Regionals, Internationals, Worlds). Remove rows once they're over.
 export const EVENTS = [
   { name: 'Stuttgart Regional', place: 'Stuttgart, Germany', from: '2026-11-28', to: '2026-11-29', reg: 'M-C' },
-  { name: 'Las Vegas Regional', place: 'Las Vegas, USA', from: '2026-12-05', to: '2026-12-06', reg: 'TBA' },
+  { name: 'Las Vegas Regional', place: 'Las Vegas, USA', from: '2026-12-05', to: '2026-12-06', reg: 'M-C' },
   { name: 'Hong Kong Premier Ball League', place: 'Wan Chai, Hong Kong', from: '2026-12-05', to: '2026-12-05', reg: 'TBA' },
   { name: 'Singapore Premier Ball League', place: 'Singapore', from: '2026-12-12', to: '2026-12-12', reg: 'TBA' },
   { name: 'Philippines Premier Ball League', place: 'Pasay, Philippines', from: '2027-01-16', to: '2027-01-16', reg: 'TBA' },
